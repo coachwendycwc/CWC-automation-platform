@@ -1,0 +1,269 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Stuck Loop Reflection | Executive Leadership Lab</title>
+    <link href="https://fonts.googleapis.com/css2?family=Source+Serif+4:wght@400;600;700&family=Inter:wght@400;500;600&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --primary: #1A1A1A;
+            --accent: #2A7B8C;
+            --accent-warm: #D4A574;
+            --text: #333333;
+            --text-light: #666666;
+            --text-muted: #999999;
+            --bg: #FAF8F5;
+            --bg-warm: #F5F2ED;
+            --border: #E5E0D8;
+        }
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        body {
+            font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
+            background: var(--bg);
+            color: var(--text);
+            line-height: 1.6;
+            padding: 48px;
+            max-width: 800px;
+            margin: 0 auto;
+        }
+        @media print { body { padding: 24px; } }
+
+        .header {
+            display: flex;
+            justify-content: space-between;
+            align-items: flex-start;
+            margin-bottom: 40px;
+            padding-bottom: 24px;
+            border-bottom: 2px solid var(--primary);
+        }
+        .header h1 {
+            font-family: 'Source Serif 4', Georgia, serif;
+            font-size: 28px;
+            font-weight: 700;
+            color: var(--primary);
+        }
+        .header p { font-size: 13px; color: var(--text-muted); margin-top: 4px; }
+        .logo { height: 40px; }
+
+        .intro {
+            background: var(--bg-warm);
+            padding: 20px 24px;
+            margin-bottom: 32px;
+            border-left: 3px solid var(--accent);
+        }
+        .intro p { font-size: 14px; color: var(--text-light); }
+
+        .loop-diagram {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            gap: 12px;
+            margin: 32px 0;
+            padding: 24px;
+            background: var(--bg-warm);
+        }
+        .loop-step {
+            padding: 12px 20px;
+            border: 1px solid var(--border);
+            background: var(--bg);
+            font-size: 13px;
+            font-weight: 500;
+        }
+        .loop-arrow { font-size: 16px; color: var(--text-muted); }
+
+        .example-box {
+            border-left: 3px solid var(--text-muted);
+            padding: 20px 24px;
+            margin-bottom: 40px;
+        }
+        .example-box h4 { font-size: 13px; font-weight: 600; color: var(--text-muted); text-transform: uppercase; letter-spacing: 1px; margin-bottom: 12px; }
+        .example-box p { font-size: 14px; color: var(--text-light); margin-bottom: 6px; }
+        .example-box p:last-child { margin-bottom: 0; }
+
+        .field-container {
+            border: 1px solid var(--border);
+            padding: 24px;
+            margin-bottom: 20px;
+        }
+        .field-header {
+            display: flex;
+            align-items: center;
+            margin-bottom: 12px;
+        }
+        .field-number {
+            width: 28px; height: 28px;
+            background: var(--primary);
+            color: var(--bg);
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 13px;
+            font-weight: 600;
+            margin-right: 12px;
+        }
+        .field-label {
+            font-family: 'Source Serif 4', Georgia, serif;
+            font-size: 17px;
+            font-weight: 600;
+            color: var(--primary);
+        }
+        .field-hint { font-size: 13px; color: var(--text-muted); margin-bottom: 12px; font-style: italic; }
+        textarea {
+            width: 100%;
+            padding: 12px;
+            border: 1px solid var(--border);
+            font-size: 14px;
+            font-family: inherit;
+            min-height: 90px;
+            resize: vertical;
+        }
+        textarea:focus { outline: none; border-color: var(--accent); }
+        textarea::placeholder { color: #BBBBBB; }
+
+        .new-choice-section {
+            border: 2px solid var(--accent-warm);
+            padding: 32px;
+            margin-top: 40px;
+        }
+        .new-choice-section h3 {
+            font-family: 'Source Serif 4', Georgia, serif;
+            font-size: 20px;
+            font-weight: 600;
+            color: var(--primary);
+            margin-bottom: 24px;
+            padding-bottom: 12px;
+            border-bottom: 1px solid var(--border);
+        }
+        .new-choice-section .field-number { background: var(--accent-warm); }
+
+        .footer {
+            margin-top: 48px;
+            padding-top: 20px;
+            border-top: 1px solid var(--border);
+            text-align: center;
+            font-size: 11px;
+            color: var(--text-muted);
+        }
+    </style>
+</head>
+<body>
+
+<div class="header">
+    <div>
+        <h1>Stuck Loop Reflection</h1>
+        <p>Executive Leadership Lab | Module 1 | January</p>
+    </div>
+    <img src="https://coachingwomenofcolor.com/wp-content/uploads/2021/04/CWCFinal_logo2.webp" alt="CWC" class="logo">
+</div>
+
+<div class="intro">
+    <p><strong>Purpose:</strong> Most career plateaus follow a predictable pattern—a "stuck loop" that repeats until we interrupt it with awareness and a new choice. This worksheet helps you identify your loop and design an alternative response.</p>
+</div>
+
+<div class="loop-diagram">
+    <div class="loop-step">Trigger</div>
+    <span class="loop-arrow">→</span>
+    <div class="loop-step">Thought</div>
+    <span class="loop-arrow">→</span>
+    <div class="loop-step">Emotion</div>
+    <span class="loop-arrow">→</span>
+    <div class="loop-step">Behavior</div>
+    <span class="loop-arrow">→</span>
+    <div class="loop-step">Outcome</div>
+    <span class="loop-arrow">↻</span>
+</div>
+
+<div class="example-box">
+    <h4>Example Loop</h4>
+    <p><strong>Trigger:</strong> Asked to present to senior leadership</p>
+    <p><strong>Thought:</strong> "I'll mess this up. They'll see I don't belong here."</p>
+    <p><strong>Emotion:</strong> Anxiety, dread, stomach tightening</p>
+    <p><strong>Behavior:</strong> Over-prepare for weeks, speak too fast, minimize accomplishments</p>
+    <p><strong>Outcome:</strong> Presentation goes "fine" but I feel exhausted and invisible</p>
+</div>
+
+<div class="field-container">
+    <div class="field-header">
+        <span class="field-number">1</span>
+        <span class="field-label">Situation / Trigger</span>
+    </div>
+    <p class="field-hint">What's the recurring situation that activates your stuck pattern?</p>
+    <textarea placeholder="Describe the situation or event that triggers your loop..."></textarea>
+</div>
+
+<div class="field-container">
+    <div class="field-header">
+        <span class="field-number">2</span>
+        <span class="field-label">Thought / Story</span>
+    </div>
+    <p class="field-hint">What do you tell yourself when this happens? What story runs through your mind?</p>
+    <textarea placeholder="Write out the thoughts or narrative that plays..."></textarea>
+</div>
+
+<div class="field-container">
+    <div class="field-header">
+        <span class="field-number">3</span>
+        <span class="field-label">Emotion / Body Cue</span>
+    </div>
+    <p class="field-hint">What emotion arises? Where do you feel it in your body?</p>
+    <textarea placeholder="Name the emotion and any physical sensations..."></textarea>
+</div>
+
+<div class="field-container">
+    <div class="field-header">
+        <span class="field-number">4</span>
+        <span class="field-label">Behavior (Do / Avoid)</span>
+    </div>
+    <p class="field-hint">What do you do—or avoid doing—as a result?</p>
+    <textarea placeholder="Describe your typical response or avoidance pattern..."></textarea>
+</div>
+
+<div class="field-container">
+    <div class="field-header">
+        <span class="field-number">5</span>
+        <span class="field-label">Outcome</span>
+    </div>
+    <p class="field-hint">What result keeps repeating? How does the loop reinforce itself?</p>
+    <textarea placeholder="What happens as a result? What belief gets reinforced?"></textarea>
+</div>
+
+<div class="new-choice-section">
+    <h3>Design Your New Choice</h3>
+
+    <div class="field-container" style="border: none; padding: 0; margin-bottom: 24px;">
+        <div class="field-header">
+            <span class="field-number">6</span>
+            <span class="field-label">New Thought I'll Practice</span>
+        </div>
+        <p class="field-hint">What's a more helpful, accurate thought you can practice instead?</p>
+        <textarea placeholder="Write a reframe or alternative perspective..."></textarea>
+    </div>
+
+    <div class="field-container" style="border: none; padding: 0; margin-bottom: 24px;">
+        <div class="field-header">
+            <span class="field-number">7</span>
+            <span class="field-label">New Behavior I'll Try</span>
+        </div>
+        <p class="field-hint">What's one different action you could take next time?</p>
+        <textarea placeholder="Describe a new response you're willing to try..."></textarea>
+    </div>
+
+    <div class="field-container" style="border: none; padding: 0; margin-bottom: 0;">
+        <div class="field-header">
+            <span class="field-number">8</span>
+            <span class="field-label">Support I Need</span>
+        </div>
+        <p class="field-hint">What would help you interrupt this loop? (reminder, accountability, phrase, etc.)</p>
+        <textarea placeholder="What support or tools would help you make a different choice?"></textarea>
+    </div>
+</div>
+
+<div class="footer">
+    Stuck Loop Reflection | Executive Leadership Lab | Coaching Women of Color<br>
+    Module 1: Break Through Career Plateaus | January
+</div>
+
+</body>
+</html>

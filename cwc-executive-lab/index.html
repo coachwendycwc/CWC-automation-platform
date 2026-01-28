@@ -1,0 +1,603 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Break Through Career Plateaus | Executive Leadership Lab</title>
+    <link href="https://fonts.googleapis.com/css2?family=Source+Serif+4:wght@400;600;700&family=Inter:wght@400;500;600&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --primary: #1A1A1A;
+            --accent: #2A7B8C;
+            --accent-warm: #D4A574;
+            --text: #333333;
+            --text-light: #666666;
+            --text-muted: #999999;
+            --bg: #FAF8F5;
+            --bg-warm: #F5F2ED;
+            --border: #E5E0D8;
+        }
+
+        /* Print styles */
+        @media print {
+            body { overflow: visible; height: auto; background: white; }
+            .presentation { height: auto; }
+            .slide {
+                position: relative;
+                opacity: 1;
+                visibility: visible;
+                transform: none;
+                page-break-after: always;
+                height: 100vh;
+                padding: 40px 60px;
+            }
+            .slide::before { display: none; }
+            .nav-controls, .keyboard-hint, .progress-bar { display: none; }
+            .slide-title, .slide-dark { background: var(--primary) !important; -webkit-print-color-adjust: exact; print-color-adjust: exact; }
+        }
+
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+
+        body {
+            font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
+            background: var(--primary);
+            color: var(--text);
+            overflow: hidden;
+            height: 100vh;
+        }
+
+        .presentation { position: relative; width: 100vw; height: 100vh; }
+
+        .slide {
+            position: absolute;
+            top: 0; left: 0;
+            width: 100%; height: 100%;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            padding: 80px 120px;
+            opacity: 0;
+            visibility: hidden;
+            transform: translateY(20px);
+            transition: all 0.5s ease;
+            background: var(--bg);
+        }
+        .slide::before {
+            content: '';
+            position: absolute;
+            top: 0; left: 0; right: 0; bottom: 0;
+            background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 200 200' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.7' numOctaves='3' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E");
+            opacity: 0.03;
+            pointer-events: none;
+            z-index: 0;
+        }
+        .slide > * { position: relative; z-index: 1; }
+
+        .slide.active { opacity: 1; visibility: visible; transform: translateY(0); }
+
+        .nav-controls {
+            position: fixed;
+            bottom: 48px;
+            left: 50%;
+            transform: translateX(-50%);
+            display: flex;
+            align-items: center;
+            gap: 24px;
+            z-index: 1000;
+        }
+
+        .nav-btn {
+            width: 48px; height: 48px;
+            border-radius: 50%;
+            border: 2px solid var(--primary);
+            background: transparent;
+            color: var(--primary);
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            transition: all 0.2s ease;
+        }
+
+        .nav-btn:hover { background: var(--primary); color: var(--bg); }
+        .nav-btn:disabled { border-color: var(--border); color: var(--text-muted); cursor: not-allowed; }
+        .nav-btn:disabled:hover { background: transparent; color: var(--text-muted); }
+        .nav-btn svg { width: 20px; height: 20px; }
+
+        .slide-counter { font-size: 13px; font-weight: 500; color: var(--text-muted); letter-spacing: 0.5px; }
+
+        .progress-bar {
+            position: fixed; top: 0; left: 0;
+            height: 2px;
+            background: var(--accent);
+            transition: width 0.4s ease;
+            z-index: 1001;
+        }
+
+        .slide-header {
+            position: absolute;
+            top: 40px; left: 60px; right: 60px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .logo { height: 64px; }
+        .module-label { font-size: 11px; font-weight: 600; color: var(--text-muted); text-transform: uppercase; letter-spacing: 2px; }
+
+        .slide-content { max-width: 960px; width: 100%; text-align: center; }
+
+        h1 {
+            font-family: 'Source Serif 4', Georgia, serif;
+            font-size: 56px; font-weight: 700;
+            color: var(--primary);
+            line-height: 1.15;
+            letter-spacing: -1px;
+            margin-bottom: 24px;
+        }
+
+        h2 {
+            font-family: 'Source Serif 4', Georgia, serif;
+            font-size: 42px; font-weight: 600;
+            color: var(--primary);
+            line-height: 1.2;
+            margin-bottom: 20px;
+        }
+
+        .section-label {
+            font-size: 11px; font-weight: 600;
+            color: var(--accent);
+            text-transform: uppercase;
+            letter-spacing: 2.5px;
+            margin-bottom: 20px;
+            display: block;
+        }
+
+        p, .lead { font-size: 18px; line-height: 1.7; color: var(--text-light); max-width: 680px; margin: 0 auto; }
+        .lead { font-size: 20px; }
+
+        .slide-title {
+            background: linear-gradient(135deg, #1A1A1A 0%, #2d2d2d 50%, #1A1A1A 100%);
+            color: var(--bg);
+            position: relative;
+        }
+        .slide-title::after {
+            content: '';
+            position: absolute;
+            top: 0; left: 0;
+            width: 100%;
+            height: 100%;
+            background: url('images/0B1A7916.jpg') center/cover no-repeat;
+            opacity: 0.15;
+            pointer-events: none;
+            z-index: -1;
+        }
+        .slide-title h1 { color: var(--bg); font-size: 64px; }
+        .slide-title p { color: rgba(255,255,255,0.6); }
+
+        .title-meta {
+            display: flex; justify-content: center; gap: 48px;
+            margin-top: 48px; padding-top: 32px;
+            border-top: 1px solid rgba(255,255,255,0.1);
+        }
+        .meta-item { font-size: 13px; color: rgba(255,255,255,0.5); letter-spacing: 0.5px; }
+
+        .cards-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 32px; margin-top: 48px; text-align: left; }
+        .cards-grid.two-col { grid-template-columns: repeat(2, 1fr); }
+
+        .card { padding: 40px; border: 1px solid var(--border); border-radius: 4px; transition: all 0.2s ease; }
+        .card:hover { border-color: var(--accent); }
+        .card h4 { font-family: 'Source Serif 4', Georgia, serif; font-size: 18px; font-weight: 600; color: var(--primary); margin-bottom: 12px; }
+        .card p { font-size: 15px; color: var(--text-light); margin: 0; line-height: 1.6; }
+
+        .feature-list { text-align: left; max-width: 640px; margin: 48px auto 0; }
+        .feature-item { display: flex; align-items: flex-start; gap: 20px; padding: 24px 0; border-bottom: 1px solid var(--border); }
+        .feature-item:last-child { border-bottom: none; }
+
+        .feature-number {
+            width: 32px; height: 32px;
+            background: var(--accent-warm);
+            border-radius: 50%;
+            display: flex; align-items: center; justify-content: center;
+            font-size: 14px; font-weight: 600; color: white;
+            flex-shrink: 0;
+        }
+
+        .feature-text h4 { font-size: 17px; font-weight: 600; color: var(--primary); margin-bottom: 6px; }
+        .feature-text p { font-size: 15px; color: var(--text-light); margin: 0; }
+
+        .two-column { display: grid; grid-template-columns: 1fr 1fr; gap: 64px; text-align: left; max-width: 880px; margin: 48px auto 0; }
+        .column h4 { font-family: 'Source Serif 4', Georgia, serif; font-size: 18px; font-weight: 600; color: var(--primary); margin-bottom: 20px; padding-bottom: 12px; border-bottom: 2px solid var(--primary); }
+        .column ul { list-style: none; }
+        .column li { padding: 10px 0; font-size: 15px; color: var(--text-light); border-bottom: 1px solid var(--border); }
+        .column li:last-child { border-bottom: none; }
+
+        .slide-quote {
+            background: var(--bg-warm);
+        }
+        .quote-text {
+            font-family: 'Source Serif 4', Georgia, serif;
+            font-size: 32px; font-weight: 400;
+            line-height: 1.5; color: var(--primary);
+            max-width: 800px; font-style: italic;
+        }
+        .quote-text::before { content: '"'; display: block; font-size: 72px; line-height: 1; color: var(--accent-warm); margin-bottom: 16px; }
+
+        .stats-row { display: flex; justify-content: center; gap: 80px; margin-top: 56px; }
+        .stat-item { text-align: center; }
+        .stat-number { font-family: 'Source Serif 4', Georgia, serif; font-size: 48px; font-weight: 700; color: var(--primary); }
+        .stat-label { font-size: 13px; color: var(--text-muted); text-transform: uppercase; letter-spacing: 1px; margin-top: 8px; }
+
+        .flow-diagram { display: flex; align-items: center; justify-content: center; gap: 16px; margin-top: 48px; }
+        .flow-step { padding: 16px 24px; border: 1px solid var(--border); border-radius: 4px; font-size: 14px; font-weight: 500; color: var(--text); }
+        .flow-arrow { font-size: 18px; color: var(--text-muted); }
+
+        .slide-dark {
+            background: linear-gradient(135deg, #1A1A1A 0%, #252525 40%, #1A1A1A 100%);
+            color: var(--bg);
+        }
+        .slide-dark h2 { color: var(--bg); }
+        .slide-dark p { color: rgba(255,255,255,0.6); }
+
+        /* ELL Visual Mark */
+        .ell-mark {
+            position: absolute;
+            bottom: 40px;
+            right: 60px;
+            font-family: 'Source Serif 4', Georgia, serif;
+            font-size: 14px;
+            font-weight: 600;
+            letter-spacing: 3px;
+            color: var(--accent-warm);
+            opacity: 0.4;
+        }
+        .slide-dark .ell-mark { color: rgba(255,255,255,0.15); }
+        .slide-title .ell-mark { color: rgba(255,255,255,0.15); }
+
+        .callout { background: var(--bg-warm); border-left: 3px solid var(--accent-warm); padding: 24px 32px; margin-top: 40px; text-align: left; max-width: 640px; margin-left: auto; margin-right: auto; }
+        .callout p { font-size: 15px; margin: 0; }
+
+        .activity-meta { display: inline-block; margin-top: 40px; padding: 12px 24px; border: 1px solid var(--border); border-radius: 4px; font-size: 13px; color: var(--text-muted); }
+
+        .keyboard-hint { position: fixed; bottom: 112px; left: 50%; transform: translateX(-50%); font-size: 11px; color: var(--text-muted); letter-spacing: 0.5px; }
+        .keyboard-hint kbd { display: inline-block; padding: 2px 6px; border: 1px solid var(--border); border-radius: 3px; font-family: inherit; font-size: 11px; margin: 0 2px; }
+    </style>
+</head>
+<body>
+    <div class="progress-bar" id="progress"></div>
+    <div class="presentation" id="presentation">
+
+        <div class="slide slide-title active" data-slide="1">
+            <div class="slide-header">
+                <img src="https://coachingwomenofcolor.com/wp-content/uploads/2021/04/CWCFinal_logo2.webp" alt="CWC" class="logo">
+                <span class="module-label">Executive Leadership Lab</span>
+            </div>
+            <div class="slide-content">
+                <span class="section-label">Module 1 — January</span>
+                <h1>Break Through<br>Career Plateaus</h1>
+                <p class="lead">Transform stagnation into strategic momentum. Build the clarity, confidence, and visibility to reach your next level.</p>
+                <div class="title-meta">
+                    <span class="meta-item">10-Month Program</span>
+                    <span class="meta-item">Coaching Women of Color</span>
+                </div>
+            </div>
+            <div class="ell-mark">ELL</div>
+        </div>
+
+        <div class="slide" data-slide="2">
+            <div class="slide-header"><img src="https://coachingwomenofcolor.com/wp-content/uploads/2021/04/CWCFinal_logo2.webp" alt="CWC" class="logo"><span class="module-label">Module 1</span></div>
+            <div class="slide-content">
+                <span class="section-label">Welcome</span>
+                <h2>You're Not Stuck.<br>You're Ready to Elevate.</h2>
+                <p>If you've been doing the work but not getting the recognition, moving but not advancing, or leading but feeling invisible—this module is your breakthrough moment.</p>
+                <div class="stats-row">
+                    <div class="stat-item"><div class="stat-number">67%</div><div class="stat-label">of WOC feel stuck</div></div>
+                    <div class="stat-item"><div class="stat-number">3×</div><div class="stat-label">more likely overlooked</div></div>
+                    <div class="stat-item"><div class="stat-number">Today</div><div class="stat-label">we change that</div></div>
+                </div>
+            </div>
+        </div>
+
+        <div class="slide" data-slide="3">
+            <div class="slide-header"><img src="https://coachingwomenofcolor.com/wp-content/uploads/2021/04/CWCFinal_logo2.webp" alt="CWC" class="logo"><span class="module-label">Module 1</span></div>
+            <div class="slide-content">
+                <span class="section-label">Objectives</span>
+                <h2>What You'll Gain</h2>
+                <div class="feature-list">
+                    <div class="feature-item"><div class="feature-number">1</div><div class="feature-text"><h4>Diagnose Your Plateau</h4><p>Identify exactly what type of plateau you're experiencing and the root causes holding you back</p></div></div>
+                    <div class="feature-item"><div class="feature-number">2</div><div class="feature-text"><h4>Build Your Growth Roadmap</h4><p>Create a strategic 90-day plan with clear milestones and accountability checkpoints</p></div></div>
+                    <div class="feature-item"><div class="feature-number">3</div><div class="feature-text"><h4>Take Your First Moves</h4><p>Leave with three concrete actions you can execute in the next 14 days to build momentum</p></div></div>
+                </div>
+            </div>
+        </div>
+
+        <div class="slide" data-slide="4">
+            <div class="slide-header"><img src="https://coachingwomenofcolor.com/wp-content/uploads/2021/04/CWCFinal_logo2.webp" alt="CWC" class="logo"><span class="module-label">Module 1</span></div>
+            <div class="slide-content">
+                <span class="section-label">The Challenge</span>
+                <h2>Working Hard ≠ Moving Up</h2>
+                <p>You've been told to put your head down and deliver. But excellence alone doesn't create advancement.</p>
+                <div class="cards-grid">
+                    <div class="card"><h4>The Visibility Gap</h4><p>Your work speaks for itself—but it's speaking to the wrong people, or not at all.</p></div>
+                    <div class="card"><h4>The Hustle Trap</h4><p>More work won't get you promoted. Strategic positioning will.</p></div>
+                    <div class="card"><h4>The Access Problem</h4><p>Without sponsors in the room, opportunity finds someone else.</p></div>
+                </div>
+            </div>
+        </div>
+
+        <div class="slide" data-slide="5">
+            <div class="slide-header"><img src="https://coachingwomenofcolor.com/wp-content/uploads/2021/04/CWCFinal_logo2.webp" alt="CWC" class="logo"><span class="module-label">Module 1</span></div>
+            <div class="slide-content">
+                <span class="section-label">Framework</span>
+                <h2>The Three Career Plateaus</h2>
+                <p>Every plateau falls into one of three categories. Understanding yours is the first step to breaking through.</p>
+                <div class="cards-grid">
+                    <div class="card"><h4>Skill Plateau</h4><p>You've maxed out your current capabilities. Growth requires new skills, experiences, or credentials to reach the next level.</p></div>
+                    <div class="card"><h4>Role Plateau</h4><p>Your position has a ceiling. No room to grow, limited scope, or organizational constraints blocking advancement.</p></div>
+                    <div class="card"><h4>Identity Plateau</h4><p>Internal barriers—imposter syndrome, perfectionism, or playing small—are holding you back from stepping into your power.</p></div>
+                </div>
+            </div>
+        </div>
+
+        <div class="slide" data-slide="6">
+            <div class="slide-header"><img src="https://coachingwomenofcolor.com/wp-content/uploads/2021/04/CWCFinal_logo2.webp" alt="CWC" class="logo"><span class="module-label">Skill Plateau</span></div>
+            <div class="slide-content">
+                <span class="section-label">Deep Dive</span>
+                <h2>Skill Plateau</h2>
+                <p>When your expertise brought you here, but won't take you there.</p>
+                <div class="two-column">
+                    <div class="column"><h4>Signs You're Here</h4><ul><li>Known as "the expert" but passed over for leadership</li><li>Your strengths feel outdated or too narrow</li><li>Lack of exposure to strategic work</li><li>Comfort zone has become a ceiling</li></ul></div>
+                    <div class="column"><h4>The Breakthrough</h4><ul><li>Identify 2-3 skills needed for your next role</li><li>Seek stretch assignments, not just promotions</li><li>Build cross-functional exposure</li><li>Reposition your brand around future value</li></ul></div>
+                </div>
+            </div>
+        </div>
+
+        <div class="slide" data-slide="7">
+            <div class="slide-header"><img src="https://coachingwomenofcolor.com/wp-content/uploads/2021/04/CWCFinal_logo2.webp" alt="CWC" class="logo"><span class="module-label">Role Plateau</span></div>
+            <div class="slide-content">
+                <span class="section-label">Deep Dive</span>
+                <h2>Role Plateau</h2>
+                <p>When the role itself has no runway—not your performance.</p>
+                <div class="two-column">
+                    <div class="column"><h4>Signs You're Here</h4><ul><li>Your manager has nowhere to go either</li><li>The org is flat or restructuring</li><li>Budget constraints limit new positions</li><li>You've outgrown the scope but can't expand</li></ul></div>
+                    <div class="column"><h4>The Breakthrough</h4><ul><li>Explore lateral moves with growth potential</li><li>Consider adjacent departments or functions</li><li>Build visibility outside your team</li><li>Know when it's time to pivot externally</li></ul></div>
+                </div>
+            </div>
+        </div>
+
+        <div class="slide" data-slide="8">
+            <div class="slide-header"><img src="https://coachingwomenofcolor.com/wp-content/uploads/2021/04/CWCFinal_logo2.webp" alt="CWC" class="logo"><span class="module-label">Identity Plateau</span></div>
+            <div class="slide-content">
+                <span class="section-label">Deep Dive</span>
+                <h2>Identity Plateau</h2>
+                <p>When the barrier isn't skill or opportunity—it's self-perception.</p>
+                <div class="two-column">
+                    <div class="column"><h4>Signs You're Here</h4><ul><li>Imposter syndrome despite track record</li><li>Perfectionism delays action</li><li>Fear of visibility or failure</li><li>Shrinking to fit, not standing out</li></ul></div>
+                    <div class="column"><h4>The Breakthrough</h4><ul><li>Challenge the internal narrative</li><li>Take "messy action"—done beats perfect</li><li>Build evidence of your capability</li><li>Step into visibility before you feel ready</li></ul></div>
+                </div>
+            </div>
+        </div>
+
+        <div class="slide slide-quote" data-slide="9" style="background: linear-gradient(rgba(245,242,237,0.92), rgba(245,242,237,0.92)), url('https://images.unsplash.com/photo-1508739773434-c26b3d09e071?w=1200&q=80') center/cover no-repeat;">
+            <div class="slide-header"><img src="https://coachingwomenofcolor.com/wp-content/uploads/2021/04/CWCFinal_logo2.webp" alt="CWC" class="logo"><span class="module-label">Reflection</span></div>
+            <div class="slide-content">
+                <p class="quote-text">The ceiling you're hitting isn't made of glass. It's made of stories you've been told—and stories you tell yourself.</p>
+            </div>
+        </div>
+
+        <div class="slide" data-slide="10">
+            <div class="slide-header"><img src="https://coachingwomenofcolor.com/wp-content/uploads/2021/04/CWCFinal_logo2.webp" alt="CWC" class="logo"><span class="module-label">Module 1</span></div>
+            <div class="slide-content">
+                <span class="section-label">Root Causes</span>
+                <h2>What's Driving Your Plateau?</h2>
+                <div class="cards-grid two-col" style="margin-top: 40px;">
+                    <div class="card"><h4>Unclear Target</h4><p>No defined "next best role" or direction makes it impossible to move strategically</p></div>
+                    <div class="card"><h4>Unclear Value Proposition</h4><p>Can't articulate your unique value or what you bring that others don't</p></div>
+                    <div class="card"><h4>Low Visibility</h4><p>Working hard but decision-makers don't know your name or your impact</p></div>
+                    <div class="card"><h4>Weak Sponsorship</h4><p>No one with power is advocating for you when opportunities arise</p></div>
+                    <div class="card"><h4>Over-Functioning</h4><p>So busy doing everyone's work that there's no bandwidth for your growth</p></div>
+                    <div class="card"><h4>Fear and Avoidance</h4><p>Avoiding the conversations, risks, or visibility that advancement requires</p></div>
+                </div>
+            </div>
+        </div>
+
+        <div class="slide" data-slide="11">
+            <div class="slide-header"><img src="https://coachingwomenofcolor.com/wp-content/uploads/2021/04/CWCFinal_logo2.webp" alt="CWC" class="logo"><span class="module-label">Activity</span></div>
+            <div class="slide-content">
+                <span class="section-label">Self-Assessment</span>
+                <h2>Plateau Diagnostic</h2>
+                <p>Time to get honest about where you are. Use the Plateau Diagnostic worksheet to identify your primary plateau type and top drivers.</p>
+                <div class="cards-grid two-col" style="margin-top: 48px;">
+                    <div class="card"><h4>Part 1: Self-Check</h4><p>Check all statements that feel true right now. Be honest—this is for your eyes only.</p></div>
+                    <div class="card"><h4>Part 2: Identify Patterns</h4><p>Notice which category has the most checkmarks—that's your primary plateau zone.</p></div>
+                </div>
+                <div class="activity-meta">Time: 5–7 minutes</div>
+            </div>
+        </div>
+
+        <div class="slide" data-slide="12">
+            <div class="slide-header"><img src="https://coachingwomenofcolor.com/wp-content/uploads/2021/04/CWCFinal_logo2.webp" alt="CWC" class="logo"><span class="module-label">Module 1</span></div>
+            <div class="slide-content">
+                <span class="section-label">Pattern Recognition</span>
+                <h2>The Stuck Loop</h2>
+                <p>Most plateaus follow a predictable pattern. Breaking free starts with recognizing yours.</p>
+                <div class="flow-diagram">
+                    <div class="flow-step">Trigger</div><span class="flow-arrow">→</span>
+                    <div class="flow-step">Thought</div><span class="flow-arrow">→</span>
+                    <div class="flow-step">Emotion</div><span class="flow-arrow">→</span>
+                    <div class="flow-step">Behavior</div><span class="flow-arrow">→</span>
+                    <div class="flow-step">Outcome</div><span class="flow-arrow">↻</span>
+                </div>
+                <div class="callout"><p><strong>Example:</strong> Asked to present → "I'll mess this up" → Anxiety → Over-prepare, speak fast → "Fine" but invisible → Reinforces doubt</p></div>
+            </div>
+        </div>
+
+        <div class="slide" data-slide="13">
+            <div class="slide-header"><img src="https://coachingwomenofcolor.com/wp-content/uploads/2021/04/CWCFinal_logo2.webp" alt="CWC" class="logo"><span class="module-label">Activity</span></div>
+            <div class="slide-content">
+                <span class="section-label">Reflection</span>
+                <h2>Map Your Stuck Loop</h2>
+                <p>Using the Stuck Loop worksheet, identify the pattern that keeps repeating. Then design a new choice.</p>
+                <div class="feature-list">
+                    <div class="feature-item"><div class="feature-number">1</div><div class="feature-text"><h4>Identify Your Loop</h4><p>What trigger, thought, emotion, behavior, and outcome keep repeating?</p></div></div>
+                    <div class="feature-item"><div class="feature-number">2</div><div class="feature-text"><h4>Design Your New Choice</h4><p>What new thought or behavior could interrupt this pattern?</p></div></div>
+                    <div class="feature-item"><div class="feature-number">3</div><div class="feature-text"><h4>Name Your Support</h4><p>What reminder, tool, or accountability would help you make a different choice?</p></div></div>
+                </div>
+            </div>
+        </div>
+
+        <div class="slide" data-slide="14">
+            <div class="slide-header"><img src="https://coachingwomenofcolor.com/wp-content/uploads/2021/04/CWCFinal_logo2.webp" alt="CWC" class="logo"><span class="module-label">Module 1</span></div>
+            <div class="slide-content">
+                <span class="section-label">Strategic Planning</span>
+                <h2>Your Career Growth Roadmap</h2>
+                <p>A structured approach to move from where you are to where you want to be. This becomes your personal north star.</p>
+                <div class="cards-grid two-col">
+                    <div class="card"><h4>North Star</h4><p>Define your "next best role" and what success looks like</p></div>
+                    <div class="card"><h4>Current Reality</h4><p>Honest assessment of where you are and what's blocking progress</p></div>
+                    <div class="card"><h4>Strengths & Gaps</h4><p>What to leverage and what to develop for the next level</p></div>
+                    <div class="card"><h4>90-Day Goals</h4><p>2-3 focused objectives with clear success measures</p></div>
+                    <div class="card"><h4>First Moves</h4><p>Concrete actions for the next 14 days to build momentum</p></div>
+                    <div class="card"><h4>Accountability</h4><p>Who will hold you to this and how often will you check in</p></div>
+                </div>
+            </div>
+        </div>
+
+        <div class="slide" data-slide="15">
+            <div class="slide-header"><img src="https://coachingwomenofcolor.com/wp-content/uploads/2021/04/CWCFinal_logo2.webp" alt="CWC" class="logo"><span class="module-label">Activity</span></div>
+            <div class="slide-content">
+                <span class="section-label">Deep Work</span>
+                <h2>Build Your Roadmap</h2>
+                <p>Work through each section of the Career Growth Roadmap. Be specific—this document guides your year.</p>
+                <div class="two-column" style="margin-top: 40px;">
+                    <div class="column"><h4>Key Questions</h4><ul><li>What is my next best role?</li><li>What must be true in 6-12 months?</li><li>What are my top 3 strengths?</li><li>What 2 gaps must I close?</li><li>What 3 actions start this week?</li></ul></div>
+                    <div class="column"><h4>Guidance</h4><ul><li>Be specific—"get promoted" isn't a goal</li><li>Make it measurable—how will you know?</li><li>Focus on what you can influence</li><li>Name real barriers—they're data, not excuses</li></ul></div>
+                </div>
+                <div class="activity-meta">Time: 25–30 minutes</div>
+            </div>
+        </div>
+
+        <div class="slide" data-slide="16">
+            <div class="slide-header"><img src="https://coachingwomenofcolor.com/wp-content/uploads/2021/04/CWCFinal_logo2.webp" alt="CWC" class="logo"><span class="module-label">Module 1</span></div>
+            <div class="slide-content">
+                <span class="section-label">Relationship Capital</span>
+                <h2>Map Your Network</h2>
+                <p>Before building, take stock. Who currently influences your growth? This baseline reveals gaps and opportunities.</p>
+                <div class="cards-grid two-col">
+                    <div class="card"><h4>Manager / Direct Leader</h4><p>Who directly influences your development and reviews?</p></div>
+                    <div class="card"><h4>Key Stakeholders</h4><p>2-3 people whose opinion shapes your reputation</p></div>
+                    <div class="card"><h4>Potential Sponsors</h4><p>Who has power and might advocate for you behind closed doors?</p></div>
+                    <div class="card"><h4>Mentors</h4><p>Who provides guidance, wisdom, or career advice?</p></div>
+                    <div class="card"><h4>Peer Allies</h4><p>Trusted peers you collaborate with and lean on</p></div>
+                    <div class="card"><h4>External Community</h4><p>Networks and groups outside your organization</p></div>
+                </div>
+            </div>
+        </div>
+
+        <div class="slide" data-slide="17">
+            <div class="slide-header"><img src="https://coachingwomenofcolor.com/wp-content/uploads/2021/04/CWCFinal_logo2.webp" alt="CWC" class="logo"><span class="module-label">Module 1</span></div>
+            <div class="slide-content">
+                <span class="section-label">Momentum</span>
+                <h2>The 14-Day Sprint</h2>
+                <p>Momentum starts with small, visible moves. Your first actions should be achievable wins that create forward motion.</p>
+                <div class="feature-list">
+                    <div class="feature-item"><div class="feature-number">1</div><div class="feature-text"><h4>Schedule Your First Moves</h4><p>Block time for the 3 actions from your roadmap—make them non-negotiable</p></div></div>
+                    <div class="feature-item"><div class="feature-number">2</div><div class="feature-text"><h4>Track Evidence of Impact</h4><p>Document wins, feedback, and visibility moments—you'll need this later</p></div></div>
+                    <div class="feature-item"><div class="feature-number">3</div><div class="feature-text"><h4>Schedule One Strategic Conversation</h4><p>A manager check-in, sponsor touchpoint, or stakeholder meeting</p></div></div>
+                </div>
+            </div>
+        </div>
+
+        <div class="slide slide-quote" data-slide="18" style="background: linear-gradient(rgba(245,242,237,0.92), rgba(245,242,237,0.92)), url('https://images.unsplash.com/photo-1470071459604-3b5ec3a7fe05?w=1200&q=80') center/cover no-repeat;">
+            <div class="slide-header"><img src="https://coachingwomenofcolor.com/wp-content/uploads/2021/04/CWCFinal_logo2.webp" alt="CWC" class="logo"><span class="module-label">Reflection</span></div>
+            <div class="slide-content">
+                <p class="quote-text">You don't have to be ready. You have to be willing to start before you feel prepared.</p>
+            </div>
+        </div>
+
+        <div class="slide" data-slide="19">
+            <div class="slide-header"><img src="https://coachingwomenofcolor.com/wp-content/uploads/2021/04/CWCFinal_logo2.webp" alt="CWC" class="logo"><span class="module-label">Module 1</span></div>
+            <div class="slide-content">
+                <span class="section-label">Summary</span>
+                <h2>Key Takeaways</h2>
+                <div class="feature-list">
+                    <div class="feature-item"><div class="feature-number">1</div><div class="feature-text"><h4>Plateaus Are Diagnosable</h4><p>Skill, Role, or Identity—knowing your type unlocks the right strategy</p></div></div>
+                    <div class="feature-item"><div class="feature-number">2</div><div class="feature-text"><h4>Hard Work Alone Won't Get You There</h4><p>Strategic positioning, visibility, and sponsorship matter as much as performance</p></div></div>
+                    <div class="feature-item"><div class="feature-number">3</div><div class="feature-text"><h4>Patterns Repeat Until Interrupted</h4><p>Your stuck loop will continue until you make a different choice</p></div></div>
+                    <div class="feature-item"><div class="feature-number">4</div><div class="feature-text"><h4>Momentum Beats Planning</h4><p>14 days of action creates more clarity than 90 days of thinking</p></div></div>
+                </div>
+            </div>
+        </div>
+
+        <div class="slide" data-slide="20">
+            <div class="slide-header"><img src="https://coachingwomenofcolor.com/wp-content/uploads/2021/04/CWCFinal_logo2.webp" alt="CWC" class="logo"><span class="module-label">Module 1</span></div>
+            <div class="slide-content">
+                <span class="section-label">Before Next Session</span>
+                <h2>Your Homework</h2>
+                <div class="feature-list">
+                    <div class="feature-item"><div class="feature-number">1</div><div class="feature-text"><h4>Complete Your Career Growth Roadmap</h4><p>If you didn't finish in session, complete all sections this week</p></div></div>
+                    <div class="feature-item"><div class="feature-number">2</div><div class="feature-text"><h4>Execute Your First 3 Actions</h4><p>Complete the first moves from your 14-day momentum planner</p></div></div>
+                    <div class="feature-item"><div class="feature-number">3</div><div class="feature-text"><h4>Schedule One Conversation</h4><p>Book a meeting with your manager, sponsor, or key stakeholder</p></div></div>
+                    <div class="feature-item"><div class="feature-number">4</div><div class="feature-text"><h4>Document One Win</h4><p>Capture at least one accomplishment or impact moment this period</p></div></div>
+                </div>
+            </div>
+        </div>
+
+        <div class="slide slide-dark" data-slide="21" style="background: linear-gradient(rgba(26,26,26,0.92), rgba(26,26,26,0.92)), url('https://images.unsplash.com/photo-1507608616759-54f48f0af0ee?w=1200&q=80') center/cover no-repeat;">
+            <div class="slide-header"><img src="https://coachingwomenofcolor.com/wp-content/uploads/2021/04/CWCFinal_logo2.webp" alt="CWC" class="logo" style="filter: brightness(0) invert(1);"><span class="module-label" style="color: rgba(255,255,255,0.5);">Module 1 Complete</span></div>
+            <div class="slide-content">
+                <span class="section-label">Executive Leadership Lab</span>
+                <h2>Your Breakthrough<br>Starts Now</h2>
+                <p>You have the diagnosis. You have the roadmap. You have the first moves.<br>The only thing left is action.</p>
+                <div style="margin-top: 64px; padding-top: 32px; border-top: 1px solid rgba(255,255,255,0.1);">
+                    <p style="font-size: 14px; color: rgba(255,255,255,0.4);">Next Module: Master Your Executive Presence — February</p>
+                </div>
+            </div>
+            <div class="ell-mark">ELL</div>
+        </div>
+    </div>
+
+    <div class="keyboard-hint">Press <kbd>←</kbd> <kbd>→</kbd> to navigate</div>
+    <div class="nav-controls">
+        <button class="nav-btn" id="prevBtn" disabled><svg viewBox="0 0 24 24" fill="currentColor"><path d="M15.41 7.41L14 6l-6 6 6 6 1.41-1.41L10.83 12z"/></svg></button>
+        <span class="slide-counter"><span id="currentSlide">1</span> / <span id="totalSlides">21</span></span>
+        <button class="nav-btn" id="nextBtn"><svg viewBox="0 0 24 24" fill="currentColor"><path d="M10 6L8.59 7.41 13.17 12l-4.58 4.59L10 18l6-6z"/></svg></button>
+    </div>
+
+    <script>
+        const slides = document.querySelectorAll('.slide');
+        const totalSlides = slides.length;
+        let currentSlide = 1;
+        const prevBtn = document.getElementById('prevBtn');
+        const nextBtn = document.getElementById('nextBtn');
+        const currentSlideEl = document.getElementById('currentSlide');
+        const progressBar = document.getElementById('progress');
+        document.getElementById('totalSlides').textContent = totalSlides;
+
+        function updateProgress() { progressBar.style.width = (currentSlide / totalSlides) * 100 + '%'; }
+        function goToSlide(n) {
+            if (n < 1 || n > totalSlides) return;
+            slides[currentSlide - 1].classList.remove('active');
+            currentSlide = n;
+            slides[currentSlide - 1].classList.add('active');
+            currentSlideEl.textContent = currentSlide;
+            prevBtn.disabled = currentSlide === 1;
+            nextBtn.disabled = currentSlide === totalSlides;
+            updateProgress();
+        }
+        function nextSlide() { if (currentSlide < totalSlides) goToSlide(currentSlide + 1); }
+        function prevSlide() { if (currentSlide > 1) goToSlide(currentSlide - 1); }
+        nextBtn.addEventListener('click', nextSlide);
+        prevBtn.addEventListener('click', prevSlide);
+        document.addEventListener('keydown', (e) => {
+            if (e.key === 'ArrowRight' || e.key === ' ') { e.preventDefault(); nextSlide(); }
+            else if (e.key === 'ArrowLeft') { e.preventDefault(); prevSlide(); }
+        });
+        let touchStartX = 0;
+        document.addEventListener('touchstart', e => { touchStartX = e.changedTouches[0].screenX; });
+        document.addEventListener('touchend', e => { const diff = touchStartX - e.changedTouches[0].screenX; if (Math.abs(diff) > 50) { diff > 0 ? nextSlide() : prevSlide(); } });
+        updateProgress();
+    </script>
+</body>
+</html>
