@@ -301,9 +301,9 @@
         <span class="section-title">90-Day Goals</span>
     </div>
     <div class="numbered-fields">
-        <div class="numbered-field"><span class="field-num">1</span><div style="flex:1;"><textarea class="text-short" placeholder="Goal 1: What will you accomplish in 90 days?"></textarea><textarea class="text-short" style="margin-top:8px;" placeholder="How will you measure success?"></textarea></div></div>
-        <div class="numbered-field"><span class="field-num">2</span><div style="flex:1;"><textarea class="text-short" placeholder="Goal 2: What will you accomplish in 90 days?"></textarea><textarea class="text-short" style="margin-top:8px;" placeholder="How will you measure success?"></textarea></div></div>
-        <div class="numbered-field"><span class="field-num">3</span><div style="flex:1;"><textarea class="text-short" placeholder="Goal 3 (optional): What will you accomplish?"></textarea><textarea class="text-short" style="margin-top:8px;" placeholder="How will you measure success?"></textarea></div></div>
+        <div class="numbered-field"><span class="field-num">1</span><div style="flex:1;"><textarea class="text-short" placeholder="Goal 1: What will you accomplish in 30 days?"></textarea><textarea class="text-short" style="margin-top:8px;" placeholder="How will you measure success?"></textarea></div></div>
+        <div class="numbered-field"><span class="field-num">2</span><div style="flex:1;"><textarea class="text-short" placeholder="Goal 2: What will you accomplish in 60 days?"></textarea><textarea class="text-short" style="margin-top:8px;" placeholder="How will you measure success?"></textarea></div></div>
+        <div class="numbered-field"><span class="field-num">3</span><div style="flex:1;"><textarea class="text-short" placeholder="Goal 3: What will you accomplish in 90 days?"></textarea><textarea class="text-short" style="margin-top:8px;" placeholder="How will you measure success?"></textarea></div></div>
     </div>
 </div>
 
@@ -359,6 +359,105 @@
     Career Growth Roadmap | Executive Leadership Lab | Coaching Women of Color<br>
     Module 1: Break Through Career Plateaus | January
 </div>
+
+<div class="save-status" id="saveStatus">All changes saved</div>
+
+<script>
+    // Auto-save functionality
+    const STORAGE_KEY = 'cwc-career-growth-roadmap';
+
+    // Get all form inputs
+    function getAllInputs() {
+        return document.querySelectorAll('input, textarea, select');
+    }
+
+    // Save to localStorage
+    function saveData() {
+        const data = {};
+        getAllInputs().forEach((input, index) => {
+            const key = input.name || input.id || `field_${index}`;
+            if (input.type === 'checkbox') {
+                data[key] = input.checked;
+            } else {
+                data[key] = input.value;
+            }
+        });
+        localStorage.setItem(STORAGE_KEY, JSON.stringify(data));
+        showSaveStatus();
+    }
+
+    // Load from localStorage
+    function loadData() {
+        const saved = localStorage.getItem(STORAGE_KEY);
+        if (saved) {
+            const data = JSON.parse(saved);
+            getAllInputs().forEach((input, index) => {
+                const key = input.name || input.id || `field_${index}`;
+                if (data[key] !== undefined) {
+                    if (input.type === 'checkbox') {
+                        input.checked = data[key];
+                    } else {
+                        input.value = data[key];
+                    }
+                }
+            });
+        }
+    }
+
+    // Show save status
+    function showSaveStatus() {
+        const status = document.getElementById('saveStatus');
+        status.textContent = 'Saved!';
+        status.classList.add('visible');
+        setTimeout(() => {
+            status.classList.remove('visible');
+        }, 2000);
+    }
+
+    // Clear all data
+    function clearAllData() {
+        if (confirm('Are you sure you want to clear all your answers? This cannot be undone.')) {
+            localStorage.removeItem(STORAGE_KEY);
+            getAllInputs().forEach(input => {
+                if (input.type === 'checkbox') {
+                    input.checked = false;
+                } else {
+                    input.value = '';
+                }
+            });
+        }
+    }
+
+    // Add event listeners
+    getAllInputs().forEach(input => {
+        input.addEventListener('input', saveData);
+        input.addEventListener('change', saveData);
+    });
+
+    // Load saved data on page load
+    document.addEventListener('DOMContentLoaded', loadData);
+    loadData();
+</script>
+
+<style>
+    .save-status {
+        position: fixed;
+        bottom: 20px;
+        right: 20px;
+        background: #2A7B8C;
+        color: white;
+        padding: 10px 20px;
+        border-radius: 4px;
+        font-size: 13px;
+        font-weight: 500;
+        opacity: 0;
+        transition: opacity 0.3s ease;
+        z-index: 1000;
+    }
+    .save-status.visible {
+        opacity: 1;
+    }
+</style>
 
 </body>
 </html>

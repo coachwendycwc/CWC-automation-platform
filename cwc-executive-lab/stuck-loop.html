@@ -265,5 +265,50 @@
     Module 1: Break Through Career Plateaus | January
 </div>
 
+<div class="save-status" id="saveStatus">All changes saved</div>
+
+<script>
+    const STORAGE_KEY = 'cwc-stuck-loop';
+    function getAllInputs() { return document.querySelectorAll('input, textarea, select'); }
+    function saveData() {
+        const data = {};
+        getAllInputs().forEach((input, index) => {
+            const key = input.name || input.id || `field_${index}`;
+            data[key] = input.type === 'checkbox' ? input.checked : input.value;
+        });
+        localStorage.setItem(STORAGE_KEY, JSON.stringify(data));
+        showSaveStatus();
+    }
+    function loadData() {
+        const saved = localStorage.getItem(STORAGE_KEY);
+        if (saved) {
+            const data = JSON.parse(saved);
+            getAllInputs().forEach((input, index) => {
+                const key = input.name || input.id || `field_${index}`;
+                if (data[key] !== undefined) {
+                    if (input.type === 'checkbox') input.checked = data[key];
+                    else input.value = data[key];
+                }
+            });
+        }
+    }
+    function showSaveStatus() {
+        const status = document.getElementById('saveStatus');
+        status.textContent = 'Saved!';
+        status.classList.add('visible');
+        setTimeout(() => status.classList.remove('visible'), 2000);
+    }
+    getAllInputs().forEach(input => {
+        input.addEventListener('input', saveData);
+        input.addEventListener('change', saveData);
+    });
+    document.addEventListener('DOMContentLoaded', loadData);
+    loadData();
+</script>
+<style>
+    .save-status { position: fixed; bottom: 20px; right: 20px; background: #2A7B8C; color: white; padding: 10px 20px; border-radius: 4px; font-size: 13px; font-weight: 500; opacity: 0; transition: opacity 0.3s ease; z-index: 1000; }
+    .save-status.visible { opacity: 1; }
+</style>
+
 </body>
 </html>

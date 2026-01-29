@@ -84,10 +84,10 @@
         tr:hover { background: var(--bg-warm); }
 
         .date-cell { width: 90px; }
-        .action-cell { width: 28%; }
-        .time-cell { width: 70px; }
-        .who-cell { width: 15%; }
-        .evidence-cell { width: 20%; }
+        .action-cell { width: 25%; }
+        .who-cell { width: 12%; }
+        .evidence-cell { width: 18%; }
+        .notes-cell { width: 18%; }
         .status-cell { width: 90px; }
 
         input[type="text"], input[type="date"], select {
@@ -169,23 +169,27 @@
         <tr>
             <th class="date-cell">Date</th>
             <th class="action-cell">Action / Task</th>
-            <th class="time-cell">Time</th>
             <th class="who-cell">Who</th>
             <th class="evidence-cell">Evidence / Win</th>
+            <th class="notes-cell">Notes</th>
             <th class="status-cell">Status</th>
         </tr>
     </thead>
     <tbody>
-        <tr><td class="date-cell"><input type="date"></td><td><input type="text" placeholder="What will you do?"></td><td class="time-cell"><input type="text" placeholder="30 min"></td><td><input type="text" placeholder="Who?"></td><td><input type="text" placeholder="What's the win?"></td><td class="status-cell"><select><option value="">Select</option><option>Planned</option><option>In Progress</option><option>Done</option><option>Moved</option></select></td></tr>
-        <tr><td class="date-cell"><input type="date"></td><td><input type="text" placeholder="What will you do?"></td><td class="time-cell"><input type="text" placeholder="30 min"></td><td><input type="text" placeholder="Who?"></td><td><input type="text" placeholder="What's the win?"></td><td class="status-cell"><select><option value="">Select</option><option>Planned</option><option>In Progress</option><option>Done</option><option>Moved</option></select></td></tr>
-        <tr><td class="date-cell"><input type="date"></td><td><input type="text" placeholder="What will you do?"></td><td class="time-cell"><input type="text" placeholder="30 min"></td><td><input type="text" placeholder="Who?"></td><td><input type="text" placeholder="What's the win?"></td><td class="status-cell"><select><option value="">Select</option><option>Planned</option><option>In Progress</option><option>Done</option><option>Moved</option></select></td></tr>
-        <tr><td class="date-cell"><input type="date"></td><td><input type="text" placeholder="What will you do?"></td><td class="time-cell"><input type="text" placeholder="30 min"></td><td><input type="text" placeholder="Who?"></td><td><input type="text" placeholder="What's the win?"></td><td class="status-cell"><select><option value="">Select</option><option>Planned</option><option>In Progress</option><option>Done</option><option>Moved</option></select></td></tr>
-        <tr><td class="date-cell"><input type="date"></td><td><input type="text" placeholder="What will you do?"></td><td class="time-cell"><input type="text" placeholder="30 min"></td><td><input type="text" placeholder="Who?"></td><td><input type="text" placeholder="What's the win?"></td><td class="status-cell"><select><option value="">Select</option><option>Planned</option><option>In Progress</option><option>Done</option><option>Moved</option></select></td></tr>
-        <tr><td class="date-cell"><input type="date"></td><td><input type="text" placeholder="What will you do?"></td><td class="time-cell"><input type="text" placeholder="30 min"></td><td><input type="text" placeholder="Who?"></td><td><input type="text" placeholder="What's the win?"></td><td class="status-cell"><select><option value="">Select</option><option>Planned</option><option>In Progress</option><option>Done</option><option>Moved</option></select></td></tr>
-        <tr><td class="date-cell"><input type="date"></td><td><input type="text" placeholder="What will you do?"></td><td class="time-cell"><input type="text" placeholder="30 min"></td><td><input type="text" placeholder="Who?"></td><td><input type="text" placeholder="What's the win?"></td><td class="status-cell"><select><option value="">Select</option><option>Planned</option><option>In Progress</option><option>Done</option><option>Moved</option></select></td></tr>
-        <tr><td class="date-cell"><input type="date"></td><td><input type="text" placeholder="What will you do?"></td><td class="time-cell"><input type="text" placeholder="30 min"></td><td><input type="text" placeholder="Who?"></td><td><input type="text" placeholder="What's the win?"></td><td class="status-cell"><select><option value="">Select</option><option>Planned</option><option>In Progress</option><option>Done</option><option>Moved</option></select></td></tr>
-        <tr><td class="date-cell"><input type="date"></td><td><input type="text" placeholder="What will you do?"></td><td class="time-cell"><input type="text" placeholder="30 min"></td><td><input type="text" placeholder="Who?"></td><td><input type="text" placeholder="What's the win?"></td><td class="status-cell"><select><option value="">Select</option><option>Planned</option><option>In Progress</option><option>Done</option><option>Moved</option></select></td></tr>
-        <tr><td class="date-cell"><input type="date"></td><td><input type="text" placeholder="What will you do?"></td><td class="time-cell"><input type="text" placeholder="30 min"></td><td><input type="text" placeholder="Who?"></td><td><input type="text" placeholder="What's the win?"></td><td class="status-cell"><select><option value="">Select</option><option>Planned</option><option>In Progress</option><option>Done</option><option>Moved</option></select></td></tr>
+        <tr><td class="date-cell"><input type="date"></td><td><input type="text" placeholder="What will you do?"></td><td><input type="text" placeholder="Who?"></td><td><input type="text" placeholder="What's the win?"></td><td class="notes-cell"><input type="text" placeholder="Notes..."></td><td class="status-cell"><select><option value="">Select</option><option>Planned</option><option>In Progress</option><option>Done</option></select></td></tr>
+        <tr><td class="date-cell"><input type="date"></td><td><input type="text" placeholder="What will you do?"></td><td><input type="text" placeholder="Who?"></td><td><input type="text" placeholder="What's the win?"></td><td class="notes-cell"><input type="text" placeholder="Notes..."></td><td class="status-cell"><select><option value="">Select</option><option>Planned</option><option>In Progress</option><option>Done</option></select></td></tr>
+        <tr><td class="date-cell"><input type="date"></td><td><input type="text" placeholder="What will you do?"></td><td><input type="text" placeholder="Who?"></td><td><input type="text" placeholder="What's the win?"></td><td class="notes-cell"><input type="text" placeholder="Notes..."></td><td class="status-cell"><select><option value="">Select</option><option>Planned</option><option>In Progress</option><option>Done</option></select></td></tr>
+        <tr><td class="date-cell"><input type="date"></td><td><input type="text" placeholder="What will you do?"></td><td><input type="text" placeholder="Who?"></td><td><input type="text" placeholder="What's the win?"></td><td class="notes-cell"><input type="text" placeholder="Notes..."></td><td class="status-cell"><select><option value="">Select</option><option>Planned</option><option>In Progress</option><option>Done</option></select></td></tr>
+        <tr><td class="date-cell"><input type="date"></td><td><input type="text" placeholder="What will you do?"></td><td><input type="text" placeholder="Who?"></td><td><input type="text" placeholder="What's the win?"></td><td class="notes-cell"><input type="text" placeholder="Notes..."></td><td class="status-cell"><select><option value="">Select</option><option>Planned</option><option>In Progress</option><option>Done</option></select></td></tr>
+        <tr><td class="date-cell"><input type="date"></td><td><input type="text" placeholder="What will you do?"></td><td><input type="text" placeholder="Who?"></td><td><input type="text" placeholder="What's the win?"></td><td class="notes-cell"><input type="text" placeholder="Notes..."></td><td class="status-cell"><select><option value="">Select</option><option>Planned</option><option>In Progress</option><option>Done</option></select></td></tr>
+        <tr><td class="date-cell"><input type="date"></td><td><input type="text" placeholder="What will you do?"></td><td><input type="text" placeholder="Who?"></td><td><input type="text" placeholder="What's the win?"></td><td class="notes-cell"><input type="text" placeholder="Notes..."></td><td class="status-cell"><select><option value="">Select</option><option>Planned</option><option>In Progress</option><option>Done</option></select></td></tr>
+        <tr><td class="date-cell"><input type="date"></td><td><input type="text" placeholder="What will you do?"></td><td><input type="text" placeholder="Who?"></td><td><input type="text" placeholder="What's the win?"></td><td class="notes-cell"><input type="text" placeholder="Notes..."></td><td class="status-cell"><select><option value="">Select</option><option>Planned</option><option>In Progress</option><option>Done</option></select></td></tr>
+        <tr><td class="date-cell"><input type="date"></td><td><input type="text" placeholder="What will you do?"></td><td><input type="text" placeholder="Who?"></td><td><input type="text" placeholder="What's the win?"></td><td class="notes-cell"><input type="text" placeholder="Notes..."></td><td class="status-cell"><select><option value="">Select</option><option>Planned</option><option>In Progress</option><option>Done</option></select></td></tr>
+        <tr><td class="date-cell"><input type="date"></td><td><input type="text" placeholder="What will you do?"></td><td><input type="text" placeholder="Who?"></td><td><input type="text" placeholder="What's the win?"></td><td class="notes-cell"><input type="text" placeholder="Notes..."></td><td class="status-cell"><select><option value="">Select</option><option>Planned</option><option>In Progress</option><option>Done</option></select></td></tr>
+        <tr><td class="date-cell"><input type="date"></td><td><input type="text" placeholder="What will you do?"></td><td><input type="text" placeholder="Who?"></td><td><input type="text" placeholder="What's the win?"></td><td class="notes-cell"><input type="text" placeholder="Notes..."></td><td class="status-cell"><select><option value="">Select</option><option>Planned</option><option>In Progress</option><option>Done</option></select></td></tr>
+        <tr><td class="date-cell"><input type="date"></td><td><input type="text" placeholder="What will you do?"></td><td><input type="text" placeholder="Who?"></td><td><input type="text" placeholder="What's the win?"></td><td class="notes-cell"><input type="text" placeholder="Notes..."></td><td class="status-cell"><select><option value="">Select</option><option>Planned</option><option>In Progress</option><option>Done</option></select></td></tr>
+        <tr><td class="date-cell"><input type="date"></td><td><input type="text" placeholder="What will you do?"></td><td><input type="text" placeholder="Who?"></td><td><input type="text" placeholder="What's the win?"></td><td class="notes-cell"><input type="text" placeholder="Notes..."></td><td class="status-cell"><select><option value="">Select</option><option>Planned</option><option>In Progress</option><option>Done</option></select></td></tr>
+        <tr><td class="date-cell"><input type="date"></td><td><input type="text" placeholder="What will you do?"></td><td><input type="text" placeholder="Who?"></td><td><input type="text" placeholder="What's the win?"></td><td class="notes-cell"><input type="text" placeholder="Notes..."></td><td class="status-cell"><select><option value="">Select</option><option>Planned</option><option>In Progress</option><option>Done</option></select></td></tr>
     </tbody>
 </table>
 
@@ -215,6 +219,51 @@
     14-Day Momentum Planner | Executive Leadership Lab | Coaching Women of Color<br>
     Module 1: Break Through Career Plateaus | January
 </div>
+
+<div class="save-status" id="saveStatus">All changes saved</div>
+
+<script>
+    const STORAGE_KEY = 'cwc-momentum-planner';
+    function getAllInputs() { return document.querySelectorAll('input, textarea, select'); }
+    function saveData() {
+        const data = {};
+        getAllInputs().forEach((input, index) => {
+            const key = input.name || input.id || `field_${index}`;
+            data[key] = input.type === 'checkbox' ? input.checked : input.value;
+        });
+        localStorage.setItem(STORAGE_KEY, JSON.stringify(data));
+        showSaveStatus();
+    }
+    function loadData() {
+        const saved = localStorage.getItem(STORAGE_KEY);
+        if (saved) {
+            const data = JSON.parse(saved);
+            getAllInputs().forEach((input, index) => {
+                const key = input.name || input.id || `field_${index}`;
+                if (data[key] !== undefined) {
+                    if (input.type === 'checkbox') input.checked = data[key];
+                    else input.value = data[key];
+                }
+            });
+        }
+    }
+    function showSaveStatus() {
+        const status = document.getElementById('saveStatus');
+        status.textContent = 'Saved!';
+        status.classList.add('visible');
+        setTimeout(() => status.classList.remove('visible'), 2000);
+    }
+    getAllInputs().forEach(input => {
+        input.addEventListener('input', saveData);
+        input.addEventListener('change', saveData);
+    });
+    document.addEventListener('DOMContentLoaded', loadData);
+    loadData();
+</script>
+<style>
+    .save-status { position: fixed; bottom: 20px; right: 20px; background: #2A7B8C; color: white; padding: 10px 20px; border-radius: 4px; font-size: 13px; font-weight: 500; opacity: 0; transition: opacity 0.3s ease; z-index: 1000; }
+    .save-status.visible { opacity: 1; }
+</style>
 
 </body>
 </html>
