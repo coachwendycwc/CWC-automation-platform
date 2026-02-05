@@ -260,8 +260,225 @@
 
         .activity-meta { display: inline-block; margin-top: 40px; padding: 12px 24px; border: 1px solid var(--border); border-radius: 4px; font-size: 13px; color: var(--text-muted); }
 
+        /* Roadmap Steps */
+        .roadmap-steps { display: grid; grid-template-columns: repeat(3, 1fr); gap: 24px; margin-top: 48px; text-align: left; }
+        .roadmap-step { display: flex; align-items: flex-start; gap: 16px; padding: 24px; border: 1px solid var(--border); border-radius: 4px; position: relative; }
+        .roadmap-step::after { content: '→'; position: absolute; right: -18px; top: 50%; transform: translateY(-50%); color: var(--accent-warm); font-size: 20px; font-weight: bold; }
+        .roadmap-step:nth-child(3)::after, .roadmap-step:nth-child(6)::after { display: none; }
+        .step-number { width: 36px; height: 36px; background: var(--accent); border-radius: 50%; display: flex; align-items: center; justify-content: center; font-size: 16px; font-weight: 700; color: white; flex-shrink: 0; }
+        .step-content h4 { font-family: 'Source Serif 4', Georgia, serif; font-size: 16px; font-weight: 600; color: var(--primary); margin-bottom: 6px; }
+        .step-content p { font-size: 14px; color: var(--text-light); margin: 0; line-height: 1.5; }
+
         .keyboard-hint { position: fixed; bottom: 112px; left: 50%; transform: translateX(-50%); font-size: 11px; color: var(--text-muted); letter-spacing: 0.5px; }
         .keyboard-hint kbd { display: inline-block; padding: 2px 6px; border: 1px solid var(--border); border-radius: 3px; font-family: inherit; font-size: 11px; margin: 0 2px; }
+
+        /* ========================================
+           RESPONSIVE STYLES
+           ======================================== */
+
+        /* Tablet Landscape (1024px and below) */
+        @media screen and (max-width: 1024px) {
+            .slide { padding: 60px 80px; }
+            .slide-header { top: 30px; left: 40px; right: 40px; }
+            .slide-content { max-width: 100%; }
+            h1 { font-size: 48px; }
+            .slide-title h1 { font-size: 52px; }
+            h2 { font-size: 36px; }
+            .quote-text { font-size: 28px; }
+            .cards-grid { gap: 24px; }
+            .card { padding: 32px; }
+            .two-column { gap: 48px; }
+            .stats-row { gap: 48px; }
+            .stat-number { font-size: 40px; }
+            .ell-mark { right: 40px; bottom: 30px; }
+        }
+
+        /* Tablet Portrait (768px and below) */
+        @media screen and (max-width: 768px) {
+            .slide { padding: 100px 40px 120px; }
+            .slide-header {
+                top: 20px; left: 24px; right: 24px;
+                flex-direction: column;
+                align-items: flex-start;
+                gap: 8px;
+            }
+            .logo { height: 48px; }
+            .module-label { font-size: 10px; }
+            .slide-content { max-width: 100%; }
+            h1 { font-size: 36px; margin-bottom: 20px; }
+            .slide-title h1 { font-size: 40px; }
+            h2 { font-size: 30px; margin-bottom: 16px; }
+            p, .lead { font-size: 16px; }
+            .lead { font-size: 17px; }
+            .section-label { font-size: 10px; letter-spacing: 2px; margin-bottom: 16px; }
+            .quote-text { font-size: 24px; }
+            .quote-text::before { font-size: 48px; }
+
+            /* Grid adjustments */
+            .cards-grid { grid-template-columns: 1fr; gap: 16px; margin-top: 32px; }
+            .cards-grid.two-col { grid-template-columns: 1fr; }
+
+            /* Roadmap responsive */
+            .roadmap-steps { grid-template-columns: 1fr; gap: 16px; margin-top: 32px; }
+            .roadmap-step { padding: 20px; }
+            .roadmap-step::after { display: none; }
+            .roadmap-step::before { content: '↓'; position: absolute; bottom: -14px; left: 50%; transform: translateX(-50%); color: var(--accent-warm); font-size: 16px; font-weight: bold; z-index: 10; }
+            .roadmap-step:last-child::before { display: none; }
+            .step-number { width: 32px; height: 32px; font-size: 14px; }
+            .step-content h4 { font-size: 15px; }
+            .step-content p { font-size: 13px; }
+            .card { padding: 24px; }
+            .card h4 { font-size: 16px; }
+            .card p { font-size: 14px; }
+
+            .two-column { grid-template-columns: 1fr; gap: 32px; margin-top: 32px; }
+            .column h4 { font-size: 16px; margin-bottom: 16px; }
+            .column li { font-size: 14px; padding: 8px 0; }
+
+            .feature-list { margin-top: 32px; }
+            .feature-item { padding: 20px 0; gap: 16px; }
+            .feature-number { width: 28px; height: 28px; font-size: 13px; }
+            .feature-text h4 { font-size: 15px; }
+            .feature-text p { font-size: 14px; }
+
+            .stats-row { flex-direction: column; gap: 24px; margin-top: 40px; }
+            .stat-number { font-size: 36px; }
+            .stat-label { font-size: 12px; }
+
+            .flow-diagram { flex-wrap: wrap; gap: 12px; margin-top: 32px; }
+            .flow-step { padding: 12px 16px; font-size: 13px; }
+            .flow-arrow { font-size: 16px; }
+
+            .callout { padding: 20px 24px; margin-top: 32px; }
+            .callout p { font-size: 14px; }
+
+            .activity-meta { margin-top: 32px; padding: 10px 20px; font-size: 12px; }
+
+            .title-meta { flex-direction: column; gap: 12px; margin-top: 32px; padding-top: 24px; }
+            .meta-item { font-size: 12px; }
+
+            .ell-mark { right: 24px; bottom: 100px; font-size: 12px; }
+
+            /* Navigation adjustments */
+            .nav-controls { bottom: 24px; gap: 16px; }
+            .nav-btn { width: 44px; height: 44px; }
+            .slide-counter { font-size: 12px; }
+            .keyboard-hint { display: none; }
+        }
+
+        /* Phone Landscape (600px and below) */
+        @media screen and (max-width: 600px) {
+            .slide { padding: 90px 24px 110px; }
+            .slide-header { top: 16px; left: 16px; right: 16px; }
+            .logo { height: 40px; }
+            h1 { font-size: 30px; }
+            .slide-title h1 { font-size: 32px; }
+            h2 { font-size: 26px; }
+            p, .lead { font-size: 15px; }
+            .lead { font-size: 16px; }
+            .quote-text { font-size: 20px; }
+            .quote-text::before { font-size: 40px; margin-bottom: 12px; }
+
+            .card { padding: 20px; }
+            .feature-item { flex-direction: column; align-items: flex-start; gap: 12px; }
+
+            .flow-diagram { justify-content: center; }
+            .flow-step { padding: 10px 14px; font-size: 12px; }
+
+            .ell-mark { display: none; }
+            .nav-controls { bottom: 16px; }
+        }
+
+        /* Phone Portrait (480px and below) */
+        @media screen and (max-width: 480px) {
+            .slide { padding: 80px 16px 100px; justify-content: flex-start; padding-top: 100px; }
+            .slide-header {
+                top: 12px; left: 12px; right: 12px;
+                flex-direction: row;
+                justify-content: space-between;
+                align-items: center;
+            }
+            .logo { height: 32px; }
+            .module-label { font-size: 9px; letter-spacing: 1px; }
+            h1 { font-size: 26px; letter-spacing: -0.5px; }
+            .slide-title h1 { font-size: 28px; }
+            h2 { font-size: 22px; }
+            p, .lead { font-size: 14px; line-height: 1.6; }
+            .lead { font-size: 15px; }
+            .section-label { font-size: 9px; letter-spacing: 1.5px; margin-bottom: 12px; }
+            .quote-text { font-size: 18px; line-height: 1.4; }
+            .quote-text::before { font-size: 32px; margin-bottom: 8px; }
+
+            .card { padding: 16px; }
+            .card h4 { font-size: 15px; margin-bottom: 8px; }
+            .card p { font-size: 13px; line-height: 1.5; }
+
+            .column h4 { font-size: 15px; padding-bottom: 10px; }
+            .column li { font-size: 13px; }
+
+            .feature-number { width: 24px; height: 24px; font-size: 12px; }
+            .feature-text h4 { font-size: 14px; }
+            .feature-text p { font-size: 13px; }
+
+            .stat-number { font-size: 32px; }
+            .stat-label { font-size: 11px; }
+
+            .flow-diagram { flex-direction: column; align-items: center; }
+            .flow-arrow { transform: rotate(90deg); }
+
+            .callout { padding: 16px 20px; }
+            .callout p { font-size: 13px; }
+
+            .title-meta { gap: 8px; margin-top: 24px; padding-top: 20px; }
+            .meta-item { font-size: 11px; }
+
+            .nav-controls { bottom: 12px; gap: 12px; }
+            .nav-btn { width: 40px; height: 40px; }
+            .nav-btn svg { width: 18px; height: 18px; }
+            .slide-counter { font-size: 11px; }
+        }
+
+        /* Landscape orientation adjustments for phones */
+        @media screen and (max-height: 500px) and (orientation: landscape) {
+            .slide {
+                padding: 60px 40px 80px;
+                justify-content: center;
+            }
+            .slide-header { top: 12px; }
+            .logo { height: 28px; }
+            h1 { font-size: 28px; margin-bottom: 12px; }
+            .slide-title h1 { font-size: 32px; }
+            h2 { font-size: 24px; margin-bottom: 12px; }
+            p, .lead { font-size: 14px; }
+            .section-label { margin-bottom: 8px; }
+            .quote-text { font-size: 20px; }
+            .quote-text::before { font-size: 36px; margin-bottom: 8px; }
+
+            .cards-grid { grid-template-columns: repeat(2, 1fr); gap: 12px; margin-top: 20px; }
+            .cards-grid.two-col { grid-template-columns: repeat(2, 1fr); }
+            .card { padding: 16px; }
+            .card h4 { font-size: 14px; }
+            .card p { font-size: 12px; }
+
+            .two-column { grid-template-columns: 1fr 1fr; gap: 24px; margin-top: 20px; }
+
+            .feature-list { margin-top: 20px; }
+            .feature-item { padding: 12px 0; }
+
+            .stats-row { flex-direction: row; gap: 32px; margin-top: 24px; }
+            .stat-number { font-size: 28px; }
+
+            .title-meta { flex-direction: row; gap: 24px; margin-top: 20px; }
+
+            .nav-controls { bottom: 8px; }
+            .nav-btn { width: 36px; height: 36px; }
+        }
+
+        /* Ensure touch targets are accessible */
+        @media (pointer: coarse) {
+            .nav-btn { min-width: 44px; min-height: 44px; }
+            .keyboard-hint { display: none; }
+        }
     </style>
 </head>
 <body>
@@ -278,7 +495,7 @@
                 <h1>Break Through<br>Career Plateaus</h1>
                 <p class="lead">Transform stagnation into strategic momentum. Build the clarity, confidence, and visibility to reach your next level.</p>
                 <div class="title-meta">
-                    <span class="meta-item">10-Month Program</span>
+                    <span class="meta-item">12-Month Program</span>
                     <span class="meta-item">Coaching Women of Color</span>
                 </div>
             </div>
@@ -452,14 +669,14 @@
             <div class="slide-content">
                 <span class="section-label">Strategic Planning</span>
                 <h2>Your Career Growth Roadmap</h2>
-                <p>A structured approach to move from where you are to where you want to be. This becomes your personal north star.</p>
-                <div class="cards-grid two-col">
-                    <div class="card"><h4>North Star</h4><p>Define your "next best role" and what success looks like</p></div>
-                    <div class="card"><h4>Current Reality</h4><p>Honest assessment of where you are and what's blocking progress</p></div>
-                    <div class="card"><h4>Strengths & Gaps</h4><p>What to leverage and what to develop for the next level</p></div>
-                    <div class="card"><h4>90-Day Goals</h4><p>2-3 focused objectives with clear success measures</p></div>
-                    <div class="card"><h4>First Moves</h4><p>Concrete actions for the next 14 days to build momentum</p></div>
-                    <div class="card"><h4>Accountability</h4><p>Who will hold you to this and how often will you check in</p></div>
+                <p>A structured approach to move from where you are to where you want to be. Follow these six steps in order.</p>
+                <div class="roadmap-steps">
+                    <div class="roadmap-step"><div class="step-number">1</div><div class="step-content"><h4>North Star</h4><p>Define your "next best role" and what success looks like</p></div></div>
+                    <div class="roadmap-step"><div class="step-number">2</div><div class="step-content"><h4>Current Reality</h4><p>Honest assessment of where you are and what's blocking progress</p></div></div>
+                    <div class="roadmap-step"><div class="step-number">3</div><div class="step-content"><h4>Strengths & Gaps</h4><p>What to leverage and what to develop for the next level</p></div></div>
+                    <div class="roadmap-step"><div class="step-number">4</div><div class="step-content"><h4>90-Day Goals</h4><p>2-3 focused objectives with clear success measures</p></div></div>
+                    <div class="roadmap-step"><div class="step-number">5</div><div class="step-content"><h4>First Moves</h4><p>Concrete actions for the next 14 days to build momentum</p></div></div>
+                    <div class="roadmap-step"><div class="step-number">6</div><div class="step-content"><h4>Accountability</h4><p>Who will hold you to this and how often will you check in</p></div></div>
                 </div>
             </div>
         </div>
@@ -551,7 +768,7 @@
                 <h2>Your Breakthrough<br>Starts Now</h2>
                 <p>You have the diagnosis. You have the roadmap. You have the first moves.<br>The only thing left is action.</p>
                 <div style="margin-top: 64px; padding-top: 32px; border-top: 1px solid rgba(255,255,255,0.1);">
-                    <p style="font-size: 14px; color: rgba(255,255,255,0.4);">Next Module: Master Your Executive Presence — February</p>
+                    <p style="font-size: 14px; color: rgba(255,255,255,0.4);">Next Module: Strategic Positioning for Promotion — February</p>
                 </div>
             </div>
             <div class="ell-mark">ELL</div>
