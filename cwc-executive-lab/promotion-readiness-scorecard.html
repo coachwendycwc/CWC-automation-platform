@@ -1167,27 +1167,52 @@ KEY INSIGHTS:
 This lead came from the Promotion Readiness Scorecard.
             `;
 
+            // Send emails using hidden form + iframe approach (more reliable)
             try {
-                // Send to Wendy via FormSubmit (primary recipient)
-                await fetch('https://formsubmit.co/ajax/wendy@coachingwomenofcolor.com', {
-                    method: 'POST',
-                    headers: {
-                        'Content-Type': 'application/json',
-                        'Accept': 'application/json'
-                    },
-                    body: JSON.stringify({
-                        name: userData.name,
-                        email: userData.email,
-                        _subject: `New Promotion Readiness Scorecard Result: ${userData.name} - Score: ${resultsData.totalScore}/50`,
-                        _cc: userData.email,
-                        message: emailMessage
-                    })
-                });
+                // Create hidden iframe for form submission
+                let iframe = document.getElementById('form-submit-iframe');
+                if (!iframe) {
+                    iframe = document.createElement('iframe');
+                    iframe.name = 'form-submit-iframe';
+                    iframe.id = 'form-submit-iframe';
+                    iframe.style.display = 'none';
+                    document.body.appendChild(iframe);
+                }
+
+                // Create and submit form to Wendy
+                const form = document.createElement('form');
+                form.method = 'POST';
+                form.action = 'https://formsubmit.co/wendy@coachingwomenofcolor.com';
+                form.target = 'form-submit-iframe';
+
+                const fields = {
+                    name: userData.name,
+                    email: userData.email,
+                    _subject: `Promotion Readiness Scorecard: ${userData.name} - Score: ${resultsData.totalScore}/50`,
+                    _cc: userData.email,
+                    _captcha: 'false',
+                    _template: 'table',
+                    message: emailMessage
+                };
+
+                for (const [key, value] of Object.entries(fields)) {
+                    const input = document.createElement('input');
+                    input.type = 'hidden';
+                    input.name = key;
+                    input.value = value;
+                    form.appendChild(input);
+                }
+
+                document.body.appendChild(form);
+                form.submit();
+                document.body.removeChild(form);
+
+                console.log('Form submitted successfully');
             } catch (error) {
-                console.log('Form submission note:', error);
+                console.log('Form submission error:', error);
             }
 
-            // Show results regardless of email status
+            // Show results immediately
             showResults();
         }
 
