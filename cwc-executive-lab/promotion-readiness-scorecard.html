@@ -1138,33 +1138,134 @@
             const { level, description } = getLevel(resultsData.totalScore);
             const insights = getInsights(resultsData.dimensionScores);
 
-            // Prepare email content
-            const dimensionSummary = Object.entries(resultsData.dimensionScores)
-                .map(([name, data]) => `${name}: ${data.score}/${data.max} (${data.percentage}%)`)
-                .join('\n');
+            // Prepare HTML email content
+            const dimensionRows = Object.entries(resultsData.dimensionScores)
+                .map(([name, data]) => {
+                    const barColor = data.percentage >= 70 ? '#4A9B7F' : data.percentage >= 50 ? '#D4A574' : '#C45C5C';
+                    return `
+                    <tr>
+                        <td style="padding: 12px 0; border-bottom: 1px solid #E5E0D8;">
+                            <div style="font-weight: 600; color: #1A1A1A; margin-bottom: 6px;">${name}</div>
+                            <div style="background: #E5E0D8; border-radius: 4px; height: 8px; overflow: hidden;">
+                                <div style="background: ${barColor}; height: 100%; width: ${data.percentage}%; border-radius: 4px;"></div>
+                            </div>
+                        </td>
+                        <td style="padding: 12px 0; border-bottom: 1px solid #E5E0D8; text-align: right; font-weight: 600; color: #666; width: 60px;">${data.score}/${data.max}</td>
+                    </tr>`;
+                }).join('');
 
-            const insightsSummary = insights.join('\n• ');
+            const insightItems = insights.map(insight =>
+                `<tr><td style="padding: 10px 0; padding-left: 20px; color: #333; font-size: 15px; border-bottom: 1px solid #F0EDE8;">
+                    <span style="color: #D4A574; margin-right: 8px;">→</span>${insight}
+                </td></tr>`
+            ).join('');
+
+            const scoreColor = resultsData.totalScore >= 40 ? '#4A9B7F' : resultsData.totalScore >= 25 ? '#D4A574' : '#C45C5C';
 
             const emailMessage = `
-PROMOTION READINESS SCORECARD RESULTS
-=====================================
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+</head>
+<body style="margin: 0; padding: 0; background-color: #FAF8F5; font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif;">
+    <table role="presentation" width="100%" cellspacing="0" cellpadding="0" style="background-color: #FAF8F5;">
+        <tr>
+            <td align="center" style="padding: 40px 20px;">
+                <table role="presentation" width="600" cellspacing="0" cellpadding="0" style="max-width: 600px; width: 100%;">
 
-Name: ${userData.name}
-Email: ${userData.email}
-Date: ${new Date().toLocaleString()}
+                    <!-- Header -->
+                    <tr>
+                        <td align="center" style="padding-bottom: 32px;">
+                            <img src="https://coachingwomenofcolor.com/wp-content/uploads/2021/04/CWCFinal_logo2.webp" alt="Coaching Women of Color" style="height: 80px; width: auto;">
+                        </td>
+                    </tr>
 
-OVERALL SCORE: ${resultsData.totalScore}/50
-LEVEL: ${level}
-${description}
+                    <!-- Score Card -->
+                    <tr>
+                        <td style="background: linear-gradient(135deg, #1A1A1A 0%, #2d2d2d 100%); border-radius: 16px; padding: 40px; text-align: center;">
+                            <p style="margin: 0 0 8px 0; color: #D4A574; font-size: 18px;">Hi ${userData.name}!</p>
+                            <p style="margin: 0 0 20px 0; color: rgba(255,255,255,0.6); font-size: 12px; text-transform: uppercase; letter-spacing: 2px;">Your Promotion Readiness Score</p>
+                            <p style="margin: 0; font-size: 72px; font-weight: 700; color: ${scoreColor}; line-height: 1;">${resultsData.totalScore}<span style="font-size: 24px; color: rgba(255,255,255,0.4);">/50</span></p>
+                            <p style="margin: 20px 0 8px 0; font-size: 24px; font-weight: 600; color: #fff;">${level}</p>
+                            <p style="margin: 0; font-size: 15px; color: rgba(255,255,255,0.7); max-width: 400px; display: inline-block;">${description}</p>
+                        </td>
+                    </tr>
 
-DIMENSION SCORES:
-${dimensionSummary}
+                    <!-- Spacing -->
+                    <tr><td style="height: 24px;"></td></tr>
 
-KEY INSIGHTS:
-• ${insightsSummary}
+                    <!-- Dimension Breakdown -->
+                    <tr>
+                        <td style="background: #fff; border: 1px solid #E5E0D8; border-radius: 12px; padding: 28px;">
+                            <h3 style="margin: 0 0 20px 0; font-size: 18px; font-weight: 600; color: #1A1A1A;">Your Readiness by Dimension</h3>
+                            <table role="presentation" width="100%" cellspacing="0" cellpadding="0">
+                                ${dimensionRows}
+                            </table>
+                        </td>
+                    </tr>
 
----
-This lead came from the Promotion Readiness Scorecard.
+                    <!-- Spacing -->
+                    <tr><td style="height: 24px;"></td></tr>
+
+                    <!-- Key Insights -->
+                    <tr>
+                        <td style="background: #F5F2ED; border: 2px solid #D4A574; border-radius: 12px; padding: 28px;">
+                            <h3 style="margin: 0 0 16px 0; font-size: 18px; font-weight: 600; color: #1A1A1A;">
+                                <span style="margin-right: 8px;">💡</span>Your Key Insights
+                            </h3>
+                            <table role="presentation" width="100%" cellspacing="0" cellpadding="0">
+                                ${insightItems}
+                            </table>
+                        </td>
+                    </tr>
+
+                    <!-- Spacing -->
+                    <tr><td style="height: 32px;"></td></tr>
+
+                    <!-- CTA Section -->
+                    <tr>
+                        <td style="background: #fff; border: 1px solid #E5E0D8; border-radius: 12px; padding: 32px; text-align: center;">
+                            <h3 style="margin: 0 0 12px 0; font-size: 22px; font-weight: 600; color: #1A1A1A;">Ready to Accelerate Your Promotion?</h3>
+                            <p style="margin: 0 0 24px 0; font-size: 16px; color: #666; max-width: 400px; display: inline-block;">Join the Executive Leadership Lab—a 12-month program designed specifically for women of color ready to break through.</p>
+
+                            <table role="presentation" cellspacing="0" cellpadding="0" style="margin: 0 auto;">
+                                <tr>
+                                    <td style="border-radius: 8px; background: #2A7B8C;">
+                                        <a href="https://calendly.com/coachingwomenofcolor/executive-leadership-lab-connection-call" target="_blank" style="display: inline-block; padding: 16px 32px; font-size: 16px; font-weight: 600; color: #fff; text-decoration: none;">Book a Free Connection Call</a>
+                                    </td>
+                                </tr>
+                            </table>
+
+                            <p style="margin: 16px 0; color: #999; font-size: 13px;">or</p>
+
+                            <table role="presentation" cellspacing="0" cellpadding="0" style="margin: 0 auto;">
+                                <tr>
+                                    <td style="border-radius: 8px; background: #D4A574;">
+                                        <a href="https://www.skool.com/cwc-executive-leadership-lab/about" target="_blank" style="display: inline-block; padding: 16px 32px; font-size: 16px; font-weight: 600; color: #fff; text-decoration: none;">Learn More About the Program</a>
+                                    </td>
+                                </tr>
+                            </table>
+                        </td>
+                    </tr>
+
+                    <!-- Footer -->
+                    <tr>
+                        <td style="padding: 40px 20px; text-align: center;">
+                            <p style="margin: 0 0 8px 0; font-size: 13px; color: #999;">© 2026 Coaching Women of Color. All rights reserved.</p>
+                            <p style="margin: 0; font-size: 13px; color: #999;">
+                                <a href="https://coachingwomenofcolor.com" style="color: #2A7B8C; text-decoration: none;">coachingwomenofcolor.com</a>
+                            </p>
+                        </td>
+                    </tr>
+
+                </table>
+            </td>
+        </tr>
+    </table>
+</body>
+</html>
             `;
 
             // Send emails using hidden form + iframe approach (more reliable)
@@ -1186,12 +1287,11 @@ This lead came from the Promotion Readiness Scorecard.
                 form.target = 'form-submit-iframe';
 
                 const fields = {
-                    name: userData.name,
-                    email: userData.email,
                     _subject: `Promotion Readiness Scorecard: ${userData.name} - Score: ${resultsData.totalScore}/50`,
                     _cc: userData.email,
                     _captcha: 'false',
-                    _template: 'table',
+                    _replyto: userData.email,
+                    _content_type: 'text/html',
                     message: emailMessage
                 };
 
