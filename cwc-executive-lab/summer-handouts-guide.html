@@ -1,0 +1,467 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Summer Handouts Guide - July & August</title>
+    <style>
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+
+        @media print {
+            body { background: white !important; }
+            .no-print { display: none !important; }
+            .container { max-width: 100% !important; }
+            .handout-card { break-inside: avoid; page-break-inside: avoid; }
+        }
+
+        body {
+            font-family: 'Georgia', serif;
+            background: linear-gradient(135deg, #1a1a2e 0%, #16213e 100%);
+            color: #333;
+            line-height: 1.7;
+            min-height: 100vh;
+        }
+
+        .header {
+            background: linear-gradient(135deg, #D4A574 0%, #b8956a 100%);
+            color: white;
+            padding: 40px 20px;
+            text-align: center;
+        }
+
+        .header h1 {
+            font-size: 2.2rem;
+            margin-bottom: 8px;
+            font-weight: 600;
+        }
+
+        .header .subtitle {
+            font-size: 1.1rem;
+            opacity: 0.9;
+        }
+
+        .print-btn {
+            position: fixed;
+            top: 20px;
+            right: 20px;
+            background: #2A7B8C;
+            color: white;
+            border: none;
+            padding: 12px 24px;
+            border-radius: 8px;
+            font-size: 14px;
+            font-weight: 600;
+            cursor: pointer;
+            z-index: 100;
+            box-shadow: 0 4px 15px rgba(0,0,0,0.3);
+        }
+
+        .print-btn:hover {
+            background: #1a5a66;
+        }
+
+        .container {
+            max-width: 800px;
+            margin: 0 auto;
+            padding: 40px 20px;
+        }
+
+        .intro-section {
+            background: white;
+            border-radius: 16px;
+            padding: 32px;
+            margin-bottom: 32px;
+            box-shadow: 0 4px 20px rgba(0,0,0,0.1);
+        }
+
+        .intro-section h2 {
+            color: #2A7B8C;
+            font-size: 1.5rem;
+            margin-bottom: 16px;
+        }
+
+        .intro-section p {
+            margin-bottom: 12px;
+        }
+
+        .handout-card {
+            background: white;
+            border-radius: 16px;
+            padding: 32px;
+            margin-bottom: 24px;
+            box-shadow: 0 4px 20px rgba(0,0,0,0.1);
+        }
+
+        .handout-number {
+            display: inline-block;
+            background: linear-gradient(135deg, #D4A574 0%, #b8956a 100%);
+            color: white;
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            text-align: center;
+            line-height: 40px;
+            font-weight: 700;
+            font-size: 1.2rem;
+            margin-bottom: 16px;
+        }
+
+        .handout-card h3 {
+            color: #1a1a2e;
+            font-size: 1.4rem;
+            margin-bottom: 12px;
+        }
+
+        .handout-card .purpose {
+            background: #f8f9fa;
+            border-left: 4px solid #2A7B8C;
+            padding: 12px 16px;
+            margin: 16px 0;
+            border-radius: 0 8px 8px 0;
+        }
+
+        .handout-card .purpose strong {
+            color: #2A7B8C;
+        }
+
+        .handout-card h4 {
+            color: #2A7B8C;
+            font-size: 1rem;
+            margin: 20px 0 12px 0;
+        }
+
+        .handout-card ul {
+            margin-left: 20px;
+        }
+
+        .handout-card li {
+            margin-bottom: 8px;
+        }
+
+        .woc-note {
+            background: linear-gradient(135deg, #fff5eb 0%, #ffe8d6 100%);
+            border-left: 4px solid #D4A574;
+            padding: 12px 16px;
+            margin: 16px 0;
+            border-radius: 0 8px 8px 0;
+            font-size: 0.95rem;
+        }
+
+        .woc-note strong {
+            color: #c49660;
+        }
+
+        .community-section {
+            background: white;
+            border-radius: 16px;
+            padding: 32px;
+            margin-bottom: 24px;
+            box-shadow: 0 4px 20px rgba(0,0,0,0.1);
+        }
+
+        .community-section h2 {
+            color: #2A7B8C;
+            font-size: 1.5rem;
+            margin-bottom: 20px;
+        }
+
+        .engagement-grid {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 16px;
+        }
+
+        .engagement-item {
+            background: #f8f9fa;
+            padding: 20px;
+            border-radius: 12px;
+            border: 1px solid #e0e0e0;
+        }
+
+        .engagement-item h4 {
+            color: #D4A574;
+            font-size: 1rem;
+            margin-bottom: 8px;
+        }
+
+        .engagement-item p {
+            font-size: 0.9rem;
+            color: #666;
+            margin: 0;
+        }
+
+        .timeline-box {
+            background: linear-gradient(135deg, #e8f4f6 0%, #d4e8eb 100%);
+            border-radius: 12px;
+            padding: 24px;
+            margin-top: 24px;
+        }
+
+        .timeline-box h4 {
+            color: #2A7B8C;
+            margin-bottom: 16px;
+        }
+
+        .timeline-item {
+            display: flex;
+            gap: 16px;
+            margin-bottom: 12px;
+        }
+
+        .timeline-week {
+            background: #2A7B8C;
+            color: white;
+            padding: 4px 12px;
+            border-radius: 4px;
+            font-size: 0.85rem;
+            font-weight: 600;
+            white-space: nowrap;
+        }
+
+        @media (max-width: 768px) {
+            .engagement-grid {
+                grid-template-columns: 1fr;
+            }
+        }
+    </style>
+</head>
+<body>
+    <button class="print-btn no-print" onclick="window.print()">Print / Download PDF</button>
+
+    <div class="header">
+        <h1>Summer Handouts Guide</h1>
+        <p class="subtitle">July & August | Executive Leadership Lab</p>
+    </div>
+
+    <div class="container">
+
+        <!-- Introduction -->
+        <div class="intro-section">
+            <h2>Summer Integration Period</h2>
+            <p>July and August serve as a pause from live modules, giving participants time to integrate the learning from the first half of the year (January-June) while continuing to build relationships and community.</p>
+            <p>During this period, provide these six handouts for self-paced work, along with community engagement activities to maintain momentum.</p>
+        </div>
+
+        <!-- Handout 1 -->
+        <div class="handout-card">
+            <div class="handout-number">1</div>
+            <h3>Board of Advisors Deep Dive</h3>
+
+            <div class="purpose">
+                <strong>Purpose:</strong> Expand on June's Board of Advisors introduction with comprehensive relationship mapping and actionable outreach strategies.
+            </div>
+
+            <h4>What to Include</h4>
+            <ul>
+                <li><strong>Advisor Categories:</strong> Mentor, Sponsor, Peer Ally, Coach, Industry Connector</li>
+                <li><strong>Relationship Mapping Worksheet:</strong> Current advisors vs. gaps to fill</li>
+                <li><strong>Outreach Templates:</strong> Email/LinkedIn scripts for cold and warm outreach</li>
+                <li><strong>60-Day Nurture Calendar:</strong> Weekly touchpoint schedule for relationship building</li>
+                <li><strong>Conversation Starters:</strong> What to talk about beyond "Can you help me?"</li>
+                <li><strong>Giving First Strategies:</strong> How to add value before asking for anything</li>
+            </ul>
+
+            <div class="woc-note">
+                <strong>WOC Focus:</strong> Include guidance on building cross-cultural relationships, navigating spaces where advisors don't "look like you," and finding advisors who understand the WOC experience.
+            </div>
+        </div>
+
+        <!-- Handout 2 -->
+        <div class="handout-card">
+            <div class="handout-number">2</div>
+            <h3>Sponsor vs. Mentor Guide</h3>
+
+            <div class="purpose">
+                <strong>Purpose:</strong> Clarify the critical difference between sponsors and mentors, and provide strategies for finding and cultivating sponsors.
+            </div>
+
+            <h4>What to Include</h4>
+            <ul>
+                <li><strong>The Difference:</strong> Mentors advise; Sponsors advocate. Mentors talk TO you; Sponsors talk ABOUT you.</li>
+                <li><strong>Why Sponsors Matter More:</strong> Research on sponsorship and promotion rates</li>
+                <li><strong>The Sponsorship Gap:</strong> Why WOC are over-mentored and under-sponsored</li>
+                <li><strong>Finding Potential Sponsors:</strong> Who has power, influence, and access?</li>
+                <li><strong>Earning Sponsorship:</strong> You can't ask for a sponsor—you earn one</li>
+                <li><strong>Converting Mentors to Sponsors:</strong> Strategies for deepening relationships</li>
+                <li><strong>Making It Easy to Sponsor You:</strong> Giving sponsors the language and evidence they need</li>
+            </ul>
+
+            <div class="woc-note">
+                <strong>WOC Focus:</strong> Address the reality that sponsors are often white men with power, and how to navigate those relationships authentically without code-switching away your identity.
+            </div>
+        </div>
+
+        <!-- Handout 3 -->
+        <div class="handout-card">
+            <div class="handout-number">3</div>
+            <h3>Mid-Year Reflection Workbook</h3>
+
+            <div class="purpose">
+                <strong>Purpose:</strong> Structured reflection on January-June progress to consolidate learning and prepare for the second half.
+            </div>
+
+            <h4>What to Include</h4>
+            <ul>
+                <li><strong>Win Inventory:</strong> Compile all wins tracked since January</li>
+                <li><strong>Goal Check-In:</strong> Review Career Growth Roadmap goals—what's on track, what needs adjustment?</li>
+                <li><strong>Visibility Audit:</strong> Who now knows your work that didn't in January?</li>
+                <li><strong>Skills Assessment:</strong> What new capabilities have you developed?</li>
+                <li><strong>Relationship Inventory:</strong> Who's in your network now vs. January?</li>
+                <li><strong>Lessons Learned:</strong> What worked? What didn't? What surprised you?</li>
+                <li><strong>Second-Half Intentions:</strong> What do you want from September-December?</li>
+                <li><strong>One Big Question:</strong> What's the one thing you still need to figure out?</li>
+            </ul>
+
+            <div class="woc-note">
+                <strong>WOC Focus:</strong> Include reflection on how identity has shown up in their journey—moments of pride, moments of challenge, and how they've navigated both.
+            </div>
+        </div>
+
+        <!-- Handout 4 -->
+        <div class="handout-card">
+            <div class="handout-number">4</div>
+            <h3>Networking for Introverts</h3>
+
+            <div class="purpose">
+                <strong>Purpose:</strong> Authentic networking strategies for those who find traditional networking draining or inauthentic.
+            </div>
+
+            <h4>What to Include</h4>
+            <ul>
+                <li><strong>Redefining Networking:</strong> It's relationship-building, not collecting business cards</li>
+                <li><strong>Quality Over Quantity:</strong> Deep connections beat wide networks</li>
+                <li><strong>Energy Management:</strong> How to network without depleting yourself</li>
+                <li><strong>One-on-One Strategies:</strong> Coffee chats, virtual meetings, walking meetings</li>
+                <li><strong>Written Networking:</strong> Thoughtful emails, LinkedIn engagement, commenting on content</li>
+                <li><strong>Event Survival Guide:</strong> How to work a room when you'd rather leave</li>
+                <li><strong>Follow-Up Systems:</strong> Maintaining relationships without constant socializing</li>
+                <li><strong>Permission to Be Yourself:</strong> Networking doesn't require becoming an extrovert</li>
+            </ul>
+
+            <div class="woc-note">
+                <strong>WOC Focus:</strong> Address the additional energy cost of networking in predominantly white spaces, and strategies for finding community and belonging.
+            </div>
+        </div>
+
+        <!-- Handout 5 -->
+        <div class="handout-card">
+            <div class="handout-number">5</div>
+            <h3>The Reciprocity Playbook</h3>
+
+            <div class="purpose">
+                <strong>Purpose:</strong> Teach participants how to add value to their network, building genuine relationships rather than transactional ones.
+            </div>
+
+            <h4>What to Include</h4>
+            <ul>
+                <li><strong>The Giving Mindset:</strong> Lead with value, not asks</li>
+                <li><strong>25 Ways to Add Value:</strong> Specific actions that help others (introductions, sharing resources, amplifying work, etc.)</li>
+                <li><strong>The 5-Minute Favor:</strong> Small acts that make a big impact</li>
+                <li><strong>Connecting Others:</strong> Being a bridge in your network</li>
+                <li><strong>Sharing Your Expertise:</strong> How to offer help without overcommitting</li>
+                <li><strong>Celebrating Others:</strong> Public recognition, recommendations, endorsements</li>
+                <li><strong>The Reciprocity Bank:</strong> Tracking how you've added value (not to keep score, but to remind yourself of your generosity)</li>
+                <li><strong>When to Ask:</strong> How giving creates space for receiving</li>
+            </ul>
+
+            <div class="woc-note">
+                <strong>WOC Focus:</strong> Balance giving generously with protecting your energy—address the tendency to over-give and under-receive.
+            </div>
+        </div>
+
+        <!-- Handout 6 -->
+        <div class="handout-card">
+            <div class="handout-number">6</div>
+            <h3>Summer Reading List</h3>
+
+            <div class="purpose">
+                <strong>Purpose:</strong> Curated resources for continued learning during the summer pause, with discussion prompts for community engagement.
+            </div>
+
+            <h4>Suggested Categories</h4>
+            <ul>
+                <li><strong>Leadership & Executive Presence</strong> (2-3 books)</li>
+                <li><strong>Career Strategy & Advancement</strong> (2-3 books)</li>
+                <li><strong>The WOC Experience</strong> (2-3 books by/for women of color)</li>
+                <li><strong>Negotiation & Influence</strong> (1-2 books)</li>
+                <li><strong>Wellness & Sustainability</strong> (1-2 books)</li>
+                <li><strong>Podcasts & Articles</strong> (curated list for those who prefer audio/shorter content)</li>
+            </ul>
+
+            <h4>For Each Resource, Include</h4>
+            <ul>
+                <li>Brief description (2-3 sentences)</li>
+                <li>Why it's relevant to the program</li>
+                <li>2-3 discussion questions for the community</li>
+                <li>Key takeaway to look for</li>
+            </ul>
+
+            <div class="woc-note">
+                <strong>WOC Focus:</strong> Center books by women of color authors and ensure the reading list reflects diverse perspectives, not just mainstream leadership advice.
+            </div>
+        </div>
+
+        <!-- Community Engagement -->
+        <div class="community-section">
+            <h2>Community Engagement Activities</h2>
+            <p style="margin-bottom: 20px;">Keep the community active during the summer pause with these low-lift engagement strategies:</p>
+
+            <div class="engagement-grid">
+                <div class="engagement-item">
+                    <h4>Accountability Partner Pairings</h4>
+                    <p>Match participants in pairs for bi-weekly summer check-ins. Provide a simple agenda: share one win, one challenge, one goal for next two weeks.</p>
+                </div>
+                <div class="engagement-item">
+                    <h4>Weekly Skool Discussion Prompts</h4>
+                    <p>Post one thought-provoking question each week to keep conversation flowing. Rotate between reflection, celebration, and advice-seeking.</p>
+                </div>
+                <div class="engagement-item">
+                    <h4>Win of the Week Thread</h4>
+                    <p>Casual weekly thread where participants share wins—big or small. Creates habit of celebrating and builds community support.</p>
+                </div>
+                <div class="engagement-item">
+                    <h4>Optional Book Club Meetup</h4>
+                    <p>One virtual gathering mid-summer to discuss summer reading. Keep it informal—45 minutes max.</p>
+                </div>
+            </div>
+
+            <div class="timeline-box">
+                <h4>Suggested Summer Schedule</h4>
+                <div class="timeline-item">
+                    <span class="timeline-week">Week 1</span>
+                    <span>Release Handouts 1-3 + Pair accountability partners</span>
+                </div>
+                <div class="timeline-item">
+                    <span class="timeline-week">Week 2</span>
+                    <span>Discussion prompt: "Biggest lesson from the first half?"</span>
+                </div>
+                <div class="timeline-item">
+                    <span class="timeline-week">Week 3</span>
+                    <span>Release Handouts 4-6 + Win of the Week thread</span>
+                </div>
+                <div class="timeline-item">
+                    <span class="timeline-week">Week 4</span>
+                    <span>Discussion prompt: "Who's one person you want to connect with?"</span>
+                </div>
+                <div class="timeline-item">
+                    <span class="timeline-week">Week 5</span>
+                    <span>Accountability partner check-in reminder</span>
+                </div>
+                <div class="timeline-item">
+                    <span class="timeline-week">Week 6</span>
+                    <span>Optional Book Club meetup</span>
+                </div>
+                <div class="timeline-item">
+                    <span class="timeline-week">Week 7</span>
+                    <span>Discussion prompt: "What are you most excited about for September?"</span>
+                </div>
+                <div class="timeline-item">
+                    <span class="timeline-week">Week 8</span>
+                    <span>Mid-Year Reflection sharing + Preview of September module</span>
+                </div>
+            </div>
+        </div>
+
+    </div>
+</body>
+</html>
