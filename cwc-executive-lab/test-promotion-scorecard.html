@@ -74,6 +74,7 @@
             margin-top: 16px;
         }
         .btn:hover { background: #c49660; }
+        .btn:disabled { background: #666; cursor: not-allowed; }
         .config-display {
             background: #333;
             border-radius: 8px;
@@ -86,6 +87,8 @@
         .config-item { margin: 4px 0; }
         .config-key { color: #D4A574; }
         .config-value { color: #4A9B7F; }
+        #test-frame { display: none; }
+        .loading { opacity: 0.5; }
     </style>
 </head>
 <body>
@@ -95,35 +98,38 @@
 
         <div class="summary">
             <div class="summary-label">Test Results</div>
-            <div class="summary-score" id="test-score">0/0</div>
-            <button class="btn" onclick="runAllTests()">Run All Tests</button>
+            <div class="summary-score" id="test-score">--</div>
+            <button class="btn" id="run-btn" onclick="runAllTests()">Run All Tests</button>
         </div>
 
         <div class="test-section">
             <h2>Configuration Tests</h2>
-            <div id="config-tests"></div>
+            <div id="config-tests"><div class="test-item"><div class="status pending">?</div><div class="test-name">Waiting to run...</div></div></div>
         </div>
 
         <div class="test-section">
             <h2>Scoring Logic Tests</h2>
-            <div id="scoring-tests"></div>
+            <div id="scoring-tests"><div class="test-item"><div class="status pending">?</div><div class="test-name">Waiting to run...</div></div></div>
         </div>
 
         <div class="test-section">
             <h2>UI Element Tests</h2>
-            <div id="ui-tests"></div>
+            <div id="ui-tests"><div class="test-item"><div class="status pending">?</div><div class="test-name">Waiting to run...</div></div></div>
         </div>
 
         <div class="test-section">
             <h2>Link Validation Tests</h2>
-            <div id="link-tests"></div>
+            <div id="link-tests"><div class="test-item"><div class="status pending">?</div><div class="test-name">Waiting to run...</div></div></div>
         </div>
 
         <div class="test-section">
             <h2>Current Configuration</h2>
-            <div class="config-display" id="config-display"></div>
+            <div class="config-display" id="config-display">Click "Run All Tests" to load configuration</div>
         </div>
     </div>
+
+    <!-- Hidden iframe to load the scorecard -->
+    <iframe id="test-frame" src="promotion-readiness-scorecard.html"></iframe>
 
     <script>
         // Test results storage
@@ -142,20 +148,6 @@
             dimensions: 5
         };
 
-        // Scoring logic (copied from main file for testing)
-        const questions = [
-            { category: "Visibility", options: [1, 2, 3, 4, 5] },
-            { category: "Visibility", options: [1, 2, 3, 4, 5] },
-            { category: "Performance", options: [1, 2, 3, 4, 5] },
-            { category: "Performance", options: [1, 2, 3, 4, 5] },
-            { category: "Positioning", options: [1, 2, 3, 4, 5] },
-            { category: "Positioning", options: [1, 2, 3, 4, 5] },
-            { category: "Readiness", options: [1, 2, 3, 4, 5] },
-            { category: "Readiness", options: [1, 2, 3, 4, 5] },
-            { category: "Mindset", options: [1, 2, 3, 4, 5] },
-            { category: "Mindset", options: [1, 2, 3, 4, 5] }
-        ];
-
         function getLevel(score) {
             if (score >= 45) return "Promotion Ready";
             if (score >= 35) return "Almost There";
@@ -163,7 +155,6 @@
             return "Foundation Stage";
         }
 
-        // Test functions
         function addTest(category, name, passed, detail = '') {
             testResults.tests.push({ category, name, passed, detail });
             if (passed) testResults.passed++;
@@ -182,146 +173,148 @@
             `;
         }
 
-        async function runConfigTests() {
-            // Fetch the main scorecard file
-            try {
-                const response = await fetch('promotion-readiness-scorecard.html');
-                const html = await response.text();
+        function runConfigTests(html) {
+            // Test EmailJS public key
+            const hasPublicKey = html.includes(expectedConfig.emailjs_public_key);
+            addTest('config', 'EmailJS Public Key', hasPublicKey,
+                hasPublicKey ? 'Key found in code' : 'Key NOT found - emails will fail');
 
-                // Test EmailJS public key
-                const hasPublicKey = html.includes(expectedConfig.emailjs_public_key);
-                addTest('config', 'EmailJS Public Key', hasPublicKey,
-                    hasPublicKey ? 'Key found in code' : 'Key NOT found - emails will fail');
+            // Test Service ID
+            const hasServiceId = html.includes(expectedConfig.emailjs_service_id);
+            addTest('config', 'EmailJS Service ID', hasServiceId,
+                hasServiceId ? `Using ${expectedConfig.emailjs_service_id}` : 'Service ID NOT found');
 
-                // Test Service ID
-                const hasServiceId = html.includes(expectedConfig.emailjs_service_id);
-                addTest('config', 'EmailJS Service ID', hasServiceId,
-                    hasServiceId ? `Using ${expectedConfig.emailjs_service_id}` : 'Service ID NOT found');
+            // Test Template ID
+            const hasTemplateId = html.includes(expectedConfig.emailjs_template_id);
+            addTest('config', 'EmailJS Template ID', hasTemplateId,
+                hasTemplateId ? `Using ${expectedConfig.emailjs_template_id}` : 'Template ID NOT found');
 
-                // Test Template ID
-                const hasTemplateId = html.includes(expectedConfig.emailjs_template_id);
-                addTest('config', 'EmailJS Template ID', hasTemplateId,
-                    hasTemplateId ? `Using ${expectedConfig.emailjs_template_id}` : 'Template ID NOT found');
+            // Test recipient email
+            const hasRecipient = html.includes(expectedConfig.recipient_email);
+            addTest('config', 'Recipient Email', hasRecipient,
+                hasRecipient ? expectedConfig.recipient_email : 'Recipient NOT found');
 
-                // Test recipient email
-                const hasRecipient = html.includes(expectedConfig.recipient_email);
-                addTest('config', 'Recipient Email', hasRecipient,
-                    hasRecipient ? expectedConfig.recipient_email : 'Recipient NOT found');
+            // Test Calendly URL
+            const hasCalendly = html.includes(expectedConfig.calendly_url);
+            addTest('config', 'Calendly Link', hasCalendly,
+                hasCalendly ? 'Calendly URL present' : 'Calendly URL NOT found');
 
-                // Test Calendly URL
-                const hasCalendly = html.includes(expectedConfig.calendly_url);
-                addTest('config', 'Calendly Link', hasCalendly,
-                    hasCalendly ? 'Calendly URL present' : 'Calendly URL NOT found');
+            // Test Skool URL
+            const hasSkool = html.includes(expectedConfig.skool_url);
+            addTest('config', 'Skool Link', hasSkool,
+                hasSkool ? 'Skool URL present' : 'Skool URL NOT found');
 
-                // Test Skool URL
-                const hasSkool = html.includes(expectedConfig.skool_url);
-                addTest('config', 'Skool Link', hasSkool,
-                    hasSkool ? 'Skool URL present' : 'Skool URL NOT found');
-
-                // Test question count
-                const questionMatches = html.match(/category:\s*"/g);
-                const questionCount = questionMatches ? questionMatches.length : 0;
-                addTest('config', 'Question Count', questionCount === expectedConfig.total_questions,
-                    `Found ${questionCount} questions (expected ${expectedConfig.total_questions})`);
-
-            } catch (error) {
-                addTest('config', 'File Load', false, `Error: ${error.message}`);
-            }
+            // Test question count
+            const questionMatches = html.match(/category:\s*"/g);
+            const questionCount = questionMatches ? questionMatches.length : 0;
+            addTest('config', 'Question Count', questionCount === expectedConfig.total_questions,
+                `Found ${questionCount} questions (expected ${expectedConfig.total_questions})`);
         }
 
         function runScoringTests() {
             // Test minimum score
-            const minScore = 10; // All 1s
+            const minScore = 10;
             const minLevel = getLevel(minScore);
             addTest('scoring', 'Minimum Score Level', minLevel === 'Foundation Stage',
                 `Score 10 = "${minLevel}"`);
 
             // Test maximum score
-            const maxScore = 50; // All 5s
+            const maxScore = 50;
             const maxLevel = getLevel(maxScore);
             addTest('scoring', 'Maximum Score Level', maxLevel === 'Promotion Ready',
                 `Score 50 = "${maxLevel}"`);
+
+            // Test boundary: 24 (should be Foundation Stage)
+            const level24 = getLevel(24);
+            addTest('scoring', 'Score 24 Level', level24 === 'Foundation Stage',
+                `Score 24 = "${level24}"`);
 
             // Test boundary: 25
             const level25 = getLevel(25);
             addTest('scoring', 'Boundary Score 25', level25 === 'Building Momentum',
                 `Score 25 = "${level25}"`);
 
+            // Test boundary: 34 (should be Building Momentum)
+            const level34 = getLevel(34);
+            addTest('scoring', 'Score 34 Level', level34 === 'Building Momentum',
+                `Score 34 = "${level34}"`);
+
             // Test boundary: 35
             const level35 = getLevel(35);
             addTest('scoring', 'Boundary Score 35', level35 === 'Almost There',
                 `Score 35 = "${level35}"`);
 
+            // Test boundary: 44 (should be Almost There)
+            const level44 = getLevel(44);
+            addTest('scoring', 'Score 44 Level', level44 === 'Almost There',
+                `Score 44 = "${level44}"`);
+
             // Test boundary: 45
             const level45 = getLevel(45);
             addTest('scoring', 'Boundary Score 45', level45 === 'Promotion Ready',
                 `Score 45 = "${level45}"`);
-
-            // Test score range validity
-            const validRange = expectedConfig.max_score === 50 && questions.length === 10;
-            addTest('scoring', 'Score Range Valid', validRange,
-                `Max: ${expectedConfig.max_score}, Questions: ${questions.length}`);
         }
 
-        async function runUITests() {
-            try {
-                const response = await fetch('promotion-readiness-scorecard.html');
-                const html = await response.text();
+        function runUITests(html) {
+            // Test logo presence
+            const hasLogo = html.includes('CWCFinal_logo');
+            addTest('ui', 'CWC Logo', hasLogo, hasLogo ? 'Logo image found' : 'Logo NOT found');
 
-                // Test logo presence
-                const hasLogo = html.includes('CWCFinal_logo') || html.includes('coachingwomenofcolor.com');
-                addTest('ui', 'CWC Logo', hasLogo, hasLogo ? 'Logo image found' : 'Logo NOT found');
+            // Test logo format (should be PNG for email compatibility)
+            const hasPngLogo = html.includes('.png') && html.includes('CWCFinal_logo');
+            addTest('ui', 'Logo PNG Format', hasPngLogo, hasPngLogo ? 'Using PNG format' : 'Not using PNG - may not render in emails');
 
-                // Test progress bar
-                const hasProgress = html.includes('progress-fill') && html.includes('progress-bar');
-                addTest('ui', 'Progress Bar', hasProgress, hasProgress ? 'Progress elements found' : 'Progress bar NOT found');
+            // Test progress bar
+            const hasProgress = html.includes('progress-fill') && html.includes('progress-bar');
+            addTest('ui', 'Progress Bar', hasProgress, hasProgress ? 'Progress elements found' : 'Progress bar NOT found');
 
-                // Test email capture form
-                const hasEmailForm = html.includes('user-email') && html.includes('user-name');
-                addTest('ui', 'Email Capture Form', hasEmailForm, hasEmailForm ? 'Form fields found' : 'Form NOT found');
+            // Test email capture form
+            const hasEmailForm = html.includes('user-email') && html.includes('user-name');
+            addTest('ui', 'Email Capture Form', hasEmailForm, hasEmailForm ? 'Form fields found' : 'Form NOT found');
 
-                // Test results container
-                const hasResults = html.includes('results-container') && html.includes('total-score');
-                addTest('ui', 'Results Display', hasResults, hasResults ? 'Results elements found' : 'Results NOT found');
+            // Test results container
+            const hasResults = html.includes('results-container') && html.includes('total-score');
+            addTest('ui', 'Results Display', hasResults, hasResults ? 'Results elements found' : 'Results NOT found');
 
-                // Test CTA buttons
-                const hasCTA = html.includes('Book a Free Connection Call') && html.includes('Learn More');
-                addTest('ui', 'CTA Buttons', hasCTA, hasCTA ? 'Both CTAs present' : 'CTA buttons NOT found');
+            // Test CTA buttons
+            const hasCalendlyCTA = html.includes('Book a Free Connection Call');
+            const hasSkoolCTA = html.includes('Learn More About');
+            addTest('ui', 'Calendly CTA Button', hasCalendlyCTA, hasCalendlyCTA ? 'Calendly CTA present' : 'Calendly CTA NOT found');
+            addTest('ui', 'Skool CTA Button', hasSkoolCTA, hasSkoolCTA ? 'Skool CTA present' : 'Skool CTA NOT found');
 
-                // Test dimensions display
-                const hasDimensions = html.includes('dimensions-breakdown');
-                addTest('ui', 'Dimensions Breakdown', hasDimensions, hasDimensions ? 'Dimension display found' : 'Dimensions NOT found');
+            // Test dimensions display
+            const hasDimensions = html.includes('dimensions-breakdown');
+            addTest('ui', 'Dimensions Breakdown', hasDimensions, hasDimensions ? 'Dimension display found' : 'Dimensions NOT found');
 
-            } catch (error) {
-                addTest('ui', 'UI Test Load', false, `Error: ${error.message}`);
-            }
+            // Test EmailJS SDK
+            const hasEmailJS = html.includes('emailjs.init') && html.includes('@emailjs/browser');
+            addTest('ui', 'EmailJS SDK Loaded', hasEmailJS, hasEmailJS ? 'EmailJS SDK present' : 'EmailJS SDK NOT found');
         }
 
-        async function runLinkTests() {
-            const linksToTest = [
-                { name: 'Calendly', url: expectedConfig.calendly_url },
-                { name: 'Skool', url: expectedConfig.skool_url },
-                { name: 'CWC Website', url: 'https://coachingwomenofcolor.com' }
-            ];
+        function runLinkTests(html) {
+            // Calendly URL
+            const hasCalendly = html.includes(expectedConfig.calendly_url);
+            addTest('link', 'Calendly URL', hasCalendly, hasCalendly ? 'URL present in code' : 'URL NOT found');
 
-            for (const link of linksToTest) {
-                // We can't actually fetch external URLs due to CORS, but we can verify they're in the file
-                try {
-                    const response = await fetch('promotion-readiness-scorecard.html');
-                    const html = await response.text();
-                    const hasLink = html.includes(link.url);
-                    addTest('link', `${link.name} URL`, hasLink, hasLink ? 'URL present in code' : 'URL NOT found');
-                } catch (error) {
-                    addTest('link', `${link.name} URL`, false, `Error: ${error.message}`);
-                }
-            }
+            // Skool URL
+            const hasSkool = html.includes(expectedConfig.skool_url);
+            addTest('link', 'Skool URL', hasSkool, hasSkool ? 'URL present in code' : 'URL NOT found');
+
+            // CWC Website
+            const hasCWC = html.includes('coachingwomenofcolor.com');
+            addTest('link', 'CWC Website URL', hasCWC, hasCWC ? 'URL present in code' : 'URL NOT found');
+
+            // Check for broken subject line encoding
+            const hasSlashInSubject = html.includes("Score: ${resultsData.totalScore}/50");
+            const hasFixedSubject = html.includes("out of 50");
+            addTest('link', 'Subject Line Format', hasFixedSubject && !hasSlashInSubject,
+                hasFixedSubject ? 'Using "out of 50" format (no encoding issues)' : 'May have slash encoding issue');
         }
 
         function renderResults() {
             const total = testResults.passed + testResults.failed;
             document.getElementById('test-score').textContent = `${testResults.passed}/${total}`;
 
-            // Render by category
             const categories = {
                 'config': 'config-tests',
                 'scoring': 'scoring-tests',
@@ -331,31 +324,54 @@
 
             for (const [cat, elementId] of Object.entries(categories)) {
                 const tests = testResults.tests.filter(t => t.category === cat);
-                document.getElementById(elementId).innerHTML = tests.map(renderTest).join('');
+                if (tests.length > 0) {
+                    document.getElementById(elementId).innerHTML = tests.map(renderTest).join('');
+                }
             }
 
-            // Render config display
             document.getElementById('config-display').innerHTML = Object.entries(expectedConfig)
                 .map(([key, value]) => `<div class="config-item"><span class="config-key">${key}:</span> <span class="config-value">${value}</span></div>`)
                 .join('');
         }
 
-        async function runAllTests() {
+        function runAllTests() {
+            const btn = document.getElementById('run-btn');
+            btn.disabled = true;
+            btn.textContent = 'Running...';
+
             // Reset
             testResults = { passed: 0, failed: 0, tests: [] };
 
-            // Run all test suites
-            await runConfigTests();
-            runScoringTests();
-            await runUITests();
-            await runLinkTests();
+            // Get the iframe content
+            const iframe = document.getElementById('test-frame');
 
-            // Render results
-            renderResults();
+            try {
+                const iframeDoc = iframe.contentDocument || iframe.contentWindow.document;
+                const html = iframeDoc.documentElement.outerHTML;
+
+                if (html && html.length > 100) {
+                    runConfigTests(html);
+                    runScoringTests();
+                    runUITests(html);
+                    runLinkTests(html);
+                    renderResults();
+                } else {
+                    document.getElementById('test-score').textContent = 'Error';
+                    document.getElementById('config-tests').innerHTML = '<div class="test-item"><div class="status fail">✗</div><div class="test-name">Could not load scorecard file</div></div>';
+                }
+            } catch (error) {
+                document.getElementById('test-score').textContent = 'Error';
+                document.getElementById('config-tests').innerHTML = `<div class="test-item"><div class="status fail">✗</div><div><div class="test-name">Error loading tests</div><div class="test-detail">${error.message}</div></div></div>`;
+            }
+
+            btn.disabled = false;
+            btn.textContent = 'Run All Tests';
         }
 
-        // Run tests on page load
-        window.addEventListener('DOMContentLoaded', runAllTests);
+        // Wait for iframe to load, then run tests
+        document.getElementById('test-frame').addEventListener('load', function() {
+            setTimeout(runAllTests, 500);
+        });
     </script>
 </body>
 </html>
