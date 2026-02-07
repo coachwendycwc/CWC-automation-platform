@@ -1,0 +1,733 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Visibility Strategy Checklist | Executive Leadership Lab</title>
+    <link href="https://fonts.googleapis.com/css2?family=Source+Serif+4:wght@400;600;700&family=Inter:wght@400;500;600&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --primary: #1A1A1A;
+            --accent: #2A7B8C;
+            --accent-warm: #D4A574;
+            --text: #333333;
+            --text-light: #666666;
+            --text-muted: #999999;
+            --bg: #FAF8F5;
+            --bg-warm: #F5F2ED;
+            --border: #E5E0D8;
+            --success: #4A9B7F;
+        }
+
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+
+        body {
+            font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
+            background: var(--bg);
+            color: var(--text);
+            line-height: 1.6;
+            min-height: 100vh;
+        }
+
+        .container {
+            max-width: 900px;
+            margin: 0 auto;
+            padding: 40px 24px;
+        }
+
+        header {
+            text-align: center;
+            margin-bottom: 48px;
+            padding-bottom: 32px;
+            border-bottom: 1px solid var(--border);
+        }
+
+        .logo { height: 80px; margin-bottom: 24px; }
+
+        .module-label {
+            font-size: 11px;
+            font-weight: 600;
+            color: var(--accent);
+            text-transform: uppercase;
+            letter-spacing: 2.5px;
+            margin-bottom: 12px;
+            display: block;
+        }
+
+        h1 {
+            font-family: 'Source Serif 4', Georgia, serif;
+            font-size: 36px;
+            font-weight: 700;
+            color: var(--primary);
+            margin-bottom: 12px;
+        }
+
+        .subtitle {
+            font-size: 18px;
+            color: var(--text-light);
+            max-width: 600px;
+            margin: 0 auto;
+        }
+
+        .instructions {
+            background: var(--bg-warm);
+            border-left: 3px solid var(--accent-warm);
+            padding: 20px 24px;
+            margin-bottom: 40px;
+            border-radius: 0 4px 4px 0;
+        }
+
+        .instructions h3 {
+            font-family: 'Source Serif 4', Georgia, serif;
+            font-size: 16px;
+            font-weight: 600;
+            color: var(--primary);
+            margin-bottom: 8px;
+        }
+
+        .instructions p {
+            font-size: 14px;
+            color: var(--text-light);
+            margin: 0;
+        }
+
+        .section {
+            background: white;
+            border: 1px solid var(--border);
+            border-radius: 8px;
+            padding: 32px;
+            margin-bottom: 24px;
+        }
+
+        .section-header {
+            display: flex;
+            align-items: center;
+            gap: 16px;
+            margin-bottom: 24px;
+        }
+
+        .step-number {
+            width: 40px;
+            height: 40px;
+            background: var(--accent);
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 18px;
+            font-weight: 700;
+            color: white;
+            flex-shrink: 0;
+        }
+
+        .section-title {
+            font-family: 'Source Serif 4', Georgia, serif;
+            font-size: 20px;
+            font-weight: 600;
+            color: var(--primary);
+        }
+
+        .section-description {
+            font-size: 14px;
+            color: var(--text-light);
+            margin-bottom: 20px;
+        }
+
+        label {
+            display: block;
+            font-size: 14px;
+            font-weight: 500;
+            color: var(--primary);
+            margin-bottom: 8px;
+        }
+
+        textarea, input[type="text"] {
+            width: 100%;
+            padding: 12px 16px;
+            border: 1px solid var(--border);
+            border-radius: 4px;
+            font-family: inherit;
+            font-size: 15px;
+            color: var(--text);
+            background: var(--bg);
+            transition: border-color 0.2s, box-shadow 0.2s;
+            resize: vertical;
+        }
+
+        textarea:focus, input[type="text"]:focus {
+            outline: none;
+            border-color: var(--accent);
+            box-shadow: 0 0 0 3px rgba(42, 123, 140, 0.1);
+        }
+
+        textarea { min-height: 100px; }
+        textarea.short { min-height: 60px; }
+
+        .field-group {
+            margin-bottom: 20px;
+        }
+
+        .field-group:last-child {
+            margin-bottom: 0;
+        }
+
+        .stakeholder-grid {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 16px;
+        }
+
+        .stakeholder-card {
+            background: var(--bg);
+            border: 1px solid var(--border);
+            border-radius: 4px;
+            padding: 16px;
+        }
+
+        .stakeholder-card h4 {
+            font-size: 13px;
+            font-weight: 600;
+            color: var(--accent);
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            margin-bottom: 12px;
+        }
+
+        .stakeholder-card input {
+            margin-bottom: 8px;
+        }
+
+        .stakeholder-card input:last-child {
+            margin-bottom: 0;
+        }
+
+        .channel-options {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 12px;
+            margin-bottom: 16px;
+        }
+
+        .channel-option {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            padding: 12px;
+            background: var(--bg);
+            border: 1px solid var(--border);
+            border-radius: 4px;
+            cursor: pointer;
+            transition: all 0.2s;
+        }
+
+        .channel-option:hover {
+            border-color: var(--accent);
+        }
+
+        .channel-option input[type="checkbox"] {
+            width: 18px;
+            height: 18px;
+            accent-color: var(--accent);
+        }
+
+        .channel-option span {
+            font-size: 14px;
+            color: var(--text);
+        }
+
+        .frequency-options {
+            display: flex;
+            gap: 12px;
+            flex-wrap: wrap;
+        }
+
+        .frequency-option {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            padding: 10px 16px;
+            background: var(--bg);
+            border: 1px solid var(--border);
+            border-radius: 4px;
+            cursor: pointer;
+            transition: all 0.2s;
+        }
+
+        .frequency-option:hover {
+            border-color: var(--accent);
+        }
+
+        .frequency-option input[type="radio"] {
+            width: 18px;
+            height: 18px;
+            accent-color: var(--accent);
+        }
+
+        .win-categories {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 12px;
+        }
+
+        .win-category {
+            display: flex;
+            align-items: flex-start;
+            gap: 12px;
+            padding: 16px;
+            background: var(--bg);
+            border: 1px solid var(--border);
+            border-radius: 4px;
+        }
+
+        .win-category input[type="checkbox"] {
+            width: 18px;
+            height: 18px;
+            accent-color: var(--accent);
+            margin-top: 2px;
+        }
+
+        .win-category-text h5 {
+            font-size: 14px;
+            font-weight: 600;
+            color: var(--primary);
+            margin-bottom: 4px;
+        }
+
+        .win-category-text p {
+            font-size: 13px;
+            color: var(--text-light);
+            margin: 0;
+        }
+
+        .review-schedule {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 16px;
+        }
+
+        .button-row {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-top: 40px;
+            padding-top: 24px;
+            border-top: 1px solid var(--border);
+        }
+
+        .btn {
+            padding: 12px 24px;
+            border-radius: 4px;
+            font-family: inherit;
+            font-size: 14px;
+            font-weight: 500;
+            cursor: pointer;
+            transition: all 0.2s;
+        }
+
+        .btn-primary {
+            background: var(--accent);
+            color: white;
+            border: none;
+        }
+
+        .btn-primary:hover {
+            background: #236a79;
+        }
+
+        .btn-secondary {
+            background: transparent;
+            color: var(--text-light);
+            border: 1px solid var(--border);
+        }
+
+        .btn-secondary:hover {
+            border-color: var(--text-light);
+        }
+
+        .save-status {
+            font-size: 13px;
+            color: var(--success);
+            display: flex;
+            align-items: center;
+            gap: 6px;
+        }
+
+        .save-status.hidden { display: none; }
+
+        footer {
+            text-align: center;
+            padding: 40px 24px;
+            color: var(--text-muted);
+            font-size: 13px;
+        }
+
+        footer a {
+            color: var(--accent);
+            text-decoration: none;
+        }
+
+        @media print {
+            body { background: white; }
+            .container { max-width: 100%; padding: 20px; }
+            .section { break-inside: avoid; border: 1px solid #ddd; }
+            .button-row { display: none; }
+            textarea, input[type="text"] { border: 1px solid #ccc; background: white; }
+        }
+
+        @media screen and (max-width: 768px) {
+            .container { padding: 24px 16px; }
+            h1 { font-size: 28px; }
+            .section { padding: 24px 20px; }
+            .stakeholder-grid { grid-template-columns: 1fr; }
+            .channel-options { grid-template-columns: 1fr; }
+            .win-categories { grid-template-columns: 1fr; }
+            .review-schedule { grid-template-columns: 1fr; }
+            .button-row { flex-direction: column; gap: 16px; }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <header>
+            <img src="https://coachingwomenofcolor.com/wp-content/uploads/2021/04/CWCFinal_logo2.webp" alt="CWC" class="logo">
+            <span class="module-label">Module 2 — February</span>
+            <h1>Visibility Strategy Checklist</h1>
+            <p class="subtitle">A six-step system to ensure your work gets seen by the right people at the right time.</p>
+        </header>
+
+        <div class="instructions">
+            <h3>How to Use This Worksheet</h3>
+            <p>Complete each section in order. Your answers auto-save as you type. Review and update this plan monthly to stay on track with your visibility goals.</p>
+        </div>
+
+        <!-- Step 1: Promotion Criteria -->
+        <div class="section">
+            <div class="section-header">
+                <div class="step-number">1</div>
+                <h2 class="section-title">Know Your Promotion Criteria</h2>
+            </div>
+            <p class="section-description">What does your organization actually reward? Document the criteria that matter for your next level.</p>
+
+            <div class="field-group">
+                <label>What are the documented promotion criteria for your target role?</label>
+                <textarea id="promotion-criteria" placeholder="List the competencies, skills, or achievements required for promotion..."></textarea>
+            </div>
+
+            <div class="field-group">
+                <label>What does your manager say "promotable" looks like?</label>
+                <textarea id="manager-criteria" class="short" placeholder="What specific feedback have you received about what you need to demonstrate?"></textarea>
+            </div>
+
+            <div class="field-group">
+                <label>What unwritten criteria have you observed? (Who gets promoted and why?)</label>
+                <textarea id="unwritten-criteria" class="short" placeholder="Think about recent promotions—what patterns do you notice?"></textarea>
+            </div>
+        </div>
+
+        <!-- Step 2: Key Stakeholders -->
+        <div class="section">
+            <div class="section-header">
+                <div class="step-number">2</div>
+                <h2 class="section-title">Identify Key Stakeholders</h2>
+            </div>
+            <p class="section-description">Who are the 3-5 decision-makers who influence your advancement? These are the people who need to know your work.</p>
+
+            <div class="stakeholder-grid">
+                <div class="stakeholder-card">
+                    <h4>Your Manager</h4>
+                    <input type="text" id="stakeholder-1-name" placeholder="Name">
+                    <input type="text" id="stakeholder-1-influence" placeholder="Their influence on your career">
+                </div>
+                <div class="stakeholder-card">
+                    <h4>Skip-Level Leader</h4>
+                    <input type="text" id="stakeholder-2-name" placeholder="Name">
+                    <input type="text" id="stakeholder-2-influence" placeholder="Their influence on your career">
+                </div>
+                <div class="stakeholder-card">
+                    <h4>Cross-Functional Leader</h4>
+                    <input type="text" id="stakeholder-3-name" placeholder="Name">
+                    <input type="text" id="stakeholder-3-influence" placeholder="Their influence on your career">
+                </div>
+            </div>
+
+            <div class="field-group" style="margin-top: 20px;">
+                <label>Additional stakeholders (optional)</label>
+                <textarea id="additional-stakeholders" class="short" placeholder="List any other decision-makers who should know your work..."></textarea>
+            </div>
+        </div>
+
+        <!-- Step 3: Communication Channels -->
+        <div class="section">
+            <div class="section-header">
+                <div class="step-number">3</div>
+                <h2 class="section-title">Choose Your Channels</h2>
+            </div>
+            <p class="section-description">How will you authentically reach your stakeholders? Select all channels you'll use.</p>
+
+            <div class="channel-options">
+                <label class="channel-option">
+                    <input type="checkbox" id="channel-1on1">
+                    <span>1:1 meetings with manager</span>
+                </label>
+                <label class="channel-option">
+                    <input type="checkbox" id="channel-team">
+                    <span>Team meetings</span>
+                </label>
+                <label class="channel-option">
+                    <input type="checkbox" id="channel-email">
+                    <span>Email updates</span>
+                </label>
+                <label class="channel-option">
+                    <input type="checkbox" id="channel-slack">
+                    <span>Slack/Teams channels</span>
+                </label>
+                <label class="channel-option">
+                    <input type="checkbox" id="channel-presentations">
+                    <span>Presentations to leadership</span>
+                </label>
+                <label class="channel-option">
+                    <input type="checkbox" id="channel-projects">
+                    <span>Cross-functional projects</span>
+                </label>
+                <label class="channel-option">
+                    <input type="checkbox" id="channel-skip">
+                    <span>Skip-level meetings</span>
+                </label>
+                <label class="channel-option">
+                    <input type="checkbox" id="channel-informal">
+                    <span>Informal conversations</span>
+                </label>
+            </div>
+
+            <div class="field-group">
+                <label>Other channels you'll use</label>
+                <input type="text" id="other-channels" placeholder="E.g., company newsletter, all-hands, lunch with executives...">
+            </div>
+        </div>
+
+        <!-- Step 4: Frequency -->
+        <div class="section">
+            <div class="section-header">
+                <div class="step-number">4</div>
+                <h2 class="section-title">Set Your Frequency</h2>
+            </div>
+            <p class="section-description">How often will you share wins and updates? Consistency beats intensity.</p>
+
+            <label style="margin-bottom: 12px;">How often will you share a win or update with stakeholders?</label>
+            <div class="frequency-options">
+                <label class="frequency-option">
+                    <input type="radio" name="frequency" value="weekly">
+                    <span>Weekly</span>
+                </label>
+                <label class="frequency-option">
+                    <input type="radio" name="frequency" value="biweekly">
+                    <span>Every 2 weeks</span>
+                </label>
+                <label class="frequency-option">
+                    <input type="radio" name="frequency" value="monthly">
+                    <span>Monthly</span>
+                </label>
+                <label class="frequency-option">
+                    <input type="radio" name="frequency" value="milestone">
+                    <span>At milestones</span>
+                </label>
+            </div>
+
+            <div class="field-group" style="margin-top: 20px;">
+                <label>What day/time will you share updates? (Make it a habit)</label>
+                <input type="text" id="sharing-schedule" placeholder="E.g., Friday afternoons, Monday team standup, after each project milestone...">
+            </div>
+        </div>
+
+        <!-- Step 5: Win Categories -->
+        <div class="section">
+            <div class="section-header">
+                <div class="step-number">5</div>
+                <h2 class="section-title">Define Your Win Categories</h2>
+            </div>
+            <p class="section-description">What types of wins should you highlight? Select categories aligned to your promotion criteria.</p>
+
+            <div class="win-categories">
+                <label class="win-category">
+                    <input type="checkbox" id="win-results">
+                    <div class="win-category-text">
+                        <h5>Business Results</h5>
+                        <p>Revenue, cost savings, efficiency gains</p>
+                    </div>
+                </label>
+                <label class="win-category">
+                    <input type="checkbox" id="win-leadership">
+                    <div class="win-category-text">
+                        <h5>Leadership Impact</h5>
+                        <p>Team development, mentoring, culture</p>
+                    </div>
+                </label>
+                <label class="win-category">
+                    <input type="checkbox" id="win-innovation">
+                    <div class="win-category-text">
+                        <h5>Innovation & Problem-Solving</h5>
+                        <p>New solutions, process improvements</p>
+                    </div>
+                </label>
+                <label class="win-category">
+                    <input type="checkbox" id="win-stakeholder">
+                    <div class="win-category-text">
+                        <h5>Stakeholder Management</h5>
+                        <p>Client success, partnerships, relationships</p>
+                    </div>
+                </label>
+                <label class="win-category">
+                    <input type="checkbox" id="win-strategic">
+                    <div class="win-category-text">
+                        <h5>Strategic Thinking</h5>
+                        <p>Vision, planning, long-term impact</p>
+                    </div>
+                </label>
+                <label class="win-category">
+                    <input type="checkbox" id="win-execution">
+                    <div class="win-category-text">
+                        <h5>Execution & Delivery</h5>
+                        <p>Projects completed, deadlines met</p>
+                    </div>
+                </label>
+            </div>
+
+            <div class="field-group" style="margin-top: 20px;">
+                <label>Other win categories specific to your role or industry</label>
+                <input type="text" id="other-win-categories" placeholder="E.g., program outcomes, grant funding, volunteer engagement...">
+            </div>
+        </div>
+
+        <!-- Step 6: Review Rhythm -->
+        <div class="section">
+            <div class="section-header">
+                <div class="step-number">6</div>
+                <h2 class="section-title">Establish Your Review Rhythm</h2>
+            </div>
+            <p class="section-description">Schedule regular check-ins with yourself to assess your visibility progress.</p>
+
+            <div class="review-schedule">
+                <div class="field-group">
+                    <label>Monthly visibility review date</label>
+                    <input type="text" id="monthly-review" placeholder="E.g., Last Friday of each month">
+                </div>
+                <div class="field-group">
+                    <label>Accountability partner (optional)</label>
+                    <input type="text" id="accountability-partner" placeholder="Who will hold you to this plan?">
+                </div>
+            </div>
+
+            <div class="field-group" style="margin-top: 20px;">
+                <label>What questions will you ask yourself each month?</label>
+                <textarea id="review-questions" placeholder="E.g., Who did I share wins with? Did the right people see my work? What visibility opportunities did I miss?"></textarea>
+            </div>
+        </div>
+
+        <div class="button-row">
+            <button class="btn btn-secondary" onclick="clearForm()">Clear All</button>
+            <span class="save-status hidden" id="save-status">
+                <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="20 6 9 17 4 12"></polyline></svg>
+                Auto-saved
+            </span>
+            <button class="btn btn-primary" onclick="window.print()">Print / Save PDF</button>
+        </div>
+    </div>
+
+    <footer>
+        <p>Executive Leadership Lab — Module 2: Strategic Positioning for Promotion</p>
+        <p><a href="https://coachingwomenofcolor.com">Coaching Women of Color</a></p>
+    </footer>
+
+    <script>
+        const STORAGE_KEY = 'cwc-visibility-strategy-v1';
+
+        // All form elements to save
+        const formElements = [
+            'promotion-criteria', 'manager-criteria', 'unwritten-criteria',
+            'stakeholder-1-name', 'stakeholder-1-influence',
+            'stakeholder-2-name', 'stakeholder-2-influence',
+            'stakeholder-3-name', 'stakeholder-3-influence',
+            'additional-stakeholders', 'other-channels', 'sharing-schedule',
+            'other-win-categories', 'monthly-review', 'accountability-partner', 'review-questions'
+        ];
+
+        const checkboxElements = [
+            'channel-1on1', 'channel-team', 'channel-email', 'channel-slack',
+            'channel-presentations', 'channel-projects', 'channel-skip', 'channel-informal',
+            'win-results', 'win-leadership', 'win-innovation', 'win-stakeholder', 'win-strategic', 'win-execution'
+        ];
+
+        function saveForm() {
+            const data = {};
+
+            formElements.forEach(id => {
+                const el = document.getElementById(id);
+                if (el) data[id] = el.value;
+            });
+
+            checkboxElements.forEach(id => {
+                const el = document.getElementById(id);
+                if (el) data[id] = el.checked;
+            });
+
+            // Save radio buttons
+            const frequency = document.querySelector('input[name="frequency"]:checked');
+            data.frequency = frequency ? frequency.value : '';
+
+            localStorage.setItem(STORAGE_KEY, JSON.stringify(data));
+            showSaveStatus();
+        }
+
+        function loadForm() {
+            const saved = localStorage.getItem(STORAGE_KEY);
+            if (!saved) return;
+
+            const data = JSON.parse(saved);
+
+            formElements.forEach(id => {
+                const el = document.getElementById(id);
+                if (el && data[id] !== undefined) el.value = data[id];
+            });
+
+            checkboxElements.forEach(id => {
+                const el = document.getElementById(id);
+                if (el && data[id] !== undefined) el.checked = data[id];
+            });
+
+            // Load radio buttons
+            if (data.frequency) {
+                const radio = document.querySelector(`input[name="frequency"][value="${data.frequency}"]`);
+                if (radio) radio.checked = true;
+            }
+        }
+
+        function clearForm() {
+            if (confirm('Are you sure you want to clear all entries? This cannot be undone.')) {
+                localStorage.removeItem(STORAGE_KEY);
+                formElements.forEach(id => {
+                    const el = document.getElementById(id);
+                    if (el) el.value = '';
+                });
+                checkboxElements.forEach(id => {
+                    const el = document.getElementById(id);
+                    if (el) el.checked = false;
+                });
+                document.querySelectorAll('input[name="frequency"]').forEach(r => r.checked = false);
+            }
+        }
+
+        function showSaveStatus() {
+            const status = document.getElementById('save-status');
+            status.classList.remove('hidden');
+            setTimeout(() => status.classList.add('hidden'), 2000);
+        }
+
+        // Auto-save on input
+        document.addEventListener('input', saveForm);
+        document.addEventListener('change', saveForm);
+
+        // Load saved data on page load
+        document.addEventListener('DOMContentLoaded', loadForm);
+    </script>
+</body>
+</html>
