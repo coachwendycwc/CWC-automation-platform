@@ -1,0 +1,1069 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Executive Leadership Lab - Revised Curriculum (March-December)</title>
+    <style>
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+
+        @media print {
+            body { background: white !important; }
+            .no-print { display: none !important; }
+            .container { max-width: 100% !important; }
+            .module-card { break-inside: avoid; page-break-inside: avoid; }
+            .month-section { break-before: page; page-break-before: always; }
+            .month-section:first-of-type { break-before: auto; page-break-before: auto; }
+        }
+
+        body {
+            font-family: 'Georgia', serif;
+            background: linear-gradient(135deg, #1a1a2e 0%, #16213e 100%);
+            color: #333;
+            line-height: 1.7;
+            min-height: 100vh;
+        }
+
+        .header {
+            background: linear-gradient(135deg, #2A7B8C 0%, #1a5a66 100%);
+            color: white;
+            padding: 40px 20px;
+            text-align: center;
+        }
+
+        .header h1 {
+            font-size: 2.2rem;
+            margin-bottom: 8px;
+            font-weight: 600;
+        }
+
+        .header .subtitle {
+            font-size: 1.1rem;
+            opacity: 0.9;
+        }
+
+        .print-btn {
+            position: fixed;
+            top: 20px;
+            right: 20px;
+            background: #D4A574;
+            color: #1a1a2e;
+            border: none;
+            padding: 12px 24px;
+            border-radius: 8px;
+            font-size: 14px;
+            font-weight: 600;
+            cursor: pointer;
+            z-index: 100;
+            box-shadow: 0 4px 15px rgba(0,0,0,0.3);
+        }
+
+        .print-btn:hover {
+            background: #c49660;
+        }
+
+        .container {
+            max-width: 900px;
+            margin: 0 auto;
+            padding: 40px 20px;
+        }
+
+        .intro-section {
+            background: white;
+            border-radius: 16px;
+            padding: 32px;
+            margin-bottom: 32px;
+            box-shadow: 0 4px 20px rgba(0,0,0,0.1);
+        }
+
+        .intro-section h2 {
+            color: #2A7B8C;
+            font-size: 1.5rem;
+            margin-bottom: 16px;
+        }
+
+        .intro-section p {
+            margin-bottom: 12px;
+        }
+
+        .lane-visual {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 16px;
+            margin: 24px 0;
+        }
+
+        .lane {
+            background: #f8f9fa;
+            padding: 16px;
+            border-radius: 8px;
+            text-align: center;
+            border-left: 4px solid #2A7B8C;
+        }
+
+        .lane h4 {
+            color: #2A7B8C;
+            font-size: 0.9rem;
+            margin-bottom: 8px;
+        }
+
+        .lane p {
+            font-size: 0.85rem;
+            color: #666;
+            margin: 0;
+        }
+
+        .month-section {
+            background: white;
+            border-radius: 16px;
+            padding: 32px;
+            margin-bottom: 32px;
+            box-shadow: 0 4px 20px rgba(0,0,0,0.1);
+        }
+
+        .month-header {
+            display: flex;
+            align-items: center;
+            gap: 16px;
+            margin-bottom: 24px;
+            padding-bottom: 16px;
+            border-bottom: 2px solid #f0f0f0;
+        }
+
+        .month-badge {
+            background: linear-gradient(135deg, #2A7B8C 0%, #1a5a66 100%);
+            color: white;
+            padding: 12px 20px;
+            border-radius: 8px;
+            font-weight: 600;
+            font-size: 0.9rem;
+            text-transform: uppercase;
+        }
+
+        .month-badge.summer {
+            background: linear-gradient(135deg, #D4A574 0%, #b8956a 100%);
+        }
+
+        .month-title h2 {
+            color: #1a1a2e;
+            font-size: 1.4rem;
+            margin-bottom: 4px;
+        }
+
+        .month-title .lane-tag {
+            font-size: 0.85rem;
+            color: #2A7B8C;
+            font-weight: 500;
+        }
+
+        .section-label {
+            font-size: 0.75rem;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            color: #999;
+            margin-bottom: 8px;
+            font-weight: 600;
+        }
+
+        .module-content h3 {
+            color: #2A7B8C;
+            font-size: 1.1rem;
+            margin: 24px 0 12px 0;
+        }
+
+        .module-content h3:first-of-type {
+            margin-top: 0;
+        }
+
+        .module-content p {
+            margin-bottom: 12px;
+        }
+
+        .module-content ul {
+            margin: 12px 0 12px 20px;
+        }
+
+        .module-content li {
+            margin-bottom: 8px;
+        }
+
+        .tool-box {
+            background: #f8f9fa;
+            border-left: 4px solid #D4A574;
+            padding: 16px 20px;
+            margin: 16px 0;
+            border-radius: 0 8px 8px 0;
+        }
+
+        .tool-box h4 {
+            color: #D4A574;
+            font-size: 0.9rem;
+            margin-bottom: 8px;
+        }
+
+        .tool-box ul {
+            margin: 0 0 0 16px;
+        }
+
+        .deliverable-box {
+            background: linear-gradient(135deg, #e8f4f6 0%, #d4e8eb 100%);
+            border-radius: 8px;
+            padding: 16px 20px;
+            margin: 16px 0;
+        }
+
+        .deliverable-box h4 {
+            color: #2A7B8C;
+            font-size: 0.9rem;
+            margin-bottom: 8px;
+        }
+
+        .woc-callout {
+            background: linear-gradient(135deg, #fff5eb 0%, #ffe8d6 100%);
+            border-left: 4px solid #D4A574;
+            padding: 16px 20px;
+            margin: 16px 0;
+            border-radius: 0 8px 8px 0;
+        }
+
+        .woc-callout h4 {
+            color: #c49660;
+            font-size: 0.9rem;
+            margin-bottom: 8px;
+        }
+
+        .bridge-box {
+            background: #f0f7f9;
+            border-radius: 8px;
+            padding: 12px 16px;
+            margin-top: 20px;
+            font-size: 0.9rem;
+        }
+
+        .bridge-box strong {
+            color: #2A7B8C;
+        }
+
+        .handout-grid {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 16px;
+            margin-top: 16px;
+        }
+
+        .handout-item {
+            background: #f8f9fa;
+            padding: 16px;
+            border-radius: 8px;
+            border: 1px solid #e0e0e0;
+        }
+
+        .handout-item h5 {
+            color: #2A7B8C;
+            font-size: 0.95rem;
+            margin-bottom: 8px;
+        }
+
+        .handout-item p {
+            font-size: 0.85rem;
+            color: #666;
+            margin: 0;
+        }
+
+        .overlap-note {
+            background: #fff3cd;
+            border: 1px solid #ffc107;
+            border-radius: 8px;
+            padding: 12px 16px;
+            margin: 16px 0;
+            font-size: 0.9rem;
+        }
+
+        .overlap-note strong {
+            color: #856404;
+        }
+
+        .differentiation {
+            background: #d4edda;
+            border: 1px solid #28a745;
+            border-radius: 8px;
+            padding: 12px 16px;
+            margin: 16px 0;
+            font-size: 0.9rem;
+        }
+
+        .differentiation strong {
+            color: #155724;
+        }
+
+        .timeline-visual {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 8px;
+            margin: 24px 0;
+        }
+
+        .timeline-month {
+            flex: 1;
+            min-width: 80px;
+            text-align: center;
+            padding: 12px 8px;
+            border-radius: 8px;
+            font-size: 0.75rem;
+        }
+
+        .timeline-month.done {
+            background: #d4edda;
+            color: #155724;
+        }
+
+        .timeline-month.current {
+            background: #cce5ff;
+            color: #004085;
+            border: 2px solid #004085;
+        }
+
+        .timeline-month.summer {
+            background: #fff3cd;
+            color: #856404;
+        }
+
+        .timeline-month.upcoming {
+            background: #f8f9fa;
+            color: #666;
+        }
+
+        .summary-table {
+            width: 100%;
+            border-collapse: collapse;
+            margin: 24px 0;
+            font-size: 0.9rem;
+        }
+
+        .summary-table th {
+            background: #2A7B8C;
+            color: white;
+            padding: 12px;
+            text-align: left;
+        }
+
+        .summary-table td {
+            padding: 12px;
+            border-bottom: 1px solid #e0e0e0;
+        }
+
+        .summary-table tr:nth-child(even) {
+            background: #f8f9fa;
+        }
+
+        @media (max-width: 768px) {
+            .lane-visual {
+                grid-template-columns: 1fr;
+            }
+            .handout-grid {
+                grid-template-columns: 1fr;
+            }
+            .timeline-visual {
+                flex-direction: column;
+            }
+        }
+    </style>
+</head>
+<body>
+    <button class="print-btn no-print" onclick="window.print()">Print / Download PDF</button>
+
+    <div class="header">
+        <h1>Executive Leadership Lab</h1>
+        <p class="subtitle">Revised Curriculum Guide | March - December 2026</p>
+    </div>
+
+    <div class="container">
+
+        <!-- Program Overview -->
+        <div class="intro-section">
+            <h2>Program Overview</h2>
+            <p>This revised curriculum addresses overlap between modules and fills critical gaps for women of color in leadership. Each month now has a distinct focus with clear differentiation from related topics.</p>
+
+            <div class="timeline-visual">
+                <div class="timeline-month done"><strong>JAN</strong><br>Plateaus</div>
+                <div class="timeline-month done"><strong>FEB</strong><br>Visibility</div>
+                <div class="timeline-month current"><strong>MAR</strong><br>Pivot</div>
+                <div class="timeline-month upcoming"><strong>APR</strong><br>Composure</div>
+                <div class="timeline-month upcoming"><strong>MAY</strong><br>Advocacy</div>
+                <div class="timeline-month upcoming"><strong>JUN</strong><br>Storytelling</div>
+                <div class="timeline-month summer"><strong>JUL</strong><br>Handouts</div>
+                <div class="timeline-month summer"><strong>AUG</strong><br>Handouts</div>
+                <div class="timeline-month upcoming"><strong>SEP</strong><br>Leadership</div>
+                <div class="timeline-month upcoming"><strong>OCT</strong><br>Energy</div>
+                <div class="timeline-month upcoming"><strong>NOV</strong><br>Confidence</div>
+                <div class="timeline-month upcoming"><strong>DEC</strong><br>Boundaries</div>
+            </div>
+
+            <h3>The Six Lanes of Development</h3>
+            <div class="lane-visual">
+                <div class="lane">
+                    <h4>DIRECTION</h4>
+                    <p>Where am I going?<br><em>Jan, Mar</em></p>
+                </div>
+                <div class="lane">
+                    <h4>VALUE</h4>
+                    <p>What do I contribute?<br><em>Feb, Jun</em></p>
+                </div>
+                <div class="lane">
+                    <h4>INFLUENCE</h4>
+                    <p>How do I move decisions?<br><em>Apr, May</em></p>
+                </div>
+                <div class="lane">
+                    <h4>LEADERSHIP</h4>
+                    <p>How do I lead others?<br><em>Sep</em></p>
+                </div>
+                <div class="lane">
+                    <h4>SUSTAINABILITY</h4>
+                    <p>How do I maintain energy?<br><em>Oct, Nov, Dec</em></p>
+                </div>
+                <div class="lane">
+                    <h4>RELATIONSHIPS</h4>
+                    <p>Who supports my growth?<br><em>Jul, Aug handouts</em></p>
+                </div>
+            </div>
+        </div>
+
+        <!-- MARCH -->
+        <div class="month-section">
+            <div class="month-header">
+                <div class="month-badge">March</div>
+                <div class="month-title">
+                    <h2>Confident Career Pivot: Own Your Next Chapter</h2>
+                    <span class="lane-tag">Lane: Direction Shift + Pivot Story</span>
+                </div>
+            </div>
+
+            <div class="module-content">
+                <h3>Distinct Focus</h3>
+                <p>Choose a pivot path and translate existing experience into a credible story for new roles. This is about taking action on the roadmap created in January—specifically for those ready to make a move.</p>
+
+                <h3>Why This Matters for WOC</h3>
+                <div class="woc-callout">
+                    <h4>The WOC Pivot Challenge</h4>
+                    <p>Women of color often face the "prove it again" bias when pivoting—our experience is questioned more, our transferable skills dismissed. This module arms participants with strategies to overcome skepticism and own their narrative.</p>
+                </div>
+
+                <h3>Core Content</h3>
+                <ul>
+                    <li><strong>The Pivot Decision Framework:</strong> Stay and grow vs. move and grow—how to decide</li>
+                    <li><strong>Transferable Skills Inventory:</strong> Mapping what you've done to what you want to do</li>
+                    <li><strong>The Pivot Story Structure:</strong> "I was doing X, I realized Y, now I'm pursuing Z because..."</li>
+                    <li><strong>Overcoming the "Prove It Again" Bias:</strong> Strategies for when your experience is questioned</li>
+                    <li><strong>Informational Interview Mastery:</strong> How to research roles and build bridges</li>
+                    <li><strong>Application Strategy:</strong> Tailoring resumes and cover letters for pivot roles</li>
+                </ul>
+
+                <div class="tool-box">
+                    <h4>Anchor Tools</h4>
+                    <ul>
+                        <li>Transferable Skills Inventory Worksheet</li>
+                        <li>Pivot Storytelling Script Template</li>
+                        <li>Informational Interview Prep Guide</li>
+                        <li>Role-Play Prompt Cards (for practice sessions)</li>
+                    </ul>
+                </div>
+
+                <div class="deliverable-box">
+                    <h4>Participant Deliverable</h4>
+                    <p>A polished pivot story they can use in interviews, networking, and applications—plus a list of 5 target roles/companies with an outreach plan.</p>
+                </div>
+
+                <h3>Embedded Relationships</h3>
+                <p>"Advisor Mapping Lite" exercise: Identify 3-5 people who can validate the pivot through informational interviews or introductions.</p>
+
+                <div class="bridge-box">
+                    <strong>Builds into April:</strong> Pivot conversations can trigger fear, rejection, and emotional responses. April's composure module helps manage these high-stakes moments.
+                </div>
+            </div>
+        </div>
+
+        <!-- APRIL -->
+        <div class="month-section">
+            <div class="month-header">
+                <div class="month-badge">April</div>
+                <div class="month-title">
+                    <h2>Leadership Composure: Managing Triggers, Bias & High-Stakes Moments</h2>
+                    <span class="lane-tag">Lane: Influence (Internal Regulation)</span>
+                </div>
+            </div>
+
+            <div class="module-content">
+                <div class="overlap-note">
+                    <strong>Overlap Addressed:</strong> This module previously overlapped with October (Burnout) and November (Imposter Syndrome). The revised focus is specifically on <em>in-the-moment</em> regulation—what to do when you're activated. October covers systemic energy management; November covers cognitive patterns.
+                </div>
+
+                <div class="differentiation">
+                    <strong>Clear Differentiation:</strong> April = REACTIVE (managing moments) | October = SYSTEMIC (energy infrastructure) | November = COGNITIVE (belief patterns)
+                </div>
+
+                <h3>Distinct Focus</h3>
+                <p>Emotional regulation and leadership composure in high-stakes, often biased, environments. This is about what happens in the moment—not the long-term systems (October) or the mindset work (November).</p>
+
+                <h3>Why This Matters for WOC</h3>
+                <div class="woc-callout">
+                    <h4>The Double Bind of Emotion</h4>
+                    <p>Women of color face unique emotional labor: we're stereotyped as "angry" when assertive, "cold" when composed, and "too emotional" when passionate. This module addresses navigating bias while maintaining authentic leadership presence—not masking, but strategic composure.</p>
+                    <ul>
+                        <li>Microaggressions and how to respond in real-time</li>
+                        <li>The "angry Black woman" and other stereotypes that police our expression</li>
+                        <li>When to address bias immediately vs. strategically later</li>
+                        <li>Protecting your energy while still being effective</li>
+                    </ul>
+                </div>
+
+                <h3>Core Content</h3>
+                <ul>
+                    <li><strong>The Trigger Map:</strong> Identifying your specific triggers and patterns</li>
+                    <li><strong>The 90-Second Rule:</strong> Physiological responses and how to interrupt them</li>
+                    <li><strong>Microaggression Response Framework:</strong> Pause, Assess, Choose (ignore, address, document)</li>
+                    <li><strong>Composure Under Fire:</strong> Techniques for staying grounded in tense moments</li>
+                    <li><strong>The Strategic Response Playbook:</strong> Scripts for common bias situations</li>
+                    <li><strong>Post-Incident Recovery:</strong> What to do after a difficult interaction</li>
+                </ul>
+
+                <div class="tool-box">
+                    <h4>Anchor Tools</h4>
+                    <ul>
+                        <li>EI Self-Assessment (baseline awareness)</li>
+                        <li>Trigger Map Worksheet</li>
+                        <li>Microaggression Response Cards (pocket reference)</li>
+                        <li>Composure Toolkit (grounding practices)</li>
+                        <li>Incident Documentation Template</li>
+                    </ul>
+                </div>
+
+                <div class="deliverable-box">
+                    <h4>Participant Deliverable</h4>
+                    <p>A personalized Trigger Map with response strategies, plus 3-5 rehearsed responses to common microaggressions they face.</p>
+                </div>
+
+                <div class="bridge-box">
+                    <strong>Builds into May:</strong> Emotional regulation is essential for high-stakes advocacy conversations. May focuses on making the ask; April ensures you can do it from a grounded place.
+                </div>
+            </div>
+        </div>
+
+        <!-- MAY -->
+        <div class="month-section">
+            <div class="month-header">
+                <div class="month-badge">May</div>
+                <div class="month-title">
+                    <h2>Advocacy & Negotiation: Promotions, Raises, Equity & Opportunities</h2>
+                    <span class="lane-tag">Lane: Influence (The Ask)</span>
+                </div>
+            </div>
+
+            <div class="module-content">
+                <h3>Distinct Focus</h3>
+                <p>The mechanics of advocacy—how to ask for what you want in a structured, confident way. This is about the conversation itself: preparation, scripts, objection handling, and follow-through.</p>
+
+                <h3>Why This Matters for WOC</h3>
+                <div class="woc-callout">
+                    <h4>The Negotiation Penalty</h4>
+                    <p>Research shows women of color face a "negotiation penalty"—we're judged more harshly for the same negotiation behaviors. This module teaches negotiation strategies that work within this reality while also expanding what's on the table beyond just salary.</p>
+                    <ul>
+                        <li>Beyond salary: equity, stock options, title, scope, flexibility, development budget</li>
+                        <li>The wealth gap: WOC have the largest wealth gap—negotiation is wealth-building</li>
+                        <li>Navigating predominantly white decision-makers</li>
+                        <li>Building the case when you lack a formal "sponsor"</li>
+                    </ul>
+                </div>
+
+                <h3>Core Content</h3>
+                <ul>
+                    <li><strong>The Advocacy Mindset:</strong> From asking for permission to stating your case</li>
+                    <li><strong>Know Your Worth:</strong> Market research and compensation benchmarking</li>
+                    <li><strong>The Full Package:</strong> Negotiating beyond salary (equity, title, scope, flexibility, budget)</li>
+                    <li><strong>The Negotiation Script:</strong> Opening, anchoring, responding to pushback</li>
+                    <li><strong>Objection Handling:</strong> "The budget is tight," "Maybe next cycle," "You're already at the top of the band"</li>
+                    <li><strong>The Follow-Up:</strong> What to do after the conversation (get it in writing, next steps)</li>
+                    <li><strong>When They Say No:</strong> Negotiating alternatives and planning your next move</li>
+                </ul>
+
+                <div class="tool-box">
+                    <h4>Anchor Tools</h4>
+                    <ul>
+                        <li>Negotiation Preparation Worksheet</li>
+                        <li>Compensation Research Guide</li>
+                        <li>Negotiation Scripts (by scenario)</li>
+                        <li>Objection Response Cards</li>
+                        <li>Meeting Plan Template</li>
+                        <li>Post-Negotiation Follow-Up Template</li>
+                    </ul>
+                </div>
+
+                <div class="deliverable-box">
+                    <h4>Participant Deliverable</h4>
+                    <p>A complete negotiation package: research, script, objection responses, and a scheduled conversation with their manager or target decision-maker.</p>
+                </div>
+
+                <h3>Embedded Relationships</h3>
+                <p>Identify who must be in the room or aware of your ask (manager, skip-level, HR, sponsor). Plan pre-conversation touchpoints and post-conversation follow-up.</p>
+
+                <div class="bridge-box">
+                    <strong>Builds into June:</strong> Once you can ask, you need a repeatable way to communicate your wins. June teaches the storytelling that makes future asks easier.
+                </div>
+            </div>
+        </div>
+
+        <!-- JUNE -->
+        <div class="month-section">
+            <div class="month-header">
+                <div class="month-badge">June</div>
+                <div class="month-title">
+                    <h2>Executive Storytelling: Master Your Narrative</h2>
+                    <span class="lane-tag">Lane: Value (Communicate Impact)</span>
+                </div>
+            </div>
+
+            <div class="module-content">
+                <div class="overlap-note">
+                    <strong>Overlap Addressed:</strong> February covered visibility <em>strategy</em> (who to reach, what to track). June covers storytelling <em>technique</em> (how to craft and deliver compelling narratives). February = the plan. June = the performance.
+                </div>
+
+                <div class="differentiation">
+                    <strong>Clear Differentiation:</strong> February = STRATEGY (Who, When, Where) | June = TECHNIQUE (How to say it)
+                </div>
+
+                <h3>Distinct Focus</h3>
+                <p>Turn your wins into compelling stories. This is the craft of narrative—story structures, delivery, presence. Participants already have wins tracked (February); now they learn to tell those stories powerfully.</p>
+
+                <h3>Why This Matters for WOC</h3>
+                <div class="woc-callout">
+                    <h4>Owning Your Story</h4>
+                    <p>Women of color often minimize accomplishments or tell stories that center others. This module teaches you to claim your narrative—not in a way that feels inauthentic, but in a way that ensures your contributions are known and remembered.</p>
+                </div>
+
+                <h3>Core Content</h3>
+                <ul>
+                    <li><strong>The Power of Story:</strong> Why stories persuade more than facts alone</li>
+                    <li><strong>Story Structures:</strong> STAR, CAR, and the "Challenge-Action-Result-Learning" framework</li>
+                    <li><strong>The Signature Story:</strong> Your 2-minute professional narrative</li>
+                    <li><strong>Context-Specific Stories:</strong> Interview, networking, review, executive presence</li>
+                    <li><strong>Delivery & Presence:</strong> Voice, pacing, body language, confidence</li>
+                    <li><strong>The Wins-to-Stories Pipeline:</strong> Turning your win tracker into ready-to-use stories</li>
+                    <li><strong>Practice & Refinement:</strong> Peer feedback and iteration</li>
+                </ul>
+
+                <div class="tool-box">
+                    <h4>Anchor Tools</h4>
+                    <ul>
+                        <li>Story Structure Templates (STAR, CAR, CARL)</li>
+                        <li>Signature Story Worksheet</li>
+                        <li>Wins-to-Stories Converter</li>
+                        <li>Delivery Self-Assessment Checklist</li>
+                        <li>Peer Feedback Guide</li>
+                    </ul>
+                </div>
+
+                <div class="deliverable-box">
+                    <h4>Participant Deliverable</h4>
+                    <p>A polished Signature Story (2 minutes) plus 3-5 context-specific stories ready for interviews, reviews, and networking.</p>
+                </div>
+
+                <h3>Embedded Relationships — Full Integration Module</h3>
+                <p>This month includes the comprehensive Board of Advisors module that was planned for July/August:</p>
+                <ul>
+                    <li>Advisor Mapping Worksheet (mentor, sponsor, peer, coach)</li>
+                    <li>Authentic Outreach Scripts</li>
+                    <li>30-Day Relationship-Building Plan (becomes homework)</li>
+                </ul>
+
+                <div class="bridge-box">
+                    <strong>Builds into September:</strong> Storytelling becomes a leadership communication tool—telling stories that inspire teams and build inclusive culture.
+                </div>
+            </div>
+        </div>
+
+        <!-- JULY & AUGUST -->
+        <div class="month-section">
+            <div class="month-header">
+                <div class="month-badge summer">July & August</div>
+                <div class="month-title">
+                    <h2>Summer Integration: Relationship Building & Reflection</h2>
+                    <span class="lane-tag">Lane: Relationships (Self-Paced)</span>
+                </div>
+            </div>
+
+            <div class="module-content">
+                <h3>Summer Pause</h3>
+                <p>No live modules during July and August. Instead, provide handouts and self-paced materials that allow participants to integrate learning from the first half of the year while building relationships.</p>
+
+                <h3>Recommended Handouts</h3>
+                <div class="handout-grid">
+                    <div class="handout-item">
+                        <h5>1. Board of Advisors Deep Dive</h5>
+                        <p>Expanded version of June's introduction. Includes relationship mapping, outreach templates, and a 60-day relationship nurture calendar.</p>
+                    </div>
+                    <div class="handout-item">
+                        <h5>2. Sponsor vs. Mentor Guide</h5>
+                        <p>The critical difference and why WOC need sponsors. Includes strategies for converting mentors to sponsors.</p>
+                    </div>
+                    <div class="handout-item">
+                        <h5>3. Mid-Year Reflection Workbook</h5>
+                        <p>Structured reflection on January-June progress. Win inventory, goal check-in, and adjustments for the second half.</p>
+                    </div>
+                    <div class="handout-item">
+                        <h5>4. Networking for Introverts</h5>
+                        <p>Authentic networking strategies for those who find traditional networking draining. Quality over quantity.</p>
+                    </div>
+                    <div class="handout-item">
+                        <h5>5. The Reciprocity Playbook</h5>
+                        <p>How to add value to your network. Giving before asking. Building genuine relationships, not transactional ones.</p>
+                    </div>
+                    <div class="handout-item">
+                        <h5>6. Summer Reading List</h5>
+                        <p>Curated books and resources on leadership, career development, and the WOC experience. With discussion prompts for the community.</p>
+                    </div>
+                </div>
+
+                <h3>Community Engagement Ideas</h3>
+                <ul>
+                    <li><strong>Accountability Partner Pairings:</strong> Match participants for summer check-ins</li>
+                    <li><strong>Skool Discussion Prompts:</strong> Weekly topics to keep community engaged</li>
+                    <li><strong>Win of the Week Shares:</strong> Casual weekly thread for celebrating progress</li>
+                    <li><strong>Book Club:</strong> Optional virtual meetup to discuss summer reading</li>
+                </ul>
+
+                <div class="bridge-box">
+                    <strong>Builds into September:</strong> Participants return with strengthened relationships and clarity, ready to focus on leading others.
+                </div>
+            </div>
+        </div>
+
+        <!-- SEPTEMBER -->
+        <div class="month-section">
+            <div class="month-header">
+                <div class="month-badge">September</div>
+                <div class="month-title">
+                    <h2>Inclusive Leadership: Lead Authentically & Build Your Coalition</h2>
+                    <span class="lane-tag">Lane: Leadership + Culture</span>
+                </div>
+            </div>
+
+            <div class="module-content">
+                <h3>Distinct Focus</h3>
+                <p>Lead inclusive teams, build accountability structures, and create a support ecosystem—while maintaining your authentic leadership style. This is about leading others, not just managing yourself.</p>
+
+                <h3>Why This Matters for WOC</h3>
+                <div class="woc-callout">
+                    <h4>Leading While "Other"</h4>
+                    <p>Women of color often lead in environments where they're the only one "like them" in the room. This module addresses the unique challenges of leading authentically while navigating spaces that weren't designed for us—and creating change from within.</p>
+                    <ul>
+                        <li>Code-switching fatigue and finding your authentic leadership voice</li>
+                        <li>Building coalition power—individual advancement has limits; collective advocacy is powerful</li>
+                        <li>Creating psychological safety when you don't feel safe yourself</li>
+                        <li>Mentoring the next generation while protecting your own energy</li>
+                    </ul>
+                </div>
+
+                <h3>Core Content</h3>
+                <ul>
+                    <li><strong>Your Leadership Identity:</strong> Defining your leadership values and authentic style</li>
+                    <li><strong>Inclusive Leadership Practices:</strong> Creating belonging on your team</li>
+                    <li><strong>The Coalition Model:</strong> Building alliances for collective impact</li>
+                    <li><strong>Managing Across Difference:</strong> Leading diverse teams with cultural competence</li>
+                    <li><strong>Difficult Conversations:</strong> Feedback, conflict, and accountability</li>
+                    <li><strong>Your Support Ecosystem:</strong> Building the structure that sustains you</li>
+                    <li><strong>Mentoring Without Burning Out:</strong> How to give back sustainably</li>
+                </ul>
+
+                <div class="tool-box">
+                    <h4>Anchor Tools</h4>
+                    <ul>
+                        <li>Leadership Identity Worksheet</li>
+                        <li>Inclusive Leadership Self-Assessment</li>
+                        <li>Coalition Mapping Exercise</li>
+                        <li>Difficult Conversation Prep Template</li>
+                        <li>Support Ecosystem Blueprint</li>
+                    </ul>
+                </div>
+
+                <div class="deliverable-box">
+                    <h4>Participant Deliverable</h4>
+                    <p>A defined leadership identity statement, a coalition map with 3-5 allies, and a personal support ecosystem blueprint.</p>
+                </div>
+
+                <div class="bridge-box">
+                    <strong>Builds into October:</strong> Inclusive leadership requires sustainable energy. October focuses on preventing the burnout that often comes from leading while underrepresented.
+                </div>
+            </div>
+        </div>
+
+        <!-- OCTOBER -->
+        <div class="month-section">
+            <div class="month-header">
+                <div class="month-badge">October</div>
+                <div class="month-title">
+                    <h2>Energy Reset: Recovery Systems & Managing the Cultural Tax</h2>
+                    <span class="lane-tag">Lane: Sustainability (Energy)</span>
+                </div>
+            </div>
+
+            <div class="module-content">
+                <div class="overlap-note">
+                    <strong>Overlap Addressed:</strong> Previously overlapped with April (composure) and December (boundaries). The revised focus is specifically on ENERGY SYSTEMS—what drains you, what fills you, and how to build sustainable recovery practices.
+                </div>
+
+                <div class="differentiation">
+                    <strong>Clear Differentiation:</strong> April = Managing moments | October = Energy infrastructure | December = Decision systems & time protection
+                </div>
+
+                <h3>Distinct Focus</h3>
+                <p>Burnout prevention through energy management—not mindset reframes (that's November), not boundary-setting (that's December). This is about understanding your energy patterns and building recovery systems.</p>
+
+                <h3>Why This Matters for WOC</h3>
+                <div class="woc-callout">
+                    <h4>The Cultural Tax</h4>
+                    <p>Women of color carry invisible labor that white colleagues don't: DEI committee work, being the "only," representing your race, code-switching, mentoring every new WOC hire, emotional labor when traumatic news affects your community. This "cultural tax" drains energy in ways that aren't recognized or compensated. This module names it and addresses it.</p>
+                </div>
+
+                <h3>Core Content</h3>
+                <ul>
+                    <li><strong>The Energy Audit:</strong> Mapping what drains and what fills your tank</li>
+                    <li><strong>The Cultural Tax:</strong> Naming the invisible labor and deciding what to carry</li>
+                    <li><strong>Recovery Practices:</strong> Daily, weekly, and seasonal recovery rituals</li>
+                    <li><strong>Workload Management:</strong> Strategic prioritization and saying no to low-value work</li>
+                    <li><strong>Stress Reset Toolkit:</strong> Practical techniques for quick recovery</li>
+                    <li><strong>Building Sustainable Rhythms:</strong> Work patterns that prevent burnout</li>
+                    <li><strong>When to Sound the Alarm:</strong> Recognizing burnout warning signs</li>
+                </ul>
+
+                <div class="tool-box">
+                    <h4>Anchor Tools</h4>
+                    <ul>
+                        <li>Energy Audit Worksheet</li>
+                        <li>Cultural Tax Inventory</li>
+                        <li>Recovery Ritual Planner</li>
+                        <li>Stress Reset Practice Cards</li>
+                        <li>Burnout Warning Signs Checklist</li>
+                    </ul>
+                </div>
+
+                <div class="deliverable-box">
+                    <h4>Participant Deliverable</h4>
+                    <p>A completed Energy Audit with a personalized Recovery Plan—including daily, weekly, and monthly practices.</p>
+                </div>
+
+                <div class="bridge-box">
+                    <strong>Builds into November:</strong> Burnout often triggers imposter spirals. October addresses the energy; November addresses the mindset.
+                </div>
+            </div>
+        </div>
+
+        <!-- NOVEMBER -->
+        <div class="month-section">
+            <div class="month-header">
+                <div class="month-badge">November</div>
+                <div class="month-title">
+                    <h2>Evidence-Based Confidence: From Self-Doubt to Self-Trust</h2>
+                    <span class="lane-tag">Lane: Sustainability (Beliefs + Identity)</span>
+                </div>
+            </div>
+
+            <div class="module-content">
+                <div class="differentiation">
+                    <strong>Clear Differentiation:</strong> This is COGNITIVE work—changing internal narratives and belief patterns. April handles in-the-moment regulation; October handles energy systems. November is about the stories you tell yourself.
+                </div>
+
+                <h3>Distinct Focus</h3>
+                <p>Reframe internal narratives and build self-trust using evidence—not affirmations alone, but proof-based confidence. This is about changing the voice in your head.</p>
+
+                <h3>Why This Matters for WOC</h3>
+                <div class="woc-callout">
+                    <h4>When the World Confirms Your Doubts</h4>
+                    <p>Imposter syndrome hits different when systemic barriers actually do exist. Women of color aren't imagining the bias—it's real. This module helps distinguish between internalized oppression and genuine growth areas, building confidence that's grounded in evidence while acknowledging the external barriers.</p>
+                </div>
+
+                <h3>Core Content</h3>
+                <ul>
+                    <li><strong>Understanding Imposter Syndrome:</strong> The patterns and why they persist</li>
+                    <li><strong>Imposter vs. Oppression:</strong> Distinguishing internal doubt from external barriers</li>
+                    <li><strong>The Evidence File:</strong> Building a proof portfolio of your capabilities</li>
+                    <li><strong>Reframing Exercises:</strong> Cognitive techniques for changing self-talk</li>
+                    <li><strong>Owning Your Expertise:</strong> From "I got lucky" to "I earned this"</li>
+                    <li><strong>Confidence Practices:</strong> Daily habits that build self-trust</li>
+                    <li><strong>Affirmations That Work:</strong> Evidence-based affirmations, not empty positivity</li>
+                </ul>
+
+                <div class="tool-box">
+                    <h4>Anchor Tools</h4>
+                    <ul>
+                        <li>Imposter Syndrome Self-Assessment</li>
+                        <li>Evidence File Template</li>
+                        <li>Reframing Worksheet</li>
+                        <li>Daily Confidence Practice Guide</li>
+                        <li>Evidence-Based Affirmations Builder</li>
+                    </ul>
+                </div>
+
+                <div class="deliverable-box">
+                    <h4>Participant Deliverable</h4>
+                    <p>A populated Evidence File with 10+ proof points, plus 5-7 personalized evidence-based affirmations they can use when doubt strikes.</p>
+                </div>
+
+                <div class="bridge-box">
+                    <strong>Builds into December:</strong> Stronger self-trust makes boundaries easier to set and maintain. December provides the systems.
+                </div>
+            </div>
+        </div>
+
+        <!-- DECEMBER -->
+        <div class="month-section">
+            <div class="month-header">
+                <div class="month-badge">December</div>
+                <div class="month-title">
+                    <h2>Reclaim Your Time: Boundaries, Decisions & Your Personal Operating System</h2>
+                    <span class="lane-tag">Lane: Sustainability (Systems + Standards)</span>
+                </div>
+            </div>
+
+            <div class="module-content">
+                <div class="differentiation">
+                    <strong>Clear Differentiation:</strong> October = Energy (what drains/fills you) | December = Decisions (what to say yes/no to, how to protect your time). This is about SYSTEMS and CHOICES.
+                </div>
+
+                <h3>Distinct Focus</h3>
+                <p>Build your personal operating system—boundaries, priorities, and decision-making frameworks for long-term success. This is about protecting your time and energy through clear systems.</p>
+
+                <h3>Why This Matters for WOC</h3>
+                <div class="woc-callout">
+                    <h4>Permission to Protect</h4>
+                    <p>Women of color are often socialized to be accommodating, to say yes, to take on extra work without complaint. Setting boundaries can feel selfish or risky. This module gives permission and practical strategies for protecting your time while maintaining relationships and reputation.</p>
+                </div>
+
+                <h3>Core Content</h3>
+                <ul>
+                    <li><strong>The Boundary Audit:</strong> Where are your boundaries weak or nonexistent?</li>
+                    <li><strong>The Yes/No Framework:</strong> Decision criteria for what deserves your time</li>
+                    <li><strong>Boundary Scripts:</strong> Language for setting limits without damaging relationships</li>
+                    <li><strong>Calendar Protection:</strong> Blocking, batching, and defending your time</li>
+                    <li><strong>The Priority Matrix:</strong> Strategic focus for the year ahead</li>
+                    <li><strong>90-Day Sustainability Plan:</strong> Carrying this work into the new year</li>
+                    <li><strong>Board of Advisors Maintenance:</strong> Relationship nurture rhythm for ongoing support</li>
+                </ul>
+
+                <div class="tool-box">
+                    <h4>Anchor Tools</h4>
+                    <ul>
+                        <li>Boundaries Workbook</li>
+                        <li>Yes/No Decision Framework</li>
+                        <li>Boundary Scripts Library</li>
+                        <li>Calendar Audit Template</li>
+                        <li>90-Day Sustainability Plan</li>
+                        <li>Board of Advisors Maintenance Tracker</li>
+                    </ul>
+                </div>
+
+                <div class="deliverable-box">
+                    <h4>Participant Deliverable</h4>
+                    <p>A complete Personal Operating System: boundaries defined, decision framework created, calendar protected, and a 90-day plan for sustaining growth into the new year.</p>
+                </div>
+
+                <h3>Program Closing</h3>
+                <p>December includes program wrap-up: celebrating wins from the year, reinforcing key tools, and setting intentions for continued growth. Consider a final celebration or recognition ceremony.</p>
+            </div>
+        </div>
+
+        <!-- SUMMARY TABLE -->
+        <div class="intro-section">
+            <h2>Quick Reference: Module Summary</h2>
+
+            <table class="summary-table">
+                <thead>
+                    <tr>
+                        <th>Month</th>
+                        <th>Title</th>
+                        <th>Anchor Tool</th>
+                        <th>WOC Focus</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td><strong>JAN</strong></td>
+                        <td>Break Through Career Plateaus</td>
+                        <td>Career Growth Roadmap</td>
+                        <td>Diagnosis + Direction</td>
+                    </tr>
+                    <tr>
+                        <td><strong>FEB</strong></td>
+                        <td>Strategic Positioning for Promotion</td>
+                        <td>Visibility Strategy + Win Tracker</td>
+                        <td>Being seen by decision-makers</td>
+                    </tr>
+                    <tr>
+                        <td><strong>MAR</strong></td>
+                        <td>Confident Career Pivot</td>
+                        <td>Transferable Skills + Pivot Script</td>
+                        <td>"Prove it again" bias</td>
+                    </tr>
+                    <tr>
+                        <td><strong>APR</strong></td>
+                        <td>Leadership Composure</td>
+                        <td>Trigger Map + Response Cards</td>
+                        <td>Microaggressions + bias response</td>
+                    </tr>
+                    <tr>
+                        <td><strong>MAY</strong></td>
+                        <td>Advocacy & Negotiation</td>
+                        <td>Negotiation Scripts + Prep</td>
+                        <td>Wealth-building + equity</td>
+                    </tr>
+                    <tr>
+                        <td><strong>JUN</strong></td>
+                        <td>Executive Storytelling</td>
+                        <td>Story Templates + Signature Story</td>
+                        <td>Owning your narrative</td>
+                    </tr>
+                    <tr>
+                        <td><strong>JUL-AUG</strong></td>
+                        <td>Summer Integration (Handouts)</td>
+                        <td>Board of Advisors + Reflection</td>
+                        <td>Relationship building</td>
+                    </tr>
+                    <tr>
+                        <td><strong>SEP</strong></td>
+                        <td>Inclusive Leadership</td>
+                        <td>Leadership Identity + Coalition Map</td>
+                        <td>Authentic leadership + coalition power</td>
+                    </tr>
+                    <tr>
+                        <td><strong>OCT</strong></td>
+                        <td>Energy Reset</td>
+                        <td>Energy Audit + Recovery Plan</td>
+                        <td>Cultural tax awareness</td>
+                    </tr>
+                    <tr>
+                        <td><strong>NOV</strong></td>
+                        <td>Evidence-Based Confidence</td>
+                        <td>Evidence File + Reframing</td>
+                        <td>Imposter vs. oppression distinction</td>
+                    </tr>
+                    <tr>
+                        <td><strong>DEC</strong></td>
+                        <td>Reclaim Your Time</td>
+                        <td>Boundaries Workbook + 90-Day Plan</td>
+                        <td>Permission to protect</td>
+                    </tr>
+                </tbody>
+            </table>
+
+            <h3 style="margin-top: 32px;">Key Differentiators Added</h3>
+            <ul>
+                <li><strong>April:</strong> Now explicitly addresses microaggressions and bias response (previously missing)</li>
+                <li><strong>May:</strong> Expanded to include equity and wealth-building beyond salary</li>
+                <li><strong>September:</strong> Added coalition-building and authentic leadership for WOC</li>
+                <li><strong>October:</strong> Added "cultural tax" content—the invisible labor WOC carry</li>
+                <li><strong>November:</strong> Added distinction between imposter syndrome and systemic oppression</li>
+                <li><strong>Clear separation:</strong> April (moments) / October (energy) / November (mindset) / December (decisions)</li>
+            </ul>
+        </div>
+
+    </div>
+</body>
+</html>
