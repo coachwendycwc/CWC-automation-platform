@@ -9,6 +9,12 @@
     <meta property="og:description" content="Discover what's really standing between you and your next level. Take this free 2-minute assessment.">
     <meta property="og:type" content="website">
     <link href="https://fonts.googleapis.com/css2?family=Source+Serif+4:wght@400;600;700&family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <script src="https://cdn.jsdelivr.net/npm/@emailjs/browser@4/dist/email.min.js"></script>
+    <script>
+        (function() {
+            emailjs.init("y6UfKicpoRY2LvZNa");
+        })();
+    </script>
     <style>
         :root {
             --primary: #1A1A1A;
@@ -1268,48 +1274,35 @@
 </html>
             `;
 
-            // Send emails using hidden form + iframe approach (more reliable)
+            // Send branded HTML email via EmailJS
             try {
-                // Create hidden iframe for form submission
-                let iframe = document.getElementById('form-submit-iframe');
-                if (!iframe) {
-                    iframe = document.createElement('iframe');
-                    iframe.name = 'form-submit-iframe';
-                    iframe.id = 'form-submit-iframe';
-                    iframe.style.display = 'none';
-                    document.body.appendChild(iframe);
-                }
-
-                // Create and submit form to Wendy
-                const form = document.createElement('form');
-                form.method = 'POST';
-                form.action = 'https://formsubmit.co/wendy@coachingwomenofcolor.com';
-                form.target = 'form-submit-iframe';
-
-                const fields = {
-                    _subject: `Promotion Readiness Scorecard: ${userData.name} - Score: ${resultsData.totalScore}/50`,
-                    _cc: userData.email,
-                    _captcha: 'false',
-                    _replyto: userData.email,
-                    _content_type: 'text/html',
-                    message: emailMessage
+                const templateParams = {
+                    to_email: 'wendy@coachingwomenofcolor.com',
+                    cc_email: userData.email,
+                    from_name: userData.name,
+                    reply_to: userData.email,
+                    subject: `Promotion Readiness Scorecard: ${userData.name} - Score: ${resultsData.totalScore}/50`,
+                    user_name: userData.name,
+                    user_email: userData.email,
+                    total_score: resultsData.totalScore,
+                    score_level: level,
+                    score_description: description,
+                    score_color: scoreColor,
+                    dimension_rows: dimensionRows,
+                    insight_items: insightItems,
+                    html_content: emailMessage
                 };
 
-                for (const [key, value] of Object.entries(fields)) {
-                    const input = document.createElement('input');
-                    input.type = 'hidden';
-                    input.name = key;
-                    input.value = value;
-                    form.appendChild(input);
-                }
+                // Send to Wendy
+                await emailjs.send('service_mfcadab', 'qz33w1a', templateParams);
 
-                document.body.appendChild(form);
-                form.submit();
-                document.body.removeChild(form);
+                // Send copy to respondent
+                const respondentParams = { ...templateParams, to_email: userData.email };
+                await emailjs.send('service_mfcadab', 'qz33w1a', respondentParams);
 
-                console.log('Form submitted successfully');
+                console.log('EmailJS: Emails sent successfully');
             } catch (error) {
-                console.log('Form submission error:', error);
+                console.log('EmailJS error:', error);
             }
 
             // Show results immediately
