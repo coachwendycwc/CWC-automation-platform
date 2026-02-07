@@ -1,0 +1,691 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Module 2: Strategic Positioning for Promotion - Facilitator Talking Points</title>
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Source+Serif+4:wght@400;600;700&family=Inter:wght@400;500;600&display=swap');
+
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+
+        body {
+            font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
+            line-height: 1.7;
+            color: #333;
+            background: #fff;
+            padding: 40px;
+            max-width: 900px;
+            margin: 0 auto;
+        }
+
+        @media print {
+            body { padding: 20px; font-size: 11pt; }
+            .no-print { display: none; }
+            .page-break { page-break-before: always; }
+            h1 { font-size: 24pt; }
+            h2 { font-size: 16pt; }
+            h3 { font-size: 13pt; }
+        }
+
+        .download-bar {
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            background: #1A1A1A;
+            color: #fff;
+            padding: 16px 40px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            z-index: 1000;
+        }
+
+        .download-bar h1 {
+            font-size: 16px;
+            font-weight: 600;
+            color: #fff;
+            border: none;
+            padding: 0;
+            margin: 0;
+        }
+
+        .download-btn {
+            background: #D4A574;
+            color: #fff;
+            border: none;
+            padding: 10px 24px;
+            border-radius: 6px;
+            font-weight: 600;
+            cursor: pointer;
+            font-size: 14px;
+        }
+
+        .download-btn:hover { background: #c49660; }
+
+        .spacer { height: 80px; }
+
+        .header {
+            text-align: center;
+            margin-bottom: 48px;
+            padding-bottom: 32px;
+            border-bottom: 3px solid #1A1A1A;
+        }
+
+        .logo { height: 60px; margin-bottom: 24px; }
+
+        .header h1 {
+            font-family: 'Source Serif 4', Georgia, serif;
+            font-size: 32px;
+            color: #1A1A1A;
+            margin-bottom: 8px;
+            border: none;
+            padding: 0;
+        }
+
+        .header p {
+            font-size: 18px;
+            color: #666;
+        }
+
+        h1 {
+            font-family: 'Source Serif 4', Georgia, serif;
+            font-size: 28px;
+            color: #1A1A1A;
+            margin: 48px 0 24px;
+            padding-top: 24px;
+            border-top: 2px solid #E5E0D8;
+        }
+
+        h2 {
+            font-family: 'Source Serif 4', Georgia, serif;
+            font-size: 20px;
+            color: #2A7B8C;
+            margin: 32px 0 16px;
+        }
+
+        h3 {
+            font-size: 15px;
+            font-weight: 600;
+            color: #D4A574;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            margin: 24px 0 12px;
+        }
+
+        p { margin-bottom: 16px; }
+
+        .time-badge {
+            display: inline-block;
+            background: #2A7B8C;
+            color: #fff;
+            padding: 4px 12px;
+            border-radius: 4px;
+            font-size: 12px;
+            font-weight: 600;
+            margin-bottom: 16px;
+        }
+
+        .script-box {
+            background: #FAF8F5;
+            border-left: 4px solid #D4A574;
+            padding: 20px 24px;
+            margin: 16px 0;
+            font-style: italic;
+            color: #444;
+        }
+
+        .script-box p { margin-bottom: 12px; }
+        .script-box p:last-child { margin-bottom: 0; }
+
+        .key-points {
+            background: #f5f5f5;
+            padding: 20px 24px;
+            margin: 16px 0;
+            border-radius: 8px;
+        }
+
+        .key-points ul {
+            margin-left: 20px;
+        }
+
+        .key-points li {
+            margin-bottom: 8px;
+        }
+
+        .engagement-box {
+            background: #E8F4F6;
+            border: 1px solid #2A7B8C;
+            padding: 16px 20px;
+            margin: 16px 0;
+            border-radius: 8px;
+        }
+
+        .engagement-box strong {
+            color: #2A7B8C;
+        }
+
+        .checklist {
+            background: #FFF9F5;
+            border: 1px solid #D4A574;
+            padding: 20px 24px;
+            margin: 16px 0;
+            border-radius: 8px;
+        }
+
+        .checklist ul {
+            list-style: none;
+            margin: 0;
+        }
+
+        .checklist li {
+            padding: 8px 0;
+            padding-left: 28px;
+            position: relative;
+            border-bottom: 1px solid #F0EBE5;
+        }
+
+        .checklist li:last-child { border-bottom: none; }
+
+        .checklist li::before {
+            content: '☐';
+            position: absolute;
+            left: 0;
+            color: #D4A574;
+        }
+
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin: 24px 0;
+        }
+
+        th {
+            background: #1A1A1A;
+            color: #fff;
+            padding: 12px 16px;
+            text-align: left;
+            font-size: 13px;
+            font-weight: 600;
+        }
+
+        td {
+            padding: 12px 16px;
+            border-bottom: 1px solid #E5E0D8;
+            font-size: 14px;
+        }
+
+        tr:nth-child(even) { background: #FAF8F5; }
+
+        .highlight {
+            background: #FFFDE7;
+            padding: 2px 6px;
+            border-radius: 3px;
+        }
+
+        hr {
+            border: none;
+            border-top: 1px solid #E5E0D8;
+            margin: 32px 0;
+        }
+
+        .footer {
+            margin-top: 64px;
+            padding-top: 32px;
+            border-top: 2px solid #1A1A1A;
+            text-align: center;
+            color: #999;
+            font-size: 13px;
+        }
+    </style>
+</head>
+<body>
+    <div class="download-bar no-print">
+        <h1>Module 2 Talking Points</h1>
+        <button class="download-btn" onclick="window.print()">Download / Print PDF</button>
+    </div>
+
+    <div class="spacer no-print"></div>
+
+    <div class="header">
+        <img src="https://coachingwomenofcolor.com/wp-content/uploads/2021/04/CWCFinal_logo2.webp" alt="CWC" class="logo">
+        <h1>Module 2: Strategic Positioning for Promotion</h1>
+        <p>Facilitator Talking Points for Zoom Walkthrough</p>
+    </div>
+
+    <h1>Pre-Session Checklist</h1>
+    <div class="checklist">
+        <ul>
+            <li>Test screen share with presentation</li>
+            <li>Have handouts ready to share in chat:
+                <ul style="margin-top: 8px; margin-left: 20px; list-style: disc;">
+                    <li>Visibility Strategy Checklist</li>
+                    <li>Win Tracking Template</li>
+                    <li>Check-In Prep Template</li>
+                    <li>Performance Impact Tracker</li>
+                </ul>
+            </li>
+            <li>Breakout rooms configured (if using)</li>
+            <li>Recording enabled (if applicable)</li>
+        </ul>
+    </div>
+
+    <h1 class="page-break">Slide 1: Title Slide</h1>
+    <span class="time-badge">1-2 minutes</span>
+
+    <h3>Opening Script</h3>
+    <div class="script-box">
+        <p>"Welcome to Module 2 of the Executive Leadership Lab. This month we're tackling something that trips up so many talented women of color—the gap between doing excellent work and actually being recognized for it.</p>
+        <p>Today's session is called <strong>Strategic Positioning for Promotion</strong>, and by the end, you'll have a concrete visibility plan and the tools to make sure your work doesn't go unnoticed."</p>
+    </div>
+
+    <div class="engagement-box">
+        <strong>Engagement:</strong> "Before we dive in, drop in the chat: On a scale of 1-10, how visible do you think your work is to decision-makers right now?"
+    </div>
+
+    <h1>Slide 2: Welcome - Your Work Deserves Recognition</h1>
+    <span class="time-badge">2-3 minutes</span>
+
+    <div class="key-points">
+        <strong>Key Points:</strong>
+        <ul>
+            <li>Acknowledge their hard work and results</li>
+            <li>The stats are stark: 58% of WOC feel overlooked, 2x less likely to be promoted</li>
+            <li>Today we're going to change that narrative</li>
+        </ul>
+    </div>
+
+    <h3>Script</h3>
+    <div class="script-box">
+        <p>"Look at these numbers. 58% of women of color report feeling overlooked for advancement. We're twice as likely to be passed over for promotion even when our performance is equal or better.</p>
+        <p>This isn't about working harder—you're already doing that. This is about working smarter with your visibility. Today, we fix that gap."</p>
+    </div>
+
+    <div class="engagement-box">
+        <strong>Engagement:</strong> "Raise your hand or put a '1' in chat if you've ever felt like your work went unnoticed while someone else got the credit."
+    </div>
+
+    <h1>Slide 3: Objectives - What You'll Gain</h1>
+    <span class="time-badge">2 minutes</span>
+
+    <div class="key-points">
+        <strong>Walk through the four objectives:</strong>
+        <ul>
+            <li><strong>Create a Visibility Plan</strong> - Strategic, tied to business outcomes</li>
+            <li><strong>Build a Win-Tracking System</strong> - Your "receipts" for promotion conversations</li>
+            <li><strong>Master Performance Conversations</strong> - Own check-ins and reviews</li>
+            <li><strong>Identify Your Sponsor Pipeline</strong> - Know who needs to see your work</li>
+        </ul>
+    </div>
+
+    <h3>Script</h3>
+    <div class="script-box">
+        <p>"By the end of today, you'll walk away with four concrete deliverables. These aren't theoretical—you'll actually build these during our session together."</p>
+    </div>
+
+    <h1 class="page-break">Slide 4: The Challenge - Excellence Without Visibility</h1>
+    <span class="time-badge">3 minutes</span>
+
+    <div class="key-points">
+        <strong>Three archetypes that keep us stuck:</strong>
+        <ul>
+            <li><strong>The Silent Achiever</strong> - Great work, no one knows</li>
+            <li><strong>The Untracked Wins</strong> - Can't remember at review time</li>
+            <li><strong>The Missing Advocates</strong> - No one fighting for you in the room</li>
+        </ul>
+    </div>
+
+    <h3>Script</h3>
+    <div class="script-box">
+        <p>"Which of these sounds familiar? The Silent Achiever who delivers exceptional results but no one outside the immediate team knows their name? The one who can't remember their wins at review time? Or the one who realizes no one was advocating for them when the promotion decision was made?</p>
+        <p>Good work doesn't speak for itself. Good work needs a microphone. And today, we're going to give you that microphone."</p>
+    </div>
+
+    <div class="engagement-box">
+        <strong>Engagement:</strong> "In the chat, which of these three resonates most with where you are right now?"
+    </div>
+
+    <h1>Slide 5: Framework - The Visibility Equation</h1>
+    <span class="time-badge">3-4 minutes</span>
+
+    <div class="key-points">
+        <strong>The Core Framework:</strong>
+        <p style="text-align: center; font-size: 18px; margin: 16px 0; padding: 16px; background: #E8F4F6; border-radius: 8px;">
+            <strong>Performance + Positioning + Promotion Criteria = Advancement</strong>
+        </p>
+        <p>Most high performers only focus on Performance. We need all three.</p>
+    </div>
+
+    <h3>Script</h3>
+    <div class="script-box">
+        <p>"Here's the framework that changes everything. Advancement isn't just about what you do—it's about who knows what you do AND whether it aligns with what actually gets rewarded.</p>
+        <p>Most of us have been focused entirely on performance. We thought if we just worked hard enough, someone would notice. But that's only one-third of the equation.</p>
+        <p>Today we address all three parts."</p>
+    </div>
+
+    <div class="engagement-box">
+        <strong>Pause Point:</strong> "Take a moment—which of these three areas do you think is your biggest gap right now? Performance documentation? Positioning? Or understanding your promotion criteria?"
+    </div>
+
+    <h1 class="page-break">Slide 6: Deep Dive - Know Your Promotion Criteria</h1>
+    <span class="time-badge">4 minutes</span>
+
+    <h3>Script</h3>
+    <div class="script-box">
+        <p>"Let's start with promotion criteria. You cannot hit a target you cannot see.</p>
+        <p>How many of you actually know what your organization's documented promotion criteria are? Not what you assume they are—what's actually written down?</p>
+        <p>If you don't know what 'exceeds expectations' means at your company, if you're guessing what leadership values, if your goals don't align with documented competencies—you're playing a game without knowing the rules.</p>
+        <p>This week, I want you to find out. Ask your manager directly: 'What does promotable look like in the next cycle?' Get specific."</p>
+    </div>
+
+    <h1>Slide 7: Deep Dive - Strategic Visibility</h1>
+    <span class="time-badge">4 minutes</span>
+
+    <h3>Script</h3>
+    <div class="script-box">
+        <p>"Strategic visibility isn't about being loud or self-promotional in a way that feels inauthentic. It's about being intentional.</p>
+        <p>Who makes promotion decisions at your organization? Is it just your manager, or is there a calibration committee? Who's in that room when your name comes up?</p>
+        <p>If decision-makers don't know your name, if you're not invited to strategic conversations, if opportunities keep going to people who are less qualified but more visible—that's a visibility problem, not a performance problem."</p>
+    </div>
+
+    <h1>Slide 8: Deep Dive - Win Documentation</h1>
+    <span class="time-badge">3 minutes</span>
+
+    <h3>Script</h3>
+    <div class="script-box">
+        <p>"Here's a truth bomb: Your manager has too many direct reports and too much on their plate to remember every good thing you've done. That's not their fault—it's just reality.</p>
+        <p>So when they go into that calibration meeting to advocate for your promotion, what evidence do they have? Only what you've given them.</p>
+        <p>If you're scrambling to write self-assessments, if you're forgetting accomplishments from Q1 by Q4—you're leaving your advancement to chance. We're going to fix that today."</p>
+    </div>
+
+    <h1 class="page-break">Slide 9: Quote Slide</h1>
+    <span class="time-badge">1 minute</span>
+
+    <h3>Script</h3>
+    <div class="script-box">
+        <p>"I want you to sit with this for a moment: <em>'Visibility isn't bragging. It's ensuring your contributions are known by those who make decisions about your future.'</em></p>
+        <p>This is a reframe many of us need. We've been taught that self-promotion is arrogant. But staying silent about your contributions isn't humble—it's a disservice to your career and to the organization that needs to know who their high performers are."</p>
+    </div>
+
+    <h1>Slide 10: Root Causes - Why Your Work Goes Unseen</h1>
+    <span class="time-badge">3-4 minutes</span>
+
+    <div class="key-points">
+        <strong>Six root causes:</strong>
+        <ul>
+            <li><strong>Modesty culture</strong> - We were taught that talking about ourselves is inappropriate</li>
+            <li><strong>No tracking system</strong> - Without a system, wins just disappear</li>
+            <li><strong>Wrong audience</strong> - Your manager knows, but the people who make decisions don't</li>
+            <li><strong>Inconsistent communication</strong> - You spike at review time but go silent the rest of the year</li>
+            <li><strong>Fear of self-promotion</strong> - Worrying about being seen as 'too much'</li>
+            <li><strong>Waiting to be noticed</strong> - Believing hard work will automatically be recognized</li>
+        </ul>
+    </div>
+
+    <div class="engagement-box">
+        <strong>Engagement:</strong> "Which of these is your biggest barrier? Be honest with yourself."
+    </div>
+
+    <h1 class="page-break">Slide 11: Activity - Visibility Diagnostic</h1>
+    <span class="time-badge">7-8 minutes</span>
+
+    <h3>Facilitation</h3>
+    <div class="script-box">
+        <p>"Now we're going to do a quick diagnostic. I'm giving you 5 minutes.</p>
+        <p><strong>Part 1:</strong> List everyone who currently knows about your work and impact. How far does your visibility actually reach?</p>
+        <p><strong>Part 2:</strong> Now identify the decision-makers and stakeholders who SHOULD know your work but don't. These are your visibility gaps.</p>
+        <p>I'll put you in breakout rooms of 3-4 people. Share what you discovered. You have 5 minutes—go!"</p>
+    </div>
+
+    <div class="engagement-box">
+        <strong>Debrief:</strong> "What did you discover? Anyone willing to share a gap they identified?"
+    </div>
+
+    <h1>Slide 12: Framework - The Win-Tracking System</h1>
+    <span class="time-badge">4-5 minutes</span>
+
+    <div class="key-points">
+        <strong>WHAT / SO WHAT / NOW WHAT Framework:</strong>
+        <ul>
+            <li><strong>WHAT</strong> - What did you accomplish? Be specific.</li>
+            <li><strong>SO WHAT</strong> - What was the business impact? Metrics, revenue, time saved.</li>
+            <li><strong>NOW WHAT</strong> - How does this connect to future goals or promotion criteria?</li>
+        </ul>
+    </div>
+
+    <h3>Examples to Share</h3>
+    <table>
+        <tr>
+            <th>Corporate Example</th>
+            <th>Non-Profit Example</th>
+        </tr>
+        <tr>
+            <td>
+                <strong>WHAT:</strong> "I led the Q1 product launch"<br>
+                <strong>SO WHAT:</strong> "Generated $2M in new revenue and 15% customer growth"<br>
+                <strong>NOW WHAT:</strong> "Positioning us to expand into enterprise sales"
+            </td>
+            <td>
+                <strong>WHAT:</strong> "Redesigned volunteer onboarding"<br>
+                <strong>SO WHAT:</strong> "Increased retention by 40%, reduced training by 2 weeks"<br>
+                <strong>NOW WHAT:</strong> "Enabling us to scale community outreach ahead of schedule"
+            </td>
+        </tr>
+    </table>
+
+    <h1 class="page-break">Slide 13: Activity - Start Your Win Log</h1>
+    <span class="time-badge">12-15 minutes</span>
+
+    <h3>Facilitation</h3>
+    <div class="script-box">
+        <p>"Now it's your turn. Using the What / So What / Now What framework, I want you to capture 3-5 wins from the past 30 days.</p>
+        <p>I'm sharing the Win Tracking Template in the chat now. You have 10 minutes. Don't overthink it—just get the wins documented.</p>
+        <p><strong>Pro tip:</strong> Set a weekly 5-minute calendar reminder to update this. Friday afternoons work well—you're wrapping up the week anyway."</p>
+    </div>
+
+    <div class="checklist">
+        <strong>Share in Chat:</strong>
+        <ul>
+            <li>Win Tracking Template link</li>
+        </ul>
+    </div>
+
+    <h1>Slides 14-15: Visibility Strategy Checklist & Activity</h1>
+    <span class="time-badge">23-28 minutes total</span>
+
+    <div class="key-points">
+        <strong>Six-Step System:</strong>
+        <ul>
+            <li><strong>Step 1:</strong> Promotion Criteria - Document what your org rewards</li>
+            <li><strong>Step 2:</strong> Key Stakeholders - Identify 3-5 decision-makers</li>
+            <li><strong>Step 3:</strong> Communication Channels - How will you reach them?</li>
+            <li><strong>Step 4:</strong> Frequency - How often will you share?</li>
+            <li><strong>Step 5:</strong> Win Categories - What types of wins to highlight</li>
+            <li><strong>Step 6:</strong> Review Rhythm - Monthly visibility check</li>
+        </ul>
+    </div>
+
+    <h3>Activity Facilitation</h3>
+    <div class="script-box">
+        <p>"This is the deep work. I'm sharing the Visibility Strategy Checklist in the chat. Work through each section. Be specific—this becomes your playbook for the next year.</p>
+        <p>You have 20 minutes. I'll play some focus music. If you finish early, pair up in the chat to share your plans."</p>
+    </div>
+
+    <h1 class="page-break">Slide 16: Performance Management Cycle</h1>
+    <span class="time-badge">4 minutes</span>
+
+    <h3>Script</h3>
+    <div class="script-box">
+        <p>"Most people treat performance reviews like a test you cram for the night before. But the winners treat it like a year-long campaign.</p>
+        <p>At goal-setting, you should already be aligning your work to promotion criteria. Throughout the year, you're tracking wins. At mid-cycle, you're course-correcting. Your self-assessment reads like a promotion case. And before calibration, you're arming your manager with specific examples they can use to advocate for you."</p>
+    </div>
+
+    <table>
+        <tr><th>Phase</th><th>Visibility Action</th></tr>
+        <tr><td>Goal Setting</td><td>Align your goals to promotion criteria from day one</td></tr>
+        <tr><td>Throughout Cycle</td><td>Track wins in real-time—don't scramble at review time</td></tr>
+        <tr><td>Mid-Cycle Review</td><td>Request feedback check-in to course-correct early</td></tr>
+        <tr><td>Self-Assessment</td><td>Write it like a promotion case with metrics and impact</td></tr>
+        <tr><td>Calibration Prep</td><td>Give your manager specific examples they can advocate with</td></tr>
+    </table>
+
+    <h1>Slide 17: Maximize Your Check-Ins</h1>
+    <span class="time-badge">4-5 minutes</span>
+
+    <div class="key-points">
+        <strong>The "Win + Ask" Formula:</strong>
+        <p style="background: #1A1A1A; color: #fff; padding: 16px 24px; border-radius: 8px; margin: 16px 0;">
+            <span style="color: #D4A574;">WIN:</span> "I completed X, which resulted in Y impact"<br>
+            <span style="color: #D4A574;">ASK:</span> "I'd like to take on Z to build toward [goal]"
+        </p>
+        <strong>Power Questions to Memorize:</strong>
+        <ul>
+            <li>"What would make me promotable in the next cycle?"</li>
+            <li>"Who else should know about this work?"</li>
+            <li>"Are there stretch opportunities I should pursue?"</li>
+        </ul>
+    </div>
+
+    <h1 class="page-break">Slide 18: Check-In Prep Template</h1>
+    <span class="time-badge">3 minutes</span>
+
+    <h3>Script</h3>
+    <div class="script-box">
+        <p>"Never walk into a manager meeting unprepared again. Before every check-in, spend 5 minutes filling this out."</p>
+    </div>
+
+    <table>
+        <tr><th>Section</th><th>Your Prep</th></tr>
+        <tr><td>Wins This Period</td><td>2-3 accomplishments with measurable impact</td></tr>
+        <tr><td>Visibility Ask</td><td>One opportunity or introduction to request</td></tr>
+        <tr><td>Career Signal</td><td>What you want to be known for</td></tr>
+        <tr><td>Feedback Request</td><td>Specific question for your manager</td></tr>
+        <tr><td>Next Commitments</td><td>What you'll deliver by next check-in</td></tr>
+    </table>
+
+    <h1>Slide 19: Your Sponsor Pipeline</h1>
+    <span class="time-badge">4 minutes</span>
+
+    <div class="key-points">
+        <strong>Three people who should consistently see your wins:</strong>
+        <ul>
+            <li><strong>Your Manager</strong> - First line of advocacy. Ensure they have evidence to fight for you.</li>
+            <li><strong>Skip-Level Leader</strong> - Your manager's manager. More influence than you think.</li>
+            <li><strong>Cross-Functional Leader</strong> - Someone outside your team who can speak to your impact.</li>
+        </ul>
+    </div>
+
+    <div class="engagement-box">
+        <strong>This month's goal:</strong> Each of these three people should know at least one recent win of yours.
+    </div>
+
+    <h1>Slide 20: 14-Day Visibility Sprint</h1>
+    <span class="time-badge">3 minutes</span>
+
+    <div class="key-points">
+        <strong>Three actions for the next two weeks:</strong>
+        <ul>
+            <li><strong>This week:</strong> Share one win—email your manager or mention it in a team meeting</li>
+            <li><strong>Next week:</strong> Schedule a check-in using the prep template</li>
+            <li><strong>By day 14:</strong> Add 5 wins to your tracker (backfill from past 60 days if needed)</li>
+        </ul>
+    </div>
+
+    <h1 class="page-break">Slides 21-22: Quote & Summary</h1>
+    <span class="time-badge">3-4 minutes</span>
+
+    <h3>Quote Script</h3>
+    <div class="script-box">
+        <p>"'You can't be considered for opportunities people don't know you want.'</p>
+        <p>Read that again. If you haven't explicitly told the right people what you want—not hinted, not hoped they'd figure it out—you're not in the running. Your ambition is not obvious. You have to make it known."</p>
+    </div>
+
+    <div class="key-points">
+        <strong>Five Key Takeaways:</strong>
+        <ul>
+            <li><strong>Visibility is strategic, not accidental</strong> - It requires a plan</li>
+            <li><strong>Track wins in real-time</strong> - If you don't document it, it didn't happen</li>
+            <li><strong>Own your performance conversations</strong> - Check-ins are visibility opportunities</li>
+            <li><strong>Know who needs to see your work</strong> - Build your sponsor pipeline now</li>
+            <li><strong>Consistency beats one-time efforts</strong> - Small actions compound over time</li>
+        </ul>
+    </div>
+
+    <h1>Slides 23-24: Homework & Closing</h1>
+    <span class="time-badge">5 minutes</span>
+
+    <div class="checklist">
+        <strong>Homework Assignments:</strong>
+        <ul>
+            <li>Complete your Visibility Strategy Checklist</li>
+            <li>Log 5 wins in your tracker</li>
+            <li>Share one accomplishment with a stakeholder</li>
+            <li>Use the Check-In Prep Template</li>
+            <li>Identify your 3 sponsor pipeline targets</li>
+        </ul>
+    </div>
+
+    <h3>Closing Script</h3>
+    <div class="script-box">
+        <p>"Get seen. Get promoted.</p>
+        <p>You have the skills. You have the results. Now you have the strategy to make sure the right people know it.</p>
+        <p>Your visibility strategy starts today—not tomorrow, not next quarter. Today.</p>
+        <p>Next month we're covering <strong>Confident Career Pivot</strong>—perfect timing as you start building this new visibility muscle."</p>
+    </div>
+
+    <div class="engagement-box">
+        <strong>Final Engagement:</strong> "Drop in the chat: What's one thing you're committing to do in the next 48 hours based on what you learned today?"
+    </div>
+
+    <h1 class="page-break">Post-Session Follow-Up</h1>
+
+    <h2>Send within 24 hours:</h2>
+    <div class="checklist">
+        <ul>
+            <li>Session recording (if applicable)</li>
+            <li>All handouts/templates</li>
+            <li>Homework reminder with due dates</li>
+            <li>Accountability partner pairings (if applicable)</li>
+        </ul>
+    </div>
+
+    <h2>Send at 7 days:</h2>
+    <div class="checklist">
+        <ul>
+            <li>Check-in email: "How is your win tracking going?"</li>
+            <li>Reminder to complete visibility plan</li>
+        </ul>
+    </div>
+
+    <h2>Send at 14 days:</h2>
+    <div class="checklist">
+        <ul>
+            <li>Accountability check: "Share one win and one visibility action you took"</li>
+            <li>Preview of Module 3</li>
+        </ul>
+    </div>
+
+    <h1>Timing Summary</h1>
+    <table>
+        <tr><th>Section</th><th>Duration</th></tr>
+        <tr><td>Opening & Slides 1-3</td><td>7 min</td></tr>
+        <tr><td>The Challenge & Framework (4-5)</td><td>8 min</td></tr>
+        <tr><td>Deep Dives (6-8)</td><td>12 min</td></tr>
+        <tr><td>Quote & Root Causes (9-10)</td><td>5 min</td></tr>
+        <tr><td>Activity: Visibility Diagnostic (11)</td><td>8 min</td></tr>
+        <tr><td>Win-Tracking Framework (12-13)</td><td>18 min</td></tr>
+        <tr><td>Visibility Strategy (14-15)</td><td>25 min</td></tr>
+        <tr><td>Performance & Check-Ins (16-18)</td><td>12 min</td></tr>
+        <tr><td>Sponsor Pipeline & Sprint (19-20)</td><td>8 min</td></tr>
+        <tr><td>Closing (21-24)</td><td>10 min</td></tr>
+        <tr><td>Q&A Buffer</td><td>10 min</td></tr>
+        <tr style="background: #1A1A1A; color: #fff;"><td><strong>TOTAL</strong></td><td><strong>~120 min</strong></td></tr>
+    </table>
+
+    <div class="footer">
+        <p>Prepared for Coaching Women of Color - Executive Leadership Lab</p>
+        <p>Module 2: Strategic Positioning for Promotion</p>
+    </div>
+</body>
+</html>
