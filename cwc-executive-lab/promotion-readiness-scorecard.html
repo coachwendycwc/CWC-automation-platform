@@ -1,0 +1,973 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Promotion Readiness Scorecard | Free Assessment</title>
+    <meta name="description" content="Take this free 2-minute assessment to discover what's standing between you and your next promotion. Get personalized insights and actionable next steps.">
+    <meta property="og:title" content="Are You Ready for Your Next Promotion? Free Scorecard">
+    <meta property="og:description" content="Discover what's really standing between you and your next level. Take this free 2-minute assessment.">
+    <meta property="og:type" content="website">
+    <link href="https://fonts.googleapis.com/css2?family=Source+Serif+4:wght@400;600;700&family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --primary: #1A1A1A;
+            --accent: #2A7B8C;
+            --accent-warm: #D4A574;
+            --accent-warm-light: #E8C9A8;
+            --text: #333333;
+            --text-light: #666666;
+            --text-muted: #999999;
+            --bg: #FAF8F5;
+            --bg-warm: #F5F2ED;
+            --border: #E5E0D8;
+            --success: #4A9B7F;
+            --warning: #D4A574;
+            --danger: #C45C5C;
+        }
+
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+
+        body {
+            font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
+            background: var(--bg);
+            color: var(--text);
+            line-height: 1.6;
+            min-height: 100vh;
+        }
+
+        .container {
+            max-width: 700px;
+            margin: 0 auto;
+            padding: 40px 24px;
+        }
+
+        /* Header */
+        header {
+            text-align: center;
+            margin-bottom: 40px;
+        }
+
+        .logo { height: 70px; margin-bottom: 20px; }
+
+        .badge {
+            display: inline-block;
+            background: var(--accent);
+            color: white;
+            font-size: 11px;
+            font-weight: 600;
+            text-transform: uppercase;
+            letter-spacing: 1.5px;
+            padding: 6px 14px;
+            border-radius: 20px;
+            margin-bottom: 20px;
+        }
+
+        h1 {
+            font-family: 'Source Serif 4', Georgia, serif;
+            font-size: 36px;
+            font-weight: 700;
+            color: var(--primary);
+            line-height: 1.2;
+            margin-bottom: 16px;
+        }
+
+        .subtitle {
+            font-size: 18px;
+            color: var(--text-light);
+            max-width: 500px;
+            margin: 0 auto 24px;
+        }
+
+        .time-estimate {
+            display: inline-flex;
+            align-items: center;
+            gap: 6px;
+            font-size: 14px;
+            color: var(--text-muted);
+            background: white;
+            padding: 8px 16px;
+            border-radius: 20px;
+            border: 1px solid var(--border);
+        }
+
+        /* Progress Bar */
+        .progress-container {
+            background: white;
+            border-radius: 8px;
+            padding: 20px 24px;
+            margin-bottom: 32px;
+            border: 1px solid var(--border);
+        }
+
+        .progress-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 12px;
+        }
+
+        .progress-label {
+            font-size: 13px;
+            font-weight: 600;
+            color: var(--text-light);
+        }
+
+        .progress-count {
+            font-size: 13px;
+            color: var(--text-muted);
+        }
+
+        .progress-bar {
+            height: 8px;
+            background: var(--border);
+            border-radius: 4px;
+            overflow: hidden;
+        }
+
+        .progress-fill {
+            height: 100%;
+            background: linear-gradient(90deg, var(--accent) 0%, var(--accent-warm) 100%);
+            border-radius: 4px;
+            transition: width 0.4s ease;
+            width: 0%;
+        }
+
+        /* Question Card */
+        .question-card {
+            background: white;
+            border: 1px solid var(--border);
+            border-radius: 12px;
+            padding: 32px;
+            margin-bottom: 24px;
+            display: none;
+        }
+
+        .question-card.active {
+            display: block;
+            animation: fadeIn 0.3s ease;
+        }
+
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(10px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        .question-category {
+            font-size: 11px;
+            font-weight: 600;
+            color: var(--accent);
+            text-transform: uppercase;
+            letter-spacing: 1.5px;
+            margin-bottom: 12px;
+        }
+
+        .question-text {
+            font-family: 'Source Serif 4', Georgia, serif;
+            font-size: 22px;
+            font-weight: 600;
+            color: var(--primary);
+            line-height: 1.4;
+            margin-bottom: 28px;
+        }
+
+        .options {
+            display: flex;
+            flex-direction: column;
+            gap: 12px;
+        }
+
+        .option {
+            display: flex;
+            align-items: center;
+            gap: 14px;
+            padding: 16px 20px;
+            background: var(--bg);
+            border: 2px solid var(--border);
+            border-radius: 8px;
+            cursor: pointer;
+            transition: all 0.2s ease;
+        }
+
+        .option:hover {
+            border-color: var(--accent);
+            background: white;
+        }
+
+        .option.selected {
+            border-color: var(--accent);
+            background: rgba(42, 123, 140, 0.05);
+        }
+
+        .option-radio {
+            width: 22px;
+            height: 22px;
+            border: 2px solid var(--border);
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            flex-shrink: 0;
+            transition: all 0.2s ease;
+        }
+
+        .option.selected .option-radio {
+            border-color: var(--accent);
+            background: var(--accent);
+        }
+
+        .option.selected .option-radio::after {
+            content: '';
+            width: 8px;
+            height: 8px;
+            background: white;
+            border-radius: 50%;
+        }
+
+        .option-text {
+            font-size: 15px;
+            color: var(--text);
+        }
+
+        .option-score {
+            margin-left: auto;
+            font-size: 12px;
+            color: var(--text-muted);
+            opacity: 0;
+        }
+
+        /* Navigation */
+        .nav-buttons {
+            display: flex;
+            justify-content: space-between;
+            gap: 16px;
+            margin-top: 24px;
+        }
+
+        .btn {
+            padding: 14px 28px;
+            border-radius: 8px;
+            font-family: inherit;
+            font-size: 15px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.2s ease;
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .btn-secondary {
+            background: transparent;
+            color: var(--text-light);
+            border: 1px solid var(--border);
+        }
+
+        .btn-secondary:hover {
+            border-color: var(--text-light);
+        }
+
+        .btn-primary {
+            background: var(--accent);
+            color: white;
+            border: none;
+            margin-left: auto;
+        }
+
+        .btn-primary:hover {
+            background: #236a79;
+        }
+
+        .btn-primary:disabled {
+            background: var(--border);
+            cursor: not-allowed;
+        }
+
+        .btn-cta {
+            background: var(--accent-warm);
+            color: white;
+            border: none;
+            width: 100%;
+            justify-content: center;
+            padding: 18px 32px;
+            font-size: 16px;
+        }
+
+        .btn-cta:hover {
+            background: #c49660;
+        }
+
+        /* Results */
+        .results-container {
+            display: none;
+        }
+
+        .results-container.active {
+            display: block;
+            animation: fadeIn 0.5s ease;
+        }
+
+        .score-card {
+            background: linear-gradient(135deg, var(--primary) 0%, #2d2d2d 100%);
+            border-radius: 16px;
+            padding: 40px;
+            text-align: center;
+            color: white;
+            margin-bottom: 32px;
+        }
+
+        .score-label {
+            font-size: 13px;
+            text-transform: uppercase;
+            letter-spacing: 2px;
+            color: rgba(255,255,255,0.6);
+            margin-bottom: 16px;
+        }
+
+        .score-value {
+            font-family: 'Source Serif 4', Georgia, serif;
+            font-size: 72px;
+            font-weight: 700;
+            color: var(--accent-warm);
+            line-height: 1;
+        }
+
+        .score-max {
+            font-size: 24px;
+            color: rgba(255,255,255,0.4);
+        }
+
+        .score-level {
+            font-family: 'Source Serif 4', Georgia, serif;
+            font-size: 24px;
+            font-weight: 600;
+            margin-top: 16px;
+            margin-bottom: 8px;
+        }
+
+        .score-description {
+            font-size: 15px;
+            color: rgba(255,255,255,0.7);
+            max-width: 400px;
+            margin: 0 auto;
+        }
+
+        .results-breakdown {
+            background: white;
+            border: 1px solid var(--border);
+            border-radius: 12px;
+            padding: 28px;
+            margin-bottom: 24px;
+        }
+
+        .results-breakdown h3 {
+            font-family: 'Source Serif 4', Georgia, serif;
+            font-size: 20px;
+            font-weight: 600;
+            color: var(--primary);
+            margin-bottom: 20px;
+        }
+
+        .dimension {
+            display: flex;
+            align-items: center;
+            gap: 16px;
+            padding: 16px 0;
+            border-bottom: 1px solid var(--border);
+        }
+
+        .dimension:last-child {
+            border-bottom: none;
+            padding-bottom: 0;
+        }
+
+        .dimension-info {
+            flex: 1;
+        }
+
+        .dimension-name {
+            font-size: 15px;
+            font-weight: 600;
+            color: var(--primary);
+            margin-bottom: 4px;
+        }
+
+        .dimension-bar {
+            height: 8px;
+            background: var(--border);
+            border-radius: 4px;
+            overflow: hidden;
+            width: 100%;
+        }
+
+        .dimension-fill {
+            height: 100%;
+            border-radius: 4px;
+            transition: width 0.6s ease;
+        }
+
+        .dimension-fill.high { background: var(--success); }
+        .dimension-fill.medium { background: var(--warning); }
+        .dimension-fill.low { background: var(--danger); }
+
+        .dimension-score {
+            font-size: 14px;
+            font-weight: 600;
+            color: var(--text-light);
+            min-width: 50px;
+            text-align: right;
+        }
+
+        .insights-card {
+            background: var(--bg-warm);
+            border: 2px solid var(--accent-warm);
+            border-radius: 12px;
+            padding: 28px;
+            margin-bottom: 24px;
+        }
+
+        .insights-card h3 {
+            font-family: 'Source Serif 4', Georgia, serif;
+            font-size: 20px;
+            font-weight: 600;
+            color: var(--primary);
+            margin-bottom: 16px;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .insight-list {
+            list-style: none;
+        }
+
+        .insight-list li {
+            padding: 12px 0;
+            padding-left: 28px;
+            position: relative;
+            font-size: 15px;
+            color: var(--text);
+            border-bottom: 1px solid var(--border);
+        }
+
+        .insight-list li:last-child {
+            border-bottom: none;
+            padding-bottom: 0;
+        }
+
+        .insight-list li::before {
+            content: '→';
+            position: absolute;
+            left: 0;
+            color: var(--accent-warm);
+            font-weight: 600;
+        }
+
+        .cta-section {
+            background: white;
+            border: 1px solid var(--border);
+            border-radius: 12px;
+            padding: 32px;
+            text-align: center;
+        }
+
+        .cta-section h3 {
+            font-family: 'Source Serif 4', Georgia, serif;
+            font-size: 24px;
+            font-weight: 600;
+            color: var(--primary);
+            margin-bottom: 12px;
+        }
+
+        .cta-section p {
+            font-size: 16px;
+            color: var(--text-light);
+            margin-bottom: 24px;
+            max-width: 450px;
+            margin-left: auto;
+            margin-right: auto;
+        }
+
+        .cta-features {
+            display: flex;
+            justify-content: center;
+            gap: 24px;
+            margin-bottom: 28px;
+            flex-wrap: wrap;
+        }
+
+        .cta-feature {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            font-size: 14px;
+            color: var(--text-light);
+        }
+
+        .cta-feature svg {
+            color: var(--success);
+        }
+
+        .share-section {
+            margin-top: 32px;
+            padding-top: 24px;
+            border-top: 1px solid var(--border);
+        }
+
+        .share-section p {
+            font-size: 14px;
+            color: var(--text-muted);
+            margin-bottom: 16px;
+        }
+
+        .share-buttons {
+            display: flex;
+            justify-content: center;
+            gap: 12px;
+        }
+
+        .share-btn {
+            padding: 10px 20px;
+            border-radius: 6px;
+            font-size: 14px;
+            font-weight: 500;
+            cursor: pointer;
+            border: 1px solid var(--border);
+            background: white;
+            color: var(--text);
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+            transition: all 0.2s;
+        }
+
+        .share-btn:hover {
+            border-color: var(--accent);
+            color: var(--accent);
+        }
+
+        /* Footer */
+        footer {
+            text-align: center;
+            padding: 40px 24px;
+            color: var(--text-muted);
+            font-size: 13px;
+        }
+
+        footer a {
+            color: var(--accent);
+            text-decoration: none;
+        }
+
+        /* Responsive */
+        @media screen and (max-width: 600px) {
+            .container { padding: 24px 16px; }
+            h1 { font-size: 28px; }
+            .question-text { font-size: 19px; }
+            .question-card { padding: 24px 20px; }
+            .score-value { font-size: 56px; }
+            .score-card { padding: 32px 24px; }
+            .cta-features { flex-direction: column; align-items: center; gap: 12px; }
+            .share-buttons { flex-direction: column; }
+            .share-btn { justify-content: center; }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <header>
+            <img src="https://coachingwomenofcolor.com/wp-content/uploads/2021/04/CWCFinal_logo2.webp" alt="Coaching Women of Color" class="logo">
+            <span class="badge">Free Assessment</span>
+            <h1>Promotion Readiness Scorecard</h1>
+            <p class="subtitle">Discover what's really standing between you and your next level—in just 2 minutes.</p>
+            <span class="time-estimate">
+                <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"></circle><polyline points="12 6 12 12 16 14"></polyline></svg>
+                2 minutes • 10 questions
+            </span>
+        </header>
+
+        <!-- Progress -->
+        <div class="progress-container" id="progress-container">
+            <div class="progress-header">
+                <span class="progress-label">Your Progress</span>
+                <span class="progress-count"><span id="current-q">0</span> of 10</span>
+            </div>
+            <div class="progress-bar">
+                <div class="progress-fill" id="progress-fill"></div>
+            </div>
+        </div>
+
+        <!-- Questions -->
+        <div id="questions-container">
+            <!-- Questions will be rendered here -->
+        </div>
+
+        <!-- Results -->
+        <div class="results-container" id="results-container">
+            <div class="score-card">
+                <div class="score-label">Your Promotion Readiness Score</div>
+                <div class="score-value" id="total-score">0</div>
+                <span class="score-max">/ 50</span>
+                <div class="score-level" id="score-level">Calculating...</div>
+                <p class="score-description" id="score-description"></p>
+            </div>
+
+            <div class="results-breakdown">
+                <h3>Your Readiness by Dimension</h3>
+                <div id="dimensions-breakdown">
+                    <!-- Dimensions will be rendered here -->
+                </div>
+            </div>
+
+            <div class="insights-card">
+                <h3>
+                    <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"></circle><line x1="12" y1="16" x2="12" y2="12"></line><line x1="12" y1="8" x2="12.01" y2="8"></line></svg>
+                    Your Key Insights
+                </h3>
+                <ul class="insight-list" id="insights-list">
+                    <!-- Insights will be rendered here -->
+                </ul>
+            </div>
+
+            <div class="cta-section">
+                <h3>Ready to Accelerate Your Promotion?</h3>
+                <p>Join the Executive Leadership Lab—a 12-month program designed specifically for women of color ready to break through to the next level.</p>
+                <div class="cta-features">
+                    <span class="cta-feature">
+                        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="20 6 9 17 4 12"></polyline></svg>
+                        Strategic visibility training
+                    </span>
+                    <span class="cta-feature">
+                        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="20 6 9 17 4 12"></polyline></svg>
+                        Executive presence coaching
+                    </span>
+                    <span class="cta-feature">
+                        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="20 6 9 17 4 12"></polyline></svg>
+                        Community of leaders
+                    </span>
+                </div>
+                <a href="https://coachingwomenofcolor.com" class="btn btn-cta">Learn More About the Executive Leadership Lab</a>
+
+                <div class="share-section">
+                    <p>Know someone who needs this assessment?</p>
+                    <div class="share-buttons">
+                        <button class="share-btn" onclick="shareOnLinkedIn()">
+                            <svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor"><path d="M19 0h-14c-2.761 0-5 2.239-5 5v14c0 2.761 2.239 5 5 5h14c2.762 0 5-2.239 5-5v-14c0-2.761-2.238-5-5-5zm-11 19h-3v-11h3v11zm-1.5-12.268c-.966 0-1.75-.79-1.75-1.764s.784-1.764 1.75-1.764 1.75.79 1.75 1.764-.783 1.764-1.75 1.764zm13.5 12.268h-3v-5.604c0-3.368-4-3.113-4 0v5.604h-3v-11h3v1.765c1.396-2.586 7-2.777 7 2.476v6.759z"/></svg>
+                            Share on LinkedIn
+                        </button>
+                        <button class="share-btn" onclick="copyLink()">
+                            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M10 13a5 5 0 0 0 7.54.54l3-3a5 5 0 0 0-7.07-7.07l-1.72 1.71"></path><path d="M14 11a5 5 0 0 0-7.54-.54l-3 3a5 5 0 0 0 7.07 7.07l1.71-1.71"></path></svg>
+                            Copy Link
+                        </button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <footer>
+        <p>© 2026 <a href="https://coachingwomenofcolor.com">Coaching Women of Color</a>. All rights reserved.</p>
+    </footer>
+
+    <script>
+        const questions = [
+            {
+                category: "Visibility",
+                question: "How often do decision-makers in your organization see or hear about your work?",
+                options: [
+                    { text: "Rarely—my work mostly stays within my immediate team", score: 1 },
+                    { text: "Occasionally—when there's a big win or project", score: 2 },
+                    { text: "Sometimes—I share updates but not consistently", score: 3 },
+                    { text: "Regularly—I have a system to ensure visibility", score: 4 },
+                    { text: "Frequently—key leaders know my contributions well", score: 5 }
+                ]
+            },
+            {
+                category: "Visibility",
+                question: "Do you have a sponsor (someone with power who advocates for you when you're not in the room)?",
+                options: [
+                    { text: "No, I don't have anyone advocating for me", score: 1 },
+                    { text: "I'm not sure—maybe my manager?", score: 2 },
+                    { text: "I have a mentor but not a true sponsor", score: 3 },
+                    { text: "Yes, I have one person who advocates for me", score: 4 },
+                    { text: "Yes, I have multiple sponsors at different levels", score: 5 }
+                ]
+            },
+            {
+                category: "Performance",
+                question: "How well can you articulate your top 3 accomplishments with measurable impact?",
+                options: [
+                    { text: "I struggle to remember or quantify my wins", score: 1 },
+                    { text: "I know my wins but can't easily quantify them", score: 2 },
+                    { text: "I can name them but need time to prepare", score: 3 },
+                    { text: "I can articulate them clearly with some metrics", score: 4 },
+                    { text: "I have them documented with clear metrics, ready to share", score: 5 }
+                ]
+            },
+            {
+                category: "Performance",
+                question: "How aligned is your current work to your organization's promotion criteria?",
+                options: [
+                    { text: "I don't know what the promotion criteria are", score: 1 },
+                    { text: "I have a vague idea but haven't mapped my work to them", score: 2 },
+                    { text: "I know the criteria but my work only partially aligns", score: 3 },
+                    { text: "My work aligns well and I can demonstrate evidence", score: 4 },
+                    { text: "I've strategically designed my work to exceed the criteria", score: 5 }
+                ]
+            },
+            {
+                category: "Positioning",
+                question: "How would you describe your professional reputation in your organization?",
+                options: [
+                    { text: "I'm not sure how I'm perceived", score: 1 },
+                    { text: "I'm known as reliable but not as a leader", score: 2 },
+                    { text: "I'm respected in my function but not broadly", score: 3 },
+                    { text: "I'm known for specific strengths across teams", score: 4 },
+                    { text: "I'm recognized as a high-potential leader", score: 5 }
+                ]
+            },
+            {
+                category: "Positioning",
+                question: "How often do you proactively communicate your career aspirations to your manager?",
+                options: [
+                    { text: "Never—I assume they know based on my work", score: 1 },
+                    { text: "Rarely—only during annual reviews", score: 2 },
+                    { text: "Sometimes—when opportunities come up", score: 3 },
+                    { text: "Regularly—a few times per year", score: 4 },
+                    { text: "Consistently—it's part of our ongoing dialogue", score: 5 }
+                ]
+            },
+            {
+                category: "Readiness",
+                question: "How prepared are you for the responsibilities of the next level?",
+                options: [
+                    { text: "I'm not sure what the next level requires", score: 1 },
+                    { text: "I have gaps I haven't started addressing", score: 2 },
+                    { text: "I'm working on developing the needed skills", score: 3 },
+                    { text: "I'm mostly ready with a few areas to strengthen", score: 4 },
+                    { text: "I'm already operating at the next level", score: 5 }
+                ]
+            },
+            {
+                category: "Readiness",
+                question: "How confident are you advocating for yourself in high-stakes conversations?",
+                options: [
+                    { text: "Very uncomfortable—I avoid these conversations", score: 1 },
+                    { text: "Uncomfortable—I struggle to speak up for myself", score: 2 },
+                    { text: "Somewhat confident—depends on the situation", score: 3 },
+                    { text: "Confident—I can advocate but still feel nervous", score: 4 },
+                    { text: "Very confident—I advocate effectively and comfortably", score: 5 }
+                ]
+            },
+            {
+                category: "Mindset",
+                question: "When you think about going for a promotion, what's your primary feeling?",
+                options: [
+                    { text: "Fear or doubt—I don't feel ready or deserving", score: 1 },
+                    { text: "Uncertainty—I'm not sure if it's the right time", score: 2 },
+                    { text: "Cautious optimism—I want it but have concerns", score: 3 },
+                    { text: "Motivated—I'm working toward it with a plan", score: 4 },
+                    { text: "Confident and excited—I know I'm ready", score: 5 }
+                ]
+            },
+            {
+                category: "Mindset",
+                question: "How often does imposter syndrome or self-doubt hold you back from taking action?",
+                options: [
+                    { text: "Constantly—it significantly limits what I pursue", score: 1 },
+                    { text: "Often—I second-guess myself regularly", score: 2 },
+                    { text: "Sometimes—it affects me in certain situations", score: 3 },
+                    { text: "Rarely—I've developed strategies to manage it", score: 4 },
+                    { text: "Almost never—I take action despite any doubt", score: 5 }
+                ]
+            }
+        ];
+
+        const dimensions = [
+            { name: "Visibility", questions: [0, 1], maxScore: 10 },
+            { name: "Performance Documentation", questions: [2, 3], maxScore: 10 },
+            { name: "Strategic Positioning", questions: [4, 5], maxScore: 10 },
+            { name: "Next-Level Readiness", questions: [6, 7], maxScore: 10 },
+            { name: "Confidence & Mindset", questions: [8, 9], maxScore: 10 }
+        ];
+
+        let currentQuestion = 0;
+        let answers = new Array(questions.length).fill(null);
+
+        function renderQuestion(index) {
+            const q = questions[index];
+            const container = document.getElementById('questions-container');
+
+            container.innerHTML = `
+                <div class="question-card active">
+                    <div class="question-category">${q.category}</div>
+                    <div class="question-text">${q.question}</div>
+                    <div class="options">
+                        ${q.options.map((opt, i) => `
+                            <div class="option ${answers[index] === i ? 'selected' : ''}" onclick="selectOption(${index}, ${i}, ${opt.score})">
+                                <div class="option-radio"></div>
+                                <span class="option-text">${opt.text}</span>
+                            </div>
+                        `).join('')}
+                    </div>
+                    <div class="nav-buttons">
+                        ${index > 0 ? `<button class="btn btn-secondary" onclick="prevQuestion()">← Back</button>` : '<div></div>'}
+                        <button class="btn btn-primary" id="next-btn" onclick="nextQuestion()" ${answers[index] === null ? 'disabled' : ''}>
+                            ${index === questions.length - 1 ? 'See My Results' : 'Next →'}
+                        </button>
+                    </div>
+                </div>
+            `;
+
+            updateProgress();
+        }
+
+        function selectOption(questionIndex, optionIndex, score) {
+            answers[questionIndex] = optionIndex;
+
+            // Update UI
+            document.querySelectorAll('.option').forEach((opt, i) => {
+                opt.classList.toggle('selected', i === optionIndex);
+            });
+
+            document.getElementById('next-btn').disabled = false;
+        }
+
+        function nextQuestion() {
+            if (currentQuestion < questions.length - 1) {
+                currentQuestion++;
+                renderQuestion(currentQuestion);
+            } else {
+                showResults();
+            }
+        }
+
+        function prevQuestion() {
+            if (currentQuestion > 0) {
+                currentQuestion--;
+                renderQuestion(currentQuestion);
+            }
+        }
+
+        function updateProgress() {
+            const answered = answers.filter(a => a !== null).length;
+            document.getElementById('current-q').textContent = answered;
+            document.getElementById('progress-fill').style.width = `${(answered / questions.length) * 100}%`;
+        }
+
+        function calculateResults() {
+            let totalScore = 0;
+            const dimensionScores = {};
+
+            dimensions.forEach(dim => {
+                let dimScore = 0;
+                dim.questions.forEach(qIndex => {
+                    if (answers[qIndex] !== null) {
+                        dimScore += questions[qIndex].options[answers[qIndex]].score;
+                    }
+                });
+                dimensionScores[dim.name] = {
+                    score: dimScore,
+                    max: dim.maxScore,
+                    percentage: Math.round((dimScore / dim.maxScore) * 100)
+                };
+                totalScore += dimScore;
+            });
+
+            return { totalScore, dimensionScores };
+        }
+
+        function getLevel(score) {
+            if (score >= 45) return { level: "Promotion Ready", description: "You have strong foundations in place. Focus on execution and timing." };
+            if (score >= 35) return { level: "Almost There", description: "You're close! A few strategic adjustments will get you to the next level." };
+            if (score >= 25) return { level: "Building Momentum", description: "You have potential but need to address key gaps in visibility and positioning." };
+            return { level: "Foundation Stage", description: "Focus on building your visibility and documenting your impact before pursuing promotion." };
+        }
+
+        function getInsights(dimensionScores) {
+            const insights = [];
+
+            if (dimensionScores["Visibility"].percentage < 60) {
+                insights.push("Your biggest opportunity is increasing visibility. Decision-makers can't promote what they don't see.");
+            }
+            if (dimensionScores["Performance Documentation"].percentage < 60) {
+                insights.push("Start tracking your wins now. You need documented evidence for promotion conversations.");
+            }
+            if (dimensionScores["Strategic Positioning"].percentage < 60) {
+                insights.push("Be more intentional about how you're perceived. Your reputation is your career currency.");
+            }
+            if (dimensionScores["Next-Level Readiness"].percentage < 60) {
+                insights.push("Identify the skills needed for your next role and start demonstrating them now.");
+            }
+            if (dimensionScores["Confidence & Mindset"].percentage < 60) {
+                insights.push("Mindset work is essential. Build evidence of your capabilities to quiet self-doubt.");
+            }
+
+            // Add positive insights for high scores
+            Object.entries(dimensionScores).forEach(([name, data]) => {
+                if (data.percentage >= 80 && insights.length < 5) {
+                    insights.push(`Your ${name.toLowerCase()} is a strength. Leverage it to accelerate your advancement.`);
+                }
+            });
+
+            return insights.slice(0, 4);
+        }
+
+        function showResults() {
+            document.getElementById('progress-container').style.display = 'none';
+            document.getElementById('questions-container').style.display = 'none';
+
+            const { totalScore, dimensionScores } = calculateResults();
+            const { level, description } = getLevel(totalScore);
+            const insights = getInsights(dimensionScores);
+
+            document.getElementById('total-score').textContent = totalScore;
+            document.getElementById('score-level').textContent = level;
+            document.getElementById('score-description').textContent = description;
+
+            // Render dimensions
+            const dimensionsContainer = document.getElementById('dimensions-breakdown');
+            dimensionsContainer.innerHTML = Object.entries(dimensionScores).map(([name, data]) => {
+                const levelClass = data.percentage >= 70 ? 'high' : data.percentage >= 50 ? 'medium' : 'low';
+                return `
+                    <div class="dimension">
+                        <div class="dimension-info">
+                            <div class="dimension-name">${name}</div>
+                            <div class="dimension-bar">
+                                <div class="dimension-fill ${levelClass}" style="width: ${data.percentage}%"></div>
+                            </div>
+                        </div>
+                        <div class="dimension-score">${data.score}/${data.max}</div>
+                    </div>
+                `;
+            }).join('');
+
+            // Render insights
+            const insightsList = document.getElementById('insights-list');
+            insightsList.innerHTML = insights.map(insight => `<li>${insight}</li>`).join('');
+
+            document.getElementById('results-container').classList.add('active');
+
+            // Scroll to top
+            window.scrollTo({ top: 0, behavior: 'smooth' });
+        }
+
+        function shareOnLinkedIn() {
+            const url = encodeURIComponent(window.location.href);
+            const text = encodeURIComponent("I just took the Promotion Readiness Scorecard from @CoachingWomenofColor. If you're thinking about your next career move, check it out!");
+            window.open(`https://www.linkedin.com/sharing/share-offsite/?url=${url}`, '_blank');
+        }
+
+        function copyLink() {
+            navigator.clipboard.writeText(window.location.href).then(() => {
+                alert('Link copied to clipboard!');
+            });
+        }
+
+        // Initialize
+        document.addEventListener('DOMContentLoaded', () => {
+            renderQuestion(0);
+        });
+    </script>
+</body>
+</html>
