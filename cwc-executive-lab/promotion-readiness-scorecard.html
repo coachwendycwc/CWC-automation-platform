@@ -1145,31 +1145,7 @@
 
             const insightsSummary = insights.join('\n• ');
 
-            // Send to Formspree (you'll need to create a form at formspree.io)
-            const formData = {
-                name: userData.name,
-                email: userData.email,
-                _replyto: userData.email,
-                _subject: `New Promotion Readiness Scorecard Result: ${userData.name}`,
-                score: resultsData.totalScore,
-                level: level,
-                description: description,
-                dimensions: dimensionSummary,
-                insights: insightsSummary,
-                date: new Date().toLocaleString()
-            };
-
-            try {
-                // Send to your email via Formspree
-                await fetch('https://formspree.io/f/xpwzgvqr', {
-                    method: 'POST',
-                    headers: {
-                        'Content-Type': 'application/json',
-                        'Accept': 'application/json'
-                    },
-                    body: JSON.stringify({
-                        ...formData,
-                        message: `
+            const emailMessage = `
 PROMOTION READINESS SCORECARD RESULTS
 =====================================
 
@@ -1189,7 +1165,22 @@ KEY INSIGHTS:
 
 ---
 This lead came from the Promotion Readiness Scorecard.
-                        `
+            `;
+
+            try {
+                // Send to Wendy via FormSubmit (primary recipient)
+                await fetch('https://formsubmit.co/ajax/wendy@coachingwomenofcolor.com', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                        'Accept': 'application/json'
+                    },
+                    body: JSON.stringify({
+                        name: userData.name,
+                        email: userData.email,
+                        _subject: `New Promotion Readiness Scorecard Result: ${userData.name} - Score: ${resultsData.totalScore}/50`,
+                        _cc: userData.email,
+                        message: emailMessage
                     })
                 });
             } catch (error) {
