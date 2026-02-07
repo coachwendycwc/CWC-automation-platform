@@ -1294,11 +1294,11 @@
                 };
 
                 // Send to Wendy
-                await emailjs.send('service_n62dsgh', 'qz33w1a', templateParams);
+                await emailjs.send('service_n62dsgh', 'template_xl8go0s', templateParams);
 
                 // Send copy to respondent
                 const respondentParams = { ...templateParams, to_email: userData.email };
-                await emailjs.send('service_n62dsgh', 'qz33w1a', respondentParams);
+                await emailjs.send('service_n62dsgh', 'template_xl8go0s', respondentParams);
 
                 console.log('EmailJS: Emails sent successfully');
             } catch (error) {
