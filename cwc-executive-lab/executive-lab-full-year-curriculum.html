@@ -326,13 +326,32 @@
         .arc-item {
             background: #2A7B8C;
             color: white;
-            padding: 8px 12px;
+            padding: 10px 14px;
             border-radius: 6px;
-            font-size: 0.8rem;
+            font-size: 0.75rem;
+            font-weight: 600;
+            text-align: center;
+            min-width: 120px;
+            white-space: nowrap;
+            overflow: hidden;
+            text-overflow: ellipsis;
         }
 
         .arc-item.summer {
             background: #D4A574;
+        }
+
+        .arc-item .month-label {
+            display: block;
+            font-size: 0.65rem;
+            opacity: 0.85;
+            margin-bottom: 2px;
+            letter-spacing: 0.5px;
+        }
+
+        .arc-item .topic-label {
+            display: block;
+            font-size: 0.8rem;
         }
 
         .arc-label {
@@ -362,7 +381,7 @@
     <div class="header">
         <h1>Executive Leadership Lab</h1>
         <p class="subtitle">Full Year Curriculum | January - December</p>
-        <p class="tagline">A 10-Month Leadership Program for Women of Color</p>
+        <p class="tagline">A 12-Month Leadership Program for Women of Color</p>
     </div>
 
     <div class="container">
@@ -370,7 +389,7 @@
         <!-- Program Overview -->
         <div class="overview-section">
             <h2>Program Overview</h2>
-            <p>The Executive Leadership Lab is a 10-month leadership development program designed specifically for women of color in corporate and professional environments. Each month builds on the previous, creating a comprehensive journey from career clarity to sustainable leadership.</p>
+            <p>The Executive Leadership Lab is a 12-month leadership development program designed specifically for women of color in corporate and professional environments. Each month builds on the previous, creating a comprehensive journey from career clarity to sustainable leadership.</p>
 
             <h3 style="color: #2A7B8C; font-size: 1.1rem; margin: 24px 0 16px 0;">The Six Lanes of Development</h3>
             <div class="lanes-grid">
@@ -404,24 +423,24 @@
                 <h4>The Arc of the Year</h4>
                 <p class="arc-label">First Half: Building Your Foundation</p>
                 <div class="arc-row">
-                    <span class="arc-item">JAN: Plateaus</span>
-                    <span class="arc-item">FEB: Visibility</span>
-                    <span class="arc-item">MAR: Pivot</span>
-                    <span class="arc-item">APR: Composure</span>
-                    <span class="arc-item">MAY: Advocacy</span>
-                    <span class="arc-item">JUN: Storytelling</span>
+                    <span class="arc-item"><span class="month-label">JANUARY</span><span class="topic-label">Plateaus</span></span>
+                    <span class="arc-item"><span class="month-label">FEBRUARY</span><span class="topic-label">Visibility</span></span>
+                    <span class="arc-item"><span class="month-label">MARCH</span><span class="topic-label">Pivot</span></span>
+                    <span class="arc-item"><span class="month-label">APRIL</span><span class="topic-label">Composure</span></span>
+                    <span class="arc-item"><span class="month-label">MAY</span><span class="topic-label">Advocacy</span></span>
+                    <span class="arc-item"><span class="month-label">JUNE</span><span class="topic-label">Storytelling</span></span>
                 </div>
                 <p class="arc-label">Summer Pause: Integration & Relationships</p>
                 <div class="arc-row">
-                    <span class="arc-item summer">JUL: Handouts</span>
-                    <span class="arc-item summer">AUG: Handouts</span>
+                    <span class="arc-item summer"><span class="month-label">JULY</span><span class="topic-label">Handouts</span></span>
+                    <span class="arc-item summer"><span class="month-label">AUGUST</span><span class="topic-label">Handouts</span></span>
                 </div>
                 <p class="arc-label">Second Half: Sustaining Your Leadership</p>
                 <div class="arc-row">
-                    <span class="arc-item">SEP: Leadership</span>
-                    <span class="arc-item">OCT: Energy</span>
-                    <span class="arc-item">NOV: Confidence</span>
-                    <span class="arc-item">DEC: Boundaries</span>
+                    <span class="arc-item"><span class="month-label">SEPTEMBER</span><span class="topic-label">Leadership</span></span>
+                    <span class="arc-item"><span class="month-label">OCTOBER</span><span class="topic-label">Energy</span></span>
+                    <span class="arc-item"><span class="month-label">NOVEMBER</span><span class="topic-label">Confidence</span></span>
+                    <span class="arc-item"><span class="month-label">DECEMBER</span><span class="topic-label">Boundaries</span></span>
                 </div>
             </div>
         </div>
