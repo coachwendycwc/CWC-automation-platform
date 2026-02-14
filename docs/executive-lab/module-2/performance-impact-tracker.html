@@ -1,0 +1,1035 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Performance Impact Tracker | Executive Leadership Lab</title>
+    <link href="https://fonts.googleapis.com/css2?family=Source+Serif+4:wght@400;600;700&family=Inter:wght@400;500;600&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --primary: #1A1A1A;
+            --accent: #2A7B8C;
+            --accent-warm: #D4A574;
+            --text: #333333;
+            --text-light: #666666;
+            --text-muted: #999999;
+            --bg: #FAF8F5;
+            --bg-warm: #F5F2ED;
+            --border: #E5E0D8;
+            --success: #4A9B7F;
+        }
+
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+
+        body {
+            font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
+            background: var(--bg);
+            color: var(--text);
+            line-height: 1.6;
+            min-height: 100vh;
+        }
+
+        .container {
+            max-width: 950px;
+            margin: 0 auto;
+            padding: 40px 24px;
+        }
+
+        header {
+            text-align: center;
+            margin-bottom: 40px;
+            padding-bottom: 32px;
+            border-bottom: 1px solid var(--border);
+        }
+
+        .logo { height: 80px; margin-bottom: 24px; }
+
+        .module-label {
+            font-size: 11px;
+            font-weight: 600;
+            color: var(--accent);
+            text-transform: uppercase;
+            letter-spacing: 2.5px;
+            margin-bottom: 12px;
+            display: block;
+        }
+
+        h1 {
+            font-family: 'Source Serif 4', Georgia, serif;
+            font-size: 36px;
+            font-weight: 700;
+            color: var(--primary);
+            margin-bottom: 12px;
+        }
+
+        .subtitle {
+            font-size: 18px;
+            color: var(--text-light);
+            max-width: 650px;
+            margin: 0 auto;
+        }
+
+        .intro-box {
+            background: var(--primary);
+            color: white;
+            padding: 28px 32px;
+            border-radius: 8px;
+            margin-bottom: 32px;
+        }
+
+        .intro-box h3 {
+            font-family: 'Source Serif 4', Georgia, serif;
+            font-size: 18px;
+            color: var(--accent-warm);
+            margin-bottom: 12px;
+        }
+
+        .intro-box p {
+            font-size: 15px;
+            color: rgba(255,255,255,0.8);
+            margin-bottom: 16px;
+        }
+
+        .intro-box p:last-child {
+            margin-bottom: 0;
+        }
+
+        .cycle-phases {
+            display: grid;
+            grid-template-columns: repeat(5, 1fr);
+            gap: 8px;
+            margin-top: 20px;
+        }
+
+        .cycle-phase {
+            text-align: center;
+            padding: 12px 8px;
+            background: rgba(255,255,255,0.1);
+            border-radius: 4px;
+            font-size: 12px;
+            color: rgba(255,255,255,0.7);
+        }
+
+        .cycle-phase.active {
+            background: var(--accent);
+            color: white;
+            font-weight: 600;
+        }
+
+        .review-period {
+            background: white;
+            border: 1px solid var(--border);
+            border-radius: 8px;
+            padding: 24px;
+            margin-bottom: 24px;
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 20px;
+        }
+
+        .review-period label {
+            display: block;
+            font-size: 12px;
+            font-weight: 600;
+            color: var(--text-muted);
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            margin-bottom: 8px;
+        }
+
+        .review-period input, .review-period select {
+            width: 100%;
+            padding: 10px 14px;
+            border: 1px solid var(--border);
+            border-radius: 4px;
+            font-family: inherit;
+            font-size: 15px;
+            color: var(--text);
+            background: var(--bg);
+        }
+
+        .review-period input:focus, .review-period select:focus {
+            outline: none;
+            border-color: var(--accent);
+        }
+
+        .category-section {
+            background: white;
+            border: 1px solid var(--border);
+            border-radius: 8px;
+            margin-bottom: 24px;
+            overflow: hidden;
+        }
+
+        .category-header {
+            background: var(--bg-warm);
+            padding: 20px 24px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            border-bottom: 1px solid var(--border);
+        }
+
+        .category-title {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+        }
+
+        .category-icon {
+            width: 36px;
+            height: 36px;
+            background: var(--accent);
+            border-radius: 8px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: white;
+        }
+
+        .category-title h2 {
+            font-family: 'Source Serif 4', Georgia, serif;
+            font-size: 18px;
+            font-weight: 600;
+            color: var(--primary);
+        }
+
+        .category-title p {
+            font-size: 13px;
+            color: var(--text-light);
+            margin: 0;
+        }
+
+        .add-example-btn {
+            padding: 8px 16px;
+            background: var(--accent);
+            color: white;
+            border: none;
+            border-radius: 4px;
+            font-family: inherit;
+            font-size: 13px;
+            font-weight: 500;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            gap: 6px;
+            transition: background 0.2s;
+        }
+
+        .add-example-btn:hover {
+            background: #236a79;
+        }
+
+        .category-body {
+            padding: 24px;
+        }
+
+        .example-card {
+            background: var(--bg);
+            border: 1px solid var(--border);
+            border-radius: 6px;
+            padding: 20px;
+            margin-bottom: 16px;
+            position: relative;
+        }
+
+        .example-card:last-child {
+            margin-bottom: 0;
+        }
+
+        .example-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 16px;
+        }
+
+        .example-number {
+            font-size: 12px;
+            font-weight: 600;
+            color: var(--accent);
+            text-transform: uppercase;
+            letter-spacing: 1px;
+        }
+
+        .example-delete {
+            background: none;
+            border: none;
+            color: var(--text-muted);
+            cursor: pointer;
+            padding: 4px;
+            transition: color 0.2s;
+        }
+
+        .example-delete:hover {
+            color: #C45C5C;
+        }
+
+        .example-grid {
+            display: grid;
+            gap: 16px;
+        }
+
+        .example-row {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 16px;
+        }
+
+        .field-group {
+            margin-bottom: 0;
+        }
+
+        .field-group label {
+            display: block;
+            font-size: 13px;
+            font-weight: 600;
+            color: var(--primary);
+            margin-bottom: 6px;
+        }
+
+        .field-group .hint {
+            font-weight: 400;
+            color: var(--text-muted);
+            font-size: 12px;
+            display: block;
+            margin-top: 2px;
+        }
+
+        .field-group textarea, .field-group input[type="text"] {
+            width: 100%;
+            padding: 10px 12px;
+            border: 1px solid var(--border);
+            border-radius: 4px;
+            font-family: inherit;
+            font-size: 14px;
+            color: var(--text);
+            background: white;
+            resize: vertical;
+        }
+
+        .field-group textarea {
+            min-height: 70px;
+        }
+
+        .field-group textarea:focus, .field-group input:focus {
+            outline: none;
+            border-color: var(--accent);
+        }
+
+        .impact-statement-box {
+            background: linear-gradient(135deg, var(--primary) 0%, #2d2d2d 100%);
+            border-radius: 6px;
+            padding: 16px;
+            margin-top: 16px;
+        }
+
+        .impact-statement-box label {
+            color: var(--accent-warm) !important;
+            font-size: 12px !important;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+        }
+
+        .impact-statement-box textarea {
+            background: rgba(255,255,255,0.95);
+            min-height: 60px;
+        }
+
+        .empty-category {
+            text-align: center;
+            padding: 40px 20px;
+            color: var(--text-muted);
+        }
+
+        .empty-category p {
+            margin-bottom: 16px;
+            font-size: 14px;
+        }
+
+        .summary-section {
+            background: var(--bg-warm);
+            border: 2px solid var(--accent-warm);
+            border-radius: 8px;
+            padding: 28px;
+            margin-top: 32px;
+        }
+
+        .summary-section h2 {
+            font-family: 'Source Serif 4', Georgia, serif;
+            font-size: 22px;
+            font-weight: 600;
+            color: var(--primary);
+            margin-bottom: 8px;
+        }
+
+        .summary-section > p {
+            font-size: 14px;
+            color: var(--text-light);
+            margin-bottom: 24px;
+        }
+
+        .summary-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 20px;
+            margin-bottom: 20px;
+        }
+
+        .summary-field label {
+            display: block;
+            font-size: 14px;
+            font-weight: 600;
+            color: var(--primary);
+            margin-bottom: 8px;
+        }
+
+        .summary-field textarea {
+            width: 100%;
+            padding: 12px 14px;
+            border: 1px solid var(--border);
+            border-radius: 4px;
+            font-family: inherit;
+            font-size: 14px;
+            color: var(--text);
+            background: white;
+            resize: vertical;
+            min-height: 100px;
+        }
+
+        .summary-field textarea:focus {
+            outline: none;
+            border-color: var(--accent);
+        }
+
+        .summary-field.full-width {
+            grid-column: 1 / -1;
+        }
+
+        .promotion-alignment {
+            background: white;
+            border: 1px solid var(--border);
+            border-radius: 6px;
+            padding: 20px;
+            margin-top: 20px;
+        }
+
+        .promotion-alignment h4 {
+            font-size: 14px;
+            font-weight: 600;
+            color: var(--accent);
+            margin-bottom: 16px;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+        }
+
+        .alignment-grid {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 12px;
+        }
+
+        .alignment-item {
+            display: flex;
+            align-items: flex-start;
+            gap: 10px;
+            padding: 12px;
+            background: var(--bg);
+            border-radius: 4px;
+        }
+
+        .alignment-item input[type="checkbox"] {
+            width: 18px;
+            height: 18px;
+            accent-color: var(--accent);
+            margin-top: 2px;
+        }
+
+        .alignment-item span {
+            font-size: 13px;
+            color: var(--text);
+        }
+
+        .button-row {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-top: 40px;
+            padding-top: 24px;
+            border-top: 1px solid var(--border);
+        }
+
+        .btn {
+            padding: 12px 24px;
+            border-radius: 4px;
+            font-family: inherit;
+            font-size: 14px;
+            font-weight: 500;
+            cursor: pointer;
+            transition: all 0.2s;
+        }
+
+        .btn-primary {
+            background: var(--accent);
+            color: white;
+            border: none;
+        }
+
+        .btn-primary:hover { background: #236a79; }
+
+        .btn-secondary {
+            background: transparent;
+            color: var(--text-light);
+            border: 1px solid var(--border);
+        }
+
+        .btn-secondary:hover { border-color: var(--text-light); }
+
+        .save-status {
+            font-size: 13px;
+            color: var(--success);
+            display: flex;
+            align-items: center;
+            gap: 6px;
+        }
+
+        .save-status.hidden { display: none; }
+
+        .export-btns {
+            display: flex;
+            gap: 12px;
+        }
+
+        footer {
+            text-align: center;
+            padding: 40px 24px;
+            color: var(--text-muted);
+            font-size: 13px;
+        }
+
+        footer a {
+            color: var(--accent);
+            text-decoration: none;
+        }
+
+        @media print {
+            body { background: white; }
+            .container { max-width: 100%; padding: 20px; }
+            .category-section, .summary-section { break-inside: avoid; }
+            .button-row, .add-example-btn, .example-delete { display: none; }
+            .intro-box { -webkit-print-color-adjust: exact; print-color-adjust: exact; }
+            .impact-statement-box { -webkit-print-color-adjust: exact; print-color-adjust: exact; }
+            textarea, input { border: 1px solid #ccc !important; }
+        }
+
+        @media screen and (max-width: 768px) {
+            .container { padding: 24px 16px; }
+            h1 { font-size: 28px; }
+            .cycle-phases { grid-template-columns: repeat(3, 1fr); }
+            .review-period { grid-template-columns: 1fr; }
+            .example-row { grid-template-columns: 1fr; }
+            .summary-grid { grid-template-columns: 1fr; }
+            .alignment-grid { grid-template-columns: 1fr; }
+            .button-row { flex-direction: column; gap: 16px; }
+            .export-btns { width: 100%; justify-content: center; }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <header>
+            <img src="https://coachingwomenofcolor.com/wp-content/uploads/2021/04/CWCFinal_logo2.webp" alt="CWC" class="logo">
+            <span class="module-label">Module 2 — February</span>
+            <h1>Performance Impact Tracker</h1>
+            <p class="subtitle">Document your accomplishments and impact statements for performance reviews. Write your self-assessment like a promotion case.</p>
+        </header>
+
+        <div class="intro-box">
+            <h3>Own the Performance Management Cycle</h3>
+            <p>Don't wait until review time to remember your accomplishments. This tracker helps you capture impact in real-time so you have the evidence you need when it matters.</p>
+            <p><strong>Pro Tip:</strong> Update this document monthly. Give your manager specific examples they can use to advocate for you in calibration meetings.</p>
+            <div class="cycle-phases">
+                <div class="cycle-phase">Goal Setting</div>
+                <div class="cycle-phase active">Throughout Cycle</div>
+                <div class="cycle-phase">Mid-Cycle</div>
+                <div class="cycle-phase">Self-Assessment</div>
+                <div class="cycle-phase">Calibration</div>
+            </div>
+        </div>
+
+        <div class="review-period">
+            <div>
+                <label>Review Period</label>
+                <select id="review-period">
+                    <option value="">Select period...</option>
+                    <option value="Q1">Q1 (Jan - Mar)</option>
+                    <option value="Q2">Q2 (Apr - Jun)</option>
+                    <option value="Q3">Q3 (Jul - Sep)</option>
+                    <option value="Q4">Q4 (Oct - Dec)</option>
+                    <option value="H1">H1 (Jan - Jun)</option>
+                    <option value="H2">H2 (Jul - Dec)</option>
+                    <option value="Annual">Annual Review</option>
+                </select>
+            </div>
+            <div>
+                <label>Year</label>
+                <input type="text" id="review-year" placeholder="e.g., 2026">
+            </div>
+            <div>
+                <label>Your Role/Title</label>
+                <input type="text" id="role-title" placeholder="e.g., Senior Program Manager">
+            </div>
+            <div>
+                <label>Manager</label>
+                <input type="text" id="manager-name" placeholder="e.g., Sarah Chen">
+            </div>
+        </div>
+
+        <!-- Category 1: Business Results -->
+        <div class="category-section" data-category="business-results">
+            <div class="category-header">
+                <div class="category-title">
+                    <div class="category-icon">
+                        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="12" y1="20" x2="12" y2="10"></line><line x1="18" y1="20" x2="18" y2="4"></line><line x1="6" y1="20" x2="6" y2="16"></line></svg>
+                    </div>
+                    <div>
+                        <h2>Business Results & Impact</h2>
+                        <p>Revenue, cost savings, efficiency gains, metrics achieved</p>
+                    </div>
+                </div>
+                <button class="add-example-btn" onclick="addExample('business-results')">
+                    <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="12" y1="5" x2="12" y2="19"></line><line x1="5" y1="12" x2="19" y2="12"></line></svg>
+                    Add Example
+                </button>
+            </div>
+            <div class="category-body" id="business-results-examples">
+                <div class="empty-category">
+                    <p>No examples added yet. Click "Add Example" to document your business impact.</p>
+                </div>
+            </div>
+        </div>
+
+        <!-- Category 2: Leadership & Team Development -->
+        <div class="category-section" data-category="leadership">
+            <div class="category-header">
+                <div class="category-title">
+                    <div class="category-icon">
+                        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"></path><circle cx="9" cy="7" r="4"></circle><path d="M23 21v-2a4 4 0 0 0-3-3.87"></path><path d="M16 3.13a4 4 0 0 1 0 7.75"></path></svg>
+                    </div>
+                    <div>
+                        <h2>Leadership & Team Development</h2>
+                        <p>Mentoring, team growth, culture building, collaboration</p>
+                    </div>
+                </div>
+                <button class="add-example-btn" onclick="addExample('leadership')">
+                    <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="12" y1="5" x2="12" y2="19"></line><line x1="5" y1="12" x2="19" y2="12"></line></svg>
+                    Add Example
+                </button>
+            </div>
+            <div class="category-body" id="leadership-examples">
+                <div class="empty-category">
+                    <p>No examples added yet. Click "Add Example" to document your leadership impact.</p>
+                </div>
+            </div>
+        </div>
+
+        <!-- Category 3: Strategic Initiatives -->
+        <div class="category-section" data-category="strategic">
+            <div class="category-header">
+                <div class="category-title">
+                    <div class="category-icon">
+                        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polygon points="12 2 2 7 12 12 22 7 12 2"></polygon><polyline points="2 17 12 22 22 17"></polyline><polyline points="2 12 12 17 22 12"></polyline></svg>
+                    </div>
+                    <div>
+                        <h2>Strategic Initiatives & Innovation</h2>
+                        <p>New programs, process improvements, strategic thinking</p>
+                    </div>
+                </div>
+                <button class="add-example-btn" onclick="addExample('strategic')">
+                    <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="12" y1="5" x2="12" y2="19"></line><line x1="5" y1="12" x2="19" y2="12"></line></svg>
+                    Add Example
+                </button>
+            </div>
+            <div class="category-body" id="strategic-examples">
+                <div class="empty-category">
+                    <p>No examples added yet. Click "Add Example" to document your strategic contributions.</p>
+                </div>
+            </div>
+        </div>
+
+        <!-- Category 4: Stakeholder & Client Impact -->
+        <div class="category-section" data-category="stakeholder">
+            <div class="category-header">
+                <div class="category-title">
+                    <div class="category-icon">
+                        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z"></path></svg>
+                    </div>
+                    <div>
+                        <h2>Stakeholder & Client Impact</h2>
+                        <p>Client success, partnerships, relationship building, service delivery</p>
+                    </div>
+                </div>
+                <button class="add-example-btn" onclick="addExample('stakeholder')">
+                    <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="12" y1="5" x2="12" y2="19"></line><line x1="5" y1="12" x2="19" y2="12"></line></svg>
+                    Add Example
+                </button>
+            </div>
+            <div class="category-body" id="stakeholder-examples">
+                <div class="empty-category">
+                    <p>No examples added yet. Click "Add Example" to document your stakeholder impact.</p>
+                </div>
+            </div>
+        </div>
+
+        <!-- Category 5: Professional Growth -->
+        <div class="category-section" data-category="growth">
+            <div class="category-header">
+                <div class="category-title">
+                    <div class="category-icon">
+                        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"></path><polyline points="22 4 12 14.01 9 11.01"></polyline></svg>
+                    </div>
+                    <div>
+                        <h2>Professional Growth & Learning</h2>
+                        <p>Skills developed, certifications, stretch assignments, feedback applied</p>
+                    </div>
+                </div>
+                <button class="add-example-btn" onclick="addExample('growth')">
+                    <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="12" y1="5" x2="12" y2="19"></line><line x1="5" y1="12" x2="19" y2="12"></line></svg>
+                    Add Example
+                </button>
+            </div>
+            <div class="category-body" id="growth-examples">
+                <div class="empty-category">
+                    <p>No examples added yet. Click "Add Example" to document your professional growth.</p>
+                </div>
+            </div>
+        </div>
+
+        <!-- Summary Section -->
+        <div class="summary-section">
+            <h2>Performance Summary Statement</h2>
+            <p>Use this section to craft your overall self-assessment narrative. This is what you'll submit or share with your manager.</p>
+
+            <div class="summary-grid">
+                <div class="summary-field">
+                    <label>Top 3 Accomplishments This Period</label>
+                    <textarea id="top-accomplishments" placeholder="Summarize your most significant contributions with measurable impact..."></textarea>
+                </div>
+                <div class="summary-field">
+                    <label>Value I Brought to the Team/Organization</label>
+                    <textarea id="value-brought" placeholder="How did you make things better? What would have been different without you?"></textarea>
+                </div>
+                <div class="summary-field">
+                    <label>Challenges Overcome</label>
+                    <textarea id="challenges" placeholder="What obstacles did you navigate? How did you adapt?"></textarea>
+                </div>
+                <div class="summary-field">
+                    <label>Areas for Development</label>
+                    <textarea id="development-areas" placeholder="What are you working to improve? What support do you need?"></textarea>
+                </div>
+                <div class="summary-field full-width">
+                    <label>Goals for Next Period</label>
+                    <textarea id="next-goals" placeholder="What do you want to accomplish next? How does it align with team/org priorities?"></textarea>
+                </div>
+            </div>
+
+            <div class="promotion-alignment">
+                <h4>Promotion Criteria Alignment</h4>
+                <p style="font-size: 13px; color: var(--text-light); margin-bottom: 16px;">Check the criteria you've demonstrated evidence for this period:</p>
+                <div class="alignment-grid">
+                    <label class="alignment-item">
+                        <input type="checkbox" id="criteria-results">
+                        <span>Delivers exceptional results</span>
+                    </label>
+                    <label class="alignment-item">
+                        <input type="checkbox" id="criteria-leadership">
+                        <span>Demonstrates leadership</span>
+                    </label>
+                    <label class="alignment-item">
+                        <input type="checkbox" id="criteria-strategic">
+                        <span>Thinks strategically</span>
+                    </label>
+                    <label class="alignment-item">
+                        <input type="checkbox" id="criteria-collaboration">
+                        <span>Builds relationships</span>
+                    </label>
+                    <label class="alignment-item">
+                        <input type="checkbox" id="criteria-innovation">
+                        <span>Drives innovation</span>
+                    </label>
+                    <label class="alignment-item">
+                        <input type="checkbox" id="criteria-growth">
+                        <span>Shows growth mindset</span>
+                    </label>
+                </div>
+            </div>
+        </div>
+
+        <div class="button-row">
+            <button class="btn btn-secondary" onclick="clearAll()">Clear All</button>
+            <span class="save-status hidden" id="save-status">
+                <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="20 6 9 17 4 12"></polyline></svg>
+                Auto-saved
+            </span>
+            <div class="export-btns">
+                <button class="btn btn-secondary" onclick="exportToText()">Export Text</button>
+                <button class="btn btn-primary" onclick="window.print()">Print / PDF</button>
+            </div>
+        </div>
+    </div>
+
+    <footer>
+        <p>Executive Leadership Lab — Module 2: Strategic Positioning for Promotion</p>
+        <p><a href="https://coachingwomenofcolor.com">Coaching Women of Color</a></p>
+    </footer>
+
+    <script>
+        const STORAGE_KEY = 'cwc-performance-impact-v1';
+
+        let data = {
+            period: '',
+            year: '',
+            role: '',
+            manager: '',
+            categories: {
+                'business-results': [],
+                'leadership': [],
+                'strategic': [],
+                'stakeholder': [],
+                'growth': []
+            },
+            summary: {
+                topAccomplishments: '',
+                valueBrought: '',
+                challenges: '',
+                developmentAreas: '',
+                nextGoals: ''
+            },
+            criteria: {
+                results: false,
+                leadership: false,
+                strategic: false,
+                collaboration: false,
+                innovation: false,
+                growth: false
+            }
+        };
+
+        function generateId() {
+            return Date.now().toString(36) + Math.random().toString(36).substr(2);
+        }
+
+        function addExample(category) {
+            const example = {
+                id: generateId(),
+                situation: '',
+                action: '',
+                result: '',
+                metrics: '',
+                impactStatement: ''
+            };
+
+            data.categories[category].push(example);
+            saveData();
+            renderCategory(category);
+        }
+
+        function deleteExample(category, id) {
+            if (confirm('Delete this example?')) {
+                data.categories[category] = data.categories[category].filter(e => e.id !== id);
+                saveData();
+                renderCategory(category);
+            }
+        }
+
+        function updateExample(category, id, field, value) {
+            const example = data.categories[category].find(e => e.id === id);
+            if (example) {
+                example[field] = value;
+                saveData();
+            }
+        }
+
+        function renderCategory(category) {
+            const container = document.getElementById(`${category}-examples`);
+            const examples = data.categories[category];
+
+            if (examples.length === 0) {
+                container.innerHTML = `
+                    <div class="empty-category">
+                        <p>No examples added yet. Click "Add Example" to document your impact.</p>
+                    </div>
+                `;
+                return;
+            }
+
+            container.innerHTML = examples.map((ex, index) => `
+                <div class="example-card" data-id="${ex.id}">
+                    <div class="example-header">
+                        <span class="example-number">Example ${index + 1}</span>
+                        <button class="example-delete" onclick="deleteExample('${category}', '${ex.id}')" title="Delete">
+                            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="3 6 5 6 21 6"></polyline><path d="M19 6v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6m3 0V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2"></path></svg>
+                        </button>
+                    </div>
+                    <div class="example-grid">
+                        <div class="example-row">
+                            <div class="field-group">
+                                <label>Situation/Context<span class="hint">What was the challenge or opportunity?</span></label>
+                                <textarea oninput="updateExample('${category}', '${ex.id}', 'situation', this.value)">${ex.situation}</textarea>
+                            </div>
+                            <div class="field-group">
+                                <label>Action Taken<span class="hint">What did YOU specifically do?</span></label>
+                                <textarea oninput="updateExample('${category}', '${ex.id}', 'action', this.value)">${ex.action}</textarea>
+                            </div>
+                        </div>
+                        <div class="example-row">
+                            <div class="field-group">
+                                <label>Result/Outcome<span class="hint">What happened because of your action?</span></label>
+                                <textarea oninput="updateExample('${category}', '${ex.id}', 'result', this.value)">${ex.result}</textarea>
+                            </div>
+                            <div class="field-group">
+                                <label>Metrics/Evidence<span class="hint">Numbers, percentages, feedback received</span></label>
+                                <textarea oninput="updateExample('${category}', '${ex.id}', 'metrics', this.value)">${ex.metrics}</textarea>
+                            </div>
+                        </div>
+                        <div class="impact-statement-box">
+                            <div class="field-group">
+                                <label>Impact Statement (Use This in Your Review)</label>
+                                <textarea placeholder="Combine the above into one powerful statement: 'I [action] which resulted in [outcome/metrics], demonstrating [competency].'" oninput="updateExample('${category}', '${ex.id}', 'impactStatement', this.value)">${ex.impactStatement}</textarea>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            `).join('');
+        }
+
+        function renderAllCategories() {
+            ['business-results', 'leadership', 'strategic', 'stakeholder', 'growth'].forEach(renderCategory);
+        }
+
+        function saveData() {
+            // Collect header data
+            data.period = document.getElementById('review-period').value;
+            data.year = document.getElementById('review-year').value;
+            data.role = document.getElementById('role-title').value;
+            data.manager = document.getElementById('manager-name').value;
+
+            // Collect summary data
+            data.summary.topAccomplishments = document.getElementById('top-accomplishments').value;
+            data.summary.valueBrought = document.getElementById('value-brought').value;
+            data.summary.challenges = document.getElementById('challenges').value;
+            data.summary.developmentAreas = document.getElementById('development-areas').value;
+            data.summary.nextGoals = document.getElementById('next-goals').value;
+
+            // Collect criteria
+            data.criteria.results = document.getElementById('criteria-results').checked;
+            data.criteria.leadership = document.getElementById('criteria-leadership').checked;
+            data.criteria.strategic = document.getElementById('criteria-strategic').checked;
+            data.criteria.collaboration = document.getElementById('criteria-collaboration').checked;
+            data.criteria.innovation = document.getElementById('criteria-innovation').checked;
+            data.criteria.growth = document.getElementById('criteria-growth').checked;
+
+            localStorage.setItem(STORAGE_KEY, JSON.stringify(data));
+            showSaveStatus();
+        }
+
+        function loadData() {
+            const saved = localStorage.getItem(STORAGE_KEY);
+            if (saved) {
+                data = JSON.parse(saved);
+
+                // Load header
+                document.getElementById('review-period').value = data.period || '';
+                document.getElementById('review-year').value = data.year || '';
+                document.getElementById('role-title').value = data.role || '';
+                document.getElementById('manager-name').value = data.manager || '';
+
+                // Load summary
+                document.getElementById('top-accomplishments').value = data.summary?.topAccomplishments || '';
+                document.getElementById('value-brought').value = data.summary?.valueBrought || '';
+                document.getElementById('challenges').value = data.summary?.challenges || '';
+                document.getElementById('development-areas').value = data.summary?.developmentAreas || '';
+                document.getElementById('next-goals').value = data.summary?.nextGoals || '';
+
+                // Load criteria
+                document.getElementById('criteria-results').checked = data.criteria?.results || false;
+                document.getElementById('criteria-leadership').checked = data.criteria?.leadership || false;
+                document.getElementById('criteria-strategic').checked = data.criteria?.strategic || false;
+                document.getElementById('criteria-collaboration').checked = data.criteria?.collaboration || false;
+                document.getElementById('criteria-innovation').checked = data.criteria?.innovation || false;
+                document.getElementById('criteria-growth').checked = data.criteria?.growth || false;
+            }
+
+            renderAllCategories();
+        }
+
+        function clearAll() {
+            if (confirm('Clear ALL data? This cannot be undone.')) {
+                localStorage.removeItem(STORAGE_KEY);
+                location.reload();
+            }
+        }
+
+        function exportToText() {
+            let text = 'PERFORMANCE IMPACT TRACKER\n';
+            text += '==========================\n\n';
+            text += `Review Period: ${data.period} ${data.year}\n`;
+            text += `Role: ${data.role}\n`;
+            text += `Manager: ${data.manager}\n\n`;
+
+            const categoryNames = {
+                'business-results': 'Business Results & Impact',
+                'leadership': 'Leadership & Team Development',
+                'strategic': 'Strategic Initiatives & Innovation',
+                'stakeholder': 'Stakeholder & Client Impact',
+                'growth': 'Professional Growth & Learning'
+            };
+
+            Object.keys(data.categories).forEach(cat => {
+                const examples = data.categories[cat];
+                if (examples.length > 0) {
+                    text += `\n${categoryNames[cat].toUpperCase()}\n`;
+                    text += '-'.repeat(40) + '\n';
+                    examples.forEach((ex, i) => {
+                        text += `\nExample ${i + 1}:\n`;
+                        text += `Situation: ${ex.situation}\n`;
+                        text += `Action: ${ex.action}\n`;
+                        text += `Result: ${ex.result}\n`;
+                        text += `Metrics: ${ex.metrics}\n`;
+                        text += `Impact Statement: ${ex.impactStatement}\n`;
+                    });
+                }
+            });
+
+            text += '\n\nPERFORMANCE SUMMARY\n';
+            text += '===================\n\n';
+            text += `Top Accomplishments:\n${data.summary.topAccomplishments}\n\n`;
+            text += `Value Brought:\n${data.summary.valueBrought}\n\n`;
+            text += `Challenges Overcome:\n${data.summary.challenges}\n\n`;
+            text += `Development Areas:\n${data.summary.developmentAreas}\n\n`;
+            text += `Goals for Next Period:\n${data.summary.nextGoals}\n`;
+
+            const blob = new Blob([text], { type: 'text/plain' });
+            const url = URL.createObjectURL(blob);
+            const a = document.createElement('a');
+            a.href = url;
+            a.download = `performance-impact-${data.period}-${data.year}.txt`;
+            a.click();
+            URL.revokeObjectURL(url);
+        }
+
+        function showSaveStatus() {
+            const status = document.getElementById('save-status');
+            status.classList.remove('hidden');
+            setTimeout(() => status.classList.add('hidden'), 2000);
+        }
+
+        // Auto-save on input
+        document.addEventListener('input', saveData);
+        document.addEventListener('change', saveData);
+
+        // Load on page load
+        document.addEventListener('DOMContentLoaded', loadData);
+    </script>
+</body>
+</html>

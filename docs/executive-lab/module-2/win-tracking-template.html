@@ -1,0 +1,654 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Win-Tracking Template | Executive Leadership Lab</title>
+    <link href="https://fonts.googleapis.com/css2?family=Source+Serif+4:wght@400;600;700&family=Inter:wght@400;500;600&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --primary: #1A1A1A;
+            --accent: #2A7B8C;
+            --accent-warm: #D4A574;
+            --text: #333333;
+            --text-light: #666666;
+            --text-muted: #999999;
+            --bg: #FAF8F5;
+            --bg-warm: #F5F2ED;
+            --border: #E5E0D8;
+            --success: #4A9B7F;
+            --danger: #C45C5C;
+        }
+
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+
+        body {
+            font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
+            background: var(--bg);
+            color: var(--text);
+            line-height: 1.6;
+            min-height: 100vh;
+        }
+
+        .container {
+            max-width: 1000px;
+            margin: 0 auto;
+            padding: 40px 24px;
+        }
+
+        header {
+            text-align: center;
+            margin-bottom: 48px;
+            padding-bottom: 32px;
+            border-bottom: 1px solid var(--border);
+        }
+
+        .logo { height: 80px; margin-bottom: 24px; }
+
+        .module-label {
+            font-size: 11px;
+            font-weight: 600;
+            color: var(--accent);
+            text-transform: uppercase;
+            letter-spacing: 2.5px;
+            margin-bottom: 12px;
+            display: block;
+        }
+
+        h1 {
+            font-family: 'Source Serif 4', Georgia, serif;
+            font-size: 36px;
+            font-weight: 700;
+            color: var(--primary);
+            margin-bottom: 12px;
+        }
+
+        .subtitle {
+            font-size: 18px;
+            color: var(--text-light);
+            max-width: 600px;
+            margin: 0 auto;
+        }
+
+        .framework-reminder {
+            background: var(--primary);
+            color: white;
+            padding: 24px 32px;
+            border-radius: 8px;
+            margin-bottom: 32px;
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 24px;
+            text-align: center;
+        }
+
+        .framework-item h3 {
+            font-family: 'Source Serif 4', Georgia, serif;
+            font-size: 18px;
+            font-weight: 600;
+            color: var(--accent-warm);
+            margin-bottom: 8px;
+        }
+
+        .framework-item p {
+            font-size: 14px;
+            color: rgba(255,255,255,0.7);
+            margin: 0;
+        }
+
+        .stats-bar {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            background: white;
+            border: 1px solid var(--border);
+            border-radius: 8px;
+            padding: 20px 24px;
+            margin-bottom: 24px;
+        }
+
+        .stat {
+            text-align: center;
+        }
+
+        .stat-number {
+            font-family: 'Source Serif 4', Georgia, serif;
+            font-size: 32px;
+            font-weight: 700;
+            color: var(--accent);
+        }
+
+        .stat-label {
+            font-size: 12px;
+            color: var(--text-muted);
+            text-transform: uppercase;
+            letter-spacing: 1px;
+        }
+
+        .add-win-btn {
+            width: 100%;
+            padding: 16px;
+            background: var(--accent);
+            color: white;
+            border: none;
+            border-radius: 8px;
+            font-family: inherit;
+            font-size: 16px;
+            font-weight: 500;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 8px;
+            transition: background 0.2s;
+            margin-bottom: 24px;
+        }
+
+        .add-win-btn:hover {
+            background: #236a79;
+        }
+
+        .wins-list {
+            display: flex;
+            flex-direction: column;
+            gap: 16px;
+        }
+
+        .win-card {
+            background: white;
+            border: 1px solid var(--border);
+            border-radius: 8px;
+            padding: 24px;
+            position: relative;
+        }
+
+        .win-card.editing {
+            border-color: var(--accent);
+            box-shadow: 0 0 0 3px rgba(42, 123, 140, 0.1);
+        }
+
+        .win-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: flex-start;
+            margin-bottom: 16px;
+        }
+
+        .win-date {
+            font-size: 13px;
+            color: var(--text-muted);
+        }
+
+        .win-actions {
+            display: flex;
+            gap: 8px;
+        }
+
+        .win-action-btn {
+            background: none;
+            border: none;
+            cursor: pointer;
+            color: var(--text-muted);
+            padding: 4px;
+            transition: color 0.2s;
+        }
+
+        .win-action-btn:hover {
+            color: var(--primary);
+        }
+
+        .win-action-btn.delete:hover {
+            color: var(--danger);
+        }
+
+        .win-fields {
+            display: grid;
+            gap: 16px;
+        }
+
+        .win-field label {
+            display: block;
+            font-size: 12px;
+            font-weight: 600;
+            color: var(--accent);
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            margin-bottom: 6px;
+        }
+
+        .win-field textarea {
+            width: 100%;
+            padding: 12px;
+            border: 1px solid var(--border);
+            border-radius: 4px;
+            font-family: inherit;
+            font-size: 14px;
+            color: var(--text);
+            background: var(--bg);
+            resize: vertical;
+            min-height: 70px;
+            transition: border-color 0.2s;
+        }
+
+        .win-field textarea:focus {
+            outline: none;
+            border-color: var(--accent);
+        }
+
+        .win-field textarea:disabled {
+            background: white;
+            border-color: transparent;
+            resize: none;
+        }
+
+        .win-category-tag {
+            display: inline-block;
+            padding: 4px 12px;
+            background: var(--bg-warm);
+            color: var(--text-light);
+            border-radius: 20px;
+            font-size: 12px;
+            margin-top: 12px;
+        }
+
+        .category-select {
+            padding: 8px 12px;
+            border: 1px solid var(--border);
+            border-radius: 4px;
+            font-family: inherit;
+            font-size: 14px;
+            color: var(--text);
+            background: var(--bg);
+            margin-top: 8px;
+        }
+
+        .empty-state {
+            text-align: center;
+            padding: 60px 24px;
+            color: var(--text-muted);
+        }
+
+        .empty-state h3 {
+            font-family: 'Source Serif 4', Georgia, serif;
+            font-size: 20px;
+            color: var(--text-light);
+            margin-bottom: 8px;
+        }
+
+        .empty-state p {
+            font-size: 14px;
+            margin-bottom: 24px;
+        }
+
+        .button-row {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-top: 40px;
+            padding-top: 24px;
+            border-top: 1px solid var(--border);
+        }
+
+        .btn {
+            padding: 12px 24px;
+            border-radius: 4px;
+            font-family: inherit;
+            font-size: 14px;
+            font-weight: 500;
+            cursor: pointer;
+            transition: all 0.2s;
+        }
+
+        .btn-primary {
+            background: var(--accent);
+            color: white;
+            border: none;
+        }
+
+        .btn-primary:hover { background: #236a79; }
+
+        .btn-secondary {
+            background: transparent;
+            color: var(--text-light);
+            border: 1px solid var(--border);
+        }
+
+        .btn-secondary:hover { border-color: var(--text-light); }
+
+        .btn-small {
+            padding: 8px 16px;
+            font-size: 13px;
+        }
+
+        .save-status {
+            font-size: 13px;
+            color: var(--success);
+            display: flex;
+            align-items: center;
+            gap: 6px;
+        }
+
+        .save-status.hidden { display: none; }
+
+        footer {
+            text-align: center;
+            padding: 40px 24px;
+            color: var(--text-muted);
+            font-size: 13px;
+        }
+
+        footer a {
+            color: var(--accent);
+            text-decoration: none;
+        }
+
+        .export-options {
+            display: flex;
+            gap: 12px;
+        }
+
+        @media print {
+            body { background: white; }
+            .container { max-width: 100%; padding: 20px; }
+            .add-win-btn, .button-row, .win-actions { display: none; }
+            .win-card { break-inside: avoid; border: 1px solid #ddd; }
+            .win-field textarea { border: none; background: white; }
+            .stats-bar { border: 1px solid #ddd; }
+        }
+
+        @media screen and (max-width: 768px) {
+            .container { padding: 24px 16px; }
+            h1 { font-size: 28px; }
+            .framework-reminder { grid-template-columns: 1fr; gap: 16px; }
+            .stats-bar { flex-wrap: wrap; gap: 16px; justify-content: center; }
+            .win-card { padding: 20px; }
+            .button-row { flex-direction: column; gap: 16px; }
+            .export-options { width: 100%; justify-content: center; }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <header>
+            <img src="https://coachingwomenofcolor.com/wp-content/uploads/2021/04/CWCFinal_logo2.webp" alt="CWC" class="logo">
+            <span class="module-label">Module 2 — February</span>
+            <h1>Win-Tracking Template</h1>
+            <p class="subtitle">Document your accomplishments using the What / So What / Now What framework. Your wins auto-save as you type.</p>
+        </header>
+
+        <div class="framework-reminder">
+            <div class="framework-item">
+                <h3>WHAT</h3>
+                <p>What did you accomplish?<br>Be specific about the deliverable.</p>
+            </div>
+            <div class="framework-item">
+                <h3>SO WHAT</h3>
+                <p>What was the impact?<br>Quantify with metrics.</p>
+            </div>
+            <div class="framework-item">
+                <h3>NOW WHAT</h3>
+                <p>What's next?<br>Connect to future goals.</p>
+            </div>
+        </div>
+
+        <div class="stats-bar">
+            <div class="stat">
+                <div class="stat-number" id="total-wins">0</div>
+                <div class="stat-label">Total Wins</div>
+            </div>
+            <div class="stat">
+                <div class="stat-number" id="this-month">0</div>
+                <div class="stat-label">This Month</div>
+            </div>
+            <div class="stat">
+                <div class="stat-number" id="this-quarter">0</div>
+                <div class="stat-label">This Quarter</div>
+            </div>
+        </div>
+
+        <button class="add-win-btn" onclick="addWin()">
+            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="12" y1="5" x2="12" y2="19"></line><line x1="5" y1="12" x2="19" y2="12"></line></svg>
+            Add New Win
+        </button>
+
+        <div class="wins-list" id="wins-list">
+            <!-- Wins will be added here dynamically -->
+        </div>
+
+        <div class="empty-state" id="empty-state">
+            <h3>No wins logged yet</h3>
+            <p>Start documenting your accomplishments. Even small wins count!</p>
+            <button class="btn btn-primary" onclick="addWin()">Log Your First Win</button>
+        </div>
+
+        <div class="button-row">
+            <button class="btn btn-secondary" onclick="clearAllWins()">Clear All</button>
+            <span class="save-status hidden" id="save-status">
+                <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="20 6 9 17 4 12"></polyline></svg>
+                Auto-saved
+            </span>
+            <div class="export-options">
+                <button class="btn btn-secondary" onclick="exportToText()">Export Text</button>
+                <button class="btn btn-primary" onclick="window.print()">Print / PDF</button>
+            </div>
+        </div>
+    </div>
+
+    <footer>
+        <p>Executive Leadership Lab — Module 2: Strategic Positioning for Promotion</p>
+        <p><a href="https://coachingwomenofcolor.com">Coaching Women of Color</a></p>
+    </footer>
+
+    <script>
+        const STORAGE_KEY = 'cwc-win-tracking-v1';
+        let wins = [];
+
+        const categories = [
+            'Business Results',
+            'Leadership Impact',
+            'Innovation & Problem-Solving',
+            'Stakeholder Management',
+            'Strategic Thinking',
+            'Execution & Delivery',
+            'Program Outcomes',
+            'Other'
+        ];
+
+        function generateId() {
+            return Date.now().toString(36) + Math.random().toString(36).substr(2);
+        }
+
+        function formatDate(date) {
+            return new Date(date).toLocaleDateString('en-US', {
+                month: 'short',
+                day: 'numeric',
+                year: 'numeric'
+            });
+        }
+
+        function addWin() {
+            const win = {
+                id: generateId(),
+                date: new Date().toISOString(),
+                what: '',
+                soWhat: '',
+                nowWhat: '',
+                category: '',
+                editing: true
+            };
+            wins.unshift(win);
+            saveWins();
+            renderWins();
+        }
+
+        function deleteWin(id) {
+            if (confirm('Delete this win? This cannot be undone.')) {
+                wins = wins.filter(w => w.id !== id);
+                saveWins();
+                renderWins();
+            }
+        }
+
+        function toggleEdit(id) {
+            wins = wins.map(w => {
+                if (w.id === id) {
+                    return { ...w, editing: !w.editing };
+                }
+                return w;
+            });
+            renderWins();
+        }
+
+        function updateWin(id, field, value) {
+            wins = wins.map(w => {
+                if (w.id === id) {
+                    return { ...w, [field]: value };
+                }
+                return w;
+            });
+            saveWins();
+        }
+
+        function saveWins() {
+            localStorage.setItem(STORAGE_KEY, JSON.stringify(wins));
+            updateStats();
+            showSaveStatus();
+        }
+
+        function loadWins() {
+            const saved = localStorage.getItem(STORAGE_KEY);
+            if (saved) {
+                wins = JSON.parse(saved);
+            }
+            renderWins();
+            updateStats();
+        }
+
+        function renderWins() {
+            const list = document.getElementById('wins-list');
+            const empty = document.getElementById('empty-state');
+
+            if (wins.length === 0) {
+                list.style.display = 'none';
+                empty.style.display = 'block';
+                return;
+            }
+
+            list.style.display = 'flex';
+            empty.style.display = 'none';
+
+            list.innerHTML = wins.map(win => `
+                <div class="win-card ${win.editing ? 'editing' : ''}" data-id="${win.id}">
+                    <div class="win-header">
+                        <span class="win-date">${formatDate(win.date)}</span>
+                        <div class="win-actions">
+                            <button class="win-action-btn" onclick="toggleEdit('${win.id}')" title="${win.editing ? 'Done' : 'Edit'}">
+                                ${win.editing ?
+                                    '<svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="20 6 9 17 4 12"></polyline></svg>' :
+                                    '<svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M11 4H4a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2v-7"></path><path d="M18.5 2.5a2.121 2.121 0 0 1 3 3L12 15l-4 1 1-4 9.5-9.5z"></path></svg>'
+                                }
+                            </button>
+                            <button class="win-action-btn delete" onclick="deleteWin('${win.id}')" title="Delete">
+                                <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="3 6 5 6 21 6"></polyline><path d="M19 6v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6m3 0V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2"></path></svg>
+                            </button>
+                        </div>
+                    </div>
+                    <div class="win-fields">
+                        <div class="win-field">
+                            <label>What (The Accomplishment)</label>
+                            <textarea
+                                ${win.editing ? '' : 'disabled'}
+                                placeholder="What did you accomplish? Be specific about the deliverable, project, or action."
+                                oninput="updateWin('${win.id}', 'what', this.value)"
+                            >${win.what}</textarea>
+                        </div>
+                        <div class="win-field">
+                            <label>So What (The Impact)</label>
+                            <textarea
+                                ${win.editing ? '' : 'disabled'}
+                                placeholder="What was the business impact? Use metrics: revenue, time saved, % improvement, people affected."
+                                oninput="updateWin('${win.id}', 'soWhat', this.value)"
+                            >${win.soWhat}</textarea>
+                        </div>
+                        <div class="win-field">
+                            <label>Now What (The Connection)</label>
+                            <textarea
+                                ${win.editing ? '' : 'disabled'}
+                                placeholder="How does this connect to future goals, larger initiatives, or promotion criteria?"
+                                oninput="updateWin('${win.id}', 'nowWhat', this.value)"
+                            >${win.nowWhat}</textarea>
+                        </div>
+                    </div>
+                    ${win.editing ? `
+                        <select class="category-select" onchange="updateWin('${win.id}', 'category', this.value)">
+                            <option value="">Select category...</option>
+                            ${categories.map(c => `<option value="${c}" ${win.category === c ? 'selected' : ''}>${c}</option>`).join('')}
+                        </select>
+                    ` : (win.category ? `<span class="win-category-tag">${win.category}</span>` : '')}
+                </div>
+            `).join('');
+        }
+
+        function updateStats() {
+            const now = new Date();
+            const thisMonth = wins.filter(w => {
+                const d = new Date(w.date);
+                return d.getMonth() === now.getMonth() && d.getFullYear() === now.getFullYear();
+            }).length;
+
+            const quarterStart = new Date(now.getFullYear(), Math.floor(now.getMonth() / 3) * 3, 1);
+            const thisQuarter = wins.filter(w => new Date(w.date) >= quarterStart).length;
+
+            document.getElementById('total-wins').textContent = wins.length;
+            document.getElementById('this-month').textContent = thisMonth;
+            document.getElementById('this-quarter').textContent = thisQuarter;
+        }
+
+        function clearAllWins() {
+            if (confirm('Delete ALL wins? This cannot be undone.')) {
+                wins = [];
+                localStorage.removeItem(STORAGE_KEY);
+                renderWins();
+                updateStats();
+            }
+        }
+
+        function exportToText() {
+            if (wins.length === 0) {
+                alert('No wins to export.');
+                return;
+            }
+
+            let text = 'WIN TRACKING LOG\n';
+            text += 'Executive Leadership Lab - Module 2\n';
+            text += '================================\n\n';
+
+            wins.forEach((win, i) => {
+                text += `WIN #${i + 1} (${formatDate(win.date)})\n`;
+                text += `Category: ${win.category || 'Not specified'}\n\n`;
+                text += `WHAT: ${win.what || 'Not specified'}\n\n`;
+                text += `SO WHAT: ${win.soWhat || 'Not specified'}\n\n`;
+                text += `NOW WHAT: ${win.nowWhat || 'Not specified'}\n`;
+                text += '\n-----------------------------------\n\n';
+            });
+
+            const blob = new Blob([text], { type: 'text/plain' });
+            const url = URL.createObjectURL(blob);
+            const a = document.createElement('a');
+            a.href = url;
+            a.download = `win-tracking-${new Date().toISOString().split('T')[0]}.txt`;
+            a.click();
+            URL.revokeObjectURL(url);
+        }
+
+        function showSaveStatus() {
+            const status = document.getElementById('save-status');
+            status.classList.remove('hidden');
+            setTimeout(() => status.classList.add('hidden'), 2000);
+        }
+
+        // Load on page load
+        document.addEventListener('DOMContentLoaded', loadWins);
+    </script>
+</body>
+</html>

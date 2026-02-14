@@ -1,0 +1,743 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Check-In Prep Template | Executive Leadership Lab</title>
+    <link href="https://fonts.googleapis.com/css2?family=Source+Serif+4:wght@400;600;700&family=Inter:wght@400;500;600&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --primary: #1A1A1A;
+            --accent: #2A7B8C;
+            --accent-warm: #D4A574;
+            --text: #333333;
+            --text-light: #666666;
+            --text-muted: #999999;
+            --bg: #FAF8F5;
+            --bg-warm: #F5F2ED;
+            --border: #E5E0D8;
+            --success: #4A9B7F;
+        }
+
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+
+        body {
+            font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
+            background: var(--bg);
+            color: var(--text);
+            line-height: 1.6;
+            min-height: 100vh;
+        }
+
+        .container {
+            max-width: 900px;
+            margin: 0 auto;
+            padding: 40px 24px;
+        }
+
+        header {
+            text-align: center;
+            margin-bottom: 48px;
+            padding-bottom: 32px;
+            border-bottom: 1px solid var(--border);
+        }
+
+        .logo { height: 80px; margin-bottom: 24px; }
+
+        .module-label {
+            font-size: 11px;
+            font-weight: 600;
+            color: var(--accent);
+            text-transform: uppercase;
+            letter-spacing: 2.5px;
+            margin-bottom: 12px;
+            display: block;
+        }
+
+        h1 {
+            font-family: 'Source Serif 4', Georgia, serif;
+            font-size: 36px;
+            font-weight: 700;
+            color: var(--primary);
+            margin-bottom: 12px;
+        }
+
+        .subtitle {
+            font-size: 18px;
+            color: var(--text-light);
+            max-width: 600px;
+            margin: 0 auto;
+        }
+
+        .meeting-info {
+            background: white;
+            border: 1px solid var(--border);
+            border-radius: 8px;
+            padding: 24px;
+            margin-bottom: 32px;
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 20px;
+        }
+
+        .meeting-field label {
+            display: block;
+            font-size: 12px;
+            font-weight: 600;
+            color: var(--text-muted);
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            margin-bottom: 8px;
+        }
+
+        .meeting-field input {
+            width: 100%;
+            padding: 10px 14px;
+            border: 1px solid var(--border);
+            border-radius: 4px;
+            font-family: inherit;
+            font-size: 15px;
+            color: var(--text);
+            background: var(--bg);
+        }
+
+        .meeting-field input:focus {
+            outline: none;
+            border-color: var(--accent);
+        }
+
+        .formula-box {
+            background: var(--primary);
+            color: white;
+            padding: 24px 32px;
+            border-radius: 8px;
+            margin-bottom: 32px;
+            text-align: center;
+        }
+
+        .formula-box h3 {
+            font-family: 'Source Serif 4', Georgia, serif;
+            font-size: 18px;
+            color: var(--accent-warm);
+            margin-bottom: 16px;
+        }
+
+        .formula-parts {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            gap: 16px;
+            flex-wrap: wrap;
+        }
+
+        .formula-part {
+            padding: 12px 20px;
+            background: rgba(255,255,255,0.1);
+            border-radius: 4px;
+        }
+
+        .formula-part strong {
+            color: var(--accent-warm);
+        }
+
+        .formula-plus {
+            font-size: 24px;
+            color: var(--accent-warm);
+        }
+
+        .section {
+            background: white;
+            border: 1px solid var(--border);
+            border-radius: 8px;
+            padding: 28px;
+            margin-bottom: 20px;
+        }
+
+        .section-header {
+            display: flex;
+            align-items: flex-start;
+            gap: 16px;
+            margin-bottom: 20px;
+        }
+
+        .section-icon {
+            width: 40px;
+            height: 40px;
+            background: var(--bg-warm);
+            border-radius: 8px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: var(--accent);
+            flex-shrink: 0;
+        }
+
+        .section-title-group h2 {
+            font-family: 'Source Serif 4', Georgia, serif;
+            font-size: 18px;
+            font-weight: 600;
+            color: var(--primary);
+            margin-bottom: 4px;
+        }
+
+        .section-title-group p {
+            font-size: 14px;
+            color: var(--text-light);
+            margin: 0;
+        }
+
+        .win-entry {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 16px;
+            padding: 16px;
+            background: var(--bg);
+            border-radius: 4px;
+            margin-bottom: 12px;
+        }
+
+        .win-entry:last-child {
+            margin-bottom: 0;
+        }
+
+        .win-entry label {
+            display: block;
+            font-size: 12px;
+            font-weight: 600;
+            color: var(--accent);
+            margin-bottom: 6px;
+        }
+
+        .win-entry input, .win-entry textarea {
+            width: 100%;
+            padding: 10px 12px;
+            border: 1px solid var(--border);
+            border-radius: 4px;
+            font-family: inherit;
+            font-size: 14px;
+            color: var(--text);
+            background: white;
+        }
+
+        .win-entry textarea {
+            resize: vertical;
+            min-height: 60px;
+        }
+
+        .win-entry input:focus, .win-entry textarea:focus {
+            outline: none;
+            border-color: var(--accent);
+        }
+
+        .full-width {
+            grid-column: 1 / -1;
+        }
+
+        .field-group {
+            margin-bottom: 16px;
+        }
+
+        .field-group:last-child {
+            margin-bottom: 0;
+        }
+
+        .field-group label {
+            display: block;
+            font-size: 14px;
+            font-weight: 500;
+            color: var(--primary);
+            margin-bottom: 8px;
+        }
+
+        .field-group textarea {
+            width: 100%;
+            padding: 12px 14px;
+            border: 1px solid var(--border);
+            border-radius: 4px;
+            font-family: inherit;
+            font-size: 15px;
+            color: var(--text);
+            background: var(--bg);
+            resize: vertical;
+            min-height: 80px;
+        }
+
+        .field-group textarea:focus {
+            outline: none;
+            border-color: var(--accent);
+        }
+
+        .field-group input[type="text"] {
+            width: 100%;
+            padding: 12px 14px;
+            border: 1px solid var(--border);
+            border-radius: 4px;
+            font-family: inherit;
+            font-size: 15px;
+            color: var(--text);
+            background: var(--bg);
+        }
+
+        .field-group input:focus {
+            outline: none;
+            border-color: var(--accent);
+        }
+
+        .power-questions {
+            background: var(--bg-warm);
+            border-radius: 4px;
+            padding: 20px;
+            margin-bottom: 16px;
+        }
+
+        .power-questions h4 {
+            font-size: 13px;
+            font-weight: 600;
+            color: var(--accent);
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            margin-bottom: 12px;
+        }
+
+        .power-questions ul {
+            list-style: none;
+            margin: 0;
+            padding: 0;
+        }
+
+        .power-questions li {
+            font-size: 14px;
+            color: var(--text-light);
+            padding: 6px 0;
+            padding-left: 20px;
+            position: relative;
+        }
+
+        .power-questions li::before {
+            content: '?';
+            position: absolute;
+            left: 0;
+            color: var(--accent-warm);
+            font-weight: 600;
+        }
+
+        .commitment-grid {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 16px;
+        }
+
+        .post-meeting {
+            background: var(--bg-warm);
+            border: 1px solid var(--border);
+            border-radius: 8px;
+            padding: 28px;
+            margin-top: 32px;
+        }
+
+        .post-meeting h3 {
+            font-family: 'Source Serif 4', Georgia, serif;
+            font-size: 18px;
+            font-weight: 600;
+            color: var(--primary);
+            margin-bottom: 20px;
+            display: flex;
+            align-items: center;
+            gap: 12px;
+        }
+
+        .post-meeting-grid {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 16px;
+        }
+
+        .button-row {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-top: 40px;
+            padding-top: 24px;
+            border-top: 1px solid var(--border);
+        }
+
+        .btn {
+            padding: 12px 24px;
+            border-radius: 4px;
+            font-family: inherit;
+            font-size: 14px;
+            font-weight: 500;
+            cursor: pointer;
+            transition: all 0.2s;
+        }
+
+        .btn-primary {
+            background: var(--accent);
+            color: white;
+            border: none;
+        }
+
+        .btn-primary:hover { background: #236a79; }
+
+        .btn-secondary {
+            background: transparent;
+            color: var(--text-light);
+            border: 1px solid var(--border);
+        }
+
+        .btn-secondary:hover { border-color: var(--text-light); }
+
+        .btn-new {
+            background: var(--accent-warm);
+            color: white;
+            border: none;
+        }
+
+        .btn-new:hover { background: #c49660; }
+
+        .save-status {
+            font-size: 13px;
+            color: var(--success);
+            display: flex;
+            align-items: center;
+            gap: 6px;
+        }
+
+        .save-status.hidden { display: none; }
+
+        footer {
+            text-align: center;
+            padding: 40px 24px;
+            color: var(--text-muted);
+            font-size: 13px;
+        }
+
+        footer a {
+            color: var(--accent);
+            text-decoration: none;
+        }
+
+        @media print {
+            body { background: white; }
+            .container { max-width: 100%; padding: 20px; }
+            .section, .post-meeting { break-inside: avoid; border: 1px solid #ddd; }
+            .button-row { display: none; }
+            textarea, input { border: 1px solid #ccc !important; background: white !important; }
+            .formula-box { -webkit-print-color-adjust: exact; print-color-adjust: exact; }
+        }
+
+        @media screen and (max-width: 768px) {
+            .container { padding: 24px 16px; }
+            h1 { font-size: 28px; }
+            .meeting-info { grid-template-columns: 1fr; }
+            .win-entry { grid-template-columns: 1fr; }
+            .commitment-grid { grid-template-columns: 1fr; }
+            .post-meeting-grid { grid-template-columns: 1fr; }
+            .formula-parts { flex-direction: column; }
+            .button-row { flex-direction: column; gap: 16px; }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <header>
+            <img src="https://coachingwomenofcolor.com/wp-content/uploads/2021/04/CWCFinal_logo2.webp" alt="CWC" class="logo">
+            <span class="module-label">Module 2 — February</span>
+            <h1>Check-In Prep Template</h1>
+            <p class="subtitle">Never walk into a manager meeting unprepared. Use this template before every check-in to maximize your visibility.</p>
+        </header>
+
+        <div class="meeting-info">
+            <div class="meeting-field">
+                <label>Meeting Date</label>
+                <input type="text" id="meeting-date" placeholder="e.g., February 15, 2026">
+            </div>
+            <div class="meeting-field">
+                <label>Meeting With</label>
+                <input type="text" id="meeting-with" placeholder="e.g., Sarah Chen (Manager)">
+            </div>
+            <div class="meeting-field">
+                <label>Meeting Type</label>
+                <input type="text" id="meeting-type" placeholder="e.g., Weekly 1:1, Quarterly Review">
+            </div>
+        </div>
+
+        <div class="formula-box">
+            <h3>The "Win + Ask" Formula</h3>
+            <div class="formula-parts">
+                <div class="formula-part"><strong>WIN:</strong> "I completed X, which resulted in Y impact"</div>
+                <div class="formula-plus">+</div>
+                <div class="formula-part"><strong>ASK:</strong> "I'd like to take on Z to build toward [goal]"</div>
+            </div>
+        </div>
+
+        <!-- Section 1: Wins -->
+        <div class="section">
+            <div class="section-header">
+                <div class="section-icon">
+                    <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"></path></svg>
+                </div>
+                <div class="section-title-group">
+                    <h2>Wins This Period</h2>
+                    <p>2-3 accomplishments with measurable impact (use the What / So What framework)</p>
+                </div>
+            </div>
+
+            <div class="win-entry">
+                <div>
+                    <label>Win #1: What I accomplished</label>
+                    <input type="text" id="win1-what" placeholder="The specific deliverable or action">
+                </div>
+                <div>
+                    <label>Impact (So What)</label>
+                    <input type="text" id="win1-impact" placeholder="Metrics, results, or business value">
+                </div>
+            </div>
+
+            <div class="win-entry">
+                <div>
+                    <label>Win #2: What I accomplished</label>
+                    <input type="text" id="win2-what" placeholder="The specific deliverable or action">
+                </div>
+                <div>
+                    <label>Impact (So What)</label>
+                    <input type="text" id="win2-impact" placeholder="Metrics, results, or business value">
+                </div>
+            </div>
+
+            <div class="win-entry">
+                <div>
+                    <label>Win #3: What I accomplished</label>
+                    <input type="text" id="win3-what" placeholder="The specific deliverable or action">
+                </div>
+                <div>
+                    <label>Impact (So What)</label>
+                    <input type="text" id="win3-impact" placeholder="Metrics, results, or business value">
+                </div>
+            </div>
+        </div>
+
+        <!-- Section 2: Visibility Ask -->
+        <div class="section">
+            <div class="section-header">
+                <div class="section-icon">
+                    <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"></circle><line x1="12" y1="8" x2="12" y2="12"></line><line x1="12" y1="16" x2="12.01" y2="16"></line></svg>
+                </div>
+                <div class="section-title-group">
+                    <h2>Visibility Ask</h2>
+                    <p>One opportunity or introduction to request</p>
+                </div>
+            </div>
+
+            <div class="field-group">
+                <label>What visibility opportunity do you want to request?</label>
+                <textarea id="visibility-ask" placeholder="E.g., 'I'd like to present our Q1 results to the leadership team' or 'Could you introduce me to [stakeholder] who's working on [project]?'"></textarea>
+            </div>
+
+            <div class="field-group">
+                <label>Why does this matter for your growth?</label>
+                <textarea id="visibility-why" placeholder="Connect the ask to your career goals or promotion criteria..."></textarea>
+            </div>
+        </div>
+
+        <!-- Section 3: Career Signal -->
+        <div class="section">
+            <div class="section-header">
+                <div class="section-icon">
+                    <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"></path><polyline points="22 4 12 14.01 9 11.01"></polyline></svg>
+                </div>
+                <div class="section-title-group">
+                    <h2>Career Signal</h2>
+                    <p>What you want to be known for</p>
+                </div>
+            </div>
+
+            <div class="field-group">
+                <label>What do you want your manager to associate you with?</label>
+                <input type="text" id="career-signal" placeholder="E.g., 'The person who drives cross-functional collaboration' or 'The strategic thinker on complex problems'">
+            </div>
+
+            <div class="field-group">
+                <label>What's one thing you'd like to reinforce in this meeting?</label>
+                <textarea id="reinforce" placeholder="What perception or reputation do you want to strengthen?"></textarea>
+            </div>
+        </div>
+
+        <!-- Section 4: Feedback Request -->
+        <div class="section">
+            <div class="section-header">
+                <div class="section-icon">
+                    <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"></path></svg>
+                </div>
+                <div class="section-title-group">
+                    <h2>Feedback Request</h2>
+                    <p>Specific question for your manager</p>
+                </div>
+            </div>
+
+            <div class="power-questions">
+                <h4>Power Questions to Consider</h4>
+                <ul>
+                    <li>"What would make me promotable in the next cycle?"</li>
+                    <li>"Who else should know about this work?"</li>
+                    <li>"Are there stretch opportunities I should pursue?"</li>
+                    <li>"What's one thing I could do differently to increase my impact?"</li>
+                    <li>"How can I better support the team's priorities?"</li>
+                </ul>
+            </div>
+
+            <div class="field-group">
+                <label>Your specific feedback question for this meeting</label>
+                <textarea id="feedback-question" placeholder="Write out the exact question you'll ask..."></textarea>
+            </div>
+        </div>
+
+        <!-- Section 5: Next Commitments -->
+        <div class="section">
+            <div class="section-header">
+                <div class="section-icon">
+                    <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="9 11 12 14 22 4"></polyline><path d="M21 12v7a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h11"></path></svg>
+                </div>
+                <div class="section-title-group">
+                    <h2>Next Commitments</h2>
+                    <p>What you'll deliver by the next check-in</p>
+                </div>
+            </div>
+
+            <div class="commitment-grid">
+                <div class="field-group">
+                    <label>Commitment #1</label>
+                    <input type="text" id="commitment1" placeholder="What will you deliver?">
+                </div>
+                <div class="field-group">
+                    <label>By When</label>
+                    <input type="text" id="commitment1-date" placeholder="Date or timeframe">
+                </div>
+                <div class="field-group">
+                    <label>Commitment #2</label>
+                    <input type="text" id="commitment2" placeholder="What will you deliver?">
+                </div>
+                <div class="field-group">
+                    <label>By When</label>
+                    <input type="text" id="commitment2-date" placeholder="Date or timeframe">
+                </div>
+            </div>
+        </div>
+
+        <!-- Post-Meeting Reflection -->
+        <div class="post-meeting">
+            <h3>
+                <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"></circle><polyline points="12 6 12 12 16 14"></polyline></svg>
+                Post-Meeting Reflection
+            </h3>
+            <p style="font-size: 14px; color: var(--text-light); margin-bottom: 20px;">Complete this section after your check-in to capture insights and follow-ups.</p>
+
+            <div class="post-meeting-grid">
+                <div class="field-group">
+                    <label>Key takeaways from the meeting</label>
+                    <textarea id="takeaways" placeholder="What did you learn? Any surprises?"></textarea>
+                </div>
+                <div class="field-group">
+                    <label>Follow-up actions needed</label>
+                    <textarea id="followups" placeholder="What do you need to do next?"></textarea>
+                </div>
+                <div class="field-group">
+                    <label>What went well?</label>
+                    <textarea id="went-well" placeholder="What would you repeat?"></textarea>
+                </div>
+                <div class="field-group">
+                    <label>What would you do differently?</label>
+                    <textarea id="do-differently" placeholder="What would you change next time?"></textarea>
+                </div>
+            </div>
+        </div>
+
+        <div class="button-row">
+            <button class="btn btn-secondary" onclick="clearForm()">Clear All</button>
+            <span class="save-status hidden" id="save-status">
+                <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="20 6 9 17 4 12"></polyline></svg>
+                Auto-saved
+            </span>
+            <div style="display: flex; gap: 12px;">
+                <button class="btn btn-new" onclick="newCheckin()">New Check-In</button>
+                <button class="btn btn-primary" onclick="window.print()">Print / Save PDF</button>
+            </div>
+        </div>
+    </div>
+
+    <footer>
+        <p>Executive Leadership Lab — Module 2: Strategic Positioning for Promotion</p>
+        <p><a href="https://coachingwomenofcolor.com">Coaching Women of Color</a></p>
+    </footer>
+
+    <script>
+        const STORAGE_KEY = 'cwc-checkin-prep-v1';
+
+        const formElements = [
+            'meeting-date', 'meeting-with', 'meeting-type',
+            'win1-what', 'win1-impact', 'win2-what', 'win2-impact', 'win3-what', 'win3-impact',
+            'visibility-ask', 'visibility-why',
+            'career-signal', 'reinforce',
+            'feedback-question',
+            'commitment1', 'commitment1-date', 'commitment2', 'commitment2-date',
+            'takeaways', 'followups', 'went-well', 'do-differently'
+        ];
+
+        function saveForm() {
+            const data = {};
+            formElements.forEach(id => {
+                const el = document.getElementById(id);
+                if (el) data[id] = el.value;
+            });
+            localStorage.setItem(STORAGE_KEY, JSON.stringify(data));
+            showSaveStatus();
+        }
+
+        function loadForm() {
+            const saved = localStorage.getItem(STORAGE_KEY);
+            if (!saved) return;
+
+            const data = JSON.parse(saved);
+            formElements.forEach(id => {
+                const el = document.getElementById(id);
+                if (el && data[id] !== undefined) el.value = data[id];
+            });
+        }
+
+        function clearForm() {
+            if (confirm('Clear all entries? This cannot be undone.')) {
+                localStorage.removeItem(STORAGE_KEY);
+                formElements.forEach(id => {
+                    const el = document.getElementById(id);
+                    if (el) el.value = '';
+                });
+            }
+        }
+
+        function newCheckin() {
+            if (confirm('Start a new check-in prep? Current entries will be cleared.')) {
+                localStorage.removeItem(STORAGE_KEY);
+                formElements.forEach(id => {
+                    const el = document.getElementById(id);
+                    if (el) el.value = '';
+                });
+                // Set today's date
+                const today = new Date().toLocaleDateString('en-US', { month: 'long', day: 'numeric', year: 'numeric' });
+                document.getElementById('meeting-date').value = today;
+            }
+        }
+
+        function showSaveStatus() {
+            const status = document.getElementById('save-status');
+            status.classList.remove('hidden');
+            setTimeout(() => status.classList.add('hidden'), 2000);
+        }
+
+        // Auto-save on input
+        document.addEventListener('input', saveForm);
+
+        // Load on page load
+        document.addEventListener('DOMContentLoaded', loadForm);
+    </script>
+</body>
+</html>
