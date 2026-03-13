@@ -32,7 +32,7 @@
                 padding: 40px 60px;
             }
             .slide::before { display: none; }
-            .nav-controls, .nav-btn-prev, .nav-btn-next, .slide-counter-bar, .keyboard-hint, .progress-bar { display: none; }
+            .nav-controls, .keyboard-hint, .progress-bar { display: none; }
             .slide-title, .slide-dark { background: var(--primary) !important; -webkit-print-color-adjust: exact; print-color-adjust: exact; }
         }
 
@@ -56,16 +56,13 @@
             flex-direction: column;
             justify-content: center;
             align-items: center;
-            padding: 60px 100px 40px 100px;
+            padding: 80px 120px 140px 120px;
             opacity: 0;
             visibility: hidden;
             transform: translateY(20px);
             transition: opacity 0.4s ease, visibility 0s 0.4s, transform 0.4s ease;
             background: var(--bg);
-            overflow-y: auto;
-            scrollbar-width: none;
         }
-        .slide::-webkit-scrollbar { display: none; }
         .slide::before {
             content: '';
             position: absolute;
@@ -79,39 +76,35 @@
 
         .slide.active { opacity: 1; visibility: visible; transform: translateY(0); transition: opacity 0.4s ease 0.05s, visibility 0s, transform 0.4s ease 0.05s; z-index: 1; }
 
-        .nav-btn {
+        .nav-controls {
             position: fixed;
-            top: 50%;
-            transform: translateY(-50%);
+            bottom: 48px;
+            left: 50%;
+            transform: translateX(-50%);
+            display: flex;
+            align-items: center;
+            gap: 24px;
+            z-index: 1000;
+        }
+
+        .nav-btn {
             width: 48px; height: 48px;
             border-radius: 50%;
-            border: none;
-            background: rgba(26,26,26,0.12);
+            border: 2px solid var(--primary);
+            background: transparent;
             color: var(--primary);
             cursor: pointer;
             display: flex;
             align-items: center;
             justify-content: center;
             transition: all 0.2s ease;
-            z-index: 1000;
         }
-        .nav-btn-prev { left: 20px; }
-        .nav-btn-next { right: 20px; }
-        .nav-btn:hover { background: rgba(26,26,26,0.8); color: #fff; }
-        .nav-btn:disabled { opacity: 0.15; cursor: not-allowed; }
-        .nav-btn:disabled:hover { background: rgba(26,26,26,0.12); color: var(--primary); }
-        .nav-btn svg { width: 20px; height: 20px; }
-        .nav-btn.on-dark { color: rgba(255,255,255,0.7); background: rgba(255,255,255,0.12); }
-        .nav-btn.on-dark:hover { background: rgba(255,255,255,0.3); color: #fff; }
-        .nav-btn.on-dark:disabled { opacity: 0.15; }
 
-        .slide-counter-bar {
-            position: fixed;
-            bottom: 24px;
-            left: 50%;
-            transform: translateX(-50%);
-            z-index: 1000;
-        }
+        .nav-btn:hover { background: var(--primary); color: var(--bg); }
+        .nav-btn:disabled { border-color: var(--border); color: var(--text-muted); cursor: not-allowed; }
+        .nav-btn:disabled:hover { background: transparent; color: var(--text-muted); }
+        .nav-btn svg { width: 20px; height: 20px; }
+
         .slide-counter { font-size: 13px; font-weight: 500; color: var(--text-muted); letter-spacing: 0.5px; }
 
         .progress-bar {
@@ -124,20 +117,20 @@
 
         .slide-header {
             position: absolute;
-            top: 24px; left: 60px; right: 60px;
+            top: 40px; left: 60px; right: 60px;
             display: flex;
             justify-content: space-between;
             align-items: center;
         }
 
-        .logo { height: 60px; }
+        .logo { height: 80px; }
         .module-label { font-size: 11px; font-weight: 600; color: var(--text-muted); text-transform: uppercase; letter-spacing: 2px; }
 
         .slide-content { max-width: 960px; width: 100%; text-align: center; }
 
         h1 {
             font-family: 'Source Serif 4', Georgia, serif;
-            font-size: 48px; font-weight: 700;
+            font-size: 56px; font-weight: 700;
             color: var(--primary);
             line-height: 1.15;
             letter-spacing: -1px;
@@ -146,7 +139,7 @@
 
         h2 {
             font-family: 'Source Serif 4', Georgia, serif;
-            font-size: 36px; font-weight: 600;
+            font-size: 42px; font-weight: 600;
             color: var(--primary);
             line-height: 1.2;
             margin-bottom: 20px;
@@ -169,7 +162,18 @@
             color: var(--bg);
             position: relative;
         }
-        .slide-title h1 { color: var(--bg); font-size: 52px; }
+        .slide-title::after {
+            content: '';
+            position: absolute;
+            top: 0; left: 0;
+            width: 100%;
+            height: 100%;
+            background: url('https://images.unsplash.com/photo-1522202176988-66273c2fd55f?w=1200&q=80') center/cover no-repeat;
+            opacity: 0.15;
+            pointer-events: none;
+            z-index: 0;
+        }
+        .slide-title h1 { color: var(--bg); font-size: 64px; }
         .slide-title p { color: rgba(255,255,255,0.6); }
 
         .title-meta {
@@ -179,16 +183,16 @@
         }
         .meta-item { font-size: 13px; color: rgba(255,255,255,0.5); letter-spacing: 0.5px; }
 
-        .cards-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 24px; margin-top: 36px; text-align: left; }
+        .cards-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 32px; margin-top: 48px; text-align: left; }
         .cards-grid.two-col { grid-template-columns: repeat(2, 1fr); }
 
-        .card { padding: 28px; border: 1px solid var(--border); border-radius: 4px; transition: all 0.2s ease; }
+        .card { padding: 40px; border: 1px solid var(--border); border-radius: 4px; transition: all 0.2s ease; }
         .card:hover { border-color: var(--accent); }
         .card h4 { font-family: 'Source Serif 4', Georgia, serif; font-size: 18px; font-weight: 600; color: var(--primary); margin-bottom: 12px; }
         .card p { font-size: 15px; color: var(--text-light); margin: 0; line-height: 1.6; }
 
-        .feature-list { text-align: left; max-width: 640px; margin: 32px auto 0; }
-        .feature-item { display: flex; align-items: flex-start; gap: 16px; padding: 16px 0; border-bottom: 1px solid var(--border); }
+        .feature-list { text-align: left; max-width: 640px; margin: 48px auto 0; }
+        .feature-item { display: flex; align-items: flex-start; gap: 20px; padding: 24px 0; border-bottom: 1px solid var(--border); }
         .feature-item:last-child { border-bottom: none; }
 
         .feature-number {
@@ -203,7 +207,7 @@
         .feature-text h4 { font-size: 17px; font-weight: 600; color: var(--primary); margin-bottom: 6px; }
         .feature-text p { font-size: 15px; color: var(--text-light); margin: 0; }
 
-        .two-column { display: grid; grid-template-columns: 1fr 1fr; gap: 48px; text-align: left; max-width: 880px; margin: 36px auto 0; }
+        .two-column { display: grid; grid-template-columns: 1fr 1fr; gap: 64px; text-align: left; max-width: 880px; margin: 48px auto 0; }
         .column h4 { font-family: 'Source Serif 4', Georgia, serif; font-size: 18px; font-weight: 600; color: var(--primary); margin-bottom: 20px; padding-bottom: 12px; border-bottom: 2px solid var(--primary); }
         .column ul { list-style: none; }
         .column li { padding: 10px 0; font-size: 15px; color: var(--text-light); border-bottom: 1px solid var(--border); }
@@ -214,15 +218,15 @@
         }
         .quote-text {
             font-family: 'Source Serif 4', Georgia, serif;
-            font-size: 28px; font-weight: 400;
+            font-size: 32px; font-weight: 400;
             line-height: 1.5; color: var(--primary);
             max-width: 800px; font-style: italic;
         }
         .quote-text::before { content: '\201C'; display: block; font-size: 72px; line-height: 1; color: var(--accent-warm); margin-bottom: 16px; }
 
-        .stats-row { display: flex; justify-content: center; gap: 48px; margin-top: 40px; }
+        .stats-row { display: flex; justify-content: center; gap: 80px; margin-top: 40px; }
         .stat-item { text-align: center; }
-        .stat-number { font-family: 'Source Serif 4', Georgia, serif; font-size: 42px; font-weight: 700; color: var(--primary); }
+        .stat-number { font-family: 'Source Serif 4', Georgia, serif; font-size: 48px; font-weight: 700; color: var(--primary); }
         .stat-label { font-size: 13px; color: var(--text-muted); text-transform: uppercase; letter-spacing: 1px; margin-top: 8px; }
 
         .flow-diagram { display: flex; align-items: center; justify-content: center; gap: 16px; margin-top: 48px; flex-wrap: wrap; }
@@ -309,9 +313,6 @@
 
         @media screen and (max-width: 768px) {
             .slide { padding: 80px 40px 60px; }
-            .nav-btn { width: 36px; height: 36px; }
-            .nav-btn-prev { left: 12px; }
-            .nav-btn-next { right: 12px; }
             .slide-header { top: 20px; left: 24px; right: 24px; flex-direction: column; align-items: flex-start; gap: 8px; }
             .logo { height: 60px; }
             h1 { font-size: 36px; }
@@ -332,16 +333,15 @@
             .simple-table { font-size: 14px; }
             .simple-table th, .simple-table td { padding: 12px 8px; }
             .formula-box { padding: 24px; }
-            .slide-counter-bar { bottom: 12px; }
+            .nav-controls { bottom: 10px; gap: 16px; }
+            .nav-btn { width: 36px; height: 36px; }
+            .nav-btn svg { width: 16px; height: 16px; }
+            .slide-counter { font-size: 11px; }
             .keyboard-hint { display: none; }
         }
 
         @media screen and (max-width: 480px) {
             .slide { padding: 60px 12px 50px; justify-content: flex-start; padding-top: 70px; }
-            .nav-btn { width: 32px; height: 32px; }
-            .nav-btn svg { width: 16px; height: 16px; }
-            .nav-btn-prev { left: 6px; }
-            .nav-btn-next { right: 6px; }
             .slide-content { max-width: 100%; padding: 0 4px; }
             .slide-header { top: 8px; left: 10px; right: 10px; flex-direction: row; justify-content: space-between; }
             .logo { height: 28px; }
@@ -385,7 +385,7 @@
             .title-meta { margin-top: 32px; padding-top: 20px; gap: 24px; flex-wrap: wrap; justify-content: center; }
             .meta-item { font-size: 11px; }
             .nav-controls { bottom: 10px; gap: 16px; }
-            .nav-btn { width: 36px; height: 36px; }
+            .nav-btn { width: 32px; height: 32px; }
             .nav-btn svg { width: 16px; height: 16px; }
             .slide-counter { font-size: 11px; }
             .ell-mark { font-size: 11px; bottom: 24px; right: 12px; }
@@ -757,16 +757,12 @@
         </div>
     </div>
 
-    <button class="nav-btn nav-btn-prev" id="prevBtn" disabled>
-        <svg viewBox="0 0 24 24" fill="currentColor"><path d="M15.41 7.41L14 6l-6 6 6 6 1.41-1.41L10.83 12z"/></svg>
-    </button>
-    <button class="nav-btn nav-btn-next" id="nextBtn">
-        <svg viewBox="0 0 24 24" fill="currentColor"><path d="M10 6L8.59 7.41 13.17 12l-4.58 4.59L10 18l6-6z"/></svg>
-    </button>
-    <div class="slide-counter-bar">
+    <div class="keyboard-hint">Press <kbd>&larr;</kbd> <kbd>&rarr;</kbd> to navigate</div>
+    <div class="nav-controls">
+        <button class="nav-btn" id="prevBtn" disabled><svg viewBox="0 0 24 24" fill="currentColor"><path d="M15.41 7.41L14 6l-6 6 6 6 1.41-1.41L10.83 12z"/></svg></button>
         <span class="slide-counter"><span id="currentSlide">1</span> / <span id="totalSlides">23</span></span>
+        <button class="nav-btn" id="nextBtn"><svg viewBox="0 0 24 24" fill="currentColor"><path d="M10 6L8.59 7.41 13.17 12l-4.58 4.59L10 18l6-6z"/></svg></button>
     </div>
-    <div class="keyboard-hint">Use <kbd>&larr;</kbd> <kbd>&rarr;</kbd> to navigate</div>
 
     <script>
         const slides = document.querySelectorAll('.slide');
@@ -784,13 +780,9 @@
             slides[currentSlide - 1].classList.remove('active');
             currentSlide = n;
             slides[currentSlide - 1].classList.add('active');
-            slides[currentSlide - 1].scrollTop = 0;
             currentSlideEl.textContent = currentSlide;
             prevBtn.disabled = currentSlide === 1;
             nextBtn.disabled = currentSlide === totalSlides;
-            const isDark = slides[currentSlide - 1].classList.contains('slide-title') || slides[currentSlide - 1].classList.contains('slide-dark');
-            prevBtn.classList.toggle('on-dark', isDark);
-            nextBtn.classList.toggle('on-dark', isDark);
             updateProgress();
         }
         function nextSlide() { if (currentSlide < totalSlides) goToSlide(currentSlide + 1); }
