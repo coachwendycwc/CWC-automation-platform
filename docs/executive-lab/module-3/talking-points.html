@@ -1,0 +1,1004 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Module 3: Confident Career Pivot - Facilitator Talking Points</title>
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Source+Serif+4:wght@400;600;700&family=Inter:wght@400;500;600&display=swap');
+
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+
+        body {
+            font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
+            line-height: 1.7;
+            color: #333;
+            background: #fff;
+            padding: 40px;
+            max-width: 900px;
+            margin: 0 auto;
+        }
+
+        @media print {
+            body { padding: 20px; font-size: 11pt; }
+            .no-print { display: none; }
+            .page-break { page-break-before: always; }
+            h1 { font-size: 24pt; }
+            h2 { font-size: 16pt; }
+            h3 { font-size: 13pt; }
+        }
+
+        @media screen and (max-width: 768px) {
+            body { padding: 20px; }
+            .download-bar { padding: 12px 20px; flex-direction: column; gap: 10px; }
+            .download-bar h1 { font-size: 14px; text-align: center; }
+            .spacer { height: 100px; }
+            .header h1 { font-size: 26px; }
+            .header p { font-size: 16px; }
+            h1 { font-size: 22px; margin: 32px 0 16px; }
+            h2 { font-size: 18px; }
+            .script-box { padding: 16px 20px; }
+            .script-box p { font-size: 15px; }
+            .key-points { padding: 16px; }
+            .engagement-box { padding: 14px 16px; }
+            .checklist { padding: 16px; }
+            table { font-size: 13px; }
+            th, td { padding: 10px 12px; }
+        }
+
+        @media screen and (max-width: 480px) {
+            body { padding: 12px; }
+            .download-bar { padding: 10px 12px; }
+            .download-bar h1 { font-size: 12px; }
+            .download-btn { padding: 8px 16px; font-size: 12px; }
+            .spacer { height: 90px; }
+            .header { margin-bottom: 32px; padding-bottom: 24px; }
+            .header h1 { font-size: 22px; }
+            .logo { height: 50px; }
+            h1 { font-size: 20px; margin: 24px 0 12px; padding-top: 16px; }
+            h2 { font-size: 16px; margin: 24px 0 12px; }
+            h3 { font-size: 13px; }
+            .script-box { padding: 12px 14px; }
+            .script-box p { font-size: 14px; line-height: 1.6; }
+            .time-badge { font-size: 11px; padding: 3px 10px; }
+            table { font-size: 12px; }
+            th, td { padding: 8px; }
+        }
+
+        .download-bar {
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            background: #1A1A1A;
+            color: #fff;
+            padding: 16px 40px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            z-index: 1000;
+        }
+
+        .download-bar h1 {
+            font-size: 16px;
+            font-weight: 600;
+            color: #fff;
+            border: none;
+            padding: 0;
+            margin: 0;
+        }
+
+        .download-btn {
+            background: #D4A574;
+            color: #fff;
+            border: none;
+            padding: 10px 24px;
+            border-radius: 6px;
+            font-weight: 600;
+            cursor: pointer;
+            font-size: 14px;
+        }
+
+        .download-btn:hover { background: #c49660; }
+
+        .spacer { height: 80px; }
+
+        .header {
+            text-align: center;
+            margin-bottom: 48px;
+            padding-bottom: 32px;
+            border-bottom: 3px solid #1A1A1A;
+        }
+
+        .logo { height: 60px; margin-bottom: 24px; }
+
+        .header h1 {
+            font-family: 'Source Serif 4', Georgia, serif;
+            font-size: 32px;
+            color: #1A1A1A;
+            margin-bottom: 8px;
+            border: none;
+            padding: 0;
+        }
+
+        .header p {
+            font-size: 18px;
+            color: #666;
+        }
+
+        h1 {
+            font-family: 'Source Serif 4', Georgia, serif;
+            font-size: 28px;
+            color: #1A1A1A;
+            margin: 48px 0 24px;
+            padding-top: 24px;
+            border-top: 2px solid #E5E0D8;
+        }
+
+        h2 {
+            font-family: 'Source Serif 4', Georgia, serif;
+            font-size: 20px;
+            color: #2A7B8C;
+            margin: 32px 0 16px;
+        }
+
+        h3 {
+            font-size: 15px;
+            font-weight: 600;
+            color: #D4A574;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            margin: 24px 0 12px;
+        }
+
+        p { margin-bottom: 16px; }
+
+        .time-badge {
+            display: inline-block;
+            background: #2A7B8C;
+            color: #fff;
+            padding: 4px 12px;
+            border-radius: 4px;
+            font-size: 12px;
+            font-weight: 600;
+            margin-bottom: 16px;
+        }
+
+        .script-box {
+            background: #FAF8F5;
+            border-left: 4px solid #D4A574;
+            padding: 24px 28px;
+            margin: 16px 0;
+            color: #333;
+        }
+
+        .script-box p { margin-bottom: 16px; line-height: 1.8; }
+        .script-box p:last-child { margin-bottom: 0; }
+
+        .key-points {
+            background: #f5f5f5;
+            padding: 20px 24px;
+            margin: 16px 0;
+            border-radius: 8px;
+        }
+
+        .key-points ul {
+            margin-left: 20px;
+        }
+
+        .key-points li {
+            margin-bottom: 8px;
+        }
+
+        .engagement-box {
+            background: #E8F4F6;
+            border: 1px solid #2A7B8C;
+            padding: 16px 20px;
+            margin: 16px 0;
+            border-radius: 8px;
+        }
+
+        .engagement-box strong {
+            color: #2A7B8C;
+        }
+
+        .checklist {
+            background: #FFF9F5;
+            border: 1px solid #D4A574;
+            padding: 20px 24px;
+            margin: 16px 0;
+            border-radius: 8px;
+        }
+
+        .checklist ul {
+            list-style: none;
+            margin: 0;
+        }
+
+        .checklist li {
+            padding: 8px 0;
+            padding-left: 28px;
+            position: relative;
+            border-bottom: 1px solid #F0EBE5;
+        }
+
+        .checklist li:last-child { border-bottom: none; }
+
+        .checklist li::before {
+            content: '☐';
+            position: absolute;
+            left: 0;
+            color: #D4A574;
+        }
+
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin: 24px 0;
+        }
+
+        th {
+            background: #1A1A1A;
+            color: #fff;
+            padding: 12px 16px;
+            text-align: left;
+            font-size: 13px;
+            font-weight: 600;
+        }
+
+        td {
+            padding: 12px 16px;
+            border-bottom: 1px solid #E5E0D8;
+            font-size: 14px;
+        }
+
+        tr:nth-child(even) { background: #FAF8F5; }
+
+        .highlight {
+            background: #FFFDE7;
+            padding: 2px 6px;
+            border-radius: 3px;
+        }
+
+        hr {
+            border: none;
+            border-top: 1px solid #E5E0D8;
+            margin: 32px 0;
+        }
+
+        .footer {
+            margin-top: 64px;
+            padding-top: 32px;
+            border-top: 2px solid #1A1A1A;
+            text-align: center;
+            color: #999;
+            font-size: 13px;
+        }
+
+        .transition-note {
+            background: #FFF3E0;
+            border-left: 4px solid #FF9800;
+            padding: 12px 16px;
+            margin: 16px 0;
+            font-size: 14px;
+            font-style: italic;
+        }
+    </style>
+</head>
+<body>
+    <div class="download-bar no-print">
+        <h1>Module 3 Talking Points - Detailed Script</h1>
+        <button class="download-btn" onclick="window.print()">Download / Print PDF</button>
+    </div>
+
+    <div class="spacer no-print"></div>
+
+    <div class="header">
+        <img src="https://coachingwomenofcolor.com/logo.webp" alt="CWC" class="logo">
+        <h1>Module 3: Confident Career Pivot</h1>
+        <p>Detailed Script for Recorded Module</p>
+    </div>
+
+    <h1>Pre-Recording Checklist</h1>
+    <div class="checklist">
+        <ul>
+            <li>Test screen share with presentation (do a dry run before recording)</li>
+            <li>Ensure all handouts are uploaded to Skool platform:
+                <ul style="margin-top: 8px; margin-left: 20px; list-style: disc;">
+                    <li>Transferable Skills Inventory</li>
+                    <li>Pivot Storytelling Script Template</li>
+                    <li>Informational Interview Prep Guide</li>
+                    <li>Role-Play Prompt Cards</li>
+                </ul>
+            </li>
+            <li>Quiet recording environment with good lighting</li>
+            <li>Water and notes within reach</li>
+            <li>Timer ready for activity sections (to guide pacing)</li>
+        </ul>
+    </div>
+
+    <!-- ============================================================ -->
+    <!-- SLIDE 1: Title Slide                                          -->
+    <!-- ============================================================ -->
+
+    <h1 class="page-break">Slide 1: Title Slide</h1>
+    <span class="time-badge">3-4 minutes</span>
+
+    <h3>Complete Opening Script</h3>
+    <div class="script-box">
+        <p>"Welcome to Module 3 of the Executive Leadership Lab. I am so glad you are here. And I want to start by saying something that I think is really important: if you are watching this module, it means you are at least thinking about a career pivot. Maybe it's a quiet thought in the back of your mind. Maybe it's something that keeps you up at night. Maybe you've already started taking steps. Wherever you are on that spectrum, I want you to know that the fact you are here, exploring this, leaning into the possibility of change? That takes courage. And I see you."</p>
+
+        <p>"This month's module is called <strong>Confident Career Pivot: Own Your Next Chapter</strong>. I chose those words very deliberately. This isn't about hesitant career change. This isn't about apologetic transitions. This is about <em>confident</em> pivots. This is about owning your story, owning your skills, and owning the next chapter of your career with the same excellence you brought to every chapter before it."</p>
+
+        <p>"Here's what I know from coaching hundreds of women of color through career transitions: the pivot itself is not the hard part. The hard part is the narrative. It's the story we tell ourselves about what changing directions means. Does it mean I failed? Does it mean I wasted my time? Does it mean I'm starting over? No. No to all of that. A pivot is not a retreat. It's a strategic advance. And by the end of this module, you're going to have the tools, the language, and the confidence to make that advance on your terms."</p>
+
+        <p>"Before we dive in, take a deep breath with me. In... and out. Whatever brought you to this moment, whether it's frustration, ambition, burnout, or a calling you can't ignore, all of that is valid. All of that is fuel. Let's channel it into something powerful."</p>
+    </div>
+
+    <div class="engagement-box">
+        <strong>Reflection Prompt:</strong> "Before we go any further, I want you to grab your journal or open a note on your phone. Write down this sentence and complete it: 'I'm considering a career pivot because...' Don't overthink it. Don't edit yourself. Just write what comes to mind. This is between you and this page. Your answer is your anchor for everything we're going to cover today."
+    </div>
+
+    <!-- ============================================================ -->
+    <!-- SLIDE 2: Welcome                                              -->
+    <!-- ============================================================ -->
+
+    <h1>Slide 2: Welcome - Your Experience Is More Transferable Than You Think</h1>
+    <span class="time-badge">4-5 minutes</span>
+
+    <h3>Complete Script</h3>
+    <div class="script-box">
+        <p>"Let me share some numbers with you, and I want you to really pay attention to these because they tell the story of where we are right now as women of color in the workforce."</p>
+
+        <p>"<strong>52% of women of color are currently considering a career change.</strong> More than half. That's not a small group of dissatisfied people. That's a movement. That tells me there is a systemic mismatch between what our workplaces offer and what we need to thrive. So if you're thinking about a pivot, you are not alone. You are part of a much larger wave of women who are saying, 'I deserve more. I deserve better. I deserve different.'"</p>
+
+        <p>"But here's where it gets complicated. <strong>Women of color are 2.5 times more likely to face 'prove it again' bias when entering a new field.</strong> Think about that. It's already hard enough to prove yourself once. But when you pivot, when you cross into a new industry or a new function, the expectation isn't just that you perform. The expectation is that you prove yourself all over again, and often to a higher standard than your peers. If you've ever felt like you had to work twice as hard just to be considered equal, imagine doing that in a brand-new arena where people don't know your track record."</p>
+
+        <p>"Now, here's the good news, and this is the number I want you to hold onto: <strong>73% of career pivots succeed when the person has a clear, compelling narrative.</strong> That's nearly three out of four. The differentiator isn't experience. It isn't credentials. It isn't even who you know. The single biggest predictor of a successful career pivot is your ability to tell a story that connects where you've been to where you're going. And that is exactly what we are going to build in this module."</p>
+
+        <p>"So here's the reframe I want to offer you right now, before we go any further. You are not starting from scratch. You are not starting over. You are starting from a foundation of years of experience, skills, relationships, and leadership. All of that comes with you. The question isn't whether you're qualified. The question is whether you can articulate your value in a way that makes sense in a new context. And the answer is yes, because I'm going to show you exactly how."</p>
+    </div>
+
+    <div class="engagement-box">
+        <strong>Reflection Prompt:</strong> "Think about this: When you imagine pivoting to something new, what's the first fear that comes up? Is it 'I'll have to start over'? Is it 'They won't take me seriously'? Is it 'I've invested too much in my current path'? Write that fear down. We're going to address it head-on in this module."
+    </div>
+
+    <!-- ============================================================ -->
+    <!-- SLIDE 3: Objectives                                           -->
+    <!-- ============================================================ -->
+
+    <h1 class="page-break">Slide 3: Objectives - What You'll Gain</h1>
+    <span class="time-badge">3-4 minutes</span>
+
+    <h3>Complete Script</h3>
+    <div class="script-box">
+        <p>"Let me tell you exactly what you're walking away with from this module. These aren't abstract ideas. These are concrete tools and skills you can start using immediately."</p>
+
+        <p>"<strong>First, you're going to Map Your Transferable Skills.</strong> This is the exercise that changes everything. Most of us think of our experience in terms of job titles and industry-specific tasks. But the truth is, the vast majority of your skills travel across industries, sectors, and functions. You're going to do a comprehensive inventory of every transferable skill you possess, and I promise you, the list is going to be longer than you think. Whether you're coming from corporate, nonprofit, government, education, or entrepreneurship, your skills have value far beyond the context where you developed them."</p>
+
+        <p>"<strong>Second, you're going to Craft Your Pivot Story.</strong> This is your narrative, your bridge from where you've been to where you're going. When someone asks, 'Why are you making this change?' you're not going to stumble, apologize, or over-explain. You're going to deliver a clear, confident, compelling story that makes your pivot feel not just logical but inevitable. I'm going to give you a four-part framework that you can adapt for any conversation, any interview, any networking event."</p>
+
+        <p>"<strong>Third, you're going to Prepare for Informational Interviews.</strong> Informational interviews are the single most underused tool in career transitions, and they are incredibly powerful. You're going to learn who to target, how to ask, what questions to bring, and how to follow up in a way that opens doors. This is about building relationships strategically, not just collecting business cards."</p>
+
+        <p>"<strong>And fourth, you're going to Practice Through Role-Play.</strong> We're going to run through four real-world scenarios that you are likely to encounter during a pivot. The skeptical hiring manager. The gatekeeper who questions your background. The networking event where someone asks what you do. The actual interview. You're going to have practiced responses for all of them, so when these moments come, you're ready."</p>
+
+        <p>"By the end of this module, you'll have a transferable skills inventory, a polished pivot story, an informational interview strategy, and practice under your belt. Let's build."</p>
+    </div>
+
+    <!-- ============================================================ -->
+    <!-- SLIDE 4: The Challenge                                        -->
+    <!-- ============================================================ -->
+
+    <h1>Slide 4: The Challenge - The Pivot Paradox: Qualified But Questioned</h1>
+    <span class="time-badge">5-6 minutes</span>
+
+    <h3>Complete Script</h3>
+    <div class="script-box">
+        <p>"Before we get into the solutions, I need to name the challenge clearly. Because if we don't understand the obstacle, we can't effectively overcome it. What I call the Pivot Paradox is this: you are fully qualified for the work you want to do, but you will be questioned as if you aren't. And for women of color, this paradox is amplified by systemic biases that are already working against us."</p>
+
+        <p>"Let me walk you through the three dimensions of this challenge."</p>
+
+        <p>"<strong>The first is The Expertise Trap.</strong> This is the belief, held by both yourself and others, that your value is tied to your specific industry or function. You've spent ten, fifteen, maybe twenty years building expertise in one area. And somewhere along the way, that expertise became an identity. You're 'the nonprofit person.' You're 'the finance person.' You're 'the government person.' And when you try to step outside that identity, people, including yourself, get confused. They can't see you in a different context. You might hear things like, 'But you've always been in healthcare. Why would you go into tech?' As if the leadership, the strategic thinking, the stakeholder management you've been doing doesn't apply everywhere."</p>
+
+        <p>"<strong>The second dimension is The Prove-It-Again Tax.</strong> Research consistently shows that women of color are held to a higher standard of proof in the workplace. We have to demonstrate competence repeatedly in ways that our white male counterparts simply don't. Now, layer a career pivot on top of that. When you enter a new field, the prove-it-again bias intensifies. People don't just want to see that you can do the job. They want you to prove that someone from your background, your industry, your experience can do the job. You're not just proving yourself. You're proving a concept. And that's an unfair burden, but it's one we can prepare for."</p>
+
+        <p>"<strong>The third dimension is The Story Gap.</strong> This is the space between your actual qualifications and other people's ability to see those qualifications. When your resume says 'Director of Community Engagement at a National Nonprofit' and the job you want says 'VP of Client Success at a Tech Company,' there's a gap. Not a skills gap. A story gap. The skills are the same: stakeholder management, relationship building, strategic planning, team leadership. But if you can't tell a compelling story that bridges those two worlds, the hiring manager's brain will default to, 'She doesn't have the right background.' The story gap is what kills most pivots. And it's entirely within your control to close it."</p>
+
+        <p>"Here's what I want you to understand: none of these three challenges are about your actual ability. They're about perception. And perception is something you can influence, shape, and ultimately control. That's what the rest of this module is about."</p>
+    </div>
+
+    <div class="engagement-box">
+        <strong>Reflection Prompt:</strong> "Which of these three challenges resonates most with you right now? The Expertise Trap, where your identity feels locked to your current field? The Prove-It-Again Tax, where you already know the bar will be higher? Or The Story Gap, where you're not sure how to connect your experience to where you want to go? Name it. Knowing your biggest challenge tells you where to focus your energy."
+    </div>
+
+    <div class="transition-note">
+        <strong>Transition:</strong> "Now that we've named the challenge, let me give you the framework that's going to help you overcome it. This is the equation that successful pivoters use, whether they know it or not."
+    </div>
+
+    <!-- ============================================================ -->
+    <!-- SLIDE 5: Framework                                            -->
+    <!-- ============================================================ -->
+
+    <h1 class="page-break">Slide 5: Framework - The Pivot Equation</h1>
+    <span class="time-badge">5-6 minutes</span>
+
+    <h3>Complete Script</h3>
+    <div class="script-box">
+        <p>"Here's the framework that's going to guide us through the rest of this module. I call it The Pivot Equation: <strong>Transferable Skills + Compelling Story + Strategic Outreach = Confident Pivot.</strong>"</p>
+
+        <p>"Let's break down each component, because they each do something different."</p>
+
+        <p>"<strong>Transferable Skills</strong> are your foundation. These are the abilities, competencies, and knowledge that you carry from one context to another. The leadership you demonstrated managing a government agency team? That's transferable. The budget management you did at the nonprofit? Transferable. The cross-functional collaboration you led in corporate? Transferable. Most people vastly underestimate how transferable their skills are because they're so focused on the industry-specific language that wraps around those skills. We're going to strip away the industry jargon and get to the core competencies underneath."</p>
+
+        <p>"<strong>Compelling Story</strong> is your bridge. This is the narrative that connects your past to your future in a way that makes sense to other people. Without a compelling story, you're just a resume that doesn't match the job description. With a compelling story, you're a strategic professional making a deliberate, thoughtful move. The story is what turns confusion into curiosity, and curiosity into opportunity."</p>
+
+        <p>"<strong>Strategic Outreach</strong> is your engine. You can have the best skills in the world and the most polished story, but if the right people don't hear it, nothing happens. Strategic outreach means identifying the people who can open doors, finding authentic ways to reach them, and building relationships that lead to real opportunities. This is where informational interviews become your secret weapon."</p>
+
+        <p>"Now, here's the connection to Module 2 that I want to make explicit. Last month, we talked about visibility and win tracking. If you did your homework, and I hope you did, you have a visibility plan and a system for documenting your accomplishments. That work feeds directly into this module. Your documented wins are the evidence for your pivot story. Your visibility skills are the muscles you'll use for strategic outreach. Nothing we've built is wasted. It all compounds."</p>
+
+        <p>"Think of the Pivot Equation like a three-legged stool. If you have skills but no story, people won't understand your value. If you have a story but haven't done the outreach, no one will hear it. If you're doing outreach but haven't mapped your transferable skills, you won't have substance behind your pitch. You need all three. And by the end of this module, you'll have all three."</p>
+    </div>
+
+    <div class="engagement-box">
+        <strong>Reflection Prompt:</strong> "Thinking about these three components, where do you feel strongest right now, and where do you feel weakest? Are you confident in your skills but struggling to articulate your story? Do you have a great narrative but no idea who to tell it to? Rate yourself 1-10 on each: Transferable Skills awareness, Compelling Story readiness, and Strategic Outreach confidence. That self-assessment will help you prioritize where to focus your energy in this module."
+    </div>
+
+    <!-- ============================================================ -->
+    <!-- SLIDE 6: Deep Dive - Skills Travel                            -->
+    <!-- ============================================================ -->
+
+    <h1 class="page-break">Slide 6: Deep Dive - Skills Travel. Job Titles Don't.</h1>
+    <span class="time-badge">5-6 minutes</span>
+
+    <h3>Complete Script</h3>
+    <div class="script-box">
+        <p>"I want to start with a reframe that is going to change how you think about your entire career. Ready? <strong>Skills travel. Job titles don't.</strong> Let me say that again. Your skills go with you everywhere. Your job title stays behind."</p>
+
+        <p>"We have been conditioned to define ourselves by our titles. 'I'm a program director.' 'I'm a policy analyst.' 'I'm a marketing manager.' And those titles feel like our identity. But here's the problem: when you try to pivot, your title becomes a cage. Because the person reviewing your resume is looking at 'Program Director at a Youth Nonprofit' and thinking, 'That's not what we need.' They can't see past the title to the actual competencies underneath."</p>
+
+        <p>"So let me show you what I mean with some common limiting beliefs that women tell me all the time versus what's actually true."</p>
+
+        <p>"<strong>What You Might Think:</strong> 'I've only ever worked in nonprofits. Corporate won't take me seriously.' <strong>What's Actually True:</strong> You've managed multi-million-dollar programs with a fraction of the budget corporate uses. You've done more with less, navigated complex stakeholder environments, built coalitions across competing interests, and delivered measurable outcomes with limited resources. Corporate doesn't just want that. Corporate needs that."</p>
+
+        <p>"<strong>What You Might Think:</strong> 'I've been in government my whole career. The private sector moves too fast for me.' <strong>What's Actually True:</strong> You've navigated one of the most complex, bureaucratic, regulation-heavy environments that exists. You understand compliance, policy, stakeholder management at a scale that most private-sector people never experience. You've learned to get things done within constraints that would break most people. Speed is easy to learn. The ability to operate within complexity? That's rare and valuable."</p>
+
+        <p>"<strong>What You Might Think:</strong> 'I don't have the technical skills for a new industry.' <strong>What's Actually True:</strong> Technical skills can be learned in weeks or months. Leadership, strategic thinking, people management, stakeholder communication, the ability to drive results through ambiguity? Those take years to develop, and you already have them. The most sought-after skills in any industry are not technical. They're human. And that's your superpower."</p>
+
+        <p>"I need you to start seeing your career not as a collection of job titles but as a portfolio of capabilities. Because when you make that shift, suddenly the world opens up. You're not 'a nonprofit person trying to break into corporate.' You're a strategic leader with proven experience in stakeholder management, program design, and outcomes-driven execution who is bringing that expertise to a new context. Feel the difference?"</p>
+    </div>
+
+    <div class="transition-note">
+        <strong>Transition:</strong> "Now let's get specific. Let me show you exactly how to translate your skills from one context to another."
+    </div>
+
+    <!-- ============================================================ -->
+    <!-- SLIDE 7: Skill Translation                                    -->
+    <!-- ============================================================ -->
+
+    <h1>Slide 7: Skill Translation - Same Skill, New Language</h1>
+    <span class="time-badge">5-6 minutes</span>
+
+    <h3>Complete Script</h3>
+    <div class="script-box">
+        <p>"This is where we get tactical. One of the biggest mistakes people make when pivoting is using the language of their old world to describe their skills in a new world. If you come from nonprofits and you walk into a corporate interview talking about 'capacity building' and 'community engagement,' the hiring manager might smile and nod, but internally they're not connecting those terms to their needs. The skill is the same. The language needs to change."</p>
+
+        <p>"Let me walk you through some translations. <strong>Managing budgets</strong> in nonprofit becomes <strong>P&L management</strong> in corporate or <strong>grant and fund management</strong> in government. Same skill: financial stewardship and resource allocation. Different vocabulary. <strong>Leading teams</strong> becomes <strong>people management and talent development</strong> in corporate or <strong>coalition building and interagency coordination</strong> in government. Same skill: getting people aligned and moving toward a common goal."</p>
+
+        <p>"<strong>Running programs</strong> in nonprofit translates to <strong>product management or operations</strong> in corporate, or <strong>program administration</strong> in government. <strong>Fundraising and donor relations</strong> becomes <strong>business development and client acquisition</strong> in corporate, or <strong>stakeholder engagement and legislative affairs</strong> in government. <strong>Writing grants</strong> translates to <strong>proposal writing and RFP responses</strong> in corporate, or <strong>policy briefs and budget justifications</strong> in government."</p>
+
+        <p>"Do you see what's happening? The underlying competency is identical. What changes is the wrapper, the context, the vocabulary. And this is a skill you can learn. In fact, you're going to practice it in just a few minutes."</p>
+
+        <p>"Here's a strategy that works beautifully: go find three to five job descriptions for the role you're targeting. Read them carefully. Highlight the key terms, the verbs, the competencies they list. Now look at your own experience and translate your accomplishments into that language. You're not lying. You're not exaggerating. You're code-switching, and as women of color, we are already experts at code-switching. We've been doing it our whole careers. This is the same skill applied to career positioning."</p>
+
+        <p>"The women I coach who pivot most successfully are the ones who become bilingual. They can describe their experience in the language of their old world and the language of their new world. And when they're in a conversation with someone in the new world, they speak that language. It's not about being someone you're not. It's about translating who you are into terms that people can understand and value."</p>
+    </div>
+
+    <div class="engagement-box">
+        <strong>Reflection Prompt:</strong> "Think about one accomplishment from your current or most recent role. How would you describe it in your current industry's language? Now, how would you describe the exact same accomplishment to someone in the industry or role you're targeting? If you can't do the translation yet, that's okay. That's exactly what the next activity is for."
+    </div>
+
+    <!-- ============================================================ -->
+    <!-- SLIDE 8: Activity - Transferable Skills Inventory             -->
+    <!-- ============================================================ -->
+
+    <h1 class="page-break">Slide 8: Activity - Your Transferable Skills Inventory</h1>
+    <span class="time-badge">15-20 minutes</span>
+
+    <h3>Complete Script</h3>
+    <div class="script-box">
+        <p>"Alright, it's time to do the work. This is one of the most important exercises in this entire module, and I want you to give it your full attention. Go ahead and pause the video if you need to and pull up the <strong>Transferable Skills Inventory</strong> worksheet. If you haven't downloaded it yet, it's available on the Skool platform."</p>
+
+        <p>"Here's what you're going to do. The worksheet has six categories, and I want you to go through each one and list every skill you have in that area. Don't be modest. Don't filter. Don't tell yourself, 'That doesn't count.' If you've done it, it counts."</p>
+
+        <p>"<strong>Category 1: Technical Skills.</strong> These are the hard skills, the functional expertise. Budget management. Data analysis. Project management. Compliance. Policy writing. Technology platforms you've used. Certifications you hold. Don't limit yourself to what's on your current job description. Think about volunteer work, side projects, board positions, anything where you've used a technical skill."</p>
+
+        <p>"<strong>Category 2: Leadership Skills.</strong> Team management. Mentoring. Decision-making under pressure. Change management. Strategic planning. Conflict resolution. Think about the times you led without a title, the times you stepped up when no one else would. Those count too."</p>
+
+        <p>"<strong>Category 3: Communication Skills.</strong> Presenting to executives. Writing proposals. Facilitating meetings. Public speaking. Storytelling. Translating complex ideas for non-expert audiences. Negotiation. Persuasion. Think about every context where your communication skills made a difference."</p>
+
+        <p>"<strong>Category 4: Strategic Thinking Skills.</strong> Problem-solving. Analysis. Innovation. Planning. Risk assessment. Vision-setting. Think about the times you saw around corners, the times you identified opportunities others missed, the times you turned a problem into a strategy."</p>
+
+        <p>"<strong>Category 5: Relationship Building Skills.</strong> Networking. Partnership development. Client management. Community engagement. Cross-functional collaboration. Stakeholder management. Think about every relationship you've built that created value, every partnership you've nurtured, every coalition you've assembled."</p>
+
+        <p>"<strong>Category 6: Industry Knowledge.</strong> This one is interesting because it includes both your deep knowledge and your transferable knowledge. What do you know about your industry that applies elsewhere? Regulatory environments. Market dynamics. Customer behavior. Cultural competence. Equity and inclusion practices. Your specialized knowledge is often more transferable than you think."</p>
+
+        <p>"Take 15 to 20 minutes to complete this inventory. Be thorough. When you think you're done, go back through each category and add three more items. I promise they're there. I'll be here when you're ready to move on."</p>
+    </div>
+
+    <div class="engagement-box">
+        <strong>Reflection Prompt:</strong> "After completing your inventory, look at the full list. How does it feel to see all of that on paper? Most women I work with are genuinely surprised by how long their list is. Circle the five skills you believe are most valuable to the role or industry you're targeting. Those five skills are the foundation of your pivot story."
+    </div>
+
+    <div class="transition-note">
+        <strong>Transition:</strong> "Now that you can see how much you bring to the table, let's talk about owning that with full confidence. Because the world will try to make you doubt it."
+    </div>
+
+    <!-- ============================================================ -->
+    <!-- SLIDE 9: Quote                                                -->
+    <!-- ============================================================ -->
+
+    <h1>Slide 9: Quote</h1>
+    <span class="time-badge">2-3 minutes</span>
+
+    <h3>Complete Script</h3>
+    <div class="script-box">
+        <p>"I want you to sit with this for a moment: <strong>'You are not starting over. You are starting from experience.'</strong>"</p>
+
+        <p>"I repeat this to every woman I coach who is navigating a pivot, because the fear of starting over is the single biggest thing that keeps talented people stuck. We tell ourselves, 'If I leave this career, I'll be back at entry level. I'll lose my seniority. I'll lose my credibility. I'll be a beginner again.' And that fear is so powerful that it keeps us in roles and industries that no longer serve us."</p>
+
+        <p>"But here's the truth: you cannot start over. It's literally impossible. Everything you've learned, every relationship you've built, every challenge you've navigated, every skill you've developed, that's all still there. It doesn't disappear because you change your job title. You're not erasing your history. You're building on it."</p>
+
+        <p>"Think about it this way. If you move to a new city, do you forget how to cook? Do you lose your ability to make friends? Do you suddenly not know how to navigate public transportation? Of course not. You bring all of that with you and you apply it in a new context. A career pivot is the same thing. You're bringing everything you are to a new context. You're not starting from zero. You're starting from a position of strength."</p>
+
+        <p>"I want you to write this quote somewhere you'll see it every day for the next month. Put it on your bathroom mirror, your laptop, your phone lock screen. Because the voices of doubt will come, and when they do, this is your answer."</p>
+    </div>
+
+    <!-- ============================================================ -->
+    <!-- SLIDE 10: WOC Focus                                           -->
+    <!-- ============================================================ -->
+
+    <h1 class="page-break">Slide 10: WOC Focus - Navigating the 'Prove It Again' Bias</h1>
+    <span class="time-badge">6-7 minutes</span>
+
+    <h3>Complete Script</h3>
+    <div class="script-box">
+        <p>"Now I want to get into something that's specific to our experience as women of color. Because while career pivots are challenging for everyone, they come with an additional layer of complexity for us. And I'm not going to pretend otherwise, because you deserve honesty, not platitudes."</p>
+
+        <p>"Let me name four challenges that women of color face when pivoting that our white counterparts often don't."</p>
+
+        <p>"<strong>The first is The Assumption Gap.</strong> When a white man pivots from finance to tech, people assume he'll figure it out. 'He's smart, he's driven, he'll learn.' When a woman of color makes the same pivot, the assumption flips. Instead of assuming competence, people assume risk. 'Does she really have the skills? Can she handle this environment? Is this a good fit?' You're not given the benefit of the doubt. You're given the burden of proof. And that burden starts before you even get the interview."</p>
+
+        <p>"<strong>The second is Credibility Reset.</strong> You spent years building credibility in your current field. People know your name, they know your work, they trust your judgment. When you pivot, all of that social capital can feel like it evaporates. You walk into a new industry and nobody knows you. Nobody has seen your track record. And because of how bias works, you don't get the automatic credibility that comes with simply walking in the door. You have to earn it from scratch, often faster and more thoroughly than your peers."</p>
+
+        <p>"<strong>The third is Network Penalty.</strong> Your professional network is likely concentrated in your current industry. When you pivot, you're moving to a space where you may not know anyone. And for women of color, building new professional networks comes with additional barriers. Networking events aren't always welcoming. Industry conferences can feel exclusionary. The informal 'grab a beer after work' culture that builds so many careers may not be accessible or comfortable for us. So we have to be more intentional, more strategic, and more creative about how we build relationships in a new space."</p>
+
+        <p>"<strong>The fourth is The Confidence Tax.</strong> This one is internal, and it's real. After years of navigating bias, microaggressions, and having to prove yourself repeatedly, the idea of voluntarily putting yourself in a new environment where you'll have to do it all over again can feel exhausting. The confidence tax is the mental and emotional cost of knowing that the bar will be higher for you. It's the little voice that says, 'Why would you leave a place where you've already proven yourself to go somewhere where you'll have to fight for respect all over again?'"</p>
+
+        <p>"Here's what I want you to know: naming these challenges is not about scaring you. It's about preparing you. Because when you can see the obstacle clearly, you can build a strategy to navigate around it. And the strategy we're building in this module, your transferable skills inventory, your pivot story, your outreach plan, is specifically designed to address these challenges. Your skill inventory proves your competence before anyone questions it. Your pivot story closes the assumption gap before anyone can fill it with doubt. And your strategic outreach builds the network in the new space before you need it."</p>
+
+        <p>"We don't have the luxury of winging this. But we do have the power of preparation. And preparation, as always, is our superpower."</p>
+    </div>
+
+    <div class="engagement-box">
+        <strong>Reflection Prompt:</strong> "Which of these four challenges feels most relevant to your situation right now? And more importantly, how has navigating similar challenges in the past actually made you stronger? Because here's what I know: every time you've faced the prove-it-again bias and succeeded, you've built a muscle that your peers don't have. That resilience is itself a transferable skill."
+    </div>
+
+    <div class="transition-note">
+        <strong>Transition:</strong> "So how do we fight back against these biases? We own the narrative. We tell our story before someone else tells it for us."
+    </div>
+
+    <!-- ============================================================ -->
+    <!-- SLIDE 11: Strategy                                            -->
+    <!-- ============================================================ -->
+
+    <h1>Slide 11: Strategy - Own Your Narrative Before Someone Else Does</h1>
+    <span class="time-badge">5-6 minutes</span>
+
+    <h3>Complete Script</h3>
+    <div class="script-box">
+        <p>"Here's a principle I want you to internalize: <strong>If you don't tell your story, someone else will. And they'll probably get it wrong.</strong> When you're pivoting, the default narrative that people construct about you is usually not flattering. They see a resume that doesn't match their expectations and they fill in the blanks with assumptions. 'She couldn't cut it in her old field.' 'She's having a quarter-life crisis.' 'She doesn't know what she wants.' None of those are true, but in the absence of your story, those assumptions take root."</p>
+
+        <p>"Let me show you the contrast between what others might assume about your pivot and what your story should actually communicate."</p>
+
+        <p>"<strong>What Others Might Assume:</strong> 'She's running away from something.' <strong>What Your Story Should Say:</strong> 'I'm running toward something. I've built a strong foundation of skills and now I'm strategically applying them where they can create the most impact.' See the difference? One frames you as reactive and uncertain. The other frames you as intentional and strategic."</p>
+
+        <p>"<strong>What Others Might Assume:</strong> 'She'll have to start at the bottom.' <strong>What Your Story Should Say:</strong> 'I bring ten years of leadership experience that directly translates to this role. I'm not looking to start over. I'm looking to build on what I've already accomplished.' You're setting the expectation that you're a senior professional, not a junior one who happens to be new to the industry."</p>
+
+        <p>"<strong>What Others Might Assume:</strong> 'Her background doesn't fit.' <strong>What Your Story Should Say:</strong> 'My background gives me a perspective that most people in this industry don't have. I'm not a liability because I come from a different sector. I'm an asset because I bring fresh thinking, diverse experience, and a track record of driving results in complex environments.'"</p>
+
+        <p>"The narrative you craft isn't just for interviews. It's for every conversation: networking events, LinkedIn messages, coffee chats, even the way you introduce yourself at a dinner party. Your pivot story should be so polished and so natural that you can deliver it in 90 seconds or 15 minutes, depending on the context. And that's exactly what we're building next."</p>
+    </div>
+
+    <!-- ============================================================ -->
+    <!-- SLIDE 12: Framework - The Pivot Story Script                  -->
+    <!-- ============================================================ -->
+
+    <h1 class="page-break">Slide 12: Framework - The Pivot Story Script</h1>
+    <span class="time-badge">6-7 minutes</span>
+
+    <h3>Complete Script</h3>
+    <div class="script-box">
+        <p>"Alright, here's the framework I use with every client who's navigating a pivot. I call it the <strong>Pivot Story Script</strong>, and it has four parts: The Hook, The Bridge, The Evidence, and The Vision. When you put these four parts together, you have a story that's compelling, credible, and confident."</p>
+
+        <p>"<strong>Part 1: The Hook.</strong> This is your opening. It's the first 15-20 seconds, and its job is to grab attention and create curiosity. A great hook usually starts with a surprising connection or a bold statement. Something like: 'Most people see nonprofit and corporate as two different worlds. I've spent the last twelve years proving they're not.' Or: 'I built my career at the intersection of policy and people, and I've realized that intersection exists in every industry.' The hook is not a summary of your resume. It's an invitation for the listener to lean in and want to hear more."</p>
+
+        <p>"<strong>Part 2: The Bridge.</strong> This is where you connect your past to your future. The bridge explains why your previous experience is relevant, not in spite of being different, but because it's different. This is where your transferable skills inventory becomes gold. You're taking the competencies you identified and explicitly linking them to the needs of the new role or industry. The bridge sounds like: 'In my role as Director of Programs, I managed a portfolio of fifteen initiatives with a combined budget of four million dollars. I built performance metrics, led a team of twelve, and drove a 40% improvement in outcomes over three years. Those are the same skills that drive success in operations leadership, and I'm ready to bring them to a new context.'"</p>
+
+        <p>"<strong>Part 3: The Evidence.</strong> This is where you prove it. Stories beat statistics, but having both is even better. Pick two or three specific accomplishments that demonstrate your transferable skills in action. These should be concrete, measurable, and relevant to where you're going. 'When our organization faced a funding crisis, I led a restructuring that preserved 90% of our programs while reducing costs by 25%. That required the same analytical rigor, stakeholder management, and strategic thinking that drives turnaround situations in any industry.' Evidence is what turns your story from a nice narrative into a credible case."</p>
+
+        <p>"<strong>Part 4: The Vision.</strong> This is where you paint a picture of the future. You're not just explaining why you're leaving. You're explaining why you're arriving. What excites you about the new direction? What impact do you want to have? How does this pivot serve not just your career but the mission you care about? The vision sounds like: 'I'm passionate about using my experience in community-centered leadership to help technology companies build products that actually serve diverse populations. I've seen the gap between what tech builds and what communities need, and I want to be the person who bridges it.' The vision gives the listener a reason to root for you."</p>
+
+        <p>"When you put all four parts together, you have a story that's approximately 90 seconds to two minutes long. Short enough for a networking event. Detailed enough for an interview. Compelling enough to change someone's mind about what a career pivot looks like."</p>
+
+        <p>"The key to making this work is practice. You need to say your story out loud at least ten times before you deliver it to anyone who matters. Record yourself. Listen back. Refine. The more natural it feels coming out of your mouth, the more powerful it will be."</p>
+    </div>
+
+    <div class="engagement-box">
+        <strong>Reflection Prompt:</strong> "As you listen to this framework, which part feels most challenging for you? Is it the Hook, creating that initial intrigue? The Bridge, connecting your past to your future? The Evidence, choosing your strongest proof points? Or The Vision, articulating where you're headed? Whatever feels hardest is where you should spend the most time in the upcoming activity."
+    </div>
+
+    <!-- ============================================================ -->
+    <!-- SLIDE 13: Examples - Pivot Stories in Action                   -->
+    <!-- ============================================================ -->
+
+    <h1>Slide 13: Examples - Pivot Stories in Action</h1>
+    <span class="time-badge">6-7 minutes</span>
+
+    <h3>Complete Script</h3>
+    <div class="script-box">
+        <p>"Let me bring this framework to life with three real examples. These are composites based on women I've coached, and I want you to listen for how each one uses the four-part structure."</p>
+
+        <p>"<strong>Example 1: Nonprofit to Corporate.</strong> Meet Angela. She spent fifteen years in the nonprofit sector, most recently as VP of Programs at a national education nonprofit. She's pivoting to a Director of Client Success role at an ed-tech company. Here's her story: 'For fifteen years, I've been obsessed with one question: how do you create programs that actually change people's lives? At my nonprofit, I led a team of thirty and managed a portfolio serving 50,000 students annually. I built the data infrastructure to measure outcomes, negotiated partnerships with twelve school districts, and grew our program impact by 60% in three years. What I've realized is that ed-tech companies are asking the same question I've been answering my whole career. They just have different tools. I'm excited to bring my deep understanding of what educators and students actually need to a company that's building the technology to deliver it at scale.' Notice how she never apologized for coming from nonprofit. She positioned it as an advantage."</p>
+
+        <p>"<strong>Example 2: Corporate to Government.</strong> Meet Priya. She spent twelve years in corporate finance at a Fortune 500 company, rising to Senior Director. She's pivoting to a Deputy Director role at a state economic development agency. Her story: 'I've spent my career analyzing what makes organizations grow. At my company, I led financial planning for a three-billion-dollar business unit and built the forecasting models that informed our expansion into four new markets. But over the past few years, I've realized that I want to apply that same analytical rigor to something bigger than shareholder returns. I want to help communities grow. Economic development requires the same skills: financial analysis, strategic planning, stakeholder management, and the ability to make complex decisions with imperfect data. The difference is the impact. And I'm ready for that difference.' She didn't frame leaving corporate as a step down. She framed it as a step up in purpose."</p>
+
+        <p>"<strong>Example 3: Government to Tech.</strong> Meet Keisha. She spent ten years in federal government, most recently as a GS-14 program manager at a health agency. She's pivoting to a Product Manager role at a health-tech startup. Her story: 'I've spent a decade navigating one of the most complex environments in the world: federal government health programs. I managed a program that served two million beneficiaries, coordinated across seven agencies, and delivered technology implementations under some of the most rigorous compliance requirements imaginable. What I learned is that building great products, whether it's a government program or a tech platform, comes down to the same thing: understanding user needs deeply, building cross-functional consensus, and iterating based on data. I'm bringing that discipline to health tech because I've seen from the inside what the healthcare system needs, and I want to help build it.' She turned government experience, which tech companies often discount, into a compelling differentiator."</p>
+
+        <p>"In each of these examples, the woman isn't running from something. She's running toward something. She's not apologizing for her background. She's leveraging it. She's not asking for permission to be taken seriously. She's demonstrating why she should be. That's the energy I want you to bring to your own story."</p>
+    </div>
+
+    <div class="transition-note">
+        <strong>Transition:</strong> "Now it's your turn. Let's write your pivot story."
+    </div>
+
+    <!-- ============================================================ -->
+    <!-- SLIDE 14: Activity - Write Your Pivot Story                   -->
+    <!-- ============================================================ -->
+
+    <h1 class="page-break">Slide 14: Activity - Write Your Pivot Story</h1>
+    <span class="time-badge">15-20 minutes</span>
+
+    <h3>Complete Script</h3>
+    <div class="script-box">
+        <p>"Okay, this is your moment. Go ahead and pull up the <strong>Pivot Storytelling Script Template</strong> from your worksheets. If you haven't downloaded it, pause and grab it from the Skool platform. This is a fillable template that walks you through each of the four parts we just covered."</p>
+
+        <p>"I'm going to give you 15 to 20 minutes for this exercise. And here's my advice: don't try to make it perfect on the first pass. Write a rough draft. Get the ideas down. You can polish later. The goal right now is to have a complete story, all four parts, even if the language isn't exactly where you want it yet."</p>
+
+        <p>"Start with <strong>The Hook.</strong> What's the surprising connection or bold statement that opens your story? Think about the thread that runs through your entire career. What's the mission, the passion, the through-line that connects your past to your future? That's usually where your hook lives."</p>
+
+        <p>"Next, write <strong>The Bridge.</strong> Look at your Transferable Skills Inventory. Pick the three to five skills that are most relevant to where you're going. Now write a sentence or two that explicitly connects each skill to the new context. Don't assume the listener will make the connection. Make it for them."</p>
+
+        <p>"Then, draft <strong>The Evidence.</strong> Choose two or three accomplishments that demonstrate your transferable skills in action. Use numbers wherever possible. 'I managed a team of...' 'I grew revenue by...' 'I reduced costs by...' 'I served a population of...' Numbers make your story concrete and credible."</p>
+
+        <p>"Finally, write <strong>The Vision.</strong> Why does this pivot matter to you? What excites you about the new direction? What impact do you want to have? This is where your passion comes through. Let the listener feel your energy and your conviction."</p>
+
+        <p>"When you're done, read it out loud. All the way through. Does it flow? Does it feel authentic? Does it sound like you, not like a corporate press release? If not, revise. The best pivot stories are conversational, not scripted. They feel like you're telling a friend about an exciting chapter in your life, not reading from a teleprompter."</p>
+
+        <p>"Take your time with this. I'll be here when you're ready."</p>
+    </div>
+
+    <div class="engagement-box">
+        <strong>Reflection Prompt:</strong> "Once you've written your draft, I want you to read it aloud and time yourself. Aim for 90 seconds to two minutes. If it's too long, cut the weakest evidence point. If it's too short, add more specificity. Then ask yourself: if I were the hiring manager, would this story make me want to learn more? If the answer is yes, you're on the right track. Consider sharing your draft in the Skool community for feedback from the group."
+    </div>
+
+    <!-- ============================================================ -->
+    <!-- SLIDE 15: Strategic Outreach                                  -->
+    <!-- ============================================================ -->
+
+    <h1 class="page-break">Slide 15: Strategic Outreach - The Informational Interview</h1>
+    <span class="time-badge">5-6 minutes</span>
+
+    <h3>Complete Script</h3>
+    <div class="script-box">
+        <p>"You've got your skills mapped. You've got your story drafted. Now let's talk about the third leg of the Pivot Equation: strategic outreach. And the most powerful tool in your outreach toolkit is the <strong>informational interview.</strong>"</p>
+
+        <p>"Let me tell you why informational interviews work so well for career pivoters. When you apply for a job online, you're a piece of paper. A resume. A collection of keywords that may or may not match an algorithm. You have zero opportunity to tell your story, to make a personal connection, or to demonstrate the intangible qualities that make you exceptional. But in an informational interview, you're a human being sitting across from another human being. You can share your story. You can ask questions. You can build rapport. You can demonstrate your curiosity, your strategic thinking, and your authentic interest in the field. That's why studies show that over 80% of jobs are filled through networking, not job boards."</p>
+
+        <p>"<strong>Who should you target?</strong> Look for three types of people. First, people who are currently in the role you want. They can tell you what the job actually looks like day-to-day, what skills matter most, and what the hiring process is like. Second, people who have successfully pivoted into the field you're targeting. They understand exactly what you're going through and can share what worked and what didn't. Third, hiring managers and recruiters in your target industry. They can tell you what they look for, what concerns they have about career changers, and how to address those concerns."</p>
+
+        <p>"<strong>How do you ask?</strong> Most people overthink this. They agonize over the perfect message, draft and redraft, and then never send it. Here's what I want you to know: people generally want to help. Especially if you approach them with genuine curiosity and respect for their time. The ask doesn't need to be complicated. It needs to be clear, brief, and easy to say yes to. We're going to cover the exact formula in the next slide."</p>
+
+        <p>"One thing I'll say specifically for women of color: your network may not naturally extend into the field you're targeting. That's okay. That's expected. The informational interview is how you build that network. You're not supposed to already know everyone. You're creating connections intentionally and strategically. And many people, when they hear your story, will want to help you. Don't underestimate the power of your narrative to open doors."</p>
+    </div>
+
+    <div class="transition-note">
+        <strong>Transition:</strong> "Let me give you the exact formula for reaching out."
+    </div>
+
+    <!-- ============================================================ -->
+    <!-- SLIDE 16: Tool - The Outreach Formula                         -->
+    <!-- ============================================================ -->
+
+    <h1>Slide 16: Tool - The Outreach Formula</h1>
+    <span class="time-badge">4-5 minutes</span>
+
+    <h3>Complete Script</h3>
+    <div class="script-box">
+        <p>"Here's the formula I teach every one of my clients for outreach messages, whether it's email, LinkedIn, or any other platform. It has four parts: <strong>Compliment, Context, Ask, Easy Out.</strong>"</p>
+
+        <p>"<strong>The Compliment</strong> is genuine and specific. Not 'I admire your work.' That's generic and forgettable. Instead: 'I read your article on scaling health-tech programs in underserved communities, and your point about community-centered design really resonated with me.' Or: 'I noticed your career path from nonprofit program management to product leadership, and I was genuinely inspired by that trajectory.' The compliment shows you've done your homework and you're reaching out to this specific person for a reason, not mass-messaging strangers."</p>
+
+        <p>"<strong>The Context</strong> is who you are and why you're reaching out. Keep it brief: 'I'm a senior leader with fifteen years in nonprofit program management, and I'm exploring a transition into the ed-tech space.' Notice: you're not apologizing, you're not over-explaining, and you're not asking for a job. You're simply providing context."</p>
+
+        <p>"<strong>The Ask</strong> is specific and time-bounded. Not 'Can I pick your brain?' That's vague and demanding. Instead: 'Would you be open to a 20-minute conversation about your experience in the industry? I'd love to hear your perspective on what skills matter most and how to position my background effectively.' Twenty minutes is key. It's short enough that it's easy to say yes. It shows you respect their time. And honestly, most conversations end up going longer because the person gets engaged, but starting with a modest ask lowers the barrier."</p>
+
+        <p>"<strong>The Easy Out</strong> is what makes the message feel low-pressure. End with something like: 'I completely understand if your schedule doesn't allow it. Either way, I appreciate your work and the path you've carved.' This gives them permission to decline without guilt. Counterintuitively, including an easy out actually increases your response rate because it makes the ask feel gracious rather than entitled."</p>
+
+        <p>"Let me give you a complete example: 'Hi Sarah, I recently listened to your panel at the Women in Tech summit and was struck by your insights on building inclusive product teams. I'm a senior leader with twelve years in government program management, and I'm exploring a transition into product leadership in the health-tech space. Would you be open to a brief 20-minute conversation? I'd love to hear your perspective on how to best position my background. I completely understand if timing doesn't work. Regardless, thank you for the thought leadership you share.' That's it. Clean, respectful, specific. Send ten of those and you'll get five to seven responses. I've seen it happen hundreds of times."</p>
+    </div>
+
+    <div class="engagement-box">
+        <strong>Reflection Prompt:</strong> "Think about one person you'd like to reach out to for an informational interview. Using the Compliment-Context-Ask-Easy Out formula, draft a message to them right now. You don't have to send it today, but having a draft ready removes the biggest barrier, which is the blank page."
+    </div>
+
+    <!-- ============================================================ -->
+    <!-- SLIDE 17: Tool - Power Questions                              -->
+    <!-- ============================================================ -->
+
+    <h1 class="page-break">Slide 17: Tool - Power Questions for Informational Interviews</h1>
+    <span class="time-badge">4-5 minutes</span>
+
+    <h3>Complete Script</h3>
+    <div class="script-box">
+        <p>"Once you've landed the informational interview, the next question is: what do you actually ask? Most people show up with generic questions that waste both people's time. 'What's a typical day like?' 'How did you get into this field?' Those are fine, but they don't give you strategic intelligence. Let me give you four power questions that will transform your informational interviews from polite conversations into career-advancing strategy sessions."</p>
+
+        <p>"<strong>Power Question 1: 'What skills or experiences surprised you as being most valuable in this role, that you wouldn't have expected coming in?'</strong> This question is brilliant because it reveals the hidden requirements of the job, the things that aren't in the job description but actually matter. The answer often uncovers transferable skills you already have that you didn't know were relevant. It also shows the person that you're thinking strategically about the role, not just superficially."</p>
+
+        <p>"<strong>Power Question 2: 'If you were making this transition today, knowing what you know now, what would you do differently?'</strong> This gives you a shortcut. You get to learn from their mistakes without making them yourself. People love this question because it invites them to reflect and share wisdom. And the answers are always incredibly practical and specific."</p>
+
+        <p>"<strong>Power Question 3: 'What concerns might a hiring manager have about someone with my background, and how would you suggest I address them?'</strong> This is a direct question about objection handling, and it's gold. You're essentially asking, 'Tell me where the resistance will be so I can prepare for it.' The answer tells you exactly what to anticipate and how to frame your story to preempt those concerns. It also demonstrates a level of self-awareness and strategic maturity that impresses people."</p>
+
+        <p>"<strong>Power Question 4: 'Is there anyone else you'd recommend I speak with as I explore this transition?'</strong> This is how one informational interview becomes three. Every conversation should end with this question because it expands your network exponentially. And when you reach out to the new person, you can say, 'Sarah recommended I connect with you,' which instantly gives you credibility and warms the introduction."</p>
+
+        <p>"Bring these four questions to every informational interview along with two or three questions specific to the person's experience. Go into the <strong>Informational Interview Prep Guide</strong> worksheet and build your question list before each conversation. Preparation is the difference between a mediocre coffee chat and a career-changing conversation."</p>
+    </div>
+
+    <div class="transition-note">
+        <strong>Transition:</strong> "Now let's put all of this together and practice. Because knowing the theory isn't enough. You need to rehearse the conversations you're actually going to have."
+    </div>
+
+    <!-- ============================================================ -->
+    <!-- SLIDE 18: Activity - Role-Play                                -->
+    <!-- ============================================================ -->
+
+    <h1>Slide 18: Activity - Role-Play: The Pivot Conversation</h1>
+    <span class="time-badge">20-25 minutes</span>
+
+    <h3>Complete Script</h3>
+    <div class="script-box">
+        <p>"Alright, this is where we practice. Pull up the <strong>Role-Play Prompt Cards</strong> worksheet. We're going to work through four scenarios that represent conversations you will actually have during your pivot. For each one, I want you to write out your response using the tools we've built: your transferable skills, your pivot story, and your outreach language."</p>
+
+        <p>"<strong>Scenario 1: The Skeptic.</strong> Imagine you're in an interview and the hiring manager looks at your resume and says: 'I see you've spent your entire career in the nonprofit sector. This is a corporate environment. What makes you think you can make this transition?' This is the prove-it-again bias in action. Your job is not to get defensive. Your job is to deliver your pivot story with confidence and evidence. Use your Bridge and your Evidence. Connect your nonprofit experience directly to what they need. And don't apologize for where you come from. Your response should sound something like: 'That's a great question, and it's one I've thought about carefully. Here's what I know...' and then you go into your story. Practice this one until you can deliver it without flinching."</p>
+
+        <p>"<strong>Scenario 2: The Gatekeeper.</strong> You're talking to a recruiter who says: 'We're really looking for someone with industry experience. I'm not sure your background is the right fit.' This is a filtering conversation, and if you don't handle it well, you never get to the hiring manager. Your response needs to acknowledge their concern without accepting it. Something like: 'I understand the preference for industry experience, and I want to share why my background might actually be a stronger fit than a traditional candidate...' Then deliver your Hook and Bridge. Turn the objection into an opportunity. Show them you bring something a traditional candidate doesn't."</p>
+
+        <p>"<strong>Scenario 3: The Networking Event.</strong> Someone at a professional event asks: 'So what do you do?' This is the casual version, and it's where most people fumble. They either give their current job title, which doesn't reflect where they're going, or they give a long, rambling explanation that confuses the listener. You need a 30-second version of your pivot story. Just the Hook and a brief Vision. 'I'm a strategic leader transitioning from government program management into health-tech product leadership. I spent a decade building programs that served millions of people, and now I'm excited to bring that impact orientation to technology.' Short. Clear. Interesting. It invites the follow-up question, 'Tell me more,' which is exactly what you want."</p>
+
+        <p>"<strong>Scenario 4: The Interview.</strong> The interviewer says: 'Walk me through your career and tell me why you're interested in this role.' This is the full story moment. You're delivering all four parts: Hook, Bridge, Evidence, Vision. Take two minutes. Be conversational. Make eye contact with the camera if it's virtual. And end with energy and enthusiasm. The interviewer should walk away thinking, 'That makes perfect sense. I can see why she'd be great here.'"</p>
+
+        <p>"Take 20 to 25 minutes to write out your responses for all four scenarios. Then, and this is important, practice saying them out loud. If you can, record yourself on your phone and listen back. Notice where you sound confident and where you sound uncertain. Notice where the story flows and where it stumbles. Refine. Repeat. The more you practice, the more natural it becomes."</p>
+    </div>
+
+    <div class="engagement-box">
+        <strong>Reflection Prompt:</strong> "After working through these scenarios, which one felt most uncomfortable? That's the one you need to practice the most. Consider finding a partner in the Skool community to do a mock conversation. Sometimes hearing your story reflected back by another person reveals strengths and gaps you can't see on your own."
+    </div>
+
+    <!-- ============================================================ -->
+    <!-- SLIDE 19: Action Plan - Your Target List                      -->
+    <!-- ============================================================ -->
+
+    <h1 class="page-break">Slide 19: Action Plan - Your Target List</h1>
+    <span class="time-badge">8-10 minutes</span>
+
+    <h3>Complete Script</h3>
+    <div class="script-box">
+        <p>"We've built the skills inventory, crafted the story, and practiced the conversations. Now it's time to turn all of that into action. And action starts with a target list."</p>
+
+        <p>"I want you to create a list of five to ten opportunities you're going to pursue. For each one, you need five pieces of information: <strong>Target Role, Company, Key Contact, Skill Match, and Outreach Status.</strong>"</p>
+
+        <p>"<strong>Target Role</strong> is the specific job title or type of role you're aiming for. Not 'something in tech.' Something like: 'Product Manager at a health-tech company' or 'Director of Programs at a corporate foundation.' Be specific because specificity drives action."</p>
+
+        <p>"<strong>Company</strong> is the organization. Do your research. Which companies or organizations are doing work that excites you? Which ones have a culture that would value what you bring? Which ones have hired career changers before? Look at their LinkedIn pages. Read their recent news. Understand their mission and challenges."</p>
+
+        <p>"<strong>Key Contact</strong> is the person you're going to reach out to at each organization. This could be a hiring manager, someone in the role you're targeting, a recruiter, or anyone who can give you insight into the opportunity. Use LinkedIn to find these people. Look for alumni connections, shared group memberships, or second-degree connections who can introduce you."</p>
+
+        <p>"<strong>Skill Match</strong> is how your transferable skills align with this specific role. For each opportunity, identify the top three skills from your inventory that are most relevant. This helps you customize your pivot story for each conversation rather than delivering a generic version."</p>
+
+        <p>"<strong>Outreach Status</strong> is where you track your progress. Have you identified the contact? Drafted the message? Sent it? Received a response? Scheduled a conversation? Had the meeting? Followed up? Tracking this keeps you accountable and helps you see momentum building."</p>
+
+        <p>"Here's the math that makes this work: if you reach out to ten people using the formula we discussed, you'll likely get five to seven responses. Of those, three to four will lead to informational interviews. Each of those conversations will generate one to two additional referrals. Within a month, you've had eight to twelve meaningful conversations in your target industry. That's how pivots happen. Not through one magic application. Through a network of conversations that build understanding, credibility, and opportunity."</p>
+
+        <p>"Take 8 to 10 minutes to start building your target list. You don't need to complete all ten right now, but get at least five down with as much detail as you can. This is your roadmap for the next 30 days."</p>
+    </div>
+
+    <div class="engagement-box">
+        <strong>Reflection Prompt:</strong> "As you build your target list, notice how you feel. If it feels exciting and energizing, you're on the right track. If it feels overwhelming, start smaller. Commit to reaching out to just three people this month. Three is enough to build momentum. You can always expand later."
+    </div>
+
+    <!-- ============================================================ -->
+    <!-- SLIDE 20: Quote                                               -->
+    <!-- ============================================================ -->
+
+    <h1>Slide 20: Quote</h1>
+    <span class="time-badge">2-3 minutes</span>
+
+    <h3>Complete Script</h3>
+    <div class="script-box">
+        <p>"Let me leave you with this: <strong>'A pivot is not a retreat. It is a strategic advance toward the career you actually want.'</strong>"</p>
+
+        <p>"I need you to hear this, especially if there's a part of you that still feels like changing direction means giving up. It doesn't. A pivot means you have enough self-awareness to recognize when a path no longer serves you. It means you have enough courage to step into uncertainty. It means you have enough vision to see what's possible beyond what's comfortable."</p>
+
+        <p>"Think about the most successful leaders you admire. How many of them followed a perfectly straight career path? Almost none. The most interesting, most impactful leaders are the ones who zigzagged. Who brought unexpected perspectives to new challenges. Who weren't afraid to reinvent themselves. That's what you're doing. You're not retreating. You're advancing. Strategically. Confidently. On your terms."</p>
+
+        <p>"And here's what makes your pivot different from most: you're not winging it. You have a transferable skills inventory that proves your value. You have a pivot story that controls the narrative. You have an outreach strategy that opens doors. And you have a community of women who are on similar journeys, cheering you on. That's not a retreat. That's a movement."</p>
+    </div>
+
+    <!-- ============================================================ -->
+    <!-- SLIDE 21: Summary                                             -->
+    <!-- ============================================================ -->
+
+    <h1 class="page-break">Slide 21: Summary - 5 Key Takeaways</h1>
+    <span class="time-badge">4-5 minutes</span>
+
+    <h3>Complete Script</h3>
+    <div class="script-box">
+        <p>"Let's bring everything together. Here are the five key takeaways from this module. If you remember nothing else, remember these."</p>
+
+        <p>"<strong>Takeaway 1: Your skills travel. Your job title doesn't.</strong> Stop thinking about your career in terms of titles and start thinking about it in terms of competencies. When you make that shift, you'll see that you're qualified for far more than you thought. Your transferable skills inventory is the proof."</p>
+
+        <p>"<strong>Takeaway 2: Own your narrative before someone else does.</strong> If you don't tell your story, people will fill in the blanks with assumptions, and those assumptions won't be in your favor. Your pivot story, built on the four-part framework of Hook, Bridge, Evidence, and Vision, puts you in control of how people perceive your transition."</p>
+
+        <p>"<strong>Takeaway 3: The prove-it-again bias is real, but you can prepare for it.</strong> As women of color, we face additional scrutiny during career transitions. Naming that reality isn't about being discouraged. It's about being prepared. Your skills inventory, your polished story, and your practiced responses are your armor against bias."</p>
+
+        <p>"<strong>Takeaway 4: Informational interviews are the most powerful tool you have.</strong> More powerful than job boards. More powerful than recruiters. More powerful than a perfect resume. Conversations build relationships, relationships build trust, and trust opens doors. Use the outreach formula. Ask the power questions. Follow up consistently."</p>
+
+        <p>"<strong>Takeaway 5: A pivot is a strategic advance, not a step backward.</strong> You are not starting over. You are not giving up. You are not admitting failure. You are taking everything you've built and applying it to something that better aligns with who you are and who you're becoming. That takes more courage than staying comfortable. Honor that courage."</p>
+
+        <p>"These five takeaways aren't just concepts. They're backed by the tools you've built today: your Skills Inventory, your Pivot Story, your Interview Prep, and your Target List. Use them."</p>
+    </div>
+
+    <!-- ============================================================ -->
+    <!-- SLIDE 22: Homework                                            -->
+    <!-- ============================================================ -->
+
+    <h1>Slide 22: Homework - Before Next Module</h1>
+    <span class="time-badge">4-5 minutes</span>
+
+    <h3>Complete Script</h3>
+    <div class="script-box">
+        <p>"Alright, here's your homework for the next month. These five assignments are designed to move you from planning to action. And I mean real action, not just thinking about it."</p>
+
+        <p>"<strong>Assignment 1: Complete your Transferable Skills Inventory.</strong> If you didn't finish it during the module, set aside 30 minutes this week to do a thorough inventory. Go through all six categories. Be generous with yourself. Then circle your top ten transferable skills and rank them by relevance to your target direction. These are the skills you'll lead with in every conversation."</p>
+
+        <p>"<strong>Assignment 2: Finalize your Pivot Story.</strong> Take the draft you wrote during the module and polish it. Read it out loud at least five times. Record yourself delivering it. Listen back and refine until it sounds natural and confident. Your goal is to be able to deliver a 90-second version and a two-minute version without notes. Practice until it feels like second nature, not a script."</p>
+
+        <p>"<strong>Assignment 3: Conduct at least two informational interviews.</strong> Using your target list and the outreach formula, reach out to at least five people this month. Your goal is to complete a minimum of two informational interviews before the next module. Use the power questions. Take notes during each conversation. Follow up with a thank-you note within 24 hours. And always ask for referrals."</p>
+
+        <p>"<strong>Assignment 4: Practice your role-play scenarios.</strong> Find a trusted friend, a partner in the Skool community, or even a mirror, and practice all four scenarios from the role-play activity. The Skeptic, The Gatekeeper, The Networking Event, and The Interview. Record yourself if possible. The goal is to feel comfortable and confident in each scenario, not just in theory but in practice."</p>
+
+        <p>"<strong>Assignment 5: Share one insight or win in the Skool community.</strong> This could be something you learned from an informational interview, feedback you got on your pivot story, a breakthrough moment in your skills inventory, or anything that moved the needle for you this month. Sharing creates accountability, and it also helps other women in the community who are on similar journeys. We rise together."</p>
+
+        <p>"I'll be checking in with the community throughout the month to see your progress. Be ready to share what you've accomplished. The work you do between modules is where the transformation happens."</p>
+    </div>
+
+    <!-- ============================================================ -->
+    <!-- SLIDE 23: Closing                                             -->
+    <!-- ============================================================ -->
+
+    <h1>Slide 23: Closing Slide</h1>
+    <span class="time-badge">3-4 minutes</span>
+
+    <h3>Complete Closing Script</h3>
+    <div class="script-box">
+        <p>"Own Your Pivot. Own Your Future."</p>
+
+        <p>"Those six words are your mantra for the next month. You have spent this module building something powerful. You've mapped your transferable skills and seen just how much value you carry with you. You've crafted a pivot story that turns your background from a question mark into an exclamation point. You've learned how to navigate the biases that will come your way, and you've practiced the conversations that will open doors."</p>
+
+        <p>"I want to acknowledge something before we close. Making a career pivot, especially as a woman of color, requires a level of courage that doesn't always get recognized. You're not just changing jobs. You're challenging expectations. You're defying the assumptions people have about what you can do and where you belong. You're betting on yourself when the world doesn't always make that easy."</p>
+
+        <p>"But here's what I know about you: you've been betting on yourself your entire career. Every time you walked into a room where no one looked like you. Every time you raised your hand for a stretch assignment. Every time you delivered excellence in the face of doubt. This pivot is just the next version of that same courage."</p>
+
+        <p>"Your experience is not a liability. It's your foundation. Your different background is not a weakness. It's your edge. And your decision to pivot is not a step backward. It's a leap forward."</p>
+
+        <p>"Next month, we're covering <strong>Module 4: Navigate Bias and Lead Through It</strong>, which is going to build perfectly on what we've done here. You'll learn how to navigate the biases you encounter not just during a pivot, but throughout your entire leadership journey."</p>
+
+        <p>"Thank you for showing up for this module. Thank you for doing the hard work of building your toolkit. Thank you for investing in yourself and your future. Now go own your pivot."</p>
+    </div>
+
+    <div class="engagement-box">
+        <strong>Final Reflection:</strong> "Before you move on, I want you to write down one specific action you're committing to take in the next 48 hours based on what you learned in this module. Maybe it's completing your skills inventory. Maybe it's drafting your first outreach message. Maybe it's recording your pivot story and listening back. Whatever it is, write it somewhere you'll see it, or post it in the Skool community to create accountability."
+        <br><br>
+        <p>"When you post your commitment in the community, you're not just creating accountability for yourself. You're inspiring others and building connections with women on similar journeys. I check the community regularly and love celebrating your wins with you."</p>
+    </div>
+
+    <!-- ============================================================ -->
+    <!-- COMMUNITY ENGAGEMENT & FOLLOW-UP                              -->
+    <!-- ============================================================ -->
+
+    <h1 class="page-break">Community Engagement & Follow-Up</h1>
+
+    <h2>Module Resources on Skool:</h2>
+    <div class="checklist">
+        <ul>
+            <li>Module 3 video recording</li>
+            <li>All downloadable templates:
+                <ul style="margin-left: 20px; list-style: disc;">
+                    <li>Transferable Skills Inventory</li>
+                    <li>Pivot Storytelling Script Template</li>
+                    <li>Informational Interview Prep Guide</li>
+                    <li>Role-Play Prompt Cards</li>
+                </ul>
+            </li>
+            <li>Homework summary with suggested timeline</li>
+            <li>Discussion thread for module Q&A</li>
+        </ul>
+    </div>
+
+    <h2>Community Prompts to Post:</h2>
+    <div class="checklist">
+        <ul>
+            <li>Week 1 (24-hour): "Share one insight from your Transferable Skills Inventory. What surprised you about how much you bring to the table?"</li>
+            <li>Week 2 (7-day): "Post a draft of your pivot story Hook (first 2-3 sentences) for feedback from the community."</li>
+            <li>Week 3 (14-day): "Who did you reach out to for an informational interview? Share your experience and any advice for the group."</li>
+            <li>Week 4: "Celebrate your progress. What pivot action did you take this month that you're proud of?"</li>
+        </ul>
+    </div>
+
+    <h2>Before Next Module:</h2>
+    <div class="checklist">
+        <ul>
+            <li>Post preview of Module 4: Navigate Bias and Lead Through It</li>
+            <li>Celebrate wins shared by participants in the community</li>
+            <li>Answer questions in the discussion thread</li>
+        </ul>
+    </div>
+
+    <!-- ============================================================ -->
+    <!-- TIMING SUMMARY                                                -->
+    <!-- ============================================================ -->
+
+    <h1>Timing Summary</h1>
+    <table>
+        <tr><th>Slide</th><th>Topic</th><th>Duration</th></tr>
+        <tr><td>1</td><td>Title - Confident Career Pivot: Own Your Next Chapter</td><td>3-4 min</td></tr>
+        <tr><td>2</td><td>Welcome - Your Experience Is More Transferable Than You Think</td><td>4-5 min</td></tr>
+        <tr><td>3</td><td>Objectives - What You'll Gain</td><td>3-4 min</td></tr>
+        <tr><td>4</td><td>The Challenge - The Pivot Paradox</td><td>5-6 min</td></tr>
+        <tr><td>5</td><td>Framework - The Pivot Equation</td><td>5-6 min</td></tr>
+        <tr><td>6</td><td>Deep Dive - Skills Travel. Job Titles Don't.</td><td>5-6 min</td></tr>
+        <tr><td>7</td><td>Skill Translation - Same Skill, New Language</td><td>5-6 min</td></tr>
+        <tr><td>8</td><td>Activity - Transferable Skills Inventory</td><td>15-20 min</td></tr>
+        <tr><td>9</td><td>Quote - Starting from Experience</td><td>2-3 min</td></tr>
+        <tr><td>10</td><td>WOC Focus - Navigating the Prove It Again Bias</td><td>6-7 min</td></tr>
+        <tr><td>11</td><td>Strategy - Own Your Narrative</td><td>5-6 min</td></tr>
+        <tr><td>12</td><td>Framework - The Pivot Story Script</td><td>6-7 min</td></tr>
+        <tr><td>13</td><td>Examples - Pivot Stories in Action</td><td>6-7 min</td></tr>
+        <tr><td>14</td><td>Activity - Write Your Pivot Story</td><td>15-20 min</td></tr>
+        <tr><td>15</td><td>Strategic Outreach - The Informational Interview</td><td>5-6 min</td></tr>
+        <tr><td>16</td><td>Tool - The Outreach Formula</td><td>4-5 min</td></tr>
+        <tr><td>17</td><td>Tool - Power Questions</td><td>4-5 min</td></tr>
+        <tr><td>18</td><td>Activity - Role-Play: The Pivot Conversation</td><td>20-25 min</td></tr>
+        <tr><td>19</td><td>Action Plan - Your Target List</td><td>8-10 min</td></tr>
+        <tr><td>20</td><td>Quote - Strategic Advance</td><td>2-3 min</td></tr>
+        <tr><td>21</td><td>Summary - 5 Key Takeaways</td><td>4-5 min</td></tr>
+        <tr><td>22</td><td>Homework - Before Next Module</td><td>4-5 min</td></tr>
+        <tr><td>23</td><td>Closing - Own Your Pivot. Own Your Future.</td><td>3-4 min</td></tr>
+        <tr style="background: #1A1A1A; color: #fff;"><td></td><td><strong>TOTAL</strong></td><td><strong>~145-175 min (2.5-3 hours)</strong></td></tr>
+    </table>
+
+    <div class="footer">
+        <p><strong>Coaching Women of Color | Executive Leadership Lab | Module 3: Confident Career Pivot | Confidential</strong></p>
+        <p>Script for Recorded Module</p>
+    </div>
+</body>
+</html>

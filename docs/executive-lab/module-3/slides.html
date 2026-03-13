@@ -32,7 +32,7 @@
                 padding: 40px 60px;
             }
             .slide::before { display: none; }
-            .nav-controls, .keyboard-hint, .progress-bar { display: none; }
+            .nav-controls, .nav-btn-prev, .nav-btn-next, .slide-counter-bar, .keyboard-hint, .progress-bar { display: none; }
             .slide-title, .slide-dark { background: var(--primary) !important; -webkit-print-color-adjust: exact; print-color-adjust: exact; }
         }
 
@@ -56,13 +56,16 @@
             flex-direction: column;
             justify-content: center;
             align-items: center;
-            padding: 80px 120px 140px 120px;
+            padding: 60px 100px 40px 100px;
             opacity: 0;
             visibility: hidden;
             transform: translateY(20px);
-            transition: all 0.5s ease;
+            transition: opacity 0.4s ease, visibility 0s 0.4s, transform 0.4s ease;
             background: var(--bg);
+            overflow-y: auto;
+            scrollbar-width: none;
         }
+        .slide::-webkit-scrollbar { display: none; }
         .slide::before {
             content: '';
             position: absolute;
@@ -74,37 +77,41 @@
         }
         .slide > * { position: relative; z-index: 1; }
 
-        .slide.active { opacity: 1; visibility: visible; transform: translateY(0); }
-
-        .nav-controls {
-            position: fixed;
-            bottom: 48px;
-            left: 50%;
-            transform: translateX(-50%);
-            display: flex;
-            align-items: center;
-            gap: 24px;
-            z-index: 1000;
-        }
+        .slide.active { opacity: 1; visibility: visible; transform: translateY(0); transition: opacity 0.4s ease 0.05s, visibility 0s, transform 0.4s ease 0.05s; z-index: 1; }
 
         .nav-btn {
+            position: fixed;
+            top: 50%;
+            transform: translateY(-50%);
             width: 48px; height: 48px;
             border-radius: 50%;
-            border: 2px solid var(--primary);
-            background: transparent;
+            border: none;
+            background: rgba(26,26,26,0.12);
             color: var(--primary);
             cursor: pointer;
             display: flex;
             align-items: center;
             justify-content: center;
             transition: all 0.2s ease;
+            z-index: 1000;
         }
-
-        .nav-btn:hover { background: var(--primary); color: var(--bg); }
-        .nav-btn:disabled { border-color: var(--border); color: var(--text-muted); cursor: not-allowed; }
-        .nav-btn:disabled:hover { background: transparent; color: var(--text-muted); }
+        .nav-btn-prev { left: 20px; }
+        .nav-btn-next { right: 20px; }
+        .nav-btn:hover { background: rgba(26,26,26,0.8); color: #fff; }
+        .nav-btn:disabled { opacity: 0.15; cursor: not-allowed; }
+        .nav-btn:disabled:hover { background: rgba(26,26,26,0.12); color: var(--primary); }
         .nav-btn svg { width: 20px; height: 20px; }
+        .nav-btn.on-dark { color: rgba(255,255,255,0.7); background: rgba(255,255,255,0.12); }
+        .nav-btn.on-dark:hover { background: rgba(255,255,255,0.3); color: #fff; }
+        .nav-btn.on-dark:disabled { opacity: 0.15; }
 
+        .slide-counter-bar {
+            position: fixed;
+            bottom: 24px;
+            left: 50%;
+            transform: translateX(-50%);
+            z-index: 1000;
+        }
         .slide-counter { font-size: 13px; font-weight: 500; color: var(--text-muted); letter-spacing: 0.5px; }
 
         .progress-bar {
@@ -117,20 +124,20 @@
 
         .slide-header {
             position: absolute;
-            top: 40px; left: 60px; right: 60px;
+            top: 24px; left: 60px; right: 60px;
             display: flex;
             justify-content: space-between;
             align-items: center;
         }
 
-        .logo { height: 80px; }
+        .logo { height: 60px; }
         .module-label { font-size: 11px; font-weight: 600; color: var(--text-muted); text-transform: uppercase; letter-spacing: 2px; }
 
         .slide-content { max-width: 960px; width: 100%; text-align: center; }
 
         h1 {
             font-family: 'Source Serif 4', Georgia, serif;
-            font-size: 56px; font-weight: 700;
+            font-size: 48px; font-weight: 700;
             color: var(--primary);
             line-height: 1.15;
             letter-spacing: -1px;
@@ -139,7 +146,7 @@
 
         h2 {
             font-family: 'Source Serif 4', Georgia, serif;
-            font-size: 42px; font-weight: 600;
+            font-size: 36px; font-weight: 600;
             color: var(--primary);
             line-height: 1.2;
             margin-bottom: 20px;
@@ -162,7 +169,7 @@
             color: var(--bg);
             position: relative;
         }
-        .slide-title h1 { color: var(--bg); font-size: 64px; }
+        .slide-title h1 { color: var(--bg); font-size: 52px; }
         .slide-title p { color: rgba(255,255,255,0.6); }
 
         .title-meta {
@@ -172,16 +179,16 @@
         }
         .meta-item { font-size: 13px; color: rgba(255,255,255,0.5); letter-spacing: 0.5px; }
 
-        .cards-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 32px; margin-top: 48px; text-align: left; }
+        .cards-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 24px; margin-top: 36px; text-align: left; }
         .cards-grid.two-col { grid-template-columns: repeat(2, 1fr); }
 
-        .card { padding: 40px; border: 1px solid var(--border); border-radius: 4px; transition: all 0.2s ease; }
+        .card { padding: 28px; border: 1px solid var(--border); border-radius: 4px; transition: all 0.2s ease; }
         .card:hover { border-color: var(--accent); }
         .card h4 { font-family: 'Source Serif 4', Georgia, serif; font-size: 18px; font-weight: 600; color: var(--primary); margin-bottom: 12px; }
         .card p { font-size: 15px; color: var(--text-light); margin: 0; line-height: 1.6; }
 
-        .feature-list { text-align: left; max-width: 640px; margin: 48px auto 0; }
-        .feature-item { display: flex; align-items: flex-start; gap: 20px; padding: 24px 0; border-bottom: 1px solid var(--border); }
+        .feature-list { text-align: left; max-width: 640px; margin: 32px auto 0; }
+        .feature-item { display: flex; align-items: flex-start; gap: 16px; padding: 16px 0; border-bottom: 1px solid var(--border); }
         .feature-item:last-child { border-bottom: none; }
 
         .feature-number {
@@ -196,7 +203,7 @@
         .feature-text h4 { font-size: 17px; font-weight: 600; color: var(--primary); margin-bottom: 6px; }
         .feature-text p { font-size: 15px; color: var(--text-light); margin: 0; }
 
-        .two-column { display: grid; grid-template-columns: 1fr 1fr; gap: 64px; text-align: left; max-width: 880px; margin: 48px auto 0; }
+        .two-column { display: grid; grid-template-columns: 1fr 1fr; gap: 48px; text-align: left; max-width: 880px; margin: 36px auto 0; }
         .column h4 { font-family: 'Source Serif 4', Georgia, serif; font-size: 18px; font-weight: 600; color: var(--primary); margin-bottom: 20px; padding-bottom: 12px; border-bottom: 2px solid var(--primary); }
         .column ul { list-style: none; }
         .column li { padding: 10px 0; font-size: 15px; color: var(--text-light); border-bottom: 1px solid var(--border); }
@@ -207,15 +214,15 @@
         }
         .quote-text {
             font-family: 'Source Serif 4', Georgia, serif;
-            font-size: 32px; font-weight: 400;
+            font-size: 28px; font-weight: 400;
             line-height: 1.5; color: var(--primary);
             max-width: 800px; font-style: italic;
         }
         .quote-text::before { content: '\201C'; display: block; font-size: 72px; line-height: 1; color: var(--accent-warm); margin-bottom: 16px; }
 
-        .stats-row { display: flex; justify-content: center; gap: 80px; margin-top: 56px; }
+        .stats-row { display: flex; justify-content: center; gap: 48px; margin-top: 40px; }
         .stat-item { text-align: center; }
-        .stat-number { font-family: 'Source Serif 4', Georgia, serif; font-size: 48px; font-weight: 700; color: var(--primary); }
+        .stat-number { font-family: 'Source Serif 4', Georgia, serif; font-size: 42px; font-weight: 700; color: var(--primary); }
         .stat-label { font-size: 13px; color: var(--text-muted); text-transform: uppercase; letter-spacing: 1px; margin-top: 8px; }
 
         .flow-diagram { display: flex; align-items: center; justify-content: center; gap: 16px; margin-top: 48px; flex-wrap: wrap; }
@@ -276,7 +283,7 @@
         .step-content h4 { font-family: 'Source Serif 4', Georgia, serif; font-size: 16px; font-weight: 600; color: var(--primary); margin-bottom: 6px; }
         .step-content p { font-size: 14px; color: var(--text-light); margin: 0; line-height: 1.5; }
 
-        .keyboard-hint { position: fixed; bottom: 20px; left: 50%; transform: translateX(-50%); font-size: 10px; color: var(--text-muted); letter-spacing: 0.5px; opacity: 0.6; }
+        .keyboard-hint { position: fixed; bottom: 8px; left: 50%; transform: translateX(-50%); font-size: 10px; color: var(--text-muted); letter-spacing: 0.5px; opacity: 0.5; z-index: 1000; }
         .keyboard-hint kbd { display: inline-block; padding: 2px 6px; border: 1px solid var(--border); border-radius: 3px; font-family: inherit; font-size: 11px; margin: 0 2px; }
 
         /* ========================================
@@ -301,7 +308,10 @@
         }
 
         @media screen and (max-width: 768px) {
-            .slide { padding: 100px 40px 140px; }
+            .slide { padding: 80px 40px 60px; }
+            .nav-btn { width: 36px; height: 36px; }
+            .nav-btn-prev { left: 12px; }
+            .nav-btn-next { right: 12px; }
             .slide-header { top: 20px; left: 24px; right: 24px; flex-direction: column; align-items: flex-start; gap: 8px; }
             .logo { height: 60px; }
             h1 { font-size: 36px; }
@@ -322,12 +332,16 @@
             .simple-table { font-size: 14px; }
             .simple-table th, .simple-table td { padding: 12px 8px; }
             .formula-box { padding: 24px; }
-            .nav-controls { bottom: 24px; }
+            .slide-counter-bar { bottom: 12px; }
             .keyboard-hint { display: none; }
         }
 
         @media screen and (max-width: 480px) {
-            .slide { padding: 70px 12px 90px; justify-content: flex-start; padding-top: 80px; overflow-y: auto; }
+            .slide { padding: 60px 12px 50px; justify-content: flex-start; padding-top: 70px; }
+            .nav-btn { width: 32px; height: 32px; }
+            .nav-btn svg { width: 16px; height: 16px; }
+            .nav-btn-prev { left: 6px; }
+            .nav-btn-next { right: 6px; }
             .slide-content { max-width: 100%; padding: 0 4px; }
             .slide-header { top: 8px; left: 10px; right: 10px; flex-direction: row; justify-content: space-between; }
             .logo { height: 28px; }
@@ -385,7 +399,7 @@
         <!-- Slide 1: Title -->
         <div class="slide slide-title active" data-slide="1">
             <div class="slide-header">
-                <img src="https://coachingwomenofcolor.com/wp-content/uploads/2021/04/CWCFinal_logo2.webp" alt="CWC" class="logo">
+                <img src="https://coachingwomenofcolor.com/logo.webp" alt="CWC" class="logo">
                 <span class="module-label">Executive Leadership Lab</span>
             </div>
             <div class="slide-content">
@@ -402,7 +416,7 @@
 
         <!-- Slide 2: Welcome -->
         <div class="slide" data-slide="2">
-            <div class="slide-header"><img src="https://coachingwomenofcolor.com/wp-content/uploads/2021/04/CWCFinal_logo2.webp" alt="CWC" class="logo"><span class="module-label">Module 3</span></div>
+            <div class="slide-header"><img src="https://coachingwomenofcolor.com/logo.webp" alt="CWC" class="logo"><span class="module-label">Module 3</span></div>
             <div class="slide-content">
                 <span class="section-label">Welcome</span>
                 <h2>Your Experience Is<br>More Transferable Than You Think</h2>
@@ -417,7 +431,7 @@
 
         <!-- Slide 3: Objectives -->
         <div class="slide" data-slide="3">
-            <div class="slide-header"><img src="https://coachingwomenofcolor.com/wp-content/uploads/2021/04/CWCFinal_logo2.webp" alt="CWC" class="logo"><span class="module-label">Module 3</span></div>
+            <div class="slide-header"><img src="https://coachingwomenofcolor.com/logo.webp" alt="CWC" class="logo"><span class="module-label">Module 3</span></div>
             <div class="slide-content">
                 <span class="section-label">Objectives</span>
                 <h2>What You'll Gain</h2>
@@ -432,7 +446,7 @@
 
         <!-- Slide 4: The Challenge -->
         <div class="slide" data-slide="4">
-            <div class="slide-header"><img src="https://coachingwomenofcolor.com/wp-content/uploads/2021/04/CWCFinal_logo2.webp" alt="CWC" class="logo"><span class="module-label">Module 3</span></div>
+            <div class="slide-header"><img src="https://coachingwomenofcolor.com/logo.webp" alt="CWC" class="logo"><span class="module-label">Module 3</span></div>
             <div class="slide-content">
                 <span class="section-label">The Challenge</span>
                 <h2>The Pivot Paradox:<br>Qualified But Questioned</h2>
@@ -447,7 +461,7 @@
 
         <!-- Slide 5: Framework -->
         <div class="slide" data-slide="5">
-            <div class="slide-header"><img src="https://coachingwomenofcolor.com/wp-content/uploads/2021/04/CWCFinal_logo2.webp" alt="CWC" class="logo"><span class="module-label">Module 3</span></div>
+            <div class="slide-header"><img src="https://coachingwomenofcolor.com/logo.webp" alt="CWC" class="logo"><span class="module-label">Module 3</span></div>
             <div class="slide-content">
                 <span class="section-label">Framework</span>
                 <h2>The Pivot Equation</h2>
@@ -467,7 +481,7 @@
 
         <!-- Slide 6: Deep Dive - Transferable Skills -->
         <div class="slide" data-slide="6">
-            <div class="slide-header"><img src="https://coachingwomenofcolor.com/wp-content/uploads/2021/04/CWCFinal_logo2.webp" alt="CWC" class="logo"><span class="module-label">Transferable Skills</span></div>
+            <div class="slide-header"><img src="https://coachingwomenofcolor.com/logo.webp" alt="CWC" class="logo"><span class="module-label">Transferable Skills</span></div>
             <div class="slide-content">
                 <span class="section-label">Deep Dive</span>
                 <h2>Skills Travel.<br>Job Titles Don't.</h2>
@@ -481,7 +495,7 @@
 
         <!-- Slide 7: Skill Translation -->
         <div class="slide" data-slide="7">
-            <div class="slide-header"><img src="https://coachingwomenofcolor.com/wp-content/uploads/2021/04/CWCFinal_logo2.webp" alt="CWC" class="logo"><span class="module-label">Transferable Skills</span></div>
+            <div class="slide-header"><img src="https://coachingwomenofcolor.com/logo.webp" alt="CWC" class="logo"><span class="module-label">Transferable Skills</span></div>
             <div class="slide-content">
                 <span class="section-label">Skill Translation</span>
                 <h2>Same Skill, New Language</h2>
@@ -498,7 +512,7 @@
 
         <!-- Slide 8: Activity - Skills Inventory -->
         <div class="slide" data-slide="8">
-            <div class="slide-header"><img src="https://coachingwomenofcolor.com/wp-content/uploads/2021/04/CWCFinal_logo2.webp" alt="CWC" class="logo"><span class="module-label">Activity</span></div>
+            <div class="slide-header"><img src="https://coachingwomenofcolor.com/logo.webp" alt="CWC" class="logo"><span class="module-label">Activity</span></div>
             <div class="slide-content">
                 <span class="section-label">Self-Assessment</span>
                 <h2>Your Transferable Skills Inventory</h2>
@@ -517,7 +531,7 @@
 
         <!-- Slide 9: Quote -->
         <div class="slide slide-quote" data-slide="9">
-            <div class="slide-header"><img src="https://coachingwomenofcolor.com/wp-content/uploads/2021/04/CWCFinal_logo2.webp" alt="CWC" class="logo"><span class="module-label">Reflection</span></div>
+            <div class="slide-header"><img src="https://coachingwomenofcolor.com/logo.webp" alt="CWC" class="logo"><span class="module-label">Reflection</span></div>
             <div class="slide-content">
                 <p class="quote-text">You are not starting over. You are starting from experience.</p>
             </div>
@@ -525,7 +539,7 @@
 
         <!-- Slide 10: The WOC Pivot Challenge -->
         <div class="slide" data-slide="10">
-            <div class="slide-header"><img src="https://coachingwomenofcolor.com/wp-content/uploads/2021/04/CWCFinal_logo2.webp" alt="CWC" class="logo"><span class="module-label">Module 3</span></div>
+            <div class="slide-header"><img src="https://coachingwomenofcolor.com/logo.webp" alt="CWC" class="logo"><span class="module-label">Module 3</span></div>
             <div class="slide-content">
                 <span class="section-label">WOC Focus</span>
                 <h2>Navigating the<br>"Prove It Again" Bias</h2>
@@ -541,7 +555,7 @@
 
         <!-- Slide 11: Owning the Narrative -->
         <div class="slide" data-slide="11">
-            <div class="slide-header"><img src="https://coachingwomenofcolor.com/wp-content/uploads/2021/04/CWCFinal_logo2.webp" alt="CWC" class="logo"><span class="module-label">Module 3</span></div>
+            <div class="slide-header"><img src="https://coachingwomenofcolor.com/logo.webp" alt="CWC" class="logo"><span class="module-label">Module 3</span></div>
             <div class="slide-content">
                 <span class="section-label">Strategy</span>
                 <h2>Own Your Narrative<br>Before Someone Else Does</h2>
@@ -555,7 +569,7 @@
 
         <!-- Slide 12: The Pivot Story Framework -->
         <div class="slide" data-slide="12">
-            <div class="slide-header"><img src="https://coachingwomenofcolor.com/wp-content/uploads/2021/04/CWCFinal_logo2.webp" alt="CWC" class="logo"><span class="module-label">Module 3</span></div>
+            <div class="slide-header"><img src="https://coachingwomenofcolor.com/logo.webp" alt="CWC" class="logo"><span class="module-label">Module 3</span></div>
             <div class="slide-content">
                 <span class="section-label">Framework</span>
                 <h2>The Pivot Story Script</h2>
@@ -571,7 +585,7 @@
 
         <!-- Slide 13: Pivot Story Examples -->
         <div class="slide" data-slide="13">
-            <div class="slide-header"><img src="https://coachingwomenofcolor.com/wp-content/uploads/2021/04/CWCFinal_logo2.webp" alt="CWC" class="logo"><span class="module-label">Module 3</span></div>
+            <div class="slide-header"><img src="https://coachingwomenofcolor.com/logo.webp" alt="CWC" class="logo"><span class="module-label">Module 3</span></div>
             <div class="slide-content">
                 <span class="section-label">Examples</span>
                 <h2>Pivot Stories in Action</h2>
@@ -585,7 +599,7 @@
 
         <!-- Slide 14: Activity - Craft Your Story -->
         <div class="slide" data-slide="14">
-            <div class="slide-header"><img src="https://coachingwomenofcolor.com/wp-content/uploads/2021/04/CWCFinal_logo2.webp" alt="CWC" class="logo"><span class="module-label">Activity</span></div>
+            <div class="slide-header"><img src="https://coachingwomenofcolor.com/logo.webp" alt="CWC" class="logo"><span class="module-label">Activity</span></div>
             <div class="slide-content">
                 <span class="section-label">Deep Work</span>
                 <h2>Write Your Pivot Story</h2>
@@ -604,7 +618,7 @@
 
         <!-- Slide 15: Informational Interviews -->
         <div class="slide" data-slide="15">
-            <div class="slide-header"><img src="https://coachingwomenofcolor.com/wp-content/uploads/2021/04/CWCFinal_logo2.webp" alt="CWC" class="logo"><span class="module-label">Module 3</span></div>
+            <div class="slide-header"><img src="https://coachingwomenofcolor.com/logo.webp" alt="CWC" class="logo"><span class="module-label">Module 3</span></div>
             <div class="slide-content">
                 <span class="section-label">Strategic Outreach</span>
                 <h2>The Informational Interview</h2>
@@ -619,7 +633,7 @@
 
         <!-- Slide 16: Outreach Templates -->
         <div class="slide" data-slide="16">
-            <div class="slide-header"><img src="https://coachingwomenofcolor.com/wp-content/uploads/2021/04/CWCFinal_logo2.webp" alt="CWC" class="logo"><span class="module-label">Module 3</span></div>
+            <div class="slide-header"><img src="https://coachingwomenofcolor.com/logo.webp" alt="CWC" class="logo"><span class="module-label">Module 3</span></div>
             <div class="slide-content">
                 <span class="section-label">Tool</span>
                 <h2>The Outreach Formula</h2>
@@ -637,7 +651,7 @@
 
         <!-- Slide 17: Informational Interview Questions -->
         <div class="slide" data-slide="17">
-            <div class="slide-header"><img src="https://coachingwomenofcolor.com/wp-content/uploads/2021/04/CWCFinal_logo2.webp" alt="CWC" class="logo"><span class="module-label">Module 3</span></div>
+            <div class="slide-header"><img src="https://coachingwomenofcolor.com/logo.webp" alt="CWC" class="logo"><span class="module-label">Module 3</span></div>
             <div class="slide-content">
                 <span class="section-label">Tool</span>
                 <h2>Power Questions for<br>Informational Interviews</h2>
@@ -653,7 +667,7 @@
 
         <!-- Slide 18: Role-Play -->
         <div class="slide" data-slide="18">
-            <div class="slide-header"><img src="https://coachingwomenofcolor.com/wp-content/uploads/2021/04/CWCFinal_logo2.webp" alt="CWC" class="logo"><span class="module-label">Activity</span></div>
+            <div class="slide-header"><img src="https://coachingwomenofcolor.com/logo.webp" alt="CWC" class="logo"><span class="module-label">Activity</span></div>
             <div class="slide-content">
                 <span class="section-label">Practice</span>
                 <h2>Role-Play: The Pivot Conversation</h2>
@@ -670,7 +684,7 @@
 
         <!-- Slide 19: Building Your Target List -->
         <div class="slide" data-slide="19">
-            <div class="slide-header"><img src="https://coachingwomenofcolor.com/wp-content/uploads/2021/04/CWCFinal_logo2.webp" alt="CWC" class="logo"><span class="module-label">Module 3</span></div>
+            <div class="slide-header"><img src="https://coachingwomenofcolor.com/logo.webp" alt="CWC" class="logo"><span class="module-label">Module 3</span></div>
             <div class="slide-content">
                 <span class="section-label">Action Plan</span>
                 <h2>Your Target List</h2>
@@ -689,7 +703,7 @@
 
         <!-- Slide 20: Quote -->
         <div class="slide slide-quote" data-slide="20" style="background: linear-gradient(rgba(245,242,237,0.92), rgba(245,242,237,0.92)), url('https://images.unsplash.com/photo-1522071820081-009f0129c71c?w=1200&q=80') center/cover no-repeat;">
-            <div class="slide-header"><img src="https://coachingwomenofcolor.com/wp-content/uploads/2021/04/CWCFinal_logo2.webp" alt="CWC" class="logo"><span class="module-label">Reflection</span></div>
+            <div class="slide-header"><img src="https://coachingwomenofcolor.com/logo.webp" alt="CWC" class="logo"><span class="module-label">Reflection</span></div>
             <div class="slide-content">
                 <p class="quote-text">A pivot is not a retreat. It is a strategic advance toward the career you actually want.</p>
             </div>
@@ -697,7 +711,7 @@
 
         <!-- Slide 21: Summary -->
         <div class="slide" data-slide="21">
-            <div class="slide-header"><img src="https://coachingwomenofcolor.com/wp-content/uploads/2021/04/CWCFinal_logo2.webp" alt="CWC" class="logo"><span class="module-label">Module 3</span></div>
+            <div class="slide-header"><img src="https://coachingwomenofcolor.com/logo.webp" alt="CWC" class="logo"><span class="module-label">Module 3</span></div>
             <div class="slide-content">
                 <span class="section-label">Summary</span>
                 <h2>Key Takeaways</h2>
@@ -713,7 +727,7 @@
 
         <!-- Slide 22: Homework -->
         <div class="slide" data-slide="22">
-            <div class="slide-header"><img src="https://coachingwomenofcolor.com/wp-content/uploads/2021/04/CWCFinal_logo2.webp" alt="CWC" class="logo"><span class="module-label">Module 3</span></div>
+            <div class="slide-header"><img src="https://coachingwomenofcolor.com/logo.webp" alt="CWC" class="logo"><span class="module-label">Module 3</span></div>
             <div class="slide-content">
                 <span class="section-label">Before Next Module</span>
                 <h2>Your Homework</h2>
@@ -729,7 +743,7 @@
 
         <!-- Slide 23: Close -->
         <div class="slide slide-dark" data-slide="23" style="background: linear-gradient(rgba(26,26,26,0.92), rgba(26,26,26,0.92)), url('https://images.unsplash.com/photo-1551836022-d5d88e9218df?w=1200&q=80') center/cover no-repeat;">
-            <div class="slide-header"><img src="https://coachingwomenofcolor.com/wp-content/uploads/2021/04/CWCFinal_logo2.webp" alt="CWC" class="logo" style="filter: brightness(0) invert(1);"><span class="module-label" style="color: rgba(255,255,255,0.5);">Module 3 Complete</span></div>
+            <div class="slide-header"><img src="https://coachingwomenofcolor.com/logo.webp" alt="CWC" class="logo" style="filter: brightness(0) invert(1);"><span class="module-label" style="color: rgba(255,255,255,0.5);">Module 3 Complete</span></div>
             <div class="slide-content">
                 <span class="section-label">Executive Leadership Lab</span>
                 <h2>Own Your Pivot.<br>Own Your Future.</h2>
@@ -743,12 +757,16 @@
         </div>
     </div>
 
-    <div class="keyboard-hint">Press <kbd>&larr;</kbd> <kbd>&rarr;</kbd> to navigate</div>
-    <div class="nav-controls">
-        <button class="nav-btn" id="prevBtn" disabled><svg viewBox="0 0 24 24" fill="currentColor"><path d="M15.41 7.41L14 6l-6 6 6 6 1.41-1.41L10.83 12z"/></svg></button>
+    <button class="nav-btn nav-btn-prev" id="prevBtn" disabled>
+        <svg viewBox="0 0 24 24" fill="currentColor"><path d="M15.41 7.41L14 6l-6 6 6 6 1.41-1.41L10.83 12z"/></svg>
+    </button>
+    <button class="nav-btn nav-btn-next" id="nextBtn">
+        <svg viewBox="0 0 24 24" fill="currentColor"><path d="M10 6L8.59 7.41 13.17 12l-4.58 4.59L10 18l6-6z"/></svg>
+    </button>
+    <div class="slide-counter-bar">
         <span class="slide-counter"><span id="currentSlide">1</span> / <span id="totalSlides">23</span></span>
-        <button class="nav-btn" id="nextBtn"><svg viewBox="0 0 24 24" fill="currentColor"><path d="M10 6L8.59 7.41 13.17 12l-4.58 4.59L10 18l6-6z"/></svg></button>
     </div>
+    <div class="keyboard-hint">Use <kbd>&larr;</kbd> <kbd>&rarr;</kbd> to navigate</div>
 
     <script>
         const slides = document.querySelectorAll('.slide');
@@ -766,9 +784,13 @@
             slides[currentSlide - 1].classList.remove('active');
             currentSlide = n;
             slides[currentSlide - 1].classList.add('active');
+            slides[currentSlide - 1].scrollTop = 0;
             currentSlideEl.textContent = currentSlide;
             prevBtn.disabled = currentSlide === 1;
             nextBtn.disabled = currentSlide === totalSlides;
+            const isDark = slides[currentSlide - 1].classList.contains('slide-title') || slides[currentSlide - 1].classList.contains('slide-dark');
+            prevBtn.classList.toggle('on-dark', isDark);
+            nextBtn.classList.toggle('on-dark', isDark);
             updateProgress();
         }
         function nextSlide() { if (currentSlide < totalSlides) goToSlide(currentSlide + 1); }
