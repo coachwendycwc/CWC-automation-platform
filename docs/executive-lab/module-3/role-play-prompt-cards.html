@@ -1,0 +1,460 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Role-Play Prompt Cards | Executive Leadership Lab</title>
+    <link href="https://fonts.googleapis.com/css2?family=Source+Serif+4:wght@400;600;700&family=Inter:wght@400;500;600&display=swap" rel="stylesheet">
+    <style>
+        :root { --primary: #1A1A1A; --accent: #2A7B8C; --accent-warm: #D4A574; --text: #333333; --text-light: #666666; --text-muted: #999999; --bg: #FAF8F5; --bg-warm: #F5F2ED; --border: #E5E0D8; --success: #4A9B7F; }
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        body { font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif; background: var(--bg); color: var(--text); line-height: 1.6; min-height: 100vh; }
+        .container { max-width: 900px; margin: 0 auto; padding: 40px 24px; }
+        header { text-align: center; margin-bottom: 48px; padding-bottom: 32px; border-bottom: 1px solid var(--border); }
+        .logo { height: 80px; margin-bottom: 24px; }
+        .module-label { font-size: 11px; font-weight: 600; color: var(--accent); text-transform: uppercase; letter-spacing: 2.5px; margin-bottom: 12px; display: block; }
+        h1 { font-family: 'Source Serif 4', Georgia, serif; font-size: 36px; font-weight: 700; color: var(--primary); margin-bottom: 12px; }
+        .subtitle { font-size: 18px; color: var(--text-light); max-width: 600px; margin: 0 auto; }
+
+        .instructions { background: var(--bg-warm); border-left: 3px solid var(--accent-warm); padding: 20px 24px; margin-bottom: 40px; border-radius: 0 4px 4px 0; }
+        .instructions h3 { font-family: 'Source Serif 4', Georgia, serif; font-size: 16px; font-weight: 600; color: var(--primary); margin-bottom: 8px; }
+        .instructions p { font-size: 14px; color: var(--text-light); margin: 0; }
+        .instructions ul { font-size: 14px; color: var(--text-light); margin: 8px 0 0 20px; }
+        .instructions li { margin-bottom: 4px; }
+
+        .prompt-card {
+            background: white;
+            border: 1px solid var(--border);
+            border-radius: 8px;
+            margin-bottom: 32px;
+            overflow: hidden;
+        }
+
+        .card-header {
+            background: var(--primary);
+            color: white;
+            padding: 20px 32px;
+            display: flex;
+            align-items: center;
+            gap: 16px;
+        }
+
+        .card-number {
+            width: 40px; height: 40px;
+            background: var(--accent);
+            border-radius: 50%;
+            display: flex; align-items: center; justify-content: center;
+            font-size: 18px; font-weight: 700; color: white; flex-shrink: 0;
+        }
+
+        .card-header-text h2 {
+            font-family: 'Source Serif 4', Georgia, serif;
+            font-size: 20px; font-weight: 600; color: white; margin-bottom: 4px;
+        }
+        .card-header-text p { font-size: 13px; color: rgba(255,255,255,0.6); margin: 0; }
+
+        .card-body { padding: 32px; }
+
+        .scenario-box {
+            background: var(--bg-warm);
+            border-left: 3px solid var(--accent-warm);
+            padding: 20px 24px;
+            margin-bottom: 24px;
+            border-radius: 0 4px 4px 0;
+        }
+        .scenario-box h4 { font-family: 'Source Serif 4', Georgia, serif; font-size: 16px; font-weight: 600; color: var(--primary); margin-bottom: 8px; }
+        .scenario-box p { font-size: 15px; color: var(--text); margin: 0; font-style: italic; }
+
+        .strategy-box {
+            background: var(--bg);
+            border: 1px solid var(--border);
+            border-radius: 4px;
+            padding: 20px;
+            margin-bottom: 24px;
+        }
+        .strategy-box h4 { font-size: 14px; font-weight: 600; color: var(--accent); text-transform: uppercase; letter-spacing: 1px; margin-bottom: 12px; }
+        .strategy-box ul { list-style: none; }
+        .strategy-box li { padding: 6px 0; font-size: 14px; color: var(--text-light); padding-left: 20px; position: relative; }
+        .strategy-box li::before { content: '\2713'; position: absolute; left: 0; color: var(--accent); font-weight: bold; }
+
+        label { display: block; font-size: 14px; font-weight: 500; color: var(--primary); margin-bottom: 8px; }
+        textarea { width: 100%; padding: 12px 16px; border: 1px solid var(--border); border-radius: 4px; font-family: inherit; font-size: 15px; color: var(--text); background: var(--bg); transition: border-color 0.2s, box-shadow 0.2s; resize: vertical; min-height: 100px; }
+        textarea:focus { outline: none; border-color: var(--accent); box-shadow: 0 0 0 3px rgba(42, 123, 140, 0.1); }
+        textarea.short { min-height: 60px; }
+        .field-group { margin-bottom: 20px; }
+        .field-group:last-child { margin-bottom: 0; }
+
+        .rating-row { display: flex; gap: 8px; align-items: center; margin-top: 16px; }
+        .rating-label { font-size: 13px; color: var(--text-muted); }
+        .rating-stars { display: flex; gap: 4px; }
+        .star { width: 28px; height: 28px; border: 1px solid var(--border); border-radius: 4px; background: var(--bg); cursor: pointer; display: flex; align-items: center; justify-content: center; font-size: 14px; transition: all 0.2s; }
+        .star:hover, .star.active { background: var(--accent-warm); color: white; border-color: var(--accent-warm); }
+
+        .reflection-section {
+            background: white;
+            border: 1px solid var(--border);
+            border-radius: 8px;
+            padding: 32px;
+            margin-bottom: 24px;
+        }
+        .reflection-section h2 { font-family: 'Source Serif 4', Georgia, serif; font-size: 20px; font-weight: 600; color: var(--primary); margin-bottom: 16px; }
+
+        .tip-box { background: var(--primary); color: var(--bg); padding: 20px 24px; border-radius: 4px; margin-top: 16px; }
+        .tip-box h4 { font-family: 'Source Serif 4', Georgia, serif; font-size: 15px; color: var(--accent-warm); margin-bottom: 8px; }
+        .tip-box p { font-size: 14px; color: rgba(255,255,255,0.7); margin: 0; }
+
+        .button-row { display: flex; justify-content: space-between; align-items: center; margin-top: 40px; padding-top: 24px; border-top: 1px solid var(--border); }
+        .btn { padding: 12px 24px; border-radius: 4px; font-family: inherit; font-size: 14px; font-weight: 500; cursor: pointer; transition: all 0.2s; }
+        .btn-primary { background: var(--accent); color: white; border: none; }
+        .btn-primary:hover { background: #236a79; }
+        .btn-secondary { background: transparent; color: var(--text-light); border: 1px solid var(--border); }
+        .btn-secondary:hover { border-color: var(--text-light); }
+        .save-status { font-size: 13px; color: var(--success); display: flex; align-items: center; gap: 6px; }
+        .save-status.hidden { display: none; }
+        footer { text-align: center; padding: 40px 24px; color: var(--text-muted); font-size: 13px; }
+        footer a { color: var(--accent); text-decoration: none; }
+
+        @media print {
+            body { background: white; }
+            .container { max-width: 100%; padding: 20px; }
+            .prompt-card { break-inside: avoid; border: 1px solid #ddd; }
+            .card-header { -webkit-print-color-adjust: exact; print-color-adjust: exact; }
+            .button-row { display: none; }
+            textarea { border: 1px solid #ccc; background: white; }
+        }
+        @media screen and (max-width: 768px) { .container { padding: 24px 16px; } h1 { font-size: 28px; } .card-body { padding: 24px 20px; } .button-row { flex-direction: column; gap: 16px; } }
+        @media screen and (max-width: 480px) { .container { padding: 16px 12px; } .logo { height: 60px; } h1 { font-size: 24px; } .subtitle { font-size: 15px; } .card-header { padding: 16px 20px; } .card-header-text h2 { font-size: 17px; } .card-body { padding: 16px; } .instructions { padding: 14px 16px; } textarea { font-size: 14px; padding: 10px; } .btn { padding: 10px 20px; font-size: 13px; } }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <header>
+            <img src="https://coachingwomenofcolor.com/wp-content/uploads/2021/04/CWCFinal_logo2.webp" alt="CWC" class="logo">
+            <span class="module-label">Module 3 &mdash; March</span>
+            <h1>Role-Play Prompt Cards</h1>
+            <p class="subtitle">Practice handling the toughest pivot conversations before they happen for real.</p>
+        </header>
+
+        <div class="instructions">
+            <h3>How to Use These Cards</h3>
+            <p>Each card presents a scenario you'll likely face during your career pivot. For each one:</p>
+            <ul>
+                <li>Read the scenario and the other person's line</li>
+                <li>Review the strategy tips</li>
+                <li>Write your response in your own words</li>
+                <li>Practice saying it out loud (with a partner if possible)</li>
+                <li>Rate your confidence and refine</li>
+            </ul>
+            <p style="margin-top: 8px;">Your answers auto-save as you type.</p>
+        </div>
+
+        <!-- Card 1: The Skeptic -->
+        <div class="prompt-card">
+            <div class="card-header">
+                <div class="card-number">1</div>
+                <div class="card-header-text">
+                    <h2>The Skeptic</h2>
+                    <p>When someone questions your decision to pivot</p>
+                </div>
+            </div>
+            <div class="card-body">
+                <div class="scenario-box">
+                    <h4>They Say:</h4>
+                    <p>"Why would you leave [your current field]? You've built so much there. That seems like a big risk."</p>
+                </div>
+
+                <div class="strategy-box">
+                    <h4>Your Strategy</h4>
+                    <ul>
+                        <li>Lead with your vision, not your frustration</li>
+                        <li>Reframe the pivot as strategic growth, not escape</li>
+                        <li>Show that you've done your research</li>
+                        <li>Don't be defensive&mdash;confidence is your best answer</li>
+                    </ul>
+                </div>
+
+                <div class="field-group">
+                    <label>Your Response</label>
+                    <textarea id="card-1-response" placeholder="Write your response in your own words. Start with something like: 'I'm not leaving something behind—I'm building on everything I've done...'"></textarea>
+                </div>
+
+                <div class="field-group">
+                    <label>What felt hard about this one?</label>
+                    <textarea id="card-1-reflection" class="short" placeholder="Note what triggered discomfort so you can address it before it comes up for real..."></textarea>
+                </div>
+
+                <div class="rating-row">
+                    <span class="rating-label">Confidence after practice:</span>
+                    <div class="rating-stars" data-group="card-1">
+                        <div class="star" data-value="1">1</div>
+                        <div class="star" data-value="2">2</div>
+                        <div class="star" data-value="3">3</div>
+                        <div class="star" data-value="4">4</div>
+                        <div class="star" data-value="5">5</div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Card 2: The Gatekeeper -->
+        <div class="prompt-card">
+            <div class="card-header">
+                <div class="card-number">2</div>
+                <div class="card-header-text">
+                    <h2>The Gatekeeper</h2>
+                    <p>When someone says you don't have the "right" experience</p>
+                </div>
+            </div>
+            <div class="card-body">
+                <div class="scenario-box">
+                    <h4>They Say:</h4>
+                    <p>"We usually look for candidates with direct experience in [target field]. How would you bridge that gap?"</p>
+                </div>
+
+                <div class="strategy-box">
+                    <h4>Your Strategy</h4>
+                    <ul>
+                        <li>Acknowledge the question without conceding the point</li>
+                        <li>Bridge with specific, transferable accomplishments</li>
+                        <li>Use the "same skill, different context" reframe</li>
+                        <li>Position your outside perspective as a competitive advantage</li>
+                    </ul>
+                </div>
+
+                <div class="field-group">
+                    <label>Your Response</label>
+                    <textarea id="card-2-response" placeholder="Write your response. Start with: 'That's a great question. While my experience is in [current field], the core of what I do is...'"></textarea>
+                </div>
+
+                <div class="field-group">
+                    <label>What felt hard about this one?</label>
+                    <textarea id="card-2-reflection" class="short" placeholder="This is often the hardest scenario for WOC because of the 'prove it again' bias. Name what came up for you..."></textarea>
+                </div>
+
+                <div class="rating-row">
+                    <span class="rating-label">Confidence after practice:</span>
+                    <div class="rating-stars" data-group="card-2">
+                        <div class="star" data-value="1">1</div>
+                        <div class="star" data-value="2">2</div>
+                        <div class="star" data-value="3">3</div>
+                        <div class="star" data-value="4">4</div>
+                        <div class="star" data-value="5">5</div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Card 3: The Networking Event -->
+        <div class="prompt-card">
+            <div class="card-header">
+                <div class="card-number">3</div>
+                <div class="card-header-text">
+                    <h2>The Networking Event</h2>
+                    <p>When you need to introduce yourself in pivot mode</p>
+                </div>
+            </div>
+            <div class="card-body">
+                <div class="scenario-box">
+                    <h4>They Say:</h4>
+                    <p>"So, what do you do?"</p>
+                </div>
+
+                <div class="strategy-box">
+                    <h4>Your Strategy</h4>
+                    <ul>
+                        <li>Lead with where you're going, not just where you've been</li>
+                        <li>Use a forward-looking introduction</li>
+                        <li>Include a hook that invites follow-up questions</li>
+                        <li>Keep it to 15&ndash;20 seconds&mdash;less is more</li>
+                    </ul>
+                </div>
+
+                <div class="field-group">
+                    <label>Your 15-Second Introduction</label>
+                    <textarea id="card-3-response" class="short" placeholder="E.g., 'I'm a [identity/background] professional transitioning into [target space]. I bring [key skill] from [current field], and I'm focused on [what you want to do].'"></textarea>
+                </div>
+
+                <div class="field-group">
+                    <label>Your follow-up if they ask "Tell me more"</label>
+                    <textarea id="card-3-followup" class="short" placeholder="This is your 30-second version. Add one specific accomplishment and your vision..."></textarea>
+                </div>
+
+                <div class="field-group">
+                    <label>What felt hard about this one?</label>
+                    <textarea id="card-3-reflection" class="short" placeholder="Many people struggle with the identity shift of introducing themselves differently. What came up?"></textarea>
+                </div>
+
+                <div class="rating-row">
+                    <span class="rating-label">Confidence after practice:</span>
+                    <div class="rating-stars" data-group="card-3">
+                        <div class="star" data-value="1">1</div>
+                        <div class="star" data-value="2">2</div>
+                        <div class="star" data-value="3">3</div>
+                        <div class="star" data-value="4">4</div>
+                        <div class="star" data-value="5">5</div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Card 4: The Interview -->
+        <div class="prompt-card">
+            <div class="card-header">
+                <div class="card-number">4</div>
+                <div class="card-header-text">
+                    <h2>The Interview</h2>
+                    <p>When you need to deliver your full pivot story</p>
+                </div>
+            </div>
+            <div class="card-body">
+                <div class="scenario-box">
+                    <h4>They Say:</h4>
+                    <p>"Walk me through your career trajectory and why you're making this change."</p>
+                </div>
+
+                <div class="strategy-box">
+                    <h4>Your Strategy</h4>
+                    <ul>
+                        <li>Use the full four-part Pivot Story Script (Hook, Bridge, Evidence, Vision)</li>
+                        <li>Keep it to 60&ndash;90 seconds</li>
+                        <li>Maintain a narrative arc&mdash;don't just list jobs</li>
+                        <li>End strong with your vision for the future, not a recap of the past</li>
+                    </ul>
+                </div>
+
+                <div class="field-group">
+                    <label>Your Full Pivot Story (60&ndash;90 seconds)</label>
+                    <textarea id="card-4-response" placeholder="Deliver your complete Pivot Story Script here. If you've already written it in the Pivot Storytelling worksheet, paste and refine it for this interview context.
+
+Remember: Hook → Bridge → Evidence → Vision"></textarea>
+                </div>
+
+                <div class="field-group">
+                    <label>Anticipated follow-up questions and your answers</label>
+                    <textarea id="card-4-followup" placeholder="What might they ask after your story? Prepare 2-3 follow-up answers:
+1. 'What specifically attracted you to our company?'
+2. 'What's your biggest concern about this transition?'
+3. 'How quickly can you get up to speed?'"></textarea>
+                </div>
+
+                <div class="field-group">
+                    <label>What felt hard about this one?</label>
+                    <textarea id="card-4-reflection" class="short" placeholder="This is the full performance. What needs more work? Where did you stumble?"></textarea>
+                </div>
+
+                <div class="rating-row">
+                    <span class="rating-label">Confidence after practice:</span>
+                    <div class="rating-stars" data-group="card-4">
+                        <div class="star" data-value="1">1</div>
+                        <div class="star" data-value="2">2</div>
+                        <div class="star" data-value="3">3</div>
+                        <div class="star" data-value="4">4</div>
+                        <div class="star" data-value="5">5</div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Overall Reflection -->
+        <div class="reflection-section">
+            <h2>Overall Reflection</h2>
+            <div class="field-group">
+                <label>Which scenario felt most challenging? Why?</label>
+                <textarea id="overall-challenge" class="short" placeholder="Identify your biggest growth area..."></textarea>
+            </div>
+            <div class="field-group">
+                <label>Which scenario felt strongest? What made it work?</label>
+                <textarea id="overall-strength" class="short" placeholder="Build on what's already working..."></textarea>
+            </div>
+            <div class="field-group">
+                <label>What will you practice this week?</label>
+                <textarea id="overall-practice" class="short" placeholder="Pick 1-2 specific scenarios to rehearse before your next real conversation..."></textarea>
+            </div>
+
+            <div class="tip-box">
+                <h4>Building Into April</h4>
+                <p>These pivot conversations will trigger real emotions&mdash;fear, self-doubt, frustration. That's normal. Next month's module (Navigate Bias and Lead Through It) builds the composure skills to stay grounded when these moments get hard.</p>
+            </div>
+        </div>
+
+        <div class="button-row">
+            <button class="btn btn-secondary" onclick="clearForm()">Clear All</button>
+            <span class="save-status hidden" id="save-status">
+                <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="20 6 9 17 4 12"></polyline></svg>
+                Auto-saved
+            </span>
+            <button class="btn btn-primary" onclick="window.print()">Print / Save PDF</button>
+        </div>
+    </div>
+
+    <footer>
+        <p>Executive Leadership Lab &mdash; Module 3: Confident Career Pivot</p>
+        <p><a href="https://coachingwomenofcolor.com">Coaching Women of Color</a></p>
+    </footer>
+
+    <script>
+        const STORAGE_KEY = 'cwc-roleplay-cards-v1';
+        const formElements = [
+            'card-1-response', 'card-1-reflection',
+            'card-2-response', 'card-2-reflection',
+            'card-3-response', 'card-3-followup', 'card-3-reflection',
+            'card-4-response', 'card-4-followup', 'card-4-reflection',
+            'overall-challenge', 'overall-strength', 'overall-practice'
+        ];
+        const ratingGroups = ['card-1', 'card-2', 'card-3', 'card-4'];
+
+        function saveForm() {
+            const data = {};
+            formElements.forEach(id => { const el = document.getElementById(id); if (el) data[id] = el.value; });
+            ratingGroups.forEach(group => {
+                const active = document.querySelector(`.rating-stars[data-group="${group}"] .star.active`);
+                data['rating-' + group] = active ? active.dataset.value : '';
+            });
+            localStorage.setItem(STORAGE_KEY, JSON.stringify(data));
+            showSaveStatus();
+        }
+
+        function loadForm() {
+            const saved = localStorage.getItem(STORAGE_KEY);
+            if (!saved) return;
+            const data = JSON.parse(saved);
+            formElements.forEach(id => { const el = document.getElementById(id); if (el && data[id] !== undefined) el.value = data[id]; });
+            ratingGroups.forEach(group => {
+                if (data['rating-' + group]) {
+                    const star = document.querySelector(`.rating-stars[data-group="${group}"] .star[data-value="${data['rating-' + group]}"]`);
+                    if (star) setRating(star, group);
+                }
+            });
+        }
+
+        function setRating(starEl, group) {
+            const stars = document.querySelectorAll(`.rating-stars[data-group="${group}"] .star`);
+            const value = parseInt(starEl.dataset.value);
+            stars.forEach(s => {
+                s.classList.toggle('active', parseInt(s.dataset.value) <= value);
+            });
+        }
+
+        // Rating click handlers
+        document.querySelectorAll('.star').forEach(star => {
+            star.addEventListener('click', () => {
+                const group = star.closest('.rating-stars').dataset.group;
+                setRating(star, group);
+                saveForm();
+            });
+        });
+
+        function clearForm() {
+            if (confirm('Are you sure you want to clear all entries? This cannot be undone.')) {
+                localStorage.removeItem(STORAGE_KEY);
+                formElements.forEach(id => { const el = document.getElementById(id); if (el) el.value = ''; });
+                document.querySelectorAll('.star').forEach(s => s.classList.remove('active'));
+            }
+        }
+
+        function showSaveStatus() { const s = document.getElementById('save-status'); s.classList.remove('hidden'); setTimeout(() => s.classList.add('hidden'), 2000); }
+        document.addEventListener('input', saveForm);
+        document.addEventListener('DOMContentLoaded', loadForm);
+    </script>
+</body>
+</html>

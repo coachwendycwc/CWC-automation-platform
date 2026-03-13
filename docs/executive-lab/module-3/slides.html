@@ -1,0 +1,788 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Confident Career Pivot | Executive Leadership Lab</title>
+    <link href="https://fonts.googleapis.com/css2?family=Source+Serif+4:wght@400;600;700&family=Inter:wght@400;500;600&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --primary: #1A1A1A;
+            --accent: #2A7B8C;
+            --accent-warm: #D4A574;
+            --text: #333333;
+            --text-light: #666666;
+            --text-muted: #999999;
+            --bg: #FAF8F5;
+            --bg-warm: #F5F2ED;
+            --border: #E5E0D8;
+        }
+
+        /* Print styles */
+        @media print {
+            body { overflow: visible; height: auto; background: white; }
+            .presentation { height: auto; }
+            .slide {
+                position: relative;
+                opacity: 1;
+                visibility: visible;
+                transform: none;
+                page-break-after: always;
+                height: 100vh;
+                padding: 40px 60px;
+            }
+            .slide::before { display: none; }
+            .nav-controls, .keyboard-hint, .progress-bar { display: none; }
+            .slide-title, .slide-dark { background: var(--primary) !important; -webkit-print-color-adjust: exact; print-color-adjust: exact; }
+        }
+
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+
+        body {
+            font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
+            background: var(--primary);
+            color: var(--text);
+            overflow: hidden;
+            height: 100vh;
+        }
+
+        .presentation { position: relative; width: 100vw; height: 100vh; }
+
+        .slide {
+            position: absolute;
+            top: 0; left: 0;
+            width: 100%; height: 100%;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            padding: 80px 120px 140px 120px;
+            opacity: 0;
+            visibility: hidden;
+            transform: translateY(20px);
+            transition: all 0.5s ease;
+            background: var(--bg);
+        }
+        .slide::before {
+            content: '';
+            position: absolute;
+            top: 0; left: 0; right: 0; bottom: 0;
+            background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 200 200' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.7' numOctaves='3' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E");
+            opacity: 0.03;
+            pointer-events: none;
+            z-index: 0;
+        }
+        .slide > * { position: relative; z-index: 1; }
+
+        .slide.active { opacity: 1; visibility: visible; transform: translateY(0); }
+
+        .nav-controls {
+            position: fixed;
+            bottom: 48px;
+            left: 50%;
+            transform: translateX(-50%);
+            display: flex;
+            align-items: center;
+            gap: 24px;
+            z-index: 1000;
+        }
+
+        .nav-btn {
+            width: 48px; height: 48px;
+            border-radius: 50%;
+            border: 2px solid var(--primary);
+            background: transparent;
+            color: var(--primary);
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            transition: all 0.2s ease;
+        }
+
+        .nav-btn:hover { background: var(--primary); color: var(--bg); }
+        .nav-btn:disabled { border-color: var(--border); color: var(--text-muted); cursor: not-allowed; }
+        .nav-btn:disabled:hover { background: transparent; color: var(--text-muted); }
+        .nav-btn svg { width: 20px; height: 20px; }
+
+        .slide-counter { font-size: 13px; font-weight: 500; color: var(--text-muted); letter-spacing: 0.5px; }
+
+        .progress-bar {
+            position: fixed; top: 0; left: 0;
+            height: 2px;
+            background: var(--accent);
+            transition: width 0.4s ease;
+            z-index: 1001;
+        }
+
+        .slide-header {
+            position: absolute;
+            top: 40px; left: 60px; right: 60px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .logo { height: 80px; }
+        .module-label { font-size: 11px; font-weight: 600; color: var(--text-muted); text-transform: uppercase; letter-spacing: 2px; }
+
+        .slide-content { max-width: 960px; width: 100%; text-align: center; }
+
+        h1 {
+            font-family: 'Source Serif 4', Georgia, serif;
+            font-size: 56px; font-weight: 700;
+            color: var(--primary);
+            line-height: 1.15;
+            letter-spacing: -1px;
+            margin-bottom: 24px;
+        }
+
+        h2 {
+            font-family: 'Source Serif 4', Georgia, serif;
+            font-size: 42px; font-weight: 600;
+            color: var(--primary);
+            line-height: 1.2;
+            margin-bottom: 20px;
+        }
+
+        .section-label {
+            font-size: 11px; font-weight: 600;
+            color: var(--accent);
+            text-transform: uppercase;
+            letter-spacing: 2.5px;
+            margin-bottom: 20px;
+            display: block;
+        }
+
+        p, .lead { font-size: 18px; line-height: 1.7; color: var(--text-light); max-width: 680px; margin: 0 auto; }
+        .lead { font-size: 20px; }
+
+        .slide-title {
+            background: linear-gradient(135deg, #1A1A1A 0%, #2d2d2d 50%, #1A1A1A 100%);
+            color: var(--bg);
+            position: relative;
+        }
+        .slide-title h1 { color: var(--bg); font-size: 64px; }
+        .slide-title p { color: rgba(255,255,255,0.6); }
+
+        .title-meta {
+            display: flex; justify-content: center; gap: 48px;
+            margin-top: 48px; padding-top: 32px;
+            border-top: 1px solid rgba(255,255,255,0.1);
+        }
+        .meta-item { font-size: 13px; color: rgba(255,255,255,0.5); letter-spacing: 0.5px; }
+
+        .cards-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 32px; margin-top: 48px; text-align: left; }
+        .cards-grid.two-col { grid-template-columns: repeat(2, 1fr); }
+
+        .card { padding: 40px; border: 1px solid var(--border); border-radius: 4px; transition: all 0.2s ease; }
+        .card:hover { border-color: var(--accent); }
+        .card h4 { font-family: 'Source Serif 4', Georgia, serif; font-size: 18px; font-weight: 600; color: var(--primary); margin-bottom: 12px; }
+        .card p { font-size: 15px; color: var(--text-light); margin: 0; line-height: 1.6; }
+
+        .feature-list { text-align: left; max-width: 640px; margin: 48px auto 0; }
+        .feature-item { display: flex; align-items: flex-start; gap: 20px; padding: 24px 0; border-bottom: 1px solid var(--border); }
+        .feature-item:last-child { border-bottom: none; }
+
+        .feature-number {
+            width: 32px; height: 32px;
+            background: var(--accent-warm);
+            border-radius: 50%;
+            display: flex; align-items: center; justify-content: center;
+            font-size: 14px; font-weight: 600; color: white;
+            flex-shrink: 0;
+        }
+
+        .feature-text h4 { font-size: 17px; font-weight: 600; color: var(--primary); margin-bottom: 6px; }
+        .feature-text p { font-size: 15px; color: var(--text-light); margin: 0; }
+
+        .two-column { display: grid; grid-template-columns: 1fr 1fr; gap: 64px; text-align: left; max-width: 880px; margin: 48px auto 0; }
+        .column h4 { font-family: 'Source Serif 4', Georgia, serif; font-size: 18px; font-weight: 600; color: var(--primary); margin-bottom: 20px; padding-bottom: 12px; border-bottom: 2px solid var(--primary); }
+        .column ul { list-style: none; }
+        .column li { padding: 10px 0; font-size: 15px; color: var(--text-light); border-bottom: 1px solid var(--border); }
+        .column li:last-child { border-bottom: none; }
+
+        .slide-quote {
+            background: var(--bg-warm);
+        }
+        .quote-text {
+            font-family: 'Source Serif 4', Georgia, serif;
+            font-size: 32px; font-weight: 400;
+            line-height: 1.5; color: var(--primary);
+            max-width: 800px; font-style: italic;
+        }
+        .quote-text::before { content: '\201C'; display: block; font-size: 72px; line-height: 1; color: var(--accent-warm); margin-bottom: 16px; }
+
+        .stats-row { display: flex; justify-content: center; gap: 80px; margin-top: 56px; }
+        .stat-item { text-align: center; }
+        .stat-number { font-family: 'Source Serif 4', Georgia, serif; font-size: 48px; font-weight: 700; color: var(--primary); }
+        .stat-label { font-size: 13px; color: var(--text-muted); text-transform: uppercase; letter-spacing: 1px; margin-top: 8px; }
+
+        .flow-diagram { display: flex; align-items: center; justify-content: center; gap: 16px; margin-top: 48px; flex-wrap: wrap; }
+        .flow-step { padding: 16px 24px; border: 1px solid var(--border); border-radius: 4px; font-size: 14px; font-weight: 500; color: var(--text); }
+        .flow-arrow { font-size: 18px; color: var(--text-muted); }
+
+        .slide-dark {
+            background: linear-gradient(135deg, #1A1A1A 0%, #252525 40%, #1A1A1A 100%);
+            color: var(--bg);
+        }
+        .slide-dark h2 { color: var(--bg); }
+        .slide-dark p { color: rgba(255,255,255,0.6); }
+
+        /* ELL Visual Mark */
+        .ell-mark {
+            position: absolute;
+            bottom: 40px;
+            right: 60px;
+            font-family: 'Source Serif 4', Georgia, serif;
+            font-size: 14px;
+            font-weight: 600;
+            letter-spacing: 3px;
+            color: var(--accent-warm);
+            opacity: 0.4;
+        }
+        .slide-dark .ell-mark { color: rgba(255,255,255,0.15); }
+        .slide-title .ell-mark { color: rgba(255,255,255,0.15); }
+
+        .callout { background: var(--bg-warm); border-left: 3px solid var(--accent-warm); padding: 24px 32px; margin-top: 40px; text-align: left; max-width: 640px; margin-left: auto; margin-right: auto; }
+        .callout p { font-size: 15px; margin: 0; }
+
+        .activity-meta { display: inline-block; margin-top: 40px; padding: 12px 24px; border: 1px solid var(--border); border-radius: 4px; font-size: 13px; color: var(--text-muted); }
+
+        /* Equation styles */
+        .equation { display: flex; align-items: center; justify-content: center; gap: 20px; margin-top: 48px; flex-wrap: wrap; }
+        .equation-part { padding: 20px 32px; background: var(--bg-warm); border-radius: 4px; font-size: 16px; font-weight: 600; color: var(--primary); }
+        .equation-symbol { font-size: 24px; color: var(--accent); font-weight: 700; }
+        .equation-result { background: var(--accent); color: white; }
+
+        /* Table styles */
+        .simple-table { width: 100%; max-width: 700px; margin: 40px auto 0; border-collapse: collapse; text-align: left; }
+        .simple-table th { font-size: 13px; font-weight: 600; color: var(--accent); text-transform: uppercase; letter-spacing: 1px; padding: 12px 16px; border-bottom: 2px solid var(--primary); }
+        .simple-table td { padding: 16px; font-size: 15px; color: var(--text-light); border-bottom: 1px solid var(--border); }
+        .simple-table td:first-child { font-weight: 600; color: var(--primary); }
+
+        /* Formula box */
+        .formula-box { background: var(--primary); color: var(--bg); padding: 32px 48px; border-radius: 4px; margin-top: 40px; max-width: 600px; margin-left: auto; margin-right: auto; }
+        .formula-box h4 { font-family: 'Source Serif 4', Georgia, serif; font-size: 18px; margin-bottom: 16px; color: var(--accent-warm); }
+        .formula-box p { font-size: 16px; color: rgba(255,255,255,0.8); margin: 8px 0; }
+        .formula-box .formula-highlight { color: white; font-weight: 600; }
+
+        /* Roadmap Steps */
+        .roadmap-steps { display: grid; grid-template-columns: repeat(3, 1fr); gap: 24px; margin-top: 48px; text-align: left; }
+        .roadmap-step { display: flex; align-items: flex-start; gap: 16px; padding: 24px; border: 1px solid var(--border); border-radius: 4px; position: relative; }
+        .roadmap-step::after { content: '\2192'; position: absolute; right: -18px; top: 50%; transform: translateY(-50%); color: var(--accent-warm); font-size: 20px; font-weight: bold; }
+        .roadmap-step:nth-child(3)::after, .roadmap-step:nth-child(6)::after { display: none; }
+        .step-number { width: 36px; height: 36px; background: var(--accent); border-radius: 50%; display: flex; align-items: center; justify-content: center; font-size: 16px; font-weight: 700; color: white; flex-shrink: 0; }
+        .step-content h4 { font-family: 'Source Serif 4', Georgia, serif; font-size: 16px; font-weight: 600; color: var(--primary); margin-bottom: 6px; }
+        .step-content p { font-size: 14px; color: var(--text-light); margin: 0; line-height: 1.5; }
+
+        .keyboard-hint { position: fixed; bottom: 20px; left: 50%; transform: translateX(-50%); font-size: 10px; color: var(--text-muted); letter-spacing: 0.5px; opacity: 0.6; }
+        .keyboard-hint kbd { display: inline-block; padding: 2px 6px; border: 1px solid var(--border); border-radius: 3px; font-family: inherit; font-size: 11px; margin: 0 2px; }
+
+        /* ========================================
+           RESPONSIVE STYLES
+           ======================================== */
+
+        @media screen and (max-width: 1024px) {
+            .slide { padding: 60px 80px 120px 80px; }
+            .slide-header { top: 30px; left: 40px; right: 40px; }
+            h1 { font-size: 48px; }
+            .slide-title h1 { font-size: 52px; }
+            h2 { font-size: 36px; }
+            .quote-text { font-size: 28px; }
+            .cards-grid { gap: 24px; }
+            .card { padding: 32px; }
+            .two-column { gap: 48px; }
+            .stats-row { gap: 48px; }
+            .stat-number { font-size: 40px; }
+            .ell-mark { right: 40px; bottom: 30px; }
+            .roadmap-steps { gap: 16px; }
+            .roadmap-step { padding: 20px; }
+        }
+
+        @media screen and (max-width: 768px) {
+            .slide { padding: 100px 40px 140px; }
+            .slide-header { top: 20px; left: 24px; right: 24px; flex-direction: column; align-items: flex-start; gap: 8px; }
+            .logo { height: 60px; }
+            h1 { font-size: 36px; }
+            .slide-title h1 { font-size: 40px; }
+            h2 { font-size: 30px; }
+            p, .lead { font-size: 16px; }
+            .quote-text { font-size: 24px; }
+            .cards-grid { grid-template-columns: 1fr; gap: 16px; }
+            .cards-grid.two-col { grid-template-columns: 1fr; }
+            .card { padding: 24px; }
+            .two-column { grid-template-columns: 1fr; gap: 32px; }
+            .feature-list { margin-top: 32px; }
+            .stats-row { flex-direction: column; gap: 24px; }
+            .equation { flex-direction: column; gap: 12px; }
+            .equation-part { padding: 16px 24px; font-size: 14px; }
+            .roadmap-steps { grid-template-columns: 1fr; }
+            .roadmap-step::after { display: none; }
+            .simple-table { font-size: 14px; }
+            .simple-table th, .simple-table td { padding: 12px 8px; }
+            .formula-box { padding: 24px; }
+            .nav-controls { bottom: 24px; }
+            .keyboard-hint { display: none; }
+        }
+
+        @media screen and (max-width: 480px) {
+            .slide { padding: 70px 12px 90px; justify-content: flex-start; padding-top: 80px; overflow-y: auto; }
+            .slide-content { max-width: 100%; padding: 0 4px; }
+            .slide-header { top: 8px; left: 10px; right: 10px; flex-direction: row; justify-content: space-between; }
+            .logo { height: 28px; }
+            .module-label { font-size: 9px; letter-spacing: 1px; }
+            .section-label { font-size: 9px; letter-spacing: 1.5px; margin-bottom: 12px; }
+            h1 { font-size: 22px; margin-bottom: 16px; }
+            .slide-title h1 { font-size: 24px; }
+            h2 { font-size: 20px; margin-bottom: 12px; }
+            p, .lead { font-size: 13px; line-height: 1.5; }
+            .quote-text { font-size: 16px; }
+            .quote-text::before { font-size: 48px; }
+            .card { padding: 12px; }
+            .card h4 { font-size: 14px; margin-bottom: 6px; }
+            .card p { font-size: 12px; line-height: 1.4; }
+            .stats-row { gap: 16px; }
+            .stat-number { font-size: 32px; }
+            .stat-label { font-size: 10px; }
+            .feature-list { margin-top: 20px; }
+            .feature-item { padding: 14px 0; gap: 12px; }
+            .feature-number { width: 26px; height: 26px; font-size: 12px; }
+            .feature-text h4 { font-size: 14px; margin-bottom: 4px; }
+            .feature-text p { font-size: 12px; }
+            .equation-part { padding: 12px 16px; font-size: 12px; }
+            .equation-symbol { font-size: 18px; }
+            .two-column { gap: 20px; margin-top: 24px; }
+            .column h4 { font-size: 14px; margin-bottom: 12px; padding-bottom: 8px; }
+            .column li { font-size: 12px; padding: 8px 0; }
+            .simple-table { font-size: 12px; margin-top: 24px; }
+            .simple-table th { font-size: 10px; padding: 8px 6px; }
+            .simple-table td { padding: 10px 6px; font-size: 12px; }
+            .formula-box { padding: 16px; margin-top: 24px; }
+            .formula-box h4 { font-size: 14px; margin-bottom: 10px; }
+            .formula-box p { font-size: 13px; }
+            .roadmap-step { padding: 12px; gap: 10px; }
+            .step-number { width: 28px; height: 28px; font-size: 13px; }
+            .step-content h4 { font-size: 13px; }
+            .step-content p { font-size: 11px; }
+            .callout { padding: 14px 16px; margin-top: 20px; }
+            .callout p { font-size: 12px; }
+            .activity-meta { padding: 8px 16px; font-size: 11px; margin-top: 24px; }
+            .title-meta { margin-top: 32px; padding-top: 20px; gap: 24px; flex-wrap: wrap; justify-content: center; }
+            .meta-item { font-size: 11px; }
+            .nav-controls { bottom: 10px; gap: 16px; }
+            .nav-btn { width: 36px; height: 36px; }
+            .nav-btn svg { width: 16px; height: 16px; }
+            .slide-counter { font-size: 11px; }
+            .ell-mark { font-size: 11px; bottom: 24px; right: 12px; }
+        }
+    </style>
+</head>
+<body>
+    <div class="progress-bar" id="progress"></div>
+    <div class="presentation" id="presentation">
+
+        <!-- Slide 1: Title -->
+        <div class="slide slide-title active" data-slide="1">
+            <div class="slide-header">
+                <img src="https://coachingwomenofcolor.com/wp-content/uploads/2021/04/CWCFinal_logo2.webp" alt="CWC" class="logo">
+                <span class="module-label">Executive Leadership Lab</span>
+            </div>
+            <div class="slide-content">
+                <span class="section-label">Module 3 &mdash; March</span>
+                <h1>Confident Career Pivot:<br>Own Your Next Chapter</h1>
+                <p class="lead">Translate your existing experience into a credible, compelling story for the roles you actually want.</p>
+                <div class="title-meta">
+                    <span class="meta-item">12-Month Program</span>
+                    <span class="meta-item">Coaching Women of Color</span>
+                </div>
+            </div>
+            <div class="ell-mark">ELL</div>
+        </div>
+
+        <!-- Slide 2: Welcome -->
+        <div class="slide" data-slide="2">
+            <div class="slide-header"><img src="https://coachingwomenofcolor.com/wp-content/uploads/2021/04/CWCFinal_logo2.webp" alt="CWC" class="logo"><span class="module-label">Module 3</span></div>
+            <div class="slide-content">
+                <span class="section-label">Welcome</span>
+                <h2>Your Experience Is<br>More Transferable Than You Think</h2>
+                <p>You're not starting over. You're building on everything you've already done. This module helps you see the bridge between where you are and where you want to be.</p>
+                <div class="stats-row">
+                    <div class="stat-item"><div class="stat-number">52%</div><div class="stat-label">of WOC considering a career change</div></div>
+                    <div class="stat-item"><div class="stat-number">2.5x</div><div class="stat-label">more likely to face "prove it again" bias</div></div>
+                    <div class="stat-item"><div class="stat-number">73%</div><div class="stat-label">of pivots succeed with a clear narrative</div></div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Slide 3: Objectives -->
+        <div class="slide" data-slide="3">
+            <div class="slide-header"><img src="https://coachingwomenofcolor.com/wp-content/uploads/2021/04/CWCFinal_logo2.webp" alt="CWC" class="logo"><span class="module-label">Module 3</span></div>
+            <div class="slide-content">
+                <span class="section-label">Objectives</span>
+                <h2>What You'll Gain</h2>
+                <div class="feature-list">
+                    <div class="feature-item"><div class="feature-number">1</div><div class="feature-text"><h4>Map Your Transferable Skills</h4><p>Identify the skills, strengths, and experiences that translate directly into your target role</p></div></div>
+                    <div class="feature-item"><div class="feature-number">2</div><div class="feature-text"><h4>Craft Your Pivot Story</h4><p>Build a polished narrative that positions your career shift as intentional, not accidental</p></div></div>
+                    <div class="feature-item"><div class="feature-number">3</div><div class="feature-text"><h4>Prepare for Informational Interviews</h4><p>Develop a research strategy and outreach plan for your target industry or role</p></div></div>
+                    <div class="feature-item"><div class="feature-number">4</div><div class="feature-text"><h4>Practice Through Role-Play</h4><p>Rehearse pivot conversations so you walk in confident, not defensive</p></div></div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Slide 4: The Challenge -->
+        <div class="slide" data-slide="4">
+            <div class="slide-header"><img src="https://coachingwomenofcolor.com/wp-content/uploads/2021/04/CWCFinal_logo2.webp" alt="CWC" class="logo"><span class="module-label">Module 3</span></div>
+            <div class="slide-content">
+                <span class="section-label">The Challenge</span>
+                <h2>The Pivot Paradox:<br>Qualified But Questioned</h2>
+                <p>You have the skills. You have the track record. But when you try to move into something new, people see a gap instead of a bridge.</p>
+                <div class="cards-grid">
+                    <div class="card"><h4>The Expertise Trap</h4><p>You're so associated with your current role that people can't see you doing anything else&mdash;even when your skills clearly transfer.</p></div>
+                    <div class="card"><h4>The Prove-It-Again Tax</h4><p>WOC already face higher standards. A pivot amplifies this&mdash;you're asked to prove competence that's already been demonstrated.</p></div>
+                    <div class="card"><h4>The Story Gap</h4><p>Without a clear narrative connecting past to future, hiring managers fill in the blanks with doubt instead of confidence.</p></div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Slide 5: Framework -->
+        <div class="slide" data-slide="5">
+            <div class="slide-header"><img src="https://coachingwomenofcolor.com/wp-content/uploads/2021/04/CWCFinal_logo2.webp" alt="CWC" class="logo"><span class="module-label">Module 3</span></div>
+            <div class="slide-content">
+                <span class="section-label">Framework</span>
+                <h2>The Pivot Equation</h2>
+                <p>A successful career pivot isn't about starting over. It's about reframing what you already have.</p>
+                <div class="equation">
+                    <div class="equation-part">Transferable Skills</div>
+                    <div class="equation-symbol">+</div>
+                    <div class="equation-part">Compelling Story</div>
+                    <div class="equation-symbol">+</div>
+                    <div class="equation-part">Strategic Outreach</div>
+                    <div class="equation-symbol">=</div>
+                    <div class="equation-part equation-result">Confident Pivot</div>
+                </div>
+                <div class="callout"><p><strong>From Module 2:</strong> The wins you've been tracking become the evidence for your pivot story. Every accomplishment is proof that your skills translate.</p></div>
+            </div>
+        </div>
+
+        <!-- Slide 6: Deep Dive - Transferable Skills -->
+        <div class="slide" data-slide="6">
+            <div class="slide-header"><img src="https://coachingwomenofcolor.com/wp-content/uploads/2021/04/CWCFinal_logo2.webp" alt="CWC" class="logo"><span class="module-label">Transferable Skills</span></div>
+            <div class="slide-content">
+                <span class="section-label">Deep Dive</span>
+                <h2>Skills Travel.<br>Job Titles Don't.</h2>
+                <p>The skills that made you successful in your current role are the same ones your target role needs. You just need to name them differently.</p>
+                <div class="two-column">
+                    <div class="column"><h4>What You Might Think</h4><ul><li>"I only know how to do this one thing"</li><li>"I don't have the right background"</li><li>"I'd have to start at the bottom"</li><li>"Nobody will take me seriously"</li></ul></div>
+                    <div class="column"><h4>What's Actually True</h4><ul><li>You have 5-10 transferable skill categories</li><li>Experience in one sector is an asset in another</li><li>Leadership skills translate across industries</li><li>Your unique perspective is a competitive advantage</li></ul></div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Slide 7: Skill Translation -->
+        <div class="slide" data-slide="7">
+            <div class="slide-header"><img src="https://coachingwomenofcolor.com/wp-content/uploads/2021/04/CWCFinal_logo2.webp" alt="CWC" class="logo"><span class="module-label">Transferable Skills</span></div>
+            <div class="slide-content">
+                <span class="section-label">Skill Translation</span>
+                <h2>Same Skill, New Language</h2>
+                <p>Your skills don't change&mdash;the way you describe them does. Here's how to translate across sectors.</p>
+                <table class="simple-table">
+                    <tr><th>Your Current Skill</th><th>Corporate Translation</th><th>Nonprofit / Gov Translation</th></tr>
+                    <tr><td>Managing budgets</td><td>P&L ownership, financial modeling</td><td>Grant management, fiscal stewardship</td></tr>
+                    <tr><td>Leading teams</td><td>People management, talent development</td><td>Program oversight, coalition building</td></tr>
+                    <tr><td>Solving problems</td><td>Strategic analysis, process optimization</td><td>Community impact assessment, policy design</td></tr>
+                    <tr><td>Building relationships</td><td>Stakeholder management, business development</td><td>Partner engagement, constituent relations</td></tr>
+                </table>
+            </div>
+        </div>
+
+        <!-- Slide 8: Activity - Skills Inventory -->
+        <div class="slide" data-slide="8">
+            <div class="slide-header"><img src="https://coachingwomenofcolor.com/wp-content/uploads/2021/04/CWCFinal_logo2.webp" alt="CWC" class="logo"><span class="module-label">Activity</span></div>
+            <div class="slide-content">
+                <span class="section-label">Self-Assessment</span>
+                <h2>Your Transferable Skills Inventory</h2>
+                <p>Before you can tell your pivot story, you need to know what you're working with. Map your skills across these categories.</p>
+                <div class="roadmap-steps">
+                    <div class="roadmap-step"><div class="step-number">1</div><div class="step-content"><h4>Technical Skills</h4><p>Systems, tools, and domain knowledge</p></div></div>
+                    <div class="roadmap-step"><div class="step-number">2</div><div class="step-content"><h4>Leadership Skills</h4><p>Managing, mentoring, decision-making</p></div></div>
+                    <div class="roadmap-step"><div class="step-number">3</div><div class="step-content"><h4>Communication</h4><p>Writing, presenting, persuading</p></div></div>
+                    <div class="roadmap-step"><div class="step-number">4</div><div class="step-content"><h4>Strategic Thinking</h4><p>Planning, analysis, problem-solving</p></div></div>
+                    <div class="roadmap-step"><div class="step-number">5</div><div class="step-content"><h4>Relationship Building</h4><p>Networking, stakeholder management</p></div></div>
+                    <div class="roadmap-step"><div class="step-number">6</div><div class="step-content"><h4>Industry Knowledge</h4><p>Sector insights that transfer</p></div></div>
+                </div>
+                <div class="activity-meta">Time: 15&ndash;20 minutes &middot; Use the Transferable Skills Inventory worksheet</div>
+            </div>
+        </div>
+
+        <!-- Slide 9: Quote -->
+        <div class="slide slide-quote" data-slide="9">
+            <div class="slide-header"><img src="https://coachingwomenofcolor.com/wp-content/uploads/2021/04/CWCFinal_logo2.webp" alt="CWC" class="logo"><span class="module-label">Reflection</span></div>
+            <div class="slide-content">
+                <p class="quote-text">You are not starting over. You are starting from experience.</p>
+            </div>
+        </div>
+
+        <!-- Slide 10: The WOC Pivot Challenge -->
+        <div class="slide" data-slide="10">
+            <div class="slide-header"><img src="https://coachingwomenofcolor.com/wp-content/uploads/2021/04/CWCFinal_logo2.webp" alt="CWC" class="logo"><span class="module-label">Module 3</span></div>
+            <div class="slide-content">
+                <span class="section-label">WOC Focus</span>
+                <h2>Navigating the<br>"Prove It Again" Bias</h2>
+                <p>When WOC pivot, they face a double standard: proving they're qualified for the new role while fighting assumptions about why they left the old one.</p>
+                <div class="cards-grid two-col" style="margin-top: 40px;">
+                    <div class="card"><h4>The Assumption Gap</h4><p>People assume your pivot means something went wrong, rather than recognizing it as a strategic career move</p></div>
+                    <div class="card"><h4>The Credibility Reset</h4><p>Years of expertise get mentally discounted because you're entering a new space&mdash;this hits WOC hardest</p></div>
+                    <div class="card"><h4>The Network Penalty</h4><p>Your existing network may not extend into your target space, and cold outreach feels higher-stakes</p></div>
+                    <div class="card"><h4>The Confidence Tax</h4><p>Internalized doubt compounds external skepticism, making you undersell the very skills that make you valuable</p></div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Slide 11: Owning the Narrative -->
+        <div class="slide" data-slide="11">
+            <div class="slide-header"><img src="https://coachingwomenofcolor.com/wp-content/uploads/2021/04/CWCFinal_logo2.webp" alt="CWC" class="logo"><span class="module-label">Module 3</span></div>
+            <div class="slide-content">
+                <span class="section-label">Strategy</span>
+                <h2>Own Your Narrative<br>Before Someone Else Does</h2>
+                <p>If you don't tell your pivot story, other people will make one up. And their version won't serve you.</p>
+                <div class="two-column">
+                    <div class="column"><h4>What Others Might Assume</h4><ul><li>"She couldn't cut it in her old field"</li><li>"She's starting from scratch"</li><li>"She doesn't have relevant experience"</li><li>"She'll be a flight risk here too"</li></ul></div>
+                    <div class="column"><h4>What Your Story Should Say</h4><ul><li>"I'm bringing proven skills to a new challenge"</li><li>"This is a strategic, intentional move"</li><li>"My cross-sector experience is an asset"</li><li>"I've done the research and I'm all in"</li></ul></div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Slide 12: The Pivot Story Framework -->
+        <div class="slide" data-slide="12">
+            <div class="slide-header"><img src="https://coachingwomenofcolor.com/wp-content/uploads/2021/04/CWCFinal_logo2.webp" alt="CWC" class="logo"><span class="module-label">Module 3</span></div>
+            <div class="slide-content">
+                <span class="section-label">Framework</span>
+                <h2>The Pivot Story Script</h2>
+                <p>Every effective pivot story has four parts. This is the structure that makes hiring managers lean in instead of lean back.</p>
+                <div class="feature-list">
+                    <div class="feature-item"><div class="feature-number">1</div><div class="feature-text"><h4>The Hook</h4><p>Open with what excites you about the new direction&mdash;lead with passion, not apology</p></div></div>
+                    <div class="feature-item"><div class="feature-number">2</div><div class="feature-text"><h4>The Bridge</h4><p>Connect your past experience to the new role using transferable skills and concrete results</p></div></div>
+                    <div class="feature-item"><div class="feature-number">3</div><div class="feature-text"><h4>The Evidence</h4><p>Share 2-3 specific accomplishments that prove you can deliver in this new context</p></div></div>
+                    <div class="feature-item"><div class="feature-number">4</div><div class="feature-text"><h4>The Vision</h4><p>Articulate what you'll bring and why your unique perspective matters in this space</p></div></div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Slide 13: Pivot Story Examples -->
+        <div class="slide" data-slide="13">
+            <div class="slide-header"><img src="https://coachingwomenofcolor.com/wp-content/uploads/2021/04/CWCFinal_logo2.webp" alt="CWC" class="logo"><span class="module-label">Module 3</span></div>
+            <div class="slide-content">
+                <span class="section-label">Examples</span>
+                <h2>Pivot Stories in Action</h2>
+                <div class="cards-grid" style="margin-top: 40px;">
+                    <div class="card"><h4>Nonprofit &rarr; Corporate</h4><p><strong>Hook:</strong> "I'm passionate about scaling impact through business strategy."<br><strong>Bridge:</strong> "Managing a $5M program with 50+ stakeholders taught me operations at scale."<br><strong>Evidence:</strong> "I increased efficiency by 40% and built partnerships across sectors."<br><strong>Vision:</strong> "I bring a stakeholder-first lens most corporate leaders are missing."</p></div>
+                    <div class="card"><h4>Corporate &rarr; Government</h4><p><strong>Hook:</strong> "I want to use my strategy skills to drive public impact."<br><strong>Bridge:</strong> "10 years leading cross-functional teams in complex environments."<br><strong>Evidence:</strong> "I delivered a $12M transformation program on time and under budget."<br><strong>Vision:</strong> "Private-sector rigor applied to public-sector missions."</p></div>
+                    <div class="card"><h4>Government &rarr; Tech</h4><p><strong>Hook:</strong> "I've been solving complex systems problems&mdash;now I want to build the solutions."<br><strong>Bridge:</strong> "Policy design is product thinking at a massive scale."<br><strong>Evidence:</strong> "I redesigned a system serving 2M constituents, reducing wait times by 60%."<br><strong>Vision:</strong> "I bring user empathy that most tech teams lack."</p></div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Slide 14: Activity - Craft Your Story -->
+        <div class="slide" data-slide="14">
+            <div class="slide-header"><img src="https://coachingwomenofcolor.com/wp-content/uploads/2021/04/CWCFinal_logo2.webp" alt="CWC" class="logo"><span class="module-label">Activity</span></div>
+            <div class="slide-content">
+                <span class="section-label">Deep Work</span>
+                <h2>Write Your Pivot Story</h2>
+                <p>Using the four-part framework, draft your own pivot story. Don't edit yourself yet&mdash;get the raw material down first.</p>
+                <table class="simple-table">
+                    <tr><th>Part</th><th>Your Draft</th></tr>
+                    <tr><td>The Hook</td><td>Why this new direction excites you</td></tr>
+                    <tr><td>The Bridge</td><td>Skills and experience that connect past to future</td></tr>
+                    <tr><td>The Evidence</td><td>2-3 specific accomplishments with metrics</td></tr>
+                    <tr><td>The Vision</td><td>What you uniquely bring to this space</td></tr>
+                </table>
+                <div class="callout"><p><strong>Pro tip:</strong> Pull from your win log (Module 2) for the Evidence section. Your tracked wins become your pivot proof points.</p></div>
+                <div class="activity-meta">Time: 15&ndash;20 minutes &middot; Use the Pivot Storytelling Script Template</div>
+            </div>
+        </div>
+
+        <!-- Slide 15: Informational Interviews -->
+        <div class="slide" data-slide="15">
+            <div class="slide-header"><img src="https://coachingwomenofcolor.com/wp-content/uploads/2021/04/CWCFinal_logo2.webp" alt="CWC" class="logo"><span class="module-label">Module 3</span></div>
+            <div class="slide-content">
+                <span class="section-label">Strategic Outreach</span>
+                <h2>The Informational Interview</h2>
+                <p>The most underrated career pivot tool. It's not about asking for a job&mdash;it's about building knowledge and relationships in your target space.</p>
+                <div class="cards-grid">
+                    <div class="card"><h4>Why They Work</h4><p>You get insider information, build advocates, and practice your pivot story in a low-stakes environment.</p></div>
+                    <div class="card"><h4>Who to Target</h4><p>People 1-2 levels above your target role, career pivoters who've done what you want to do, and industry connectors.</p></div>
+                    <div class="card"><h4>How to Ask</h4><p>Be specific, be respectful of their time, and make it easy to say yes. Lead with admiration, not desperation.</p></div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Slide 16: Outreach Templates -->
+        <div class="slide" data-slide="16">
+            <div class="slide-header"><img src="https://coachingwomenofcolor.com/wp-content/uploads/2021/04/CWCFinal_logo2.webp" alt="CWC" class="logo"><span class="module-label">Module 3</span></div>
+            <div class="slide-content">
+                <span class="section-label">Tool</span>
+                <h2>The Outreach Formula</h2>
+                <p>A simple, repeatable approach for reaching out to people in your target space.</p>
+                <div class="formula-box">
+                    <h4>The Outreach Script</h4>
+                    <p><span class="formula-highlight">Compliment:</span> "I admire your work in [specific area]"</p>
+                    <p><span class="formula-highlight">Context:</span> "I'm transitioning from [current field] to [target field]"</p>
+                    <p><span class="formula-highlight">Ask:</span> "Would you have 20 minutes for a brief conversation?"</p>
+                    <p><span class="formula-highlight">Easy Out:</span> "No pressure at all&mdash;I appreciate your time either way"</p>
+                </div>
+                <div class="callout"><p><strong>For WOC:</strong> You don't need to over-explain your pivot. A confident, concise outreach message signals that you know your worth.</p></div>
+            </div>
+        </div>
+
+        <!-- Slide 17: Informational Interview Questions -->
+        <div class="slide" data-slide="17">
+            <div class="slide-header"><img src="https://coachingwomenofcolor.com/wp-content/uploads/2021/04/CWCFinal_logo2.webp" alt="CWC" class="logo"><span class="module-label">Module 3</span></div>
+            <div class="slide-content">
+                <span class="section-label">Tool</span>
+                <h2>Power Questions for<br>Informational Interviews</h2>
+                <div class="feature-list" style="margin-top: 32px;">
+                    <div class="feature-item"><div class="feature-number">1</div><div class="feature-text"><h4>"What skills matter most in this role that aren't in the job description?"</h4><p>Reveals the hidden criteria you need to address</p></div></div>
+                    <div class="feature-item"><div class="feature-number">2</div><div class="feature-text"><h4>"What would someone from my background need to demonstrate to be taken seriously?"</h4><p>Directly addresses the prove-it-again barrier</p></div></div>
+                    <div class="feature-item"><div class="feature-number">3</div><div class="feature-text"><h4>"What's the biggest misconception about transitioning into this field?"</h4><p>Helps you preempt objections in your pivot story</p></div></div>
+                    <div class="feature-item"><div class="feature-number">4</div><div class="feature-text"><h4>"Who else should I be talking to?"</h4><p>Expands your network with warm introductions</p></div></div>
+                </div>
+                <div class="activity-meta">Use the Informational Interview Prep Guide worksheet</div>
+            </div>
+        </div>
+
+        <!-- Slide 18: Role-Play -->
+        <div class="slide" data-slide="18">
+            <div class="slide-header"><img src="https://coachingwomenofcolor.com/wp-content/uploads/2021/04/CWCFinal_logo2.webp" alt="CWC" class="logo"><span class="module-label">Activity</span></div>
+            <div class="slide-content">
+                <span class="section-label">Practice</span>
+                <h2>Role-Play: The Pivot Conversation</h2>
+                <p>Confidence comes from rehearsal, not wishful thinking. Practice handling the hardest pivot questions before they come up for real.</p>
+                <div class="cards-grid two-col" style="margin-top: 48px;">
+                    <div class="card"><h4>Scenario 1: The Skeptic</h4><p>"Why would you leave [current field]? That seems like a big risk."<br><br><strong>Your move:</strong> Lead with your vision, not your frustration. Reframe risk as strategic growth.</p></div>
+                    <div class="card"><h4>Scenario 2: The Gatekeeper</h4><p>"We usually look for candidates with direct experience in [target field]."<br><br><strong>Your move:</strong> Bridge your transferable skills with specific, measurable evidence.</p></div>
+                    <div class="card"><h4>Scenario 3: The Networking Event</h4><p>"So what do you do?" (and your answer needs to signal your pivot direction)<br><br><strong>Your move:</strong> Use a forward-looking introduction that positions where you're going, not just where you've been.</p></div>
+                    <div class="card"><h4>Scenario 4: The Interview</h4><p>"Walk me through your career trajectory and why you're making this change."<br><br><strong>Your move:</strong> Use the full four-part Pivot Story Script with polished delivery.</p></div>
+                </div>
+                <div class="activity-meta">Time: 20&ndash;25 minutes &middot; Use the Role-Play Prompt Cards</div>
+            </div>
+        </div>
+
+        <!-- Slide 19: Building Your Target List -->
+        <div class="slide" data-slide="19">
+            <div class="slide-header"><img src="https://coachingwomenofcolor.com/wp-content/uploads/2021/04/CWCFinal_logo2.webp" alt="CWC" class="logo"><span class="module-label">Module 3</span></div>
+            <div class="slide-content">
+                <span class="section-label">Action Plan</span>
+                <h2>Your Target List</h2>
+                <p>A confident pivot starts with clarity on where you're going. Identify 5 target roles or companies and build your outreach plan.</p>
+                <table class="simple-table">
+                    <tr><th>Element</th><th>Details</th></tr>
+                    <tr><td>Target Role / Title</td><td>The specific position you're aiming for</td></tr>
+                    <tr><td>Target Company / Org</td><td>3-5 organizations where this role exists</td></tr>
+                    <tr><td>Key Contact</td><td>Someone at each org you can reach out to</td></tr>
+                    <tr><td>Transferable Skill Match</td><td>Which of your skills map to their needs</td></tr>
+                    <tr><td>Outreach Status</td><td>Track: researched, reached out, meeting scheduled, completed</td></tr>
+                </table>
+                <div class="callout"><p><strong>Deliverable:</strong> By the end of this module, you should have a polished pivot story and a list of 5 target roles/companies with an outreach plan for each.</p></div>
+            </div>
+        </div>
+
+        <!-- Slide 20: Quote -->
+        <div class="slide slide-quote" data-slide="20" style="background: linear-gradient(rgba(245,242,237,0.92), rgba(245,242,237,0.92)), url('https://images.unsplash.com/photo-1522071820081-009f0129c71c?w=1200&q=80') center/cover no-repeat;">
+            <div class="slide-header"><img src="https://coachingwomenofcolor.com/wp-content/uploads/2021/04/CWCFinal_logo2.webp" alt="CWC" class="logo"><span class="module-label">Reflection</span></div>
+            <div class="slide-content">
+                <p class="quote-text">A pivot is not a retreat. It is a strategic advance toward the career you actually want.</p>
+            </div>
+        </div>
+
+        <!-- Slide 21: Summary -->
+        <div class="slide" data-slide="21">
+            <div class="slide-header"><img src="https://coachingwomenofcolor.com/wp-content/uploads/2021/04/CWCFinal_logo2.webp" alt="CWC" class="logo"><span class="module-label">Module 3</span></div>
+            <div class="slide-content">
+                <span class="section-label">Summary</span>
+                <h2>Key Takeaways</h2>
+                <div class="feature-list">
+                    <div class="feature-item"><div class="feature-number">1</div><div class="feature-text"><h4>Your Skills Are More Portable Than You Think</h4><p>Leadership, strategy, and relationship skills transfer across every industry</p></div></div>
+                    <div class="feature-item"><div class="feature-number">2</div><div class="feature-text"><h4>Control the Narrative</h4><p>A polished pivot story turns skepticism into curiosity</p></div></div>
+                    <div class="feature-item"><div class="feature-number">3</div><div class="feature-text"><h4>Research Before You Leap</h4><p>Informational interviews give you insider knowledge and warm advocates</p></div></div>
+                    <div class="feature-item"><div class="feature-number">4</div><div class="feature-text"><h4>Practice Builds Confidence</h4><p>Role-playing pivot conversations removes the fear of being questioned</p></div></div>
+                    <div class="feature-item"><div class="feature-number">5</div><div class="feature-text"><h4>Name the Bias, Then Overcome It</h4><p>Understanding "prove it again" helps you prepare for it instead of being blindsided</p></div></div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Slide 22: Homework -->
+        <div class="slide" data-slide="22">
+            <div class="slide-header"><img src="https://coachingwomenofcolor.com/wp-content/uploads/2021/04/CWCFinal_logo2.webp" alt="CWC" class="logo"><span class="module-label">Module 3</span></div>
+            <div class="slide-content">
+                <span class="section-label">Before Next Module</span>
+                <h2>Your Homework</h2>
+                <div class="feature-list">
+                    <div class="feature-item"><div class="feature-number">1</div><div class="feature-text"><h4>Complete Your Transferable Skills Inventory</h4><p>Map all six skill categories with specific examples and evidence</p></div></div>
+                    <div class="feature-item"><div class="feature-number">2</div><div class="feature-text"><h4>Polish Your Pivot Story</h4><p>Finalize all four parts and practice delivering it out loud at least 3 times</p></div></div>
+                    <div class="feature-item"><div class="feature-number">3</div><div class="feature-text"><h4>Conduct 2 Informational Interviews</h4><p>Use the Prep Guide to schedule and execute two conversations in your target space</p></div></div>
+                    <div class="feature-item"><div class="feature-number">4</div><div class="feature-text"><h4>Build Your Target List</h4><p>Identify 5 roles/companies with outreach plan for each</p></div></div>
+                    <div class="feature-item"><div class="feature-number">5</div><div class="feature-text"><h4>Practice with the Role-Play Cards</h4><p>Run through all 4 scenarios with a partner or in front of a mirror</p></div></div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Slide 23: Close -->
+        <div class="slide slide-dark" data-slide="23" style="background: linear-gradient(rgba(26,26,26,0.92), rgba(26,26,26,0.92)), url('https://images.unsplash.com/photo-1551836022-d5d88e9218df?w=1200&q=80') center/cover no-repeat;">
+            <div class="slide-header"><img src="https://coachingwomenofcolor.com/wp-content/uploads/2021/04/CWCFinal_logo2.webp" alt="CWC" class="logo" style="filter: brightness(0) invert(1);"><span class="module-label" style="color: rgba(255,255,255,0.5);">Module 3 Complete</span></div>
+            <div class="slide-content">
+                <span class="section-label">Executive Leadership Lab</span>
+                <h2>Own Your Pivot.<br>Own Your Future.</h2>
+                <p style="white-space: nowrap;">You're not leaving something behind. You're moving toward what was always meant for you.</p>
+                <p>Your next chapter starts now.</p>
+                <div style="margin-top: 64px; padding-top: 32px; border-top: 1px solid rgba(255,255,255,0.1);">
+                    <p style="font-size: 14px; color: rgba(255,255,255,0.4);">Next Module: Navigate Bias and Lead Through It &mdash; April</p>
+                </div>
+            </div>
+            <div class="ell-mark">ELL</div>
+        </div>
+    </div>
+
+    <div class="keyboard-hint">Press <kbd>&larr;</kbd> <kbd>&rarr;</kbd> to navigate</div>
+    <div class="nav-controls">
+        <button class="nav-btn" id="prevBtn" disabled><svg viewBox="0 0 24 24" fill="currentColor"><path d="M15.41 7.41L14 6l-6 6 6 6 1.41-1.41L10.83 12z"/></svg></button>
+        <span class="slide-counter"><span id="currentSlide">1</span> / <span id="totalSlides">23</span></span>
+        <button class="nav-btn" id="nextBtn"><svg viewBox="0 0 24 24" fill="currentColor"><path d="M10 6L8.59 7.41 13.17 12l-4.58 4.59L10 18l6-6z"/></svg></button>
+    </div>
+
+    <script>
+        const slides = document.querySelectorAll('.slide');
+        const totalSlides = slides.length;
+        let currentSlide = 1;
+        const prevBtn = document.getElementById('prevBtn');
+        const nextBtn = document.getElementById('nextBtn');
+        const currentSlideEl = document.getElementById('currentSlide');
+        const progressBar = document.getElementById('progress');
+        document.getElementById('totalSlides').textContent = totalSlides;
+
+        function updateProgress() { progressBar.style.width = (currentSlide / totalSlides) * 100 + '%'; }
+        function goToSlide(n) {
+            if (n < 1 || n > totalSlides) return;
+            slides[currentSlide - 1].classList.remove('active');
+            currentSlide = n;
+            slides[currentSlide - 1].classList.add('active');
+            currentSlideEl.textContent = currentSlide;
+            prevBtn.disabled = currentSlide === 1;
+            nextBtn.disabled = currentSlide === totalSlides;
+            updateProgress();
+        }
+        function nextSlide() { if (currentSlide < totalSlides) goToSlide(currentSlide + 1); }
+        function prevSlide() { if (currentSlide > 1) goToSlide(currentSlide - 1); }
+        nextBtn.addEventListener('click', nextSlide);
+        prevBtn.addEventListener('click', prevSlide);
+        document.addEventListener('keydown', (e) => {
+            if (e.key === 'ArrowRight' || e.key === ' ') { e.preventDefault(); nextSlide(); }
+            else if (e.key === 'ArrowLeft') { e.preventDefault(); prevSlide(); }
+        });
+        let touchStartX = 0;
+        document.addEventListener('touchstart', e => { touchStartX = e.changedTouches[0].screenX; });
+        document.addEventListener('touchend', e => { const diff = touchStartX - e.changedTouches[0].screenX; if (Math.abs(diff) > 50) { diff > 0 ? nextSlide() : prevSlide(); } });
+        updateProgress();
+    </script>
+</body>
+</html>
