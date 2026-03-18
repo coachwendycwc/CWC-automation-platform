@@ -1,0 +1,1027 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Leadership Composure | Executive Leadership Lab</title>
+    <link href="https://fonts.googleapis.com/css2?family=Source+Serif+4:wght@400;600;700&family=Inter:wght@400;500;600&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --primary: #1A1A1A;
+            --accent: #2A7B8C;
+            --accent-warm: #D4A574;
+            --text: #333333;
+            --text-light: #666666;
+            --text-muted: #999999;
+            --bg: #FAF8F5;
+            --bg-warm: #F5F2ED;
+            --border: #E5E0D8;
+        }
+
+        /* Print styles */
+        @media print {
+            body { overflow: visible; height: auto; background: white; }
+            .presentation { height: auto; }
+            .slide {
+                position: relative;
+                opacity: 1;
+                visibility: visible;
+                transform: none;
+                page-break-after: always;
+                height: 100vh;
+                padding: 40px 60px;
+            }
+            .slide::before { display: none; }
+            .nav-arrow, .slide-counter, .keyboard-hint, .progress-bar { display: none; }
+            .slide-title, .slide-dark { background: var(--primary) !important; -webkit-print-color-adjust: exact; print-color-adjust: exact; }
+        }
+
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+
+        body {
+            font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
+            background: var(--primary);
+            color: var(--text);
+            overflow: hidden;
+            height: 100vh;
+        }
+
+        .progress-bar {
+            position: fixed;
+            top: 0;
+            left: 0;
+            height: 3px;
+            background: var(--accent);
+            transition: width 0.4s ease;
+            z-index: 1000;
+        }
+
+        .presentation {
+            width: 100%;
+            height: 100vh;
+            position: relative;
+        }
+
+        .slide {
+            position: absolute;
+            top: 0; left: 0;
+            width: 100%; height: 100%;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            padding: 80px 120px 140px 120px;
+            opacity: 0;
+            visibility: hidden;
+            transform: translateY(20px);
+            transition: opacity 0.4s ease, visibility 0s 0.4s, transform 0.4s ease;
+            background: var(--bg);
+        }
+        .slide::before {
+            content: '';
+            position: absolute;
+            top: 0; left: 0; right: 0; bottom: 0;
+            background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 200 200' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.7' numOctaves='3' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E");
+            opacity: 0.03;
+            pointer-events: none;
+            z-index: 0;
+        }
+        .slide > * { position: relative; z-index: 1; }
+
+        .slide.active { opacity: 1; visibility: visible; transform: translateY(0); transition: opacity 0.4s ease 0.05s, visibility 0s, transform 0.4s ease 0.05s; z-index: 1; }
+
+        .slide-title {
+            background: linear-gradient(135deg, #1A1A1A 0%, #2d2d2d 50%, #1A1A1A 100%);
+            color: white;
+        }
+        .slide-title::after {
+            content: '';
+            position: absolute;
+            top: 0; left: 0; right: 0; bottom: 0;
+            background: url('images/0B1A7916.jpg') center/cover no-repeat;
+            background-size: cover;
+            opacity: 0.15;
+            pointer-events: none;
+            z-index: 0;
+        }
+        .slide-title .section-label { color: rgba(255,255,255,0.5); }
+        .slide-title h1 { color: white; font-size: 56px; }
+        .slide-title .lead { color: rgba(255,255,255,0.7); }
+        .slide-title .title-meta { border-top-color: rgba(255,255,255,0.1); }
+        .slide-title .meta-item { color: rgba(255,255,255,0.4); }
+
+        .slide-dark {
+            background: var(--primary);
+            color: white;
+        }
+        .slide-dark .section-label { color: rgba(255,255,255,0.4); }
+        .slide-dark h2 { color: white; }
+        .slide-dark p { color: rgba(255,255,255,0.7); }
+
+        .slide-quote {
+            background: var(--bg-warm);
+        }
+
+        .slide-header {
+            position: absolute;
+            top: 40px;
+            left: 60px;
+            right: 60px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .logo { height: 80px; }
+        .module-label {
+            font-size: 11px;
+            font-weight: 600;
+            color: var(--accent);
+            text-transform: uppercase;
+            letter-spacing: 2.5px;
+        }
+        .slide-title .module-label { color: rgba(255,255,255,0.4); }
+
+        .slide-content { max-width: 960px; width: 100%; }
+
+        h1 {
+            font-family: 'Source Serif 4', Georgia, serif;
+            font-size: 56px;
+            font-weight: 700;
+            color: var(--primary);
+            letter-spacing: -1px;
+            line-height: 1.1;
+            margin-bottom: 24px;
+        }
+
+        h2 {
+            font-family: 'Source Serif 4', Georgia, serif;
+            font-size: 40px;
+            font-weight: 600;
+            color: var(--primary);
+            letter-spacing: -0.5px;
+            line-height: 1.15;
+            margin-bottom: 20px;
+        }
+
+        p, .lead {
+            font-size: 18px;
+            line-height: 1.6;
+            color: var(--text-light);
+        }
+
+        .lead { font-size: 20px; color: var(--text); }
+
+        .section-label {
+            display: block;
+            font-size: 11px;
+            font-weight: 600;
+            color: var(--accent);
+            text-transform: uppercase;
+            letter-spacing: 2.5px;
+            margin-bottom: 20px;
+        }
+
+        /* Title meta */
+        .title-meta {
+            display: flex;
+            gap: 32px;
+            margin-top: 48px;
+            padding-top: 24px;
+            border-top: 1px solid var(--border);
+        }
+        .meta-item {
+            font-size: 13px;
+            color: var(--text-muted);
+            text-transform: uppercase;
+            letter-spacing: 1px;
+        }
+
+        /* Stats Row */
+        .stats-row {
+            display: flex;
+            gap: 64px;
+            margin-top: 48px;
+        }
+        .stat-item { text-align: center; flex: 1; }
+        .stat-number {
+            font-family: 'Source Serif 4', Georgia, serif;
+            font-size: 48px;
+            font-weight: 700;
+            color: var(--accent);
+            line-height: 1;
+        }
+        .stat-label {
+            font-size: 13px;
+            color: var(--text-light);
+            margin-top: 8px;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+        }
+
+        /* Cards Grid */
+        .cards-grid {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 28px;
+            margin-top: 40px;
+        }
+        .cards-grid.two-col { grid-template-columns: repeat(2, 1fr); }
+        .card {
+            background: white;
+            border: 1px solid var(--border);
+            padding: 28px;
+            border-radius: 2px;
+        }
+        .card h4 {
+            font-family: 'Source Serif 4', Georgia, serif;
+            font-size: 17px;
+            font-weight: 600;
+            color: var(--primary);
+            margin-bottom: 10px;
+        }
+        .card p { font-size: 15px; color: var(--text-light); line-height: 1.5; margin: 0; }
+
+        /* Two Column */
+        .two-column {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 56px;
+            margin-top: 40px;
+        }
+        .column h4 {
+            font-size: 15px;
+            font-weight: 600;
+            color: var(--primary);
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            margin-bottom: 20px;
+            padding-bottom: 12px;
+            border-bottom: 2px solid var(--accent);
+        }
+        .column ul { list-style: none; }
+        .column li {
+            font-size: 15px;
+            color: var(--text-light);
+            padding: 12px 0;
+            border-bottom: 1px solid var(--border);
+            line-height: 1.5;
+        }
+        .column li:last-child { border-bottom: none; }
+
+        /* Feature List */
+        .feature-list { margin-top: 40px; }
+        .feature-item {
+            display: flex;
+            align-items: flex-start;
+            gap: 20px;
+            padding: 20px 0;
+            border-bottom: 1px solid var(--border);
+        }
+        .feature-item:last-child { border-bottom: none; }
+        .feature-number {
+            width: 32px; height: 32px;
+            background: var(--accent);
+            border-radius: 50%;
+            display: flex; align-items: center; justify-content: center;
+            font-size: 14px; font-weight: 700; color: white; flex-shrink: 0;
+        }
+        .feature-text h4 {
+            font-size: 16px; font-weight: 600; color: var(--primary); margin-bottom: 4px;
+        }
+        .feature-text p { font-size: 15px; color: var(--text-light); margin: 0; }
+
+        /* Quote */
+        .quote-text {
+            font-family: 'Source Serif 4', Georgia, serif;
+            font-size: 32px;
+            font-weight: 400;
+            color: var(--primary);
+            line-height: 1.4;
+            max-width: 800px;
+        }
+        .quote-text::before {
+            content: '\201C';
+            display: block;
+            font-size: 64px;
+            color: var(--accent);
+            line-height: 1;
+            margin-bottom: 16px;
+        }
+
+        /* Equation */
+        .equation {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 16px;
+            margin-top: 48px;
+            flex-wrap: wrap;
+        }
+        .equation-part {
+            background: white;
+            border: 1px solid var(--border);
+            padding: 20px 28px;
+            font-size: 16px;
+            font-weight: 600;
+            color: var(--primary);
+            border-radius: 2px;
+        }
+        .equation-result {
+            background: var(--accent);
+            color: white;
+            border-color: var(--accent);
+        }
+        .equation-symbol {
+            font-size: 24px;
+            font-weight: 300;
+            color: var(--text-muted);
+        }
+
+        /* Callout */
+        .callout {
+            background: var(--bg-warm);
+            border-left: 3px solid var(--accent-warm);
+            padding: 24px 28px;
+            margin-top: 40px;
+        }
+        .callout p { font-size: 15px; color: var(--text); margin: 0; line-height: 1.6; }
+
+        /* Simple Table */
+        .simple-table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-top: 32px;
+        }
+        .simple-table th {
+            background: var(--primary);
+            color: white;
+            padding: 14px 20px;
+            text-align: left;
+            font-size: 13px;
+            font-weight: 600;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+        }
+        .simple-table td {
+            padding: 14px 20px;
+            border-bottom: 1px solid var(--border);
+            font-size: 15px;
+            color: var(--text);
+        }
+        .simple-table tr:nth-child(even) { background: var(--bg-warm); }
+
+        /* Formula Box */
+        .formula-box {
+            background: var(--bg-warm);
+            border: 1px solid var(--border);
+            padding: 32px;
+            margin-top: 32px;
+            border-radius: 2px;
+        }
+        .formula-box h4 {
+            font-family: 'Source Serif 4', Georgia, serif;
+            font-size: 18px;
+            font-weight: 600;
+            color: var(--primary);
+            margin-bottom: 16px;
+        }
+        .formula-box p { font-size: 15px; margin-bottom: 12px; }
+        .formula-box p:last-child { margin-bottom: 0; }
+        .formula-highlight {
+            font-weight: 600;
+            color: var(--accent);
+        }
+
+        /* Roadmap Steps */
+        .roadmap-steps {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 20px;
+            margin-top: 40px;
+        }
+        .roadmap-step {
+            background: white;
+            border: 1px solid var(--border);
+            padding: 24px;
+            border-radius: 2px;
+            display: flex;
+            align-items: flex-start;
+            gap: 16px;
+            position: relative;
+        }
+        .step-number {
+            width: 36px; height: 36px;
+            background: var(--accent);
+            border-radius: 50%;
+            display: flex; align-items: center; justify-content: center;
+            font-size: 16px; font-weight: 700; color: white; flex-shrink: 0;
+        }
+        .step-content h4 { font-size: 15px; font-weight: 600; color: var(--primary); margin-bottom: 4px; }
+        .step-content p { font-size: 13px; color: var(--text-light); margin: 0; }
+
+        /* Flow Diagram */
+        .flow-diagram {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 16px;
+            margin-top: 48px;
+            flex-wrap: wrap;
+        }
+        .flow-step {
+            background: white;
+            border: 1px solid var(--border);
+            padding: 16px 24px;
+            font-size: 15px;
+            font-weight: 600;
+            color: var(--primary);
+            border-radius: 2px;
+        }
+        .flow-arrow { font-size: 20px; color: var(--accent); font-weight: 300; }
+
+        /* Activity Meta */
+        .activity-meta {
+            display: inline-block;
+            margin-top: 32px;
+            padding: 10px 24px;
+            background: var(--bg-warm);
+            border: 1px solid var(--border);
+            font-size: 13px;
+            color: var(--text-light);
+            font-weight: 500;
+        }
+
+        /* ELL Mark */
+        .ell-mark {
+            position: absolute;
+            right: 60px;
+            bottom: 30px;
+            font-size: 13px;
+            font-weight: 600;
+            color: var(--text-muted);
+            letter-spacing: 3px;
+            opacity: 0.3;
+        }
+
+        /* Navigation - Gallery Style (M3 pattern) */
+        .nav-arrow {
+            position: fixed;
+            top: 50%;
+            transform: translateY(-50%);
+            width: 48px;
+            height: 48px;
+            border-radius: 50%;
+            border: 1px solid var(--border);
+            background: rgba(255,255,255,0.9);
+            color: var(--text);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            cursor: pointer;
+            z-index: 100;
+            transition: all 0.2s ease;
+            backdrop-filter: blur(8px);
+        }
+        .nav-arrow:hover { background: white; border-color: var(--accent); color: var(--accent); }
+        .nav-arrow:disabled { opacity: 0.3; cursor: default; }
+        .nav-arrow:disabled:hover { background: rgba(255,255,255,0.9); border-color: var(--border); color: var(--text); }
+        .nav-arrow svg { width: 20px; height: 20px; }
+        .nav-arrow.prev { left: 24px; }
+        .nav-arrow.next { right: 24px; }
+
+        .nav-arrow.on-dark { border-color: rgba(255,255,255,0.2); background: rgba(255,255,255,0.1); color: white; }
+        .nav-arrow.on-dark:hover { background: rgba(255,255,255,0.2); border-color: rgba(255,255,255,0.4); }
+        .nav-arrow.on-dark:disabled { opacity: 0.2; }
+        .nav-arrow.on-dark:disabled:hover { background: rgba(255,255,255,0.1); border-color: rgba(255,255,255,0.2); color: white; }
+
+        .slide-counter {
+            position: fixed;
+            bottom: 32px;
+            left: 50%;
+            transform: translateX(-50%);
+            font-size: 13px;
+            font-weight: 500;
+            color: var(--text-muted);
+            letter-spacing: 0.5px;
+            z-index: 1000;
+        }
+        .slide-counter.on-dark { color: rgba(255,255,255,0.4); }
+
+
+        /* ========================================
+           RESPONSIVE STYLES
+           ======================================== */
+
+        @media screen and (max-width: 1024px) {
+            .slide { padding: 60px 80px 120px 80px; }
+            .slide-header { top: 30px; left: 40px; right: 40px; }
+            h1 { font-size: 48px; }
+            .slide-title h1 { font-size: 52px; }
+            h2 { font-size: 36px; }
+            .quote-text { font-size: 28px; }
+            .cards-grid { gap: 24px; }
+            .card { padding: 32px; }
+            .two-column { gap: 48px; }
+            .stats-row { gap: 48px; }
+            .stat-number { font-size: 40px; }
+            .ell-mark { right: 40px; bottom: 30px; }
+            .roadmap-steps { gap: 16px; }
+            .roadmap-step { padding: 20px; }
+        }
+
+        @media screen and (max-width: 768px) {
+            .slide { padding: 100px 40px 140px; }
+            .slide-header { top: 20px; left: 24px; right: 24px; flex-direction: column; align-items: flex-start; gap: 8px; }
+            .logo { height: 60px; }
+            h1 { font-size: 36px; }
+            .slide-title h1 { font-size: 40px; }
+            h2 { font-size: 30px; }
+            p, .lead { font-size: 16px; }
+            .quote-text { font-size: 24px; }
+            .cards-grid { grid-template-columns: 1fr; gap: 16px; }
+            .cards-grid.two-col { grid-template-columns: 1fr; }
+            .card { padding: 24px; }
+            .two-column { grid-template-columns: 1fr; gap: 32px; }
+            .feature-list { margin-top: 32px; }
+            .stats-row { flex-direction: column; gap: 24px; }
+            .equation { flex-direction: column; gap: 12px; }
+            .equation-part { padding: 16px 24px; font-size: 14px; }
+            .roadmap-steps { grid-template-columns: 1fr; }
+            .roadmap-step::after { display: none; }
+            .simple-table { font-size: 14px; }
+            .simple-table th, .simple-table td { padding: 12px 8px; }
+            .formula-box { padding: 24px; }
+            .nav-arrow { width: 40px; height: 40px; }
+            .nav-arrow.prev { left: 16px; }
+            .nav-arrow.next { right: 16px; }
+            .nav-arrow svg { width: 18px; height: 18px; }
+            .slide-counter { bottom: 24px; font-size: 11px; }
+            .keyboard-hint { display: none; }
+        }
+
+        @media screen and (max-width: 480px) {
+            .slide { padding: 70px 12px 90px; justify-content: flex-start; padding-top: 80px; overflow-y: auto; }
+            .slide-content { max-width: 100%; padding: 0 4px; }
+            .slide-header { top: 8px; left: 10px; right: 10px; flex-direction: row; justify-content: space-between; }
+            .logo { height: 28px; }
+            .module-label { font-size: 9px; letter-spacing: 1px; }
+            .section-label { font-size: 9px; letter-spacing: 1.5px; margin-bottom: 12px; }
+            h1 { font-size: 22px; margin-bottom: 16px; }
+            .slide-title h1 { font-size: 24px; }
+            h2 { font-size: 20px; margin-bottom: 12px; }
+            p, .lead { font-size: 13px; line-height: 1.5; }
+            .quote-text { font-size: 16px; }
+            .quote-text::before { font-size: 48px; }
+            .card { padding: 12px; }
+            .card h4 { font-size: 14px; margin-bottom: 6px; }
+            .card p { font-size: 12px; line-height: 1.4; }
+            .stats-row { gap: 16px; }
+            .stat-number { font-size: 32px; }
+            .stat-label { font-size: 10px; }
+            .feature-list { margin-top: 20px; }
+            .feature-item { padding: 14px 0; gap: 12px; }
+            .feature-number { width: 26px; height: 26px; font-size: 12px; }
+            .feature-text h4 { font-size: 14px; margin-bottom: 4px; }
+            .feature-text p { font-size: 12px; }
+            .equation-part { padding: 12px 16px; font-size: 12px; }
+            .equation-symbol { font-size: 18px; }
+            .two-column { gap: 20px; margin-top: 24px; }
+            .column h4 { font-size: 14px; margin-bottom: 12px; padding-bottom: 8px; }
+            .column li { font-size: 12px; padding: 8px 0; }
+            .simple-table { font-size: 12px; margin-top: 24px; }
+            .simple-table th { font-size: 10px; padding: 8px 6px; }
+            .simple-table td { padding: 10px 6px; font-size: 12px; }
+            .formula-box { padding: 16px; margin-top: 24px; }
+            .formula-box h4 { font-size: 14px; margin-bottom: 10px; }
+            .formula-box p { font-size: 13px; }
+            .roadmap-step { padding: 12px; gap: 10px; }
+            .step-number { width: 28px; height: 28px; font-size: 13px; }
+            .step-content h4 { font-size: 13px; }
+            .step-content p { font-size: 11px; }
+            .callout { padding: 14px 16px; margin-top: 20px; }
+            .callout p { font-size: 12px; }
+            .activity-meta { padding: 8px 16px; font-size: 11px; margin-top: 24px; }
+            .title-meta { margin-top: 32px; padding-top: 20px; gap: 24px; flex-wrap: wrap; justify-content: center; }
+            .meta-item { font-size: 11px; }
+            .nav-arrow { width: 36px; height: 36px; }
+            .nav-arrow.prev { left: 10px; }
+            .nav-arrow.next { right: 10px; }
+            .nav-arrow svg { width: 16px; height: 16px; }
+            .slide-counter { bottom: 18px; font-size: 11px; }
+            .ell-mark { font-size: 11px; bottom: 24px; right: 12px; }
+        }
+    </style>
+</head>
+<body>
+    <div class="progress-bar" id="progress"></div>
+    <div class="presentation" id="presentation">
+
+        <!-- Slide 1: Title -->
+        <div class="slide slide-title active" data-slide="1">
+            <div class="slide-header">
+                <img src="https://coachingwomenofcolor.com/logo.webp" alt="CWC" class="logo" style="filter: brightness(0) invert(1);">
+                <span class="module-label">Executive Leadership Lab</span>
+            </div>
+            <div class="slide-content">
+                <span class="section-label">Module 4 &mdash; April</span>
+                <h1>Leadership Composure:<br>Managing Triggers, Bias<br>&amp; High-Stakes Moments</h1>
+                <p class="lead">Master the in-the-moment composure that turns reactive situations into strategic leadership.</p>
+                <div class="title-meta">
+                    <span class="meta-item">12-Month Program</span>
+                    <span class="meta-item">Coaching Women of Color</span>
+                </div>
+            </div>
+            <div class="ell-mark">ELL</div>
+        </div>
+
+        <!-- Slide 2: Welcome -->
+        <div class="slide" data-slide="2">
+            <div class="slide-header"><img src="https://coachingwomenofcolor.com/logo.webp" alt="CWC" class="logo"><span class="module-label">Module 4</span></div>
+            <div class="slide-content">
+                <span class="section-label">Welcome</span>
+                <h2>You Don&rsquo;t Have to Swallow It.<br>You Just Have to Be Ready.</h2>
+                <p>You&rsquo;ve been told to stay calm, be professional, don&rsquo;t let them see you sweat. But composure isn&rsquo;t about suppressing your emotions. It&rsquo;s about choosing how and when to use them strategically.</p>
+                <div class="stats-row">
+                    <div class="stat-item"><div class="stat-number">3&ndash;4&times;</div><div class="stat-label">Black women face microaggressions vs. white women</div></div>
+                    <div class="stat-item"><div class="stat-number">5.5%</div><div class="stat-label">decline in global EQ scores since 2019</div></div>
+                    <div class="stat-item"><div class="stat-number">61%</div><div class="stat-label">of Black women say race caused missed opportunities</div></div>
+                </div>
+                <p style="font-size: 11px; color: var(--text-muted); margin-top: 32px; max-width: 800px;">Sources: LeanIn.Org, State of Black Women in Corporate America (2024) &middot; Six Seconds, State of the Heart (2024) &middot; McKinsey &amp; LeanIn.Org, Women in the Workplace (2024)</p>
+            </div>
+        </div>
+
+        <!-- Slide 3: Objectives -->
+        <div class="slide" data-slide="3">
+            <div class="slide-header"><img src="https://coachingwomenofcolor.com/logo.webp" alt="CWC" class="logo"><span class="module-label">Module 4</span></div>
+            <div class="slide-content">
+                <span class="section-label">Objectives</span>
+                <h2>What You&rsquo;ll Gain</h2>
+                <div class="feature-list">
+                    <div class="feature-item"><div class="feature-number">1</div><div class="feature-text"><h4>Assess Your Emotional Intelligence</h4><p>Establish a baseline across self-awareness, self-management, social awareness, and relationship management</p></div></div>
+                    <div class="feature-item"><div class="feature-number">2</div><div class="feature-text"><h4>Map Your Personal Triggers</h4><p>Identify the situations, body signals, and thought patterns that knock you off center</p></div></div>
+                    <div class="feature-item"><div class="feature-number">3</div><div class="feature-text"><h4>Build a Microaggression Response Toolkit</h4><p>Develop rehearsed, strategic responses to the bias you encounter most frequently</p></div></div>
+                    <div class="feature-item"><div class="feature-number">4</div><div class="feature-text"><h4>Create Your Composure Toolkit</h4><p>Master grounding practices you can use in real-time&mdash;in meetings, on calls, and in high-stakes moments</p></div></div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Slide 4: The Challenge -->
+        <div class="slide" data-slide="4">
+            <div class="slide-header"><img src="https://coachingwomenofcolor.com/logo.webp" alt="CWC" class="logo"><span class="module-label">Module 4</span></div>
+            <div class="slide-content">
+                <span class="section-label">The Challenge</span>
+                <h2>The Double Bind<br>of Emotion</h2>
+                <p>You&rsquo;re stereotyped as &ldquo;angry&rdquo; when you&rsquo;re assertive and &ldquo;cold&rdquo; when you&rsquo;re composed. There is no safe lane. So you need strategy, not silence.</p>
+                <div class="cards-grid">
+                    <div class="card"><h4>The Anger Penalty</h4><p>Research shows Black women who express anger at work receive lower performance evaluations and leadership ratings than peers showing the same emotion.</p></div>
+                    <div class="card"><h4>The Composure Trap</h4><p>Suppressing emotion to appear &ldquo;professional&rdquo; leads to burnout, disengagement, and health consequences&mdash;while the underlying issues go unaddressed.</p></div>
+                    <div class="card"><h4>The Exhaustion Spiral</h4><p>Managing your image, your emotions, and systemic bias simultaneously creates a cognitive load that drains energy meant for your actual work.</p></div>
+                </div>
+                <p style="font-size: 11px; color: var(--text-muted); margin-top: 24px;">Source: Motro, Evans, Ellis &amp; Benson, Journal of Applied Psychology (2022) &middot; GSC Advanced Research &amp; Reviews (2025)</p>
+            </div>
+        </div>
+
+        <!-- Slide 5: Framework -->
+        <div class="slide" data-slide="5">
+            <div class="slide-header"><img src="https://coachingwomenofcolor.com/logo.webp" alt="CWC" class="logo"><span class="module-label">Module 4</span></div>
+            <div class="slide-content">
+                <span class="section-label">Framework</span>
+                <h2>The Composure Equation</h2>
+                <p>Leadership composure isn&rsquo;t about being calm. It&rsquo;s about being intentional&mdash;even when you&rsquo;re furious, hurt, or blindsided.</p>
+                <div class="equation">
+                    <div class="equation-part">Awareness</div>
+                    <div class="equation-symbol">+</div>
+                    <div class="equation-part">Regulation</div>
+                    <div class="equation-symbol">+</div>
+                    <div class="equation-part">Strategic Response</div>
+                    <div class="equation-symbol">=</div>
+                    <div class="equation-part equation-result">Leadership Composure</div>
+                </div>
+                <div class="callout"><p><strong>Key distinction:</strong> April is about managing <em>moments</em> (reactive). October covers managing <em>energy</em> (systemic). November covers managing <em>mindset</em> (cognitive). This month, we focus on what to do <em>right now</em>, when it&rsquo;s happening.</p></div>
+            </div>
+        </div>
+
+        <!-- Slide 6: Deep Dive - Emotional Intelligence -->
+        <div class="slide" data-slide="6">
+            <div class="slide-header"><img src="https://coachingwomenofcolor.com/logo.webp" alt="CWC" class="logo"><span class="module-label">Emotional Intelligence</span></div>
+            <div class="slide-content">
+                <span class="section-label">Deep Dive</span>
+                <h2>Emotional Intelligence:<br>Your Leadership Foundation</h2>
+                <p>EI explains roughly 67% of a leader&rsquo;s effectiveness. It&rsquo;s not a personality trait&mdash;it&rsquo;s a skill set you can build.</p>
+                <div class="two-column">
+                    <div class="column"><h4>Signs You Need This</h4><ul><li>You react before you can think&mdash;then regret it</li><li>You shut down completely when triggered</li><li>You absorb other people&rsquo;s emotions and carry them home</li><li>You avoid conflict even when it costs you</li></ul></div>
+                    <div class="column"><h4>The Breakthrough</h4><ul><li>Name what you&rsquo;re feeling in real-time (emotional literacy)</li><li>Create space between stimulus and response</li><li>Read the room without losing yourself in it</li><li>Choose your response based on strategy, not survival</li></ul></div>
+                </div>
+                <p style="font-size: 11px; color: var(--text-muted); margin-top: 24px;">Source: Frontiers in Psychology, &ldquo;The Emotional Recession&rdquo; (2025) &middot; Six Seconds, State of the Heart (2024)</p>
+            </div>
+        </div>
+
+        <!-- Slide 7: Deep Dive - Triggers -->
+        <div class="slide" data-slide="7">
+            <div class="slide-header"><img src="https://coachingwomenofcolor.com/logo.webp" alt="CWC" class="logo"><span class="module-label">Triggers</span></div>
+            <div class="slide-content">
+                <span class="section-label">Deep Dive</span>
+                <h2>Your Triggers Are Data,<br>Not Weakness</h2>
+                <p>A trigger is any situation that activates a strong emotional response before your rational brain catches up. Knowing yours is a strategic advantage.</p>
+                <div class="two-column">
+                    <div class="column"><h4>Common Trigger Patterns</h4><ul><li>Being interrupted, spoken over, or having ideas credited to others</li><li>Tone policing&mdash;&ldquo;You seem upset&rdquo; when you&rsquo;re simply direct</li><li>Being excluded from decisions that affect your work</li><li>Feeling invisible in rooms where you should be leading</li></ul></div>
+                    <div class="column"><h4>The Breakthrough</h4><ul><li>Map your triggers before they happen</li><li>Identify the body signal that arrives first (jaw, chest, stomach)</li><li>Recognize the automatic thought (&ldquo;They don&rsquo;t respect me&rdquo;)</li><li>Design a chosen response in advance</li></ul></div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Slide 8: Deep Dive - Microaggressions -->
+        <div class="slide" data-slide="8">
+            <div class="slide-header"><img src="https://coachingwomenofcolor.com/logo.webp" alt="CWC" class="logo"><span class="module-label">Microaggressions</span></div>
+            <div class="slide-content">
+                <span class="section-label">Deep Dive</span>
+                <h2>Microaggressions:<br>The Invisible Drain</h2>
+                <p>Women who experience three or more microaggressions are 4.2 times more likely to feel burned out. These aren&rsquo;t minor&mdash;they&rsquo;re cumulative and corrosive.</p>
+                <div class="two-column">
+                    <div class="column"><h4>What WOC Face Most</h4><ul><li>&ldquo;You&rsquo;re so articulate&rdquo;&mdash;surprise at your competence</li><li>Being confused with the only other person of color in the room</li><li>Hair touching, name mispronunciation, cultural assumptions</li><li>&ldquo;You&rsquo;re not like other [group]&rdquo;&mdash;othering disguised as a compliment</li></ul></div>
+                    <div class="column"><h4>Strategic Response Options</h4><ul><li><strong>Address now:</strong> When safety and stakes allow it</li><li><strong>Address later:</strong> When timing or audience requires privacy</li><li><strong>Document:</strong> When patterns need evidence for escalation</li><li><strong>Release:</strong> When your energy is better spent elsewhere</li></ul></div>
+                </div>
+                <p style="font-size: 11px; color: var(--text-muted); margin-top: 24px;">Source: LeanIn.Org, State of Black Women in Corporate America (2024) &middot; Derald Wing Sue, Columbia University (2010)</p>
+            </div>
+        </div>
+
+        <!-- Slide 9: Quote -->
+        <div class="slide slide-quote" data-slide="9" style="background: linear-gradient(rgba(245,242,237,0.92), rgba(245,242,237,0.92)), url('https://images.unsplash.com/photo-1506126613408-eca07ce68773?w=1200&q=80') center/cover no-repeat;">
+            <div class="slide-header"><img src="https://coachingwomenofcolor.com/logo.webp" alt="CWC" class="logo"><span class="module-label">Reflection</span></div>
+            <div class="slide-content">
+                <p class="quote-text">Composure is not silence. It is choosing when and how to use your voice for maximum impact.</p>
+            </div>
+        </div>
+
+        <!-- Slide 10: Root Causes -->
+        <div class="slide" data-slide="10">
+            <div class="slide-header"><img src="https://coachingwomenofcolor.com/logo.webp" alt="CWC" class="logo"><span class="module-label">Module 4</span></div>
+            <div class="slide-content">
+                <span class="section-label">Root Causes</span>
+                <h2>Why High-Stakes Moments<br>Hit Harder for WOC</h2>
+                <div class="cards-grid two-col" style="margin-top: 40px;">
+                    <div class="card"><h4>Stereotype Threat</h4><p>The awareness that your reaction will be filtered through racial stereotypes adds a layer of cognitive load that others don&rsquo;t carry</p></div>
+                    <div class="card"><h4>Hypervisibility</h4><p>Being &ldquo;the only&rdquo; means every reaction is noticed, remembered, and generalized to your entire group</p></div>
+                    <div class="card"><h4>The Emotional Tax</h4><p>58% of Black women report feeling perpetually &ldquo;on guard&rdquo; at work&mdash;a constant state of heightened alertness</p></div>
+                    <div class="card"><h4>Code-Switching Fatigue</h4><p>Black women are 3x more likely to code-switch at work, spending energy on performance that could go toward actual performance</p></div>
+                    <div class="card"><h4>Racial Trauma Load</h4><p>Over 60% of Black women have been personally affected by racial trauma in the past year&mdash;and they carry that into the office</p></div>
+                    <div class="card"><h4>Isolation</h4><p>Without peers who share your experience, there&rsquo;s no safe space to process what just happened before moving to the next meeting</p></div>
+                </div>
+                <p style="font-size: 11px; color: var(--text-muted); margin-top: 24px;">Sources: Catalyst, &ldquo;Emotional Tax&rdquo; (2018) &middot; LeanIn.Org, State of Black Women (2024)</p>
+            </div>
+        </div>
+
+        <!-- Slide 11: Activity - EI Self-Assessment -->
+        <div class="slide" data-slide="11">
+            <div class="slide-header"><img src="https://coachingwomenofcolor.com/logo.webp" alt="CWC" class="logo"><span class="module-label">Activity</span></div>
+            <div class="slide-content">
+                <span class="section-label">Self-Assessment</span>
+                <h2>EI Self-Assessment</h2>
+                <p>Before you can build composure, you need to know where you stand. Rate yourself across the four domains of emotional intelligence.</p>
+                <div class="cards-grid two-col" style="margin-top: 48px;">
+                    <div class="card"><h4>Self-Awareness</h4><p>Can you name what you&rsquo;re feeling in the moment? Do you recognize your triggers before they escalate?</p></div>
+                    <div class="card"><h4>Self-Management</h4><p>Can you pause before reacting? Do you choose your response rather than defaulting to habit?</p></div>
+                    <div class="card"><h4>Social Awareness</h4><p>Can you read the emotional temperature of a room? Do you pick up on unspoken dynamics?</p></div>
+                    <div class="card"><h4>Relationship Management</h4><p>Can you navigate conflict without shutting down or blowing up? Can you give hard feedback with care?</p></div>
+                </div>
+                <div class="activity-meta">Time: 5&ndash;7 minutes &middot; Use the EI Self-Assessment worksheet</div>
+            </div>
+        </div>
+
+        <!-- Slide 12: Framework - The Trigger Map -->
+        <div class="slide" data-slide="12">
+            <div class="slide-header"><img src="https://coachingwomenofcolor.com/logo.webp" alt="CWC" class="logo"><span class="module-label">Module 4</span></div>
+            <div class="slide-content">
+                <span class="section-label">Framework</span>
+                <h2>The Trigger Map</h2>
+                <p>Every trigger follows a predictable sequence. Mapping yours in advance is how you shift from reactive to strategic.</p>
+                <div class="flow-diagram">
+                    <div class="flow-step">Trigger</div><span class="flow-arrow">&rarr;</span>
+                    <div class="flow-step">Body Signal</div><span class="flow-arrow">&rarr;</span>
+                    <div class="flow-step">Automatic Thought</div><span class="flow-arrow">&rarr;</span>
+                    <div class="flow-step">Chosen Response</div>
+                </div>
+                <div class="callout"><p><strong>Example:</strong> Someone takes credit for your idea &rarr; Jaw clenches, chest tightens &rarr; &ldquo;They always do this to me&rdquo; &rarr; <em>New choice:</em> &ldquo;I want to build on what I shared earlier&mdash;here&rsquo;s the next step I&rsquo;d recommend.&rdquo;</p></div>
+                <div class="callout" style="border-left-color: var(--accent); margin-top: 16px;"><p><strong>From Module 1:</strong> This builds on the Stuck Loop (Trigger &rarr; Thought &rarr; Emotion &rarr; Behavior &rarr; Outcome). Now we&rsquo;re adding body awareness and designing the response <em>before</em> the moment happens.</p></div>
+            </div>
+        </div>
+
+        <!-- Slide 13: Activity - Map Your Triggers -->
+        <div class="slide" data-slide="13">
+            <div class="slide-header"><img src="https://coachingwomenofcolor.com/logo.webp" alt="CWC" class="logo"><span class="module-label">Activity</span></div>
+            <div class="slide-content">
+                <span class="section-label">Deep Work</span>
+                <h2>Map Your Triggers</h2>
+                <p>Identify your top 3&ndash;5 workplace triggers. For each one, map the full sequence and design your chosen response.</p>
+                <table class="simple-table">
+                    <tr><th>Trigger</th><th>Body Signal</th><th>Automatic Thought</th><th>Chosen Response</th></tr>
+                    <tr><td>The situation</td><td>What you feel physically</td><td>The story your mind tells</td><td>What you&rsquo;ll do instead</td></tr>
+                    <tr><td>Be specific</td><td>Jaw, chest, stomach, hands</td><td>Name the narrative</td><td>Script it out</td></tr>
+                </table>
+                <div class="callout"><p><strong>Pro tip:</strong> Think about the last time you reacted in a way you later regretted. Work backwards from the reaction to identify the trigger, body signal, and automatic thought. That&rsquo;s your first entry.</p></div>
+                <div class="activity-meta">Time: 15&ndash;20 minutes &middot; Use the Trigger Map worksheet</div>
+            </div>
+        </div>
+
+        <!-- Slide 14: Tool - The Response Continuum -->
+        <div class="slide" data-slide="14">
+            <div class="slide-header"><img src="https://coachingwomenofcolor.com/logo.webp" alt="CWC" class="logo"><span class="module-label">Module 4</span></div>
+            <div class="slide-content">
+                <span class="section-label">Tool</span>
+                <h2>The Response Continuum</h2>
+                <p>Not every moment requires the same response. Knowing <em>when</em> to address something is as important as knowing <em>how</em>.</p>
+                <div class="cards-grid">
+                    <div class="card"><h4>Address Now</h4><p><strong>When:</strong> You have safety, the stakes are high, and silence would be interpreted as agreement.<br><br><strong>How:</strong> Name what happened clearly and calmly. &ldquo;I want to flag something. When you said X, here&rsquo;s the impact.&rdquo;</p></div>
+                    <div class="card"><h4>Address Later</h4><p><strong>When:</strong> The audience is wrong, emotions are too hot, or you need time to choose your words.<br><br><strong>How:</strong> Follow up 1-on-1 within 48 hours. &ldquo;I wanted to circle back on something from yesterday&rsquo;s meeting.&rdquo;</p></div>
+                    <div class="card"><h4>Document &amp; Release</h4><p><strong>When:</strong> The cost of addressing outweighs the benefit, but you need a record for patterns.<br><br><strong>How:</strong> Log it in your Incident Documentation. Release the emotional charge through your Composure Toolkit.</p></div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Slide 15: Tool - Microaggression Response Scripts -->
+        <div class="slide" data-slide="15">
+            <div class="slide-header"><img src="https://coachingwomenofcolor.com/logo.webp" alt="CWC" class="logo"><span class="module-label">Module 4</span></div>
+            <div class="slide-content">
+                <span class="section-label">Tool</span>
+                <h2>Microaggression Response Scripts</h2>
+                <p>Four strategic response patterns. Each one works differently depending on the situation, the person, and your goal.</p>
+                <div class="cards-grid two-col" style="margin-top: 32px;">
+                    <div class="card"><h4>Ask</h4><p>Invite them to examine what they said.<br><br><em>&ldquo;Can you say more about what you mean by that?&rdquo;</em><br><em>&ldquo;I&rsquo;m curious what led you to that assumption.&rdquo;</em></p></div>
+                    <div class="card"><h4>Name</h4><p>State the impact directly without attacking.<br><br><em>&ldquo;That comment landed as [impact]. I want to name that.&rdquo;</em><br><em>&ldquo;I don&rsquo;t think that was your intent, but here&rsquo;s how it felt.&rdquo;</em></p></div>
+                    <div class="card"><h4>Redirect</h4><p>Steer the conversation back to substance.<br><br><em>&ldquo;Let&rsquo;s refocus on the proposal I was presenting.&rdquo;</em><br><em>&ldquo;I&rsquo;d like to get back to the data.&rdquo;</em></p></div>
+                    <div class="card"><h4>Boundary</h4><p>Set a clear limit when the line has been crossed.<br><br><em>&ldquo;That&rsquo;s not something I&rsquo;m willing to discuss.&rdquo;</em><br><em>&ldquo;I need you to stop. That&rsquo;s not appropriate.&rdquo;</em></p></div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Slide 16: Practice - Microaggression Scenarios -->
+        <div class="slide" data-slide="16" style="padding-top: 60px; padding-bottom: 80px;">
+            <div class="slide-header"><img src="https://coachingwomenofcolor.com/logo.webp" alt="CWC" class="logo"><span class="module-label">Activity</span></div>
+            <div class="slide-content">
+                <span class="section-label">Practice</span>
+                <h2>Practice: Microaggression Scenarios</h2>
+                <p style="font-size: 16px;">Rehearsal builds muscle memory. Practice these scenarios so your response is ready when the moment arrives.</p>
+                <div class="cards-grid two-col" style="margin-top: 28px; gap: 20px;">
+                    <div class="card" style="padding: 24px;"><h4>Scenario 1: The Credit Thief</h4><p>In a meeting, a colleague restates your idea and receives praise for it. Your manager nods along without acknowledging you.<br><strong>Your move:</strong> Use Ask or Redirect to reclaim your contribution without escalating.</p></div>
+                    <div class="card" style="padding: 24px;"><h4>Scenario 2: The Tone Police</h4><p>&ldquo;You seem really passionate about this. Maybe take a breath?&rdquo; &mdash;said to you, not to your white male colleague who made the same argument.<br><strong>Your move:</strong> Use Name to call out the double standard calmly.</p></div>
+                    <div class="card" style="padding: 24px;"><h4>Scenario 3: The Surprise Compliment</h4><p>&ldquo;Wow, you&rsquo;re so articulate! Where did you go to school?&rdquo;<br><strong>Your move:</strong> Use Ask to surface the assumption. Or Redirect to move past it with your dignity intact.</p></div>
+                    <div class="card" style="padding: 24px;"><h4>Scenario 4: The Exclusion</h4><p>You discover a decision about your project was made in a meeting you weren&rsquo;t invited to. Again.<br><strong>Your move:</strong> Use Boundary with your manager. Document the pattern. Escalate if it continues.</p></div>
+                </div>
+                <div class="activity-meta">Time: 20&ndash;25 minutes &middot; Use the Microaggression Response Cards</div>
+            </div>
+        </div>
+
+        <!-- Slide 17: Tool - The Composure Toolkit -->
+        <div class="slide" data-slide="17">
+            <div class="slide-header"><img src="https://coachingwomenofcolor.com/logo.webp" alt="CWC" class="logo"><span class="module-label">Module 4</span></div>
+            <div class="slide-content">
+                <span class="section-label">Tool</span>
+                <h2>The Composure Toolkit</h2>
+                <p>Four evidence-based practices you can use in real-time&mdash;in meetings, on calls, or before difficult conversations.</p>
+                <div class="cards-grid two-col" style="margin-top: 32px;">
+                    <div class="card"><h4>Box Breathing</h4><p>Inhale 4 seconds &rarr; Hold 4 seconds &rarr; Exhale 4 seconds &rarr; Hold 4 seconds. Repeat 3&ndash;4 cycles. Activates your parasympathetic nervous system in under 60 seconds.</p></div>
+                    <div class="card"><h4>5-4-3-2-1 Grounding</h4><p>Name 5 things you see, 4 you hear, 3 you can touch, 2 you smell, 1 you taste. Pulls you out of the emotional spiral and into the present moment.</p></div>
+                    <div class="card"><h4>The Power Pause</h4><p>When triggered: (1) Take a breath. (2) Drop your shoulders. (3) Unclench your jaw. Three physical resets that buy you 5&ndash;10 seconds of decision-making space.</p></div>
+                    <div class="card"><h4>The Strategic Exit</h4><p>&ldquo;I want to give this the attention it deserves. Let me come back to you on this.&rdquo; A professional way to remove yourself when you need space to respond, not react.</p></div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Slide 18: Tool - Incident Documentation -->
+        <div class="slide" data-slide="18">
+            <div class="slide-header"><img src="https://coachingwomenofcolor.com/logo.webp" alt="CWC" class="logo"><span class="module-label">Module 4</span></div>
+            <div class="slide-content">
+                <span class="section-label">Tool</span>
+                <h2>The Incident<br>Documentation Template</h2>
+                <p>When patterns of bias need to be escalated, documented evidence is your most powerful tool. Your memory fades. Paper doesn&rsquo;t.</p>
+                <table class="simple-table">
+                    <tr><th>Section</th><th>What to Capture</th></tr>
+                    <tr><td>Date &amp; Context</td><td>When, where, who was present</td></tr>
+                    <tr><td>What Happened</td><td>Factual description&mdash;what was said or done, in their words</td></tr>
+                    <tr><td>Impact</td><td>How it affected you professionally and emotionally</td></tr>
+                    <tr><td>Your Response</td><td>What you said or did in the moment</td></tr>
+                    <tr><td>Witnesses</td><td>Who else was there and what they observed</td></tr>
+                    <tr><td>Pattern Notes</td><td>Is this part of a recurring pattern? Reference previous entries.</td></tr>
+                </table>
+                <div class="callout"><p><strong>When to escalate:</strong> Three or more documented incidents of the same pattern from the same person is typically enough to bring to HR, your manager, or a skip-level with credibility and evidence.</p></div>
+                <div class="activity-meta">Use the Incident Documentation Template worksheet</div>
+            </div>
+        </div>
+
+        <!-- Slide 19: Momentum -->
+        <div class="slide" data-slide="19">
+            <div class="slide-header"><img src="https://coachingwomenofcolor.com/logo.webp" alt="CWC" class="logo"><span class="module-label">Module 4</span></div>
+            <div class="slide-content">
+                <span class="section-label">Action Plan</span>
+                <h2>Your 14-Day Composure Sprint</h2>
+                <p>Composure is built through practice, not intention. Start with these three moves this week.</p>
+                <div class="feature-list">
+                    <div class="feature-item"><div class="feature-number">1</div><div class="feature-text"><h4>Practice Box Breathing Daily</h4><p>Set a calendar reminder. Do 3 cycles before your first meeting of the day&mdash;build the habit before you need it.</p></div></div>
+                    <div class="feature-item"><div class="feature-number">2</div><div class="feature-text"><h4>Map Your Top 3 Triggers</h4><p>Complete your Trigger Map worksheet. Identify the situations, body signals, and automatic thoughts. Script your chosen responses.</p></div></div>
+                    <div class="feature-item"><div class="feature-number">3</div><div class="feature-text"><h4>Rehearse One Microaggression Response</h4><p>Pick the scenario you encounter most often. Practice your response out loud until it feels natural, not rehearsed.</p></div></div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Slide 20: Quote -->
+        <div class="slide slide-quote" data-slide="20" style="background: linear-gradient(rgba(245,242,237,0.92), rgba(245,242,237,0.92)), url('https://images.unsplash.com/photo-1499750310107-5fef28a66643?w=1200&q=80') center/cover no-repeat;">
+            <div class="slide-header"><img src="https://coachingwomenofcolor.com/logo.webp" alt="CWC" class="logo"><span class="module-label">Reflection</span></div>
+            <div class="slide-content">
+                <p class="quote-text">You don&rsquo;t owe anyone your composure. But you owe yourself strategic choices.</p>
+            </div>
+        </div>
+
+        <!-- Slide 21: Summary -->
+        <div class="slide" data-slide="21">
+            <div class="slide-header"><img src="https://coachingwomenofcolor.com/logo.webp" alt="CWC" class="logo"><span class="module-label">Module 4</span></div>
+            <div class="slide-content">
+                <span class="section-label">Summary</span>
+                <h2>Key Takeaways</h2>
+                <div class="feature-list">
+                    <div class="feature-item"><div class="feature-number">1</div><div class="feature-text"><h4>Composure Is Strategic, Not Passive</h4><p>It&rsquo;s not about staying quiet. It&rsquo;s about choosing when and how to use your voice for maximum impact.</p></div></div>
+                    <div class="feature-item"><div class="feature-number">2</div><div class="feature-text"><h4>Your Triggers Are Predictable&mdash;Use That</h4><p>When you map your triggers in advance, you shift from reactive to intentional</p></div></div>
+                    <div class="feature-item"><div class="feature-number">3</div><div class="feature-text"><h4>You Have Four Response Options for Microaggressions</h4><p>Ask, Name, Redirect, or Boundary&mdash;choose based on the moment, the stakes, and your energy</p></div></div>
+                    <div class="feature-item"><div class="feature-number">4</div><div class="feature-text"><h4>Grounding Practices Work in Seconds</h4><p>Box Breathing, 5-4-3-2-1, and the Power Pause give you real-time tools for high-stakes moments</p></div></div>
+                    <div class="feature-item"><div class="feature-number">5</div><div class="feature-text"><h4>Document Patterns, Not Just Moments</h4><p>Individual incidents feel small. Documented patterns have power. Your paper trail is your protection.</p></div></div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Slide 22: Homework -->
+        <div class="slide" data-slide="22">
+            <div class="slide-header"><img src="https://coachingwomenofcolor.com/logo.webp" alt="CWC" class="logo"><span class="module-label">Module 4</span></div>
+            <div class="slide-content">
+                <span class="section-label">Before Next Module</span>
+                <h2>Your Homework</h2>
+                <div class="feature-list">
+                    <div class="feature-item"><div class="feature-number">1</div><div class="feature-text"><h4>Complete Your EI Self-Assessment</h4><p>Rate yourself honestly across all four domains. Identify your strongest and weakest area.</p></div></div>
+                    <div class="feature-item"><div class="feature-number">2</div><div class="feature-text"><h4>Build Your Full Trigger Map</h4><p>Map 3&ndash;5 triggers with body signals, automatic thoughts, and chosen responses. Script them out.</p></div></div>
+                    <div class="feature-item"><div class="feature-number">3</div><div class="feature-text"><h4>Practice 3 Microaggression Responses</h4><p>Use the Response Cards with a partner, the Skool community, or a mirror. Record yourself if possible.</p></div></div>
+                    <div class="feature-item"><div class="feature-number">4</div><div class="feature-text"><h4>Build Your Personal Composure Toolkit</h4><p>Choose 2 grounding practices and commit to using them daily for 14 days.</p></div></div>
+                    <div class="feature-item"><div class="feature-number">5</div><div class="feature-text"><h4>Share One Insight in the Skool Community</h4><p>A trigger you mapped, a response you practiced, or a moment where composure made a difference&mdash;sharing creates accountability.</p></div></div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Slide 23: Close -->
+        <div class="slide slide-dark" data-slide="23" style="background: linear-gradient(rgba(26,26,26,0.85), rgba(26,26,26,0.85)), url('images/0B1A7947.jpg') center/cover no-repeat;">
+            <div class="slide-header"><img src="https://coachingwomenofcolor.com/logo.webp" alt="CWC" class="logo" style="filter: brightness(0) invert(1);"><span class="module-label" style="color: rgba(255,255,255,0.5);">Module 4 Complete</span></div>
+            <div class="slide-content">
+                <span class="section-label">Executive Leadership Lab</span>
+                <h2>Lead With Composure.<br>Lead With Power.</h2>
+                <p>You don&rsquo;t have to choose between feeling everything and showing nothing. You get to choose <em>strategically</em>.</p>
+                <p>Your composure is your leadership.</p>
+                <div style="margin-top: 64px; padding-top: 32px; border-top: 1px solid rgba(255,255,255,0.1);">
+                    <p style="font-size: 14px; color: rgba(255,255,255,0.4);">Next Module: Advocacy &amp; Negotiation &mdash; May</p>
+                </div>
+            </div>
+            <div class="ell-mark">ELL</div>
+        </div>
+    </div>
+
+    <button class="nav-arrow prev" id="prevBtn" disabled><svg viewBox="0 0 24 24" fill="currentColor"><path d="M15.41 7.41L14 6l-6 6 6 6 1.41-1.41L10.83 12z"/></svg></button>
+    <button class="nav-arrow next" id="nextBtn"><svg viewBox="0 0 24 24" fill="currentColor"><path d="M10 6L8.59 7.41 13.17 12l-4.58 4.59L10 18l6-6z"/></svg></button>
+    <span class="slide-counter"><span id="currentSlide">1</span> / <span id="totalSlides">23</span></span>
+
+    <script>
+        const slides = document.querySelectorAll('.slide');
+        const totalSlides = slides.length;
+        let currentSlide = 1;
+        const prevBtn = document.getElementById('prevBtn');
+        const nextBtn = document.getElementById('nextBtn');
+        const currentSlideEl = document.getElementById('currentSlide');
+        const progressBar = document.getElementById('progress');
+        document.getElementById('totalSlides').textContent = totalSlides;
+
+        function updateProgress() { progressBar.style.width = (currentSlide / totalSlides) * 100 + '%'; }
+        function goToSlide(n) {
+            if (n < 1 || n > totalSlides) return;
+            slides[currentSlide - 1].classList.remove('active');
+            currentSlide = n;
+            slides[currentSlide - 1].classList.add('active');
+            currentSlideEl.textContent = currentSlide;
+            prevBtn.disabled = currentSlide === 1;
+            nextBtn.disabled = currentSlide === totalSlides;
+            updateProgress();
+            // Adapt arrow/counter colors for dark slides
+            const active = slides[currentSlide - 1];
+            const isDark = active.classList.contains('slide-title') || active.classList.contains('slide-dark');
+            document.querySelectorAll('.nav-arrow').forEach(btn => btn.classList.toggle('on-dark', isDark));
+            document.querySelector('.slide-counter').classList.toggle('on-dark', isDark);
+        }
+        function nextSlide() { if (currentSlide < totalSlides) goToSlide(currentSlide + 1); }
+        function prevSlide() { if (currentSlide > 1) goToSlide(currentSlide - 1); }
+        nextBtn.addEventListener('click', nextSlide);
+        prevBtn.addEventListener('click', prevSlide);
+        document.addEventListener('keydown', (e) => {
+            if (e.key === 'ArrowRight' || e.key === ' ') { e.preventDefault(); nextSlide(); }
+            else if (e.key === 'ArrowLeft') { e.preventDefault(); prevSlide(); }
+        });
+        let touchStartX = 0;
+        document.addEventListener('touchstart', e => { touchStartX = e.changedTouches[0].screenX; });
+        document.addEventListener('touchend', e => { const diff = touchStartX - e.changedTouches[0].screenX; if (Math.abs(diff) > 50) { diff > 0 ? nextSlide() : prevSlide(); } });
+        updateProgress();
+    </script>
+</body>
+</html>
