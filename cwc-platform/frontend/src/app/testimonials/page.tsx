@@ -40,6 +40,7 @@ import {
   Clock,
   Play,
 } from "lucide-react";
+import { Skeleton } from "@/components/ui/skeleton";
 import { toast } from "sonner";
 import { format } from "date-fns";
 import Link from "next/link";
@@ -52,9 +53,9 @@ interface Contact {
 }
 
 const statusColors: Record<string, string> = {
-  pending: "bg-yellow-100 text-yellow-700",
-  approved: "bg-green-100 text-green-700",
-  rejected: "bg-red-100 text-red-700",
+  pending: "bg-warning/10 text-warning",
+  approved: "bg-success/10 text-success",
+  rejected: "bg-destructive/10 text-destructive",
 };
 
 export default function TestimonialsPage() {
@@ -219,7 +220,7 @@ export default function TestimonialsPage() {
             <Video className="h-6 w-6" />
             Testimonials
           </h1>
-          <p className="text-gray-500">Video testimonials from clients</p>
+          <p className="text-muted-foreground">Video testimonials from clients</p>
         </div>
         <Button onClick={() => setShowCreateDialog(true)}>
           <Plus className="h-4 w-4 mr-2" />
@@ -256,12 +257,23 @@ export default function TestimonialsPage() {
       <Card>
         <CardContent className="p-0">
           {loading ? (
-            <div className="p-8 text-center text-gray-500">Loading...</div>
+            <div className="p-4 space-y-4">
+              {[...Array(4)].map((_, i) => (
+                <div key={i} className="flex items-start gap-4 p-4">
+                  <Skeleton className="h-16 w-24 rounded-lg" />
+                  <div className="flex-1 space-y-2">
+                    <Skeleton className="h-4 w-40" />
+                    <Skeleton className="h-3 w-64" />
+                    <Skeleton className="h-3 w-32" />
+                  </div>
+                </div>
+              ))}
+            </div>
           ) : testimonials.length === 0 ? (
             <div className="p-8 text-center">
-              <Video className="h-12 w-12 text-gray-300 mx-auto mb-4" />
-              <h3 className="text-lg font-medium text-gray-900">No testimonials</h3>
-              <p className="text-gray-500 mt-1">
+              <Video className="h-12 w-12 text-muted-foreground/50 mx-auto mb-4" />
+              <h3 className="text-lg font-medium text-foreground">No testimonials</h3>
+              <p className="text-muted-foreground mt-1">
                 Request testimonials from your clients
               </p>
             </div>
@@ -272,7 +284,7 @@ export default function TestimonialsPage() {
                   <div className="flex items-start gap-4">
                     {/* Thumbnail or placeholder */}
                     <div
-                      className="w-24 h-16 bg-gray-100 rounded-lg flex-shrink-0 overflow-hidden relative cursor-pointer group"
+                      className="w-24 h-16 bg-muted rounded-lg flex-shrink-0 overflow-hidden relative cursor-pointer group"
                       onClick={() => testimonial.video_url && setPreviewVideo(testimonial.video_url)}
                     >
                       {testimonial.thumbnail_url ? (
@@ -288,7 +300,7 @@ export default function TestimonialsPage() {
                         </>
                       ) : (
                         <div className="w-full h-full flex items-center justify-center">
-                          <Video className="h-6 w-6 text-gray-300" />
+                          <Video className="h-6 w-6 text-muted-foreground/50" />
                         </div>
                       )}
                       {testimonial.video_duration_seconds && (
@@ -300,7 +312,7 @@ export default function TestimonialsPage() {
 
                     <div className="flex-1 min-w-0">
                       <div className="flex items-center gap-2 flex-wrap">
-                        <span className="font-medium text-gray-900">
+                        <span className="font-medium text-foreground">
                           {testimonial.author_name}
                         </span>
                         <Badge className={statusColors[testimonial.status]}>
@@ -313,24 +325,24 @@ export default function TestimonialsPage() {
                           </Badge>
                         )}
                         {!testimonial.has_video && testimonial.status === "pending" && (
-                          <Badge variant="outline" className="text-gray-500">
+                          <Badge variant="outline" className="text-muted-foreground">
                             <Clock className="h-3 w-3 mr-1" />
                             Awaiting submission
                           </Badge>
                         )}
                       </div>
                       {testimonial.author_title && (
-                        <p className="text-sm text-gray-600">
+                        <p className="text-sm text-muted-foreground">
                           {testimonial.author_title}
                           {testimonial.author_company && ` at ${testimonial.author_company}`}
                         </p>
                       )}
                       {testimonial.quote && (
-                        <p className="text-sm text-gray-500 mt-1 line-clamp-2 italic">
+                        <p className="text-sm text-muted-foreground mt-1 line-clamp-2 italic">
                           "{testimonial.quote}"
                         </p>
                       )}
-                      <div className="flex items-center gap-3 mt-2 text-xs text-gray-400 flex-wrap">
+                      <div className="flex items-center gap-3 mt-2 text-xs text-muted-foreground flex-wrap">
                         {testimonial.contact_name && (
                           <span>Client: {testimonial.contact_name}</span>
                         )}
@@ -401,7 +413,7 @@ export default function TestimonialsPage() {
                             </DropdownMenuItem>
                           )}
                           <DropdownMenuItem
-                            className="text-red-600"
+                            className="text-destructive"
                             onClick={() => setDeletingId(testimonial.id)}
                           >
                             <Trash2 className="h-4 w-4 mr-2" />
@@ -421,7 +433,7 @@ export default function TestimonialsPage() {
       {/* Pagination */}
       {totalPages > 1 && (
         <div className="flex items-center justify-between">
-          <p className="text-sm text-gray-500">
+          <p className="text-sm text-muted-foreground">
             Showing {(page - 1) * 20 + 1} to {Math.min(page * 20, total)} of {total}
           </p>
           <div className="flex gap-2">
@@ -535,7 +547,7 @@ export default function TestimonialsPage() {
             <DialogTitle>Delete Testimonial</DialogTitle>
           </DialogHeader>
           <div className="py-4">
-            <p className="text-gray-600">
+            <p className="text-muted-foreground">
               Are you sure you want to delete this testimonial? The video will also be removed.
               This cannot be undone.
             </p>

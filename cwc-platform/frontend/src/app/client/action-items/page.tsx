@@ -7,6 +7,7 @@ import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
 import { Checkbox } from "@/components/ui/checkbox";
+import { Skeleton } from "@/components/ui/skeleton";
 import {
   ListTodo,
   Calendar,
@@ -31,9 +32,9 @@ interface ActionItem {
 }
 
 const priorityColors: Record<string, string> = {
-  low: "bg-gray-100 text-gray-600",
-  medium: "bg-yellow-100 text-yellow-700",
-  high: "bg-red-100 text-red-700",
+  low: "bg-muted text-muted-foreground",
+  medium: "bg-warning/10 text-warning",
+  high: "bg-destructive/10 text-destructive",
 };
 
 export default function ClientActionItemsPage() {
@@ -140,8 +141,16 @@ export default function ClientActionItemsPage() {
 
   if (loading) {
     return (
-      <div className="flex items-center justify-center h-64">
-        <div className="text-gray-500">Loading action items...</div>
+      <div className="space-y-6">
+        <div className="space-y-2">
+          <Skeleton className="h-8 w-48" />
+          <Skeleton className="h-4 w-72" />
+        </div>
+        <div className="space-y-3">
+          {[1, 2, 3].map((i) => (
+            <Skeleton key={i} className="h-20 w-full rounded-xl" />
+          ))}
+        </div>
       </div>
     );
   }
@@ -149,8 +158,8 @@ export default function ClientActionItemsPage() {
   return (
     <div className="space-y-6">
       <div>
-        <h1 className="text-2xl font-bold text-gray-900">Action Items</h1>
-        <p className="text-gray-500">
+        <h1 className="text-2xl font-bold text-foreground">Action Items</h1>
+        <p className="text-muted-foreground">
           Tasks and assignments from your coach
         </p>
       </div>
@@ -159,23 +168,23 @@ export default function ClientActionItemsPage() {
       <div className="grid grid-cols-2 gap-4">
         <Card>
           <CardContent className="p-4 flex items-center gap-3">
-            <div className="p-2 bg-yellow-100 rounded-lg">
-              <Clock className="h-5 w-5 text-yellow-600" />
+            <div className="p-2 bg-warning/10 rounded-lg">
+              <Clock className="h-5 w-5 text-warning" />
             </div>
             <div>
-              <p className="text-2xl font-bold text-gray-900">{pendingCount}</p>
-              <p className="text-sm text-gray-500">Pending</p>
+              <p className="text-2xl font-bold text-foreground">{pendingCount}</p>
+              <p className="text-sm text-muted-foreground">Pending</p>
             </div>
           </CardContent>
         </Card>
         <Card>
           <CardContent className="p-4 flex items-center gap-3">
-            <div className="p-2 bg-green-100 rounded-lg">
-              <CheckCircle2 className="h-5 w-5 text-green-600" />
+            <div className="p-2 bg-success/10 rounded-lg">
+              <CheckCircle2 className="h-5 w-5 text-success" />
             </div>
             <div>
-              <p className="text-2xl font-bold text-gray-900">{completedCount}</p>
-              <p className="text-sm text-gray-500">Completed</p>
+              <p className="text-2xl font-bold text-foreground">{completedCount}</p>
+              <p className="text-sm text-muted-foreground">Completed</p>
             </div>
           </CardContent>
         </Card>
@@ -210,9 +219,9 @@ export default function ClientActionItemsPage() {
       {filteredItems.length === 0 ? (
         <Card>
           <CardContent className="p-8 text-center">
-            <ListTodo className="h-12 w-12 text-gray-300 mx-auto mb-4" />
-            <h3 className="text-lg font-medium text-gray-900">No action items</h3>
-            <p className="text-gray-500 mt-1">
+            <ListTodo className="h-12 w-12 text-muted-foreground/40 mx-auto mb-4" />
+            <h3 className="text-lg font-medium text-foreground">No action items</h3>
+            <p className="text-muted-foreground mt-1">
               {filter === "completed"
                 ? "No completed items yet"
                 : filter === "pending"
@@ -228,7 +237,7 @@ export default function ClientActionItemsPage() {
             <Card>
               <CardHeader className="pb-3">
                 <CardTitle className="text-base font-medium flex items-center gap-2">
-                  <Circle className="h-4 w-4 text-gray-400" />
+                  <Circle className="h-4 w-4 text-muted-foreground" />
                   To Do
                 </CardTitle>
               </CardHeader>
@@ -249,23 +258,23 @@ export default function ClientActionItemsPage() {
                           />
                           <div className="flex-1 min-w-0">
                             <div className="flex items-center gap-2 flex-wrap">
-                              <span className="font-medium text-gray-900">
+                              <span className="font-medium text-foreground">
                                 {item.title}
                               </span>
-                              <Badge className={priorityColors[item.priority] || "bg-gray-100"}>
+                              <Badge className={priorityColors[item.priority] || "bg-muted"}>
                                 {item.priority}
                               </Badge>
                             </div>
                             {item.description && (
-                              <p className="text-sm text-gray-600 mt-1">
+                              <p className="text-sm text-muted-foreground mt-1">
                                 {item.description}
                               </p>
                             )}
                             {dueDateInfo && (
                               <p className={`text-xs mt-2 flex items-center gap-1 ${
-                                dueDateInfo.isOverdue ? "text-red-600" :
+                                dueDateInfo.isOverdue ? "text-destructive" :
                                 dueDateInfo.isToday ? "text-orange-600" :
-                                "text-gray-500"
+                                "text-muted-foreground"
                               }`}>
                                 {dueDateInfo.isOverdue && <AlertCircle className="h-3 w-3" />}
                                 <Calendar className="h-3 w-3" />
@@ -276,7 +285,7 @@ export default function ClientActionItemsPage() {
                           <Button
                             variant="ghost"
                             size="sm"
-                            className="text-gray-400 hover:text-gray-600"
+                            className="text-muted-foreground hover:text-muted-foreground"
                             onClick={() => handleSkip(item)}
                           >
                             Skip
@@ -314,23 +323,23 @@ export default function ClientActionItemsPage() {
                             className="mt-1 h-5 w-5"
                           />
                         ) : (
-                          <XCircle className="h-5 w-5 text-gray-400 mt-1" />
+                          <XCircle className="h-5 w-5 text-muted-foreground mt-1" />
                         )}
                         <div className="flex-1 min-w-0">
                           <div className="flex items-center gap-2 flex-wrap">
                             <span className={`font-medium ${
-                              item.status === "skipped" ? "text-gray-400 line-through" : "text-gray-500 line-through"
+                              item.status === "skipped" ? "text-muted-foreground line-through" : "text-muted-foreground line-through"
                             }`}>
                               {item.title}
                             </span>
                             {item.status === "skipped" && (
-                              <Badge variant="outline" className="text-gray-400">
+                              <Badge variant="outline" className="text-muted-foreground">
                                 Skipped
                               </Badge>
                             )}
                           </div>
                           {item.completed_at && (
-                            <p className="text-xs text-gray-400 mt-1">
+                            <p className="text-xs text-muted-foreground mt-1">
                               {item.status === "completed" ? "Completed" : "Skipped"} {format(new Date(item.completed_at), "MMM d, yyyy")}
                             </p>
                           )}

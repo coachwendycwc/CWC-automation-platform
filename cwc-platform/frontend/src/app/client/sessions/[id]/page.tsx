@@ -8,6 +8,7 @@ import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { Checkbox } from "@/components/ui/checkbox";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
+import { Skeleton } from "@/components/ui/skeleton";
 import Link from "next/link";
 import { toast } from "sonner";
 import {
@@ -106,8 +107,15 @@ export default function ClientSessionDetailPage() {
 
   if (loading) {
     return (
-      <div className="flex items-center justify-center h-64">
-        <div className="text-gray-500">Loading session...</div>
+      <div className="space-y-6">
+        <div className="flex items-center gap-4">
+          <Skeleton className="h-9 w-20" />
+          <div className="space-y-2">
+            <Skeleton className="h-8 w-64" />
+            <Skeleton className="h-4 w-40" />
+          </div>
+        </div>
+        <Skeleton className="h-64 w-full rounded-xl" />
       </div>
     );
   }
@@ -115,7 +123,7 @@ export default function ClientSessionDetailPage() {
   if (!session) {
     return (
       <div className="flex items-center justify-center h-64">
-        <div className="text-gray-500">Session not found</div>
+        <div className="text-muted-foreground">Session not found</div>
       </div>
     );
   }
@@ -137,7 +145,7 @@ export default function ClientSessionDetailPage() {
           <h1 className="text-2xl font-bold">
             {session.meeting_title || "Coaching Session"}
           </h1>
-          <div className="flex items-center gap-3 text-gray-500">
+          <div className="flex items-center gap-3 text-muted-foreground">
             <span>{formatDate(session.recorded_at)}</span>
             {session.duration_seconds && (
               <>
@@ -167,9 +175,9 @@ export default function ClientSessionDetailPage() {
                 href={session.recording_url}
                 target="_blank"
                 rel="noopener noreferrer"
-                className="flex flex-col items-center gap-3 text-white hover:text-purple-300 transition-colors"
+                className="flex flex-col items-center gap-3 text-white hover:text-accent/60 transition-colors"
               >
-                <div className="p-4 bg-purple-600 rounded-full">
+                <div className="p-4 bg-accent rounded-full">
                   <Play className="h-8 w-8" />
                 </div>
                 <span className="text-lg font-medium">Watch Recording</span>
@@ -222,24 +230,24 @@ export default function ClientSessionDetailPage() {
                   <div className="space-y-4">
                     {session.summary.overview && (
                       <div>
-                        <h4 className="font-semibold text-gray-900">Overview</h4>
-                        <p className="text-gray-700">{session.summary.overview}</p>
+                        <h4 className="font-semibold text-foreground">Overview</h4>
+                        <p className="text-foreground">{session.summary.overview}</p>
                       </div>
                     )}
                     {session.summary.key_points && (
                       <div>
-                        <h4 className="font-semibold text-gray-900">Key Points</h4>
+                        <h4 className="font-semibold text-foreground">Key Points</h4>
                         <ul className="list-disc pl-5 space-y-1">
                           {session.summary.key_points.map((point: string, i: number) => (
-                            <li key={i} className="text-gray-700">{point}</li>
+                            <li key={i} className="text-foreground">{point}</li>
                           ))}
                         </ul>
                       </div>
                     )}
                     {session.summary.insights && (
                       <div>
-                        <h4 className="font-semibold text-gray-900">Insights</h4>
-                        <p className="text-gray-700">{session.summary.insights}</p>
+                        <h4 className="font-semibold text-foreground">Insights</h4>
+                        <p className="text-foreground">{session.summary.insights}</p>
                       </div>
                     )}
                   </div>
@@ -256,7 +264,7 @@ export default function ClientSessionDetailPage() {
               <CardHeader>
                 <CardTitle className="flex items-center justify-between">
                   <span>Homework & To-Dos</span>
-                  <span className="text-sm font-normal text-gray-500">
+                  <span className="text-sm font-normal text-muted-foreground">
                     {completedHomework} of {totalHomework} completed
                   </span>
                 </CardTitle>
@@ -268,8 +276,8 @@ export default function ClientSessionDetailPage() {
                       key={index}
                       className={`flex items-start gap-3 p-4 rounded-lg border ${
                         item.completed
-                          ? "bg-green-50 border-green-200"
-                          : "bg-white border-gray-200"
+                          ? "bg-success/5 border-success/20"
+                          : "bg-card border-border"
                       }`}
                     >
                       <Checkbox
@@ -282,7 +290,7 @@ export default function ClientSessionDetailPage() {
                       />
                       <span
                         className={`flex-1 ${
-                          item.completed ? "text-gray-500 line-through" : "text-gray-900"
+                          item.completed ? "text-muted-foreground line-through" : "text-foreground"
                         }`}
                       >
                         {item.description}
@@ -307,9 +315,9 @@ export default function ClientSessionDetailPage() {
                   {session.action_items.map((item, index) => (
                     <li
                       key={index}
-                      className="flex items-start gap-2 p-3 bg-gray-50 rounded-lg"
+                      className="flex items-start gap-2 p-3 bg-muted rounded-lg"
                     >
-                      <CheckSquare className="h-5 w-5 text-purple-600 mt-0.5 flex-shrink-0" />
+                      <CheckSquare className="h-5 w-5 text-accent mt-0.5 flex-shrink-0" />
                       <span>{item}</span>
                     </li>
                   ))}
@@ -328,7 +336,7 @@ export default function ClientSessionDetailPage() {
               </CardHeader>
               <CardContent>
                 <div className="prose prose-sm max-w-none">
-                  <pre className="whitespace-pre-wrap font-sans text-sm text-gray-700 bg-gray-50 p-4 rounded-lg max-h-[600px] overflow-y-auto">
+                  <pre className="whitespace-pre-wrap font-sans text-sm text-foreground bg-muted p-4 rounded-lg max-h-[600px] overflow-y-auto">
                     {session.transcript}
                   </pre>
                 </div>
@@ -342,9 +350,9 @@ export default function ClientSessionDetailPage() {
       {!session.recording_url && !session.summary && !session.transcript && !session.homework?.length && (
         <Card>
           <CardContent className="py-12 text-center">
-            <Video className="h-12 w-12 text-gray-300 mx-auto mb-4" />
-            <h3 className="text-lg font-medium text-gray-900">Session content pending</h3>
-            <p className="text-gray-500">
+            <Video className="h-12 w-12 text-muted-foreground/40 mx-auto mb-4" />
+            <h3 className="text-lg font-medium text-foreground">Session content pending</h3>
+            <p className="text-muted-foreground">
               The recording and transcript for this session are still being processed.
               Check back soon!
             </p>

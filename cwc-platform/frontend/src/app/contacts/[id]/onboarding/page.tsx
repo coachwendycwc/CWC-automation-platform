@@ -22,6 +22,7 @@ import {
 } from "lucide-react";
 import Link from "next/link";
 import { toast } from "sonner";
+import { Skeleton } from "@/components/ui/skeleton";
 import { contactsApi, onboardingAssessmentsApi, OnboardingAssessmentResponse } from "@/lib/api";
 import { formatDateTime } from "@/lib/utils";
 
@@ -102,10 +103,10 @@ export default function OnboardingAssessmentViewPage() {
     if (!value) return null;
     return (
       <div className="flex items-center justify-between py-2 border-b last:border-b-0">
-        <span className="text-sm text-gray-600">{label}</span>
+        <span className="text-sm text-muted-foreground">{label}</span>
         <div className="flex items-center gap-1">
           <span className="text-sm font-medium">{value}/10</span>
-          <div className="w-20 h-2 bg-gray-200 rounded-full overflow-hidden">
+          <div className="w-20 h-2 bg-muted rounded-full overflow-hidden">
             <div
               className="h-full bg-violet-500 rounded-full"
               style={{ width: `${(value / 10) * 100}%` }}
@@ -119,8 +120,16 @@ export default function OnboardingAssessmentViewPage() {
   if (loading) {
     return (
       <Shell>
-        <div className="flex items-center justify-center py-12">
-          <div className="text-gray-500">Loading...</div>
+        <div className="space-y-6">
+          <div className="flex items-center gap-4">
+            <Skeleton className="h-10 w-10" />
+            <div>
+              <Skeleton className="h-7 w-64 mb-2" />
+              <Skeleton className="h-4 w-40" />
+            </div>
+          </div>
+          <Skeleton className="h-[200px] w-full" />
+          <Skeleton className="h-[300px] w-full" />
         </div>
       </Shell>
     );
@@ -136,15 +145,15 @@ export default function OnboardingAssessmentViewPage() {
             </Button>
             <div>
               <h1 className="text-2xl font-bold">Onboarding Assessment</h1>
-              <p className="text-gray-500">{contact?.full_name}</p>
+              <p className="text-muted-foreground">{contact?.full_name}</p>
             </div>
           </div>
 
           <Card>
             <CardContent className="py-12 text-center">
-              <Clock className="h-12 w-12 text-gray-400 mx-auto mb-4" />
+              <Clock className="h-12 w-12 text-muted-foreground mx-auto mb-4" />
               <h2 className="text-lg font-medium mb-2">No Assessment Yet</h2>
-              <p className="text-gray-500 mb-4">
+              <p className="text-muted-foreground mb-4">
                 This contact hasn't been sent an onboarding assessment yet.
               </p>
               <Link href={`/contacts/${contactId}`}>
@@ -171,7 +180,7 @@ export default function OnboardingAssessmentViewPage() {
             </Button>
             <div>
               <h1 className="text-2xl font-bold">Onboarding Assessment</h1>
-              <p className="text-gray-500">{contact?.full_name}</p>
+              <p className="text-muted-foreground">{contact?.full_name}</p>
             </div>
           </div>
           <div className="flex items-center gap-2">
@@ -204,7 +213,7 @@ export default function OnboardingAssessmentViewPage() {
             <CardContent className="py-12 text-center">
               <Send className="h-12 w-12 text-amber-500 mx-auto mb-4" />
               <h2 className="text-lg font-medium mb-2">Awaiting Response</h2>
-              <p className="text-gray-500 mb-4">
+              <p className="text-muted-foreground mb-4">
                 The assessment was sent on {formatDateTime(assessment.created_at)}.
                 The client has not yet completed it.
               </p>
@@ -233,43 +242,43 @@ export default function OnboardingAssessmentViewPage() {
               <CardContent className="space-y-4">
                 {assessment.name_pronouns && (
                   <div>
-                    <span className="text-sm text-gray-500">Name & Pronouns</span>
+                    <span className="text-sm text-muted-foreground">Name & Pronouns</span>
                     <p className="font-medium">{assessment.name_pronouns}</p>
                   </div>
                 )}
                 {assessment.phone && (
                   <div>
-                    <span className="text-sm text-gray-500">Phone</span>
+                    <span className="text-sm text-muted-foreground">Phone</span>
                     <p className="font-medium">{assessment.phone}</p>
                   </div>
                 )}
                 {assessment.role_title && (
                   <div>
-                    <span className="text-sm text-gray-500">Role / Title</span>
+                    <span className="text-sm text-muted-foreground">Role / Title</span>
                     <p className="font-medium">{assessment.role_title}</p>
                   </div>
                 )}
                 {assessment.organization_industry && (
                   <div>
-                    <span className="text-sm text-gray-500">Organization / Industry</span>
+                    <span className="text-sm text-muted-foreground">Organization / Industry</span>
                     <p className="font-medium">{assessment.organization_industry}</p>
                   </div>
                 )}
                 {assessment.time_in_role && (
                   <div>
-                    <span className="text-sm text-gray-500">Time in Role</span>
+                    <span className="text-sm text-muted-foreground">Time in Role</span>
                     <p className="font-medium">{assessment.time_in_role}</p>
                   </div>
                 )}
                 {assessment.role_description && (
                   <div>
-                    <span className="text-sm text-gray-500">Role Description</span>
-                    <p className="text-gray-700 whitespace-pre-wrap">{assessment.role_description}</p>
+                    <span className="text-sm text-muted-foreground">Role Description</span>
+                    <p className="text-foreground whitespace-pre-wrap">{assessment.role_description}</p>
                   </div>
                 )}
                 {assessment.coaching_motivations && assessment.coaching_motivations.length > 0 && (
                   <div>
-                    <span className="text-sm text-gray-500">Coaching Motivations</span>
+                    <span className="text-sm text-muted-foreground">Coaching Motivations</span>
                     <div className="flex flex-wrap gap-2 mt-1">
                       {assessment.coaching_motivations.map((m) => (
                         <Badge key={m} variant="outline">
@@ -307,8 +316,8 @@ export default function OnboardingAssessmentViewPage() {
 
                 {assessment.priority_focus_areas && (
                   <div className="pt-4 border-t mt-4">
-                    <span className="text-sm text-gray-500">Priority Focus Areas</span>
-                    <p className="text-gray-700 whitespace-pre-wrap mt-1">{assessment.priority_focus_areas}</p>
+                    <span className="text-sm text-muted-foreground">Priority Focus Areas</span>
+                    <p className="text-foreground whitespace-pre-wrap mt-1">{assessment.priority_focus_areas}</p>
                   </div>
                 )}
               </CardContent>
@@ -325,20 +334,20 @@ export default function OnboardingAssessmentViewPage() {
               <CardContent className="space-y-4">
                 {assessment.workplace_experience && (
                   <div>
-                    <span className="text-sm text-gray-500">Workplace Experience</span>
-                    <p className="text-gray-700 whitespace-pre-wrap mt-1">{assessment.workplace_experience}</p>
+                    <span className="text-sm text-muted-foreground">Workplace Experience</span>
+                    <p className="text-foreground whitespace-pre-wrap mt-1">{assessment.workplace_experience}</p>
                   </div>
                 )}
                 {assessment.self_doubt_patterns && (
                   <div>
-                    <span className="text-sm text-gray-500">Where Self-Doubt Shows Up</span>
-                    <p className="text-gray-700 whitespace-pre-wrap mt-1">{assessment.self_doubt_patterns}</p>
+                    <span className="text-sm text-muted-foreground">Where Self-Doubt Shows Up</span>
+                    <p className="text-foreground whitespace-pre-wrap mt-1">{assessment.self_doubt_patterns}</p>
                   </div>
                 )}
                 {assessment.habits_to_shift && (
                   <div>
-                    <span className="text-sm text-gray-500">Patterns/Habits to Shift</span>
-                    <p className="text-gray-700 whitespace-pre-wrap mt-1">{assessment.habits_to_shift}</p>
+                    <span className="text-sm text-muted-foreground">Patterns/Habits to Shift</span>
+                    <p className="text-foreground whitespace-pre-wrap mt-1">{assessment.habits_to_shift}</p>
                   </div>
                 )}
               </CardContent>
@@ -355,20 +364,20 @@ export default function OnboardingAssessmentViewPage() {
               <CardContent className="space-y-4">
                 {assessment.coaching_goal && (
                   <div>
-                    <span className="text-sm text-gray-500">Coaching Goal</span>
-                    <p className="text-gray-700 whitespace-pre-wrap mt-1">{assessment.coaching_goal}</p>
+                    <span className="text-sm text-muted-foreground">Coaching Goal</span>
+                    <p className="text-foreground whitespace-pre-wrap mt-1">{assessment.coaching_goal}</p>
                   </div>
                 )}
                 {assessment.success_evidence && (
                   <div>
-                    <span className="text-sm text-gray-500">Evidence of Success</span>
-                    <p className="text-gray-700 whitespace-pre-wrap mt-1">{assessment.success_evidence}</p>
+                    <span className="text-sm text-muted-foreground">Evidence of Success</span>
+                    <p className="text-foreground whitespace-pre-wrap mt-1">{assessment.success_evidence}</p>
                   </div>
                 )}
                 {assessment.thriving_vision && (
                   <div>
-                    <span className="text-sm text-gray-500">Thriving Vision</span>
-                    <p className="text-gray-700 whitespace-pre-wrap mt-1">{assessment.thriving_vision}</p>
+                    <span className="text-sm text-muted-foreground">Thriving Vision</span>
+                    <p className="text-foreground whitespace-pre-wrap mt-1">{assessment.thriving_vision}</p>
                   </div>
                 )}
               </CardContent>
@@ -392,19 +401,19 @@ export default function OnboardingAssessmentViewPage() {
 
                 {assessment.potential_barriers && (
                   <div>
-                    <span className="text-sm text-gray-500">Potential Barriers</span>
-                    <p className="text-gray-700 whitespace-pre-wrap mt-1">{assessment.potential_barriers}</p>
+                    <span className="text-sm text-muted-foreground">Potential Barriers</span>
+                    <p className="text-foreground whitespace-pre-wrap mt-1">{assessment.potential_barriers}</p>
                   </div>
                 )}
                 {assessment.support_needed && (
                   <div>
-                    <span className="text-sm text-gray-500">Support Needed</span>
-                    <p className="text-gray-700 whitespace-pre-wrap mt-1">{assessment.support_needed}</p>
+                    <span className="text-sm text-muted-foreground">Support Needed</span>
+                    <p className="text-foreground whitespace-pre-wrap mt-1">{assessment.support_needed}</p>
                   </div>
                 )}
                 {assessment.feedback_preference && (
                   <div>
-                    <span className="text-sm text-gray-500">Feedback Preference</span>
+                    <span className="text-sm text-muted-foreground">Feedback Preference</span>
                     <p className="font-medium mt-1">
                       {FEEDBACK_LABELS[assessment.feedback_preference] || assessment.feedback_preference}
                     </p>
@@ -412,8 +421,8 @@ export default function OnboardingAssessmentViewPage() {
                 )}
                 {assessment.sensitive_topics && (
                   <div>
-                    <span className="text-sm text-gray-500">Sensitive Topics to Avoid</span>
-                    <p className="text-gray-700 whitespace-pre-wrap mt-1">{assessment.sensitive_topics}</p>
+                    <span className="text-sm text-muted-foreground">Sensitive Topics to Avoid</span>
+                    <p className="text-foreground whitespace-pre-wrap mt-1">{assessment.sensitive_topics}</p>
                   </div>
                 )}
               </CardContent>
@@ -430,11 +439,11 @@ export default function OnboardingAssessmentViewPage() {
               <CardContent>
                 {assessment.scheduling_preferences ? (
                   <div>
-                    <span className="text-sm text-gray-500">Scheduling Preferences</span>
-                    <p className="text-gray-700 whitespace-pre-wrap mt-1">{assessment.scheduling_preferences}</p>
+                    <span className="text-sm text-muted-foreground">Scheduling Preferences</span>
+                    <p className="text-foreground whitespace-pre-wrap mt-1">{assessment.scheduling_preferences}</p>
                   </div>
                 ) : (
-                  <p className="text-gray-500 text-sm">No scheduling preferences provided</p>
+                  <p className="text-muted-foreground text-sm">No scheduling preferences provided</p>
                 )}
               </CardContent>
             </Card>

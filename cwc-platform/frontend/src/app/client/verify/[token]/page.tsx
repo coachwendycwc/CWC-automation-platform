@@ -46,33 +46,33 @@ export default function VerifyTokenPage() {
         <CardContent className="pt-6">
           {status === "loading" && (
             <div className="text-center space-y-4 py-8">
-              <Loader2 className="h-12 w-12 text-purple-600 animate-spin mx-auto" />
+              <Loader2 className="h-12 w-12 text-accent animate-spin mx-auto" />
               <h3 className="text-lg font-semibold">Verifying your login...</h3>
-              <p className="text-gray-500">Please wait a moment</p>
+              <p className="text-muted-foreground">Please wait a moment</p>
             </div>
           )}
 
           {status === "success" && (
             <div className="text-center space-y-4 py-8">
-              <div className="mx-auto w-16 h-16 bg-green-100 rounded-full flex items-center justify-center">
-                <CheckCircle className="h-8 w-8 text-green-600" />
+              <div className="mx-auto w-16 h-16 bg-success/10 rounded-full flex items-center justify-center">
+                <CheckCircle className="h-8 w-8 text-success" />
               </div>
-              <h3 className="text-lg font-semibold text-green-700">
+              <h3 className="text-lg font-semibold text-success">
                 Login successful!
               </h3>
-              <p className="text-gray-600">Redirecting to your dashboard...</p>
+              <p className="text-muted-foreground">Redirecting to your dashboard...</p>
             </div>
           )}
 
           {status === "error" && (
             <div className="text-center space-y-4 py-8">
-              <div className="mx-auto w-16 h-16 bg-red-100 rounded-full flex items-center justify-center">
-                <XCircle className="h-8 w-8 text-red-600" />
+              <div className="mx-auto w-16 h-16 bg-destructive/10 rounded-full flex items-center justify-center">
+                <XCircle className="h-8 w-8 text-destructive" />
               </div>
-              <h3 className="text-lg font-semibold text-red-700">Login failed</h3>
-              <p className="text-gray-600">{errorMessage}</p>
+              <h3 className="text-lg font-semibold text-destructive">Login failed</h3>
+              <p className="text-muted-foreground">{errorMessage}</p>
               <Link href="/client/login">
-                <Button className="mt-4">Request new login link</Button>
+                <Button className="mt-4 cursor-pointer">Request new login link</Button>
               </Link>
             </div>
           )}

@@ -27,6 +27,7 @@ import {
   Check,
   AlertCircle,
 } from "lucide-react";
+import { Skeleton } from "@/components/ui/skeleton";
 import Link from "next/link";
 
 interface ChecklistItem {
@@ -72,10 +73,10 @@ interface Workflow {
 }
 
 const STATUS_COLORS: Record<string, string> = {
-  pending: "bg-gray-100 text-gray-800",
-  in_progress: "bg-blue-100 text-blue-800",
-  completed: "bg-green-100 text-green-800",
-  cancelled: "bg-red-100 text-red-800",
+  pending: "bg-muted text-muted-foreground",
+  in_progress: "bg-primary/10 text-primary",
+  completed: "bg-success/10 text-success",
+  cancelled: "bg-destructive/10 text-destructive",
 };
 
 const STATUS_ICONS: Record<string, React.ReactNode> = {
@@ -201,7 +202,7 @@ export default function OffboardingDetailPage() {
         {[1, 2, 3, 4, 5].map((star) => (
           <Star
             key={star}
-            className={`h-5 w-5 ${star <= rating ? "text-yellow-400 fill-yellow-400" : "text-gray-300"}`}
+            className={`h-5 w-5 ${star <= rating ? "text-yellow-400 fill-yellow-400" : "text-muted-foreground"}`}
           />
         ))}
       </div>
@@ -211,8 +212,14 @@ export default function OffboardingDetailPage() {
   if (loading) {
     return (
       <Shell>
-        <div className="flex items-center justify-center h-64">
-          <div className="text-gray-500">Loading...</div>
+        <div className="space-y-6">
+          <Skeleton className="h-8 w-64" />
+          <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
+            <div className="lg:col-span-2 space-y-6">
+              <Skeleton className="h-[300px] w-full" />
+            </div>
+            <Skeleton className="h-[200px] w-full" />
+          </div>
         </div>
       </Shell>
     );
@@ -222,7 +229,7 @@ export default function OffboardingDetailPage() {
     return (
       <Shell>
         <div className="flex flex-col items-center justify-center h-64">
-          <AlertCircle className="h-12 w-12 text-gray-300 mb-4" />
+          <AlertCircle className="h-12 w-12 text-muted-foreground mb-4" />
           <h3 className="text-lg font-medium">Workflow not found</h3>
           <Link href="/offboarding">
             <Button className="mt-4">Back to Offboarding</Button>
@@ -252,12 +259,12 @@ export default function OffboardingDetailPage() {
               </Button>
             </Link>
             <div className="flex items-center gap-3">
-              <div className="flex items-center justify-center w-12 h-12 rounded-full bg-gray-100">
+              <div className="flex items-center justify-center w-12 h-12 rounded-full bg-muted">
                 {WORKFLOW_TYPE_ICONS[workflow.workflow_type]}
               </div>
               <div>
                 <h1 className="text-2xl font-bold">{workflow.contact_name || "Unknown Contact"}</h1>
-                <div className="flex items-center gap-2 text-gray-500">
+                <div className="flex items-center gap-2 text-muted-foreground">
                   <span>{WORKFLOW_TYPE_LABELS[workflow.workflow_type]}</span>
                   <span>•</span>
                   <span>Started {formatDate(workflow.initiated_at)}</span>
@@ -306,7 +313,7 @@ export default function OffboardingDetailPage() {
                   </div>
                   <div className="text-right">
                     <div className="text-2xl font-bold">{checklistProgress}%</div>
-                    <div className="text-sm text-gray-500">
+                    <div className="text-sm text-muted-foreground">
                       {workflow.checklist.filter((i) => i.completed).length}/{workflow.checklist.length} complete
                     </div>
                   </div>
@@ -318,7 +325,7 @@ export default function OffboardingDetailPage() {
                     <div
                       key={index}
                       className={`flex items-center gap-3 p-3 rounded-lg border ${
-                        item.completed ? "bg-green-50 border-green-200" : "bg-white border-gray-200"
+                        item.completed ? "bg-success/10 border-success/20" : "bg-card border-border"
                       }`}
                     >
                       <Checkbox
@@ -326,11 +333,11 @@ export default function OffboardingDetailPage() {
                         onCheckedChange={() => toggleChecklistItem(index)}
                         disabled={workflow.status === "completed" || workflow.status === "cancelled"}
                       />
-                      <span className={item.completed ? "text-green-700 line-through" : ""}>
+                      <span className={item.completed ? "text-success line-through" : ""}>
                         {item.item}
                       </span>
                       {item.completed && item.completed_at && (
-                        <span className="ml-auto text-xs text-gray-500">
+                        <span className="ml-auto text-sm text-muted-foreground">
                           {formatDate(item.completed_at)}
                         </span>
                       )}
@@ -353,15 +360,15 @@ export default function OffboardingDetailPage() {
                 <CardContent className="space-y-6">
                   {/* Section 1: Overall Experience */}
                   <div className="space-y-4">
-                    <h4 className="font-semibold text-gray-900 border-b pb-2">Overall Experience</h4>
+                    <h4 className="font-semibold text-foreground border-b pb-2">Overall Experience</h4>
 
                     <div className="grid grid-cols-2 gap-4">
                       {workflow.survey_response.satisfaction_rating && (
                         <div>
-                          <div className="text-sm font-medium text-gray-500 mb-1">Satisfaction</div>
+                          <div className="text-sm font-medium text-muted-foreground mb-1">Satisfaction</div>
                           <div className="flex items-center gap-2">
                             <div className="text-2xl font-bold">{workflow.survey_response.satisfaction_rating}</div>
-                            <div className="text-gray-500">/10</div>
+                            <div className="text-muted-foreground">/10</div>
                             {renderStars(Math.round(workflow.survey_response.satisfaction_rating / 2))}
                           </div>
                         </div>
@@ -369,14 +376,14 @@ export default function OffboardingDetailPage() {
 
                       {workflow.survey_response.nps_score !== undefined && (
                         <div>
-                          <div className="text-sm font-medium text-gray-500 mb-1">NPS Score</div>
+                          <div className="text-sm font-medium text-muted-foreground mb-1">NPS Score</div>
                           <div className="flex items-center gap-2">
                             <div className="text-2xl font-bold">{workflow.survey_response.nps_score}</div>
-                            <div className="text-gray-500">/10</div>
+                            <div className="text-muted-foreground">/10</div>
                             <Badge className={
-                              workflow.survey_response.nps_score >= 9 ? "bg-green-100 text-green-800" :
-                              workflow.survey_response.nps_score >= 7 ? "bg-yellow-100 text-yellow-800" :
-                              "bg-red-100 text-red-800"
+                              workflow.survey_response.nps_score >= 9 ? "bg-success/10 text-success" :
+                              workflow.survey_response.nps_score >= 7 ? "bg-warning/10 text-warning" :
+                              "bg-destructive/10 text-destructive"
                             }>
                               {workflow.survey_response.nps_score >= 9 ? "Promoter" :
                                workflow.survey_response.nps_score >= 7 ? "Passive" : "Detractor"}
@@ -388,8 +395,8 @@ export default function OffboardingDetailPage() {
 
                     {workflow.survey_response.initial_goals && (
                       <div>
-                        <div className="text-sm font-medium text-gray-500 mb-1">Initial Goals</div>
-                        <p className="text-gray-700">{workflow.survey_response.initial_goals}</p>
+                        <div className="text-sm font-medium text-muted-foreground mb-1">Initial Goals</div>
+                        <p className="text-foreground">{workflow.survey_response.initial_goals}</p>
                       </div>
                     )}
                   </div>
@@ -397,11 +404,11 @@ export default function OffboardingDetailPage() {
                   {/* Section 2: Growth + Measurement */}
                   {(workflow.survey_response.outcomes || workflow.survey_response.specific_wins || workflow.survey_response.progress_rating || workflow.survey_response.most_transformative) && (
                     <div className="space-y-4">
-                      <h4 className="font-semibold text-gray-900 border-b pb-2">Growth + Measurement</h4>
+                      <h4 className="font-semibold text-foreground border-b pb-2">Growth + Measurement</h4>
 
                       {workflow.survey_response.outcomes && workflow.survey_response.outcomes.length > 0 && (
                         <div>
-                          <div className="text-sm font-medium text-gray-500 mb-2">Outcomes Achieved</div>
+                          <div className="text-sm font-medium text-muted-foreground mb-2">Outcomes Achieved</div>
                           <div className="flex flex-wrap gap-2">
                             {workflow.survey_response.outcomes.map((outcome: string) => (
                               <Badge key={outcome} variant="outline" className="bg-green-50 text-green-700">
@@ -411,16 +418,16 @@ export default function OffboardingDetailPage() {
                             ))}
                           </div>
                           {workflow.survey_response.outcomes_other && (
-                            <p className="text-gray-600 text-sm mt-2">Other: {workflow.survey_response.outcomes_other}</p>
+                            <p className="text-muted-foreground text-sm mt-2">Other: {workflow.survey_response.outcomes_other}</p>
                           )}
                         </div>
                       )}
 
                       {workflow.survey_response.progress_rating && (
                         <div>
-                          <div className="text-sm font-medium text-gray-500 mb-1">Progress Toward Goals</div>
+                          <div className="text-sm font-medium text-muted-foreground mb-1">Progress Toward Goals</div>
                           <div className="flex items-center gap-2">
-                            <div className="flex-1 bg-gray-200 rounded-full h-3">
+                            <div className="flex-1 bg-muted rounded-full h-3">
                               <div
                                 className="bg-purple-600 h-3 rounded-full transition-all"
                                 style={{ width: `${workflow.survey_response.progress_rating * 10}%` }}
@@ -433,15 +440,15 @@ export default function OffboardingDetailPage() {
 
                       {workflow.survey_response.specific_wins && (
                         <div>
-                          <div className="text-sm font-medium text-gray-500 mb-1">Specific Wins</div>
-                          <p className="text-gray-700">{workflow.survey_response.specific_wins}</p>
+                          <div className="text-sm font-medium text-muted-foreground mb-1">Specific Wins</div>
+                          <p className="text-foreground">{workflow.survey_response.specific_wins}</p>
                         </div>
                       )}
 
                       {workflow.survey_response.most_transformative && (
                         <div>
-                          <div className="text-sm font-medium text-gray-500 mb-1">Most Transformative</div>
-                          <p className="text-gray-700">{workflow.survey_response.most_transformative}</p>
+                          <div className="text-sm font-medium text-muted-foreground mb-1">Most Transformative</div>
+                          <p className="text-foreground">{workflow.survey_response.most_transformative}</p>
                         </div>
                       )}
                     </div>
@@ -450,11 +457,11 @@ export default function OffboardingDetailPage() {
                   {/* Section 3: Coaching Process */}
                   {(workflow.survey_response.helpful_parts || workflow.survey_response.least_helpful || workflow.survey_response.wish_done_earlier) && (
                     <div className="space-y-4">
-                      <h4 className="font-semibold text-gray-900 border-b pb-2">Coaching Process</h4>
+                      <h4 className="font-semibold text-foreground border-b pb-2">Coaching Process</h4>
 
                       {workflow.survey_response.helpful_parts && workflow.survey_response.helpful_parts.length > 0 && (
                         <div>
-                          <div className="text-sm font-medium text-gray-500 mb-2">Most Helpful Parts</div>
+                          <div className="text-sm font-medium text-muted-foreground mb-2">Most Helpful Parts</div>
                           <div className="flex flex-wrap gap-2">
                             {workflow.survey_response.helpful_parts.map((part: string) => (
                               <Badge key={part} variant="outline" className="bg-blue-50 text-blue-700">
@@ -463,22 +470,22 @@ export default function OffboardingDetailPage() {
                             ))}
                           </div>
                           {workflow.survey_response.helpful_parts_other && (
-                            <p className="text-gray-600 text-sm mt-2">Other: {workflow.survey_response.helpful_parts_other}</p>
+                            <p className="text-muted-foreground text-sm mt-2">Other: {workflow.survey_response.helpful_parts_other}</p>
                           )}
                         </div>
                       )}
 
                       {workflow.survey_response.least_helpful && (
                         <div>
-                          <div className="text-sm font-medium text-gray-500 mb-1">Least Helpful / Areas for Improvement</div>
-                          <p className="text-gray-700">{workflow.survey_response.least_helpful}</p>
+                          <div className="text-sm font-medium text-muted-foreground mb-1">Least Helpful / Areas for Improvement</div>
+                          <p className="text-foreground">{workflow.survey_response.least_helpful}</p>
                         </div>
                       )}
 
                       {workflow.survey_response.wish_done_earlier && (
                         <div>
-                          <div className="text-sm font-medium text-gray-500 mb-1">Wish We Had Done Earlier</div>
-                          <p className="text-gray-700">{workflow.survey_response.wish_done_earlier}</p>
+                          <div className="text-sm font-medium text-muted-foreground mb-1">Wish We Had Done Earlier</div>
+                          <p className="text-foreground">{workflow.survey_response.wish_done_earlier}</p>
                         </div>
                       )}
                     </div>
@@ -487,18 +494,18 @@ export default function OffboardingDetailPage() {
                   {/* Section 4: Equity, Safety & Support */}
                   {(workflow.survey_response.psychological_safety || workflow.survey_response.woc_support_rating || workflow.survey_response.support_feedback) && (
                     <div className="space-y-4">
-                      <h4 className="font-semibold text-gray-900 border-b pb-2">Equity, Safety & Support</h4>
+                      <h4 className="font-semibold text-foreground border-b pb-2">Equity, Safety & Support</h4>
 
                       <div className="grid grid-cols-2 gap-4">
                         {workflow.survey_response.psychological_safety && (
                           <div>
-                            <div className="text-sm font-medium text-gray-500 mb-1">Psychological Safety</div>
+                            <div className="text-sm font-medium text-muted-foreground mb-1">Psychological Safety</div>
                             <Badge className={
                               ["strongly_agree", "agree"].includes(workflow.survey_response.psychological_safety)
-                                ? "bg-green-100 text-green-800"
+                                ? "bg-success/10 text-success"
                                 : workflow.survey_response.psychological_safety === "neutral"
-                                  ? "bg-gray-100 text-gray-800"
-                                  : "bg-red-100 text-red-800"
+                                  ? "bg-muted text-muted-foreground"
+                                  : "bg-destructive/10 text-destructive"
                             }>
                               {workflow.survey_response.psychological_safety.replace(/_/g, " ").replace(/\b\w/g, (l: string) => l.toUpperCase())}
                             </Badge>
@@ -507,10 +514,10 @@ export default function OffboardingDetailPage() {
 
                         {workflow.survey_response.woc_support_rating && (
                           <div>
-                            <div className="text-sm font-medium text-gray-500 mb-1">WOC Support Rating</div>
+                            <div className="text-sm font-medium text-muted-foreground mb-1">WOC Support Rating</div>
                             <div className="flex items-center gap-2">
                               <div className="text-2xl font-bold">{workflow.survey_response.woc_support_rating}</div>
-                              <div className="text-gray-500">/10</div>
+                              <div className="text-muted-foreground">/10</div>
                             </div>
                           </div>
                         )}
@@ -518,8 +525,8 @@ export default function OffboardingDetailPage() {
 
                       {workflow.survey_response.support_feedback && (
                         <div>
-                          <div className="text-sm font-medium text-gray-500 mb-1">What Helped Feel Supported</div>
-                          <p className="text-gray-700">{workflow.survey_response.support_feedback}</p>
+                          <div className="text-sm font-medium text-muted-foreground mb-1">What Helped Feel Supported</div>
+                          <p className="text-foreground">{workflow.survey_response.support_feedback}</p>
                         </div>
                       )}
                     </div>
@@ -528,14 +535,14 @@ export default function OffboardingDetailPage() {
                   {/* Section 5: Testimonial Permission */}
                   {(workflow.survey_response.may_share_testimonial || workflow.survey_response.written_testimonial) && (
                     <div className="space-y-4">
-                      <h4 className="font-semibold text-gray-900 border-b pb-2">Testimonial</h4>
+                      <h4 className="font-semibold text-foreground border-b pb-2">Testimonial</h4>
 
                       {workflow.survey_response.may_share_testimonial && (
                         <div className="flex items-center gap-2">
                           <Badge className={
                             workflow.survey_response.may_share_testimonial === "yes_with_name"
-                              ? "bg-green-100 text-green-800"
-                              : "bg-gray-100 text-gray-800"
+                              ? "bg-success/10 text-success"
+                              : "bg-muted text-muted-foreground"
                           }>
                             {workflow.survey_response.may_share_testimonial === "yes_with_name"
                               ? "Willing to share with name"
@@ -546,15 +553,15 @@ export default function OffboardingDetailPage() {
 
                       {workflow.survey_response.display_name_title && (
                         <div>
-                          <div className="text-sm font-medium text-gray-500 mb-1">Display As</div>
-                          <p className="text-gray-700">{workflow.survey_response.display_name_title}</p>
+                          <div className="text-sm font-medium text-muted-foreground mb-1">Display As</div>
+                          <p className="text-foreground">{workflow.survey_response.display_name_title}</p>
                         </div>
                       )}
 
                       {workflow.survey_response.written_testimonial && (
                         <div>
-                          <div className="text-sm font-medium text-gray-500 mb-1">Written Testimonial</div>
-                          <blockquote className="text-gray-700 italic border-l-4 border-purple-500 pl-4">
+                          <div className="text-sm font-medium text-muted-foreground mb-1">Written Testimonial</div>
+                          <blockquote className="text-foreground italic border-l-4 border-purple-500 pl-4">
                             "{workflow.survey_response.written_testimonial}"
                           </blockquote>
                         </div>
@@ -562,7 +569,7 @@ export default function OffboardingDetailPage() {
 
                       {workflow.survey_response.video_url && (
                         <div>
-                          <div className="text-sm font-medium text-gray-500 mb-2">Video Testimonial</div>
+                          <div className="text-sm font-medium text-muted-foreground mb-2">Video Testimonial</div>
                           <div className="aspect-video bg-black rounded-lg overflow-hidden max-w-md">
                             <video
                               src={workflow.survey_response.video_url}
@@ -572,7 +579,7 @@ export default function OffboardingDetailPage() {
                             />
                           </div>
                           {workflow.survey_response.video_duration_seconds && (
-                            <p className="text-xs text-gray-500 mt-1">
+                            <p className="text-sm text-muted-foreground mt-1">
                               Duration: {Math.floor(workflow.survey_response.video_duration_seconds / 60)}:{(workflow.survey_response.video_duration_seconds % 60).toString().padStart(2, '0')}
                             </p>
                           )}
@@ -581,12 +588,12 @@ export default function OffboardingDetailPage() {
 
                       {!workflow.survey_response.video_url && workflow.survey_response.willing_to_record_video !== undefined && (
                         <div className="flex items-center gap-2">
-                          <span className="text-sm text-gray-500">Video testimonial:</span>
+                          <span className="text-sm text-muted-foreground">Video testimonial:</span>
                           <Badge variant="outline">
                             {workflow.survey_response.willing_to_record_video ? "Open to recording" : "Not interested"}
                           </Badge>
                           {workflow.survey_response.willing_to_record_video && workflow.survey_response.video_upload_preference && (
-                            <span className="text-sm text-gray-500">
+                            <span className="text-sm text-muted-foreground">
                               (Prefers: {workflow.survey_response.video_upload_preference})
                             </span>
                           )}
@@ -598,26 +605,26 @@ export default function OffboardingDetailPage() {
                   {/* Section 6: Final Feedback (Legacy fields) */}
                   {(workflow.survey_response.most_valued || workflow.survey_response.improvement_suggestions || workflow.survey_response.additional_comments) && (
                     <div className="space-y-4">
-                      <h4 className="font-semibold text-gray-900 border-b pb-2">Final Feedback</h4>
+                      <h4 className="font-semibold text-foreground border-b pb-2">Final Feedback</h4>
 
                       {workflow.survey_response.most_valued && (
                         <div>
-                          <div className="text-sm font-medium text-gray-500 mb-1">Most Valued</div>
-                          <p className="text-gray-700">{workflow.survey_response.most_valued}</p>
+                          <div className="text-sm font-medium text-muted-foreground mb-1">Most Valued</div>
+                          <p className="text-foreground">{workflow.survey_response.most_valued}</p>
                         </div>
                       )}
 
                       {workflow.survey_response.improvement_suggestions && (
                         <div>
-                          <div className="text-sm font-medium text-gray-500 mb-1">Improvement Suggestions</div>
-                          <p className="text-gray-700">{workflow.survey_response.improvement_suggestions}</p>
+                          <div className="text-sm font-medium text-muted-foreground mb-1">Improvement Suggestions</div>
+                          <p className="text-foreground">{workflow.survey_response.improvement_suggestions}</p>
                         </div>
                       )}
 
                       {workflow.survey_response.additional_comments && (
                         <div>
-                          <div className="text-sm font-medium text-gray-500 mb-1">Additional Comments</div>
-                          <p className="text-gray-700">{workflow.survey_response.additional_comments}</p>
+                          <div className="text-sm font-medium text-muted-foreground mb-1">Additional Comments</div>
+                          <p className="text-foreground">{workflow.survey_response.additional_comments}</p>
                         </div>
                       )}
                     </div>
@@ -636,16 +643,16 @@ export default function OffboardingDetailPage() {
                   </CardTitle>
                 </CardHeader>
                 <CardContent>
-                  <blockquote className="text-lg italic text-gray-700 border-l-4 border-green-500 pl-4">
+                  <blockquote className="text-lg italic text-foreground border-l-4 border-green-500 pl-4">
                     "{workflow.testimonial_text}"
                   </blockquote>
                   {workflow.testimonial_author_name && (
-                    <div className="mt-3 text-sm text-gray-500">
+                    <div className="mt-3 text-sm text-muted-foreground">
                       — {workflow.testimonial_author_name}
                     </div>
                   )}
                   {workflow.testimonial_permission_granted && (
-                    <Badge className="mt-2 bg-green-100 text-green-800">
+                    <Badge className="mt-2 bg-success/10 text-success">
                       <Check className="h-3 w-3 mr-1" />
                       Permission granted to use publicly
                     </Badge>
@@ -661,7 +668,7 @@ export default function OffboardingDetailPage() {
                   <CardTitle>Notes</CardTitle>
                 </CardHeader>
                 <CardContent>
-                  <p className="text-gray-700 whitespace-pre-wrap">{workflow.notes}</p>
+                  <p className="text-foreground whitespace-pre-wrap">{workflow.notes}</p>
                 </CardContent>
               </Card>
             )}
@@ -720,15 +727,15 @@ export default function OffboardingDetailPage() {
               </CardHeader>
               <CardContent className="space-y-3">
                 <div className="flex items-center justify-between">
-                  <span className="text-gray-500">Survey</span>
+                  <span className="text-muted-foreground">Survey</span>
                   {workflow.send_survey ? (
                     workflow.survey_completed_at ? (
-                      <Badge className="bg-green-100 text-green-800">
+                      <Badge className="bg-success/10 text-success">
                         <Check className="h-3 w-3 mr-1" />
                         Completed
                       </Badge>
                     ) : (
-                      <Badge className="bg-yellow-100 text-yellow-800">Pending</Badge>
+                      <Badge className="bg-warning/10 text-warning">Pending</Badge>
                     )
                   ) : (
                     <Badge variant="outline">Not requested</Badge>
@@ -736,15 +743,15 @@ export default function OffboardingDetailPage() {
                 </div>
 
                 <div className="flex items-center justify-between">
-                  <span className="text-gray-500">Testimonial</span>
+                  <span className="text-muted-foreground">Testimonial</span>
                   {workflow.request_testimonial ? (
                     workflow.testimonial_received ? (
-                      <Badge className="bg-green-100 text-green-800">
+                      <Badge className="bg-success/10 text-success">
                         <Check className="h-3 w-3 mr-1" />
                         Received
                       </Badge>
                     ) : (
-                      <Badge className="bg-yellow-100 text-yellow-800">Pending</Badge>
+                      <Badge className="bg-warning/10 text-warning">Pending</Badge>
                     )
                   ) : (
                     <Badge variant="outline">Not requested</Badge>
@@ -753,10 +760,10 @@ export default function OffboardingDetailPage() {
 
                 {workflow.related_project_title && (
                   <div className="pt-2 border-t">
-                    <span className="text-sm text-gray-500">Related Project</span>
+                    <span className="text-sm text-muted-foreground">Related Project</span>
                     <Link
                       href={`/projects/${workflow.related_project_id}`}
-                      className="block text-blue-600 hover:underline"
+                      className="block text-primary hover:underline"
                     >
                       {workflow.related_project_title}
                     </Link>
@@ -773,16 +780,16 @@ export default function OffboardingDetailPage() {
               <CardContent>
                 <div className="space-y-4">
                   {activities.length === 0 ? (
-                    <p className="text-gray-500 text-sm">No activity yet</p>
+                    <p className="text-muted-foreground text-sm">No activity yet</p>
                   ) : (
                     activities.map((activity) => (
                       <div key={activity.id} className="flex gap-3 text-sm">
-                        <div className="w-2 h-2 rounded-full bg-gray-400 mt-2 flex-shrink-0" />
+                        <div className="w-2 h-2 rounded-full bg-muted-foreground mt-2 flex-shrink-0" />
                         <div>
-                          <div className="text-gray-900">
+                          <div className="text-foreground">
                             {ACTION_LABELS[activity.action] || activity.action}
                           </div>
-                          <div className="text-gray-500 text-xs">
+                          <div className="text-muted-foreground text-xs">
                             {formatDate(activity.created_at)}
                           </div>
                         </div>
@@ -802,10 +809,10 @@ export default function OffboardingDetailPage() {
                 <div className="space-y-2">
                   <div className="font-medium">{workflow.contact_name}</div>
                   {workflow.contact_email && (
-                    <div className="text-sm text-gray-500">{workflow.contact_email}</div>
+                    <div className="text-sm text-muted-foreground">{workflow.contact_email}</div>
                   )}
                   <Link href={`/contacts/${workflow.contact_id}`}>
-                    <Button variant="link" className="p-0 h-auto text-blue-600">
+                    <Button variant="link" className="p-0 h-auto text-primary">
                       View Contact
                     </Button>
                   </Link>

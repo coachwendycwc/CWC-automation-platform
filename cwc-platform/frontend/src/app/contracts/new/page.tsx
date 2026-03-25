@@ -16,6 +16,7 @@ import {
   SelectValue,
 } from "@/components/ui/select";
 import { contractsApi, contractTemplatesApi, contactsApi } from "@/lib/api";
+import { Skeleton } from "@/components/ui/skeleton";
 import { ArrowLeft, FileText, User } from "lucide-react";
 import Link from "next/link";
 
@@ -144,8 +145,11 @@ export default function NewContractPage() {
   if (loading) {
     return (
       <Shell>
-        <div className="flex items-center justify-center h-64">
-          <div className="text-gray-500">Loading...</div>
+        <div className="max-w-3xl mx-auto space-y-6 py-8">
+          <Skeleton className="h-10 w-48" />
+          <Skeleton className="h-40 w-full rounded-lg" />
+          <Skeleton className="h-40 w-full rounded-lg" />
+          <Skeleton className="h-48 w-full rounded-lg" />
         </div>
       </Shell>
     );
@@ -164,7 +168,7 @@ export default function NewContractPage() {
           </Link>
           <div>
             <h1 className="text-2xl font-bold">New Contract</h1>
-            <p className="text-gray-500">Create a contract from a template</p>
+            <p className="text-muted-foreground">Create a contract from a template</p>
           </div>
         </div>
 
@@ -190,7 +194,7 @@ export default function NewContractPage() {
                         <div className="flex flex-col">
                           <span>{template.name}</span>
                           {template.description && (
-                            <span className="text-xs text-gray-500">
+                            <span className="text-sm text-muted-foreground">
                               {template.description}
                             </span>
                           )}
@@ -202,7 +206,7 @@ export default function NewContractPage() {
               </div>
 
               {templates.length === 0 && (
-                <div className="text-center py-4 text-gray-500">
+                <div className="text-center py-4 text-muted-foreground">
                   <p>No templates available.</p>
                   <Link href="/contracts/templates/new">
                     <Button variant="link">Create a template first</Button>
@@ -261,7 +265,7 @@ export default function NewContractPage() {
                 {getCustomFields().length > 0 && (
                   <div className="space-y-4 pt-4 border-t">
                     <h3 className="font-medium">Custom Fields</h3>
-                    <p className="text-sm text-gray-500">
+                    <p className="text-sm text-muted-foreground">
                       Fill in these fields to customize your contract
                     </p>
                     {getCustomFields().map((fieldName) => {

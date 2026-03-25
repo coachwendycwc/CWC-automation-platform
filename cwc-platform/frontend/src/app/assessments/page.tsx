@@ -61,11 +61,11 @@ interface Stats {
 }
 
 const statusConfig: Record<string, { label: string; color: string; icon: React.ReactNode }> = {
-  submitted: { label: "New", color: "bg-blue-100 text-blue-800", icon: <Clock className="w-3 h-3" /> },
-  reviewed: { label: "Reviewed", color: "bg-yellow-100 text-yellow-800", icon: <Eye className="w-3 h-3" /> },
-  contacted: { label: "Contacted", color: "bg-purple-100 text-purple-800", icon: <MessageSquare className="w-3 h-3" /> },
-  converted: { label: "Converted", color: "bg-green-100 text-green-800", icon: <CheckCircle className="w-3 h-3" /> },
-  archived: { label: "Archived", color: "bg-gray-100 text-gray-800", icon: <Archive className="w-3 h-3" /> },
+  submitted: { label: "New", color: "bg-primary/10 text-primary", icon: <Clock className="w-3 h-3" /> },
+  reviewed: { label: "Reviewed", color: "bg-warning/10 text-warning", icon: <Eye className="w-3 h-3" /> },
+  contacted: { label: "Contacted", color: "bg-accent/10 text-accent", icon: <MessageSquare className="w-3 h-3" /> },
+  converted: { label: "Converted", color: "bg-success/10 text-success", icon: <CheckCircle className="w-3 h-3" /> },
+  archived: { label: "Archived", color: "bg-muted text-muted-foreground", icon: <Archive className="w-3 h-3" /> },
 };
 
 const budgetLabels: Record<string, string> = {
@@ -169,8 +169,8 @@ export default function AssessmentsPage() {
         <div className="max-w-7xl mx-auto">
           {/* Header */}
           <div className="mb-8">
-            <h1 className="text-3xl font-bold text-gray-900">Organizational Assessments</h1>
-            <p className="text-gray-600 mt-1">
+            <h1 className="text-3xl font-bold text-foreground">Organizational Assessments</h1>
+            <p className="text-muted-foreground mt-1">
               Review and manage needs assessments from organizations
             </p>
           </div>
@@ -184,10 +184,10 @@ export default function AssessmentsPage() {
               <CardContent className="p-4">
                 <div className="flex items-center justify-between">
                   <div>
-                    <p className="text-sm text-gray-500">Total</p>
+                    <p className="text-sm text-muted-foreground">Total</p>
                     <p className="text-2xl font-bold">{stats?.total || 0}</p>
                   </div>
-                  <Building2 className="w-8 h-8 text-gray-400" />
+                  <Building2 className="w-8 h-8 text-muted-foreground" />
                 </div>
               </CardContent>
             </Card>
@@ -199,10 +199,10 @@ export default function AssessmentsPage() {
               <CardContent className="p-4">
                 <div className="flex items-center justify-between">
                   <div>
-                    <p className="text-sm text-gray-500">New</p>
-                    <p className="text-2xl font-bold text-blue-600">{stats?.submitted || 0}</p>
+                    <p className="text-sm text-muted-foreground">New</p>
+                    <p className="text-2xl font-bold text-primary">{stats?.submitted || 0}</p>
                   </div>
-                  <Clock className="w-8 h-8 text-blue-400" />
+                  <Clock className="w-8 h-8 text-primary/60" />
                 </div>
               </CardContent>
             </Card>
@@ -214,10 +214,10 @@ export default function AssessmentsPage() {
               <CardContent className="p-4">
                 <div className="flex items-center justify-between">
                   <div>
-                    <p className="text-sm text-gray-500">Reviewed</p>
-                    <p className="text-2xl font-bold text-yellow-600">{stats?.reviewed || 0}</p>
+                    <p className="text-sm text-muted-foreground">Reviewed</p>
+                    <p className="text-2xl font-bold text-warning">{stats?.reviewed || 0}</p>
                   </div>
-                  <Eye className="w-8 h-8 text-yellow-400" />
+                  <Eye className="w-8 h-8 text-warning/60" />
                 </div>
               </CardContent>
             </Card>
@@ -229,10 +229,10 @@ export default function AssessmentsPage() {
               <CardContent className="p-4">
                 <div className="flex items-center justify-between">
                   <div>
-                    <p className="text-sm text-gray-500">Contacted</p>
-                    <p className="text-2xl font-bold text-purple-600">{stats?.contacted || 0}</p>
+                    <p className="text-sm text-muted-foreground">Contacted</p>
+                    <p className="text-2xl font-bold text-accent">{stats?.contacted || 0}</p>
                   </div>
-                  <MessageSquare className="w-8 h-8 text-purple-400" />
+                  <MessageSquare className="w-8 h-8 text-accent/60" />
                 </div>
               </CardContent>
             </Card>
@@ -244,10 +244,10 @@ export default function AssessmentsPage() {
               <CardContent className="p-4">
                 <div className="flex items-center justify-between">
                   <div>
-                    <p className="text-sm text-gray-500">Converted</p>
-                    <p className="text-2xl font-bold text-green-600">{stats?.converted || 0}</p>
+                    <p className="text-sm text-muted-foreground">Converted</p>
+                    <p className="text-2xl font-bold text-success">{stats?.converted || 0}</p>
                   </div>
-                  <CheckCircle className="w-8 h-8 text-green-400" />
+                  <CheckCircle className="w-8 h-8 text-success/60" />
                 </div>
               </CardContent>
             </Card>
@@ -258,7 +258,7 @@ export default function AssessmentsPage() {
             <CardContent className="p-4">
               <form onSubmit={handleSearch} className="flex gap-4">
                 <div className="relative flex-1">
-                  <Search className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-gray-400" />
+                  <Search className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-muted-foreground" />
                   <Input
                     placeholder="Search by organization, name, or email..."
                     value={search}
@@ -295,9 +295,9 @@ export default function AssessmentsPage() {
                 </div>
               ) : assessments.length === 0 ? (
                 <div className="p-8 text-center">
-                  <Building2 className="w-12 h-12 text-gray-300 mx-auto mb-4" />
-                  <h3 className="text-lg font-medium text-gray-900 mb-1">No assessments found</h3>
-                  <p className="text-gray-500">
+                  <Building2 className="w-12 h-12 text-muted-foreground mx-auto mb-4" />
+                  <h3 className="text-lg font-medium text-foreground mb-1">No assessments found</h3>
+                  <p className="text-muted-foreground">
                     {statusFilter !== "all"
                       ? "Try changing the filter or search terms"
                       : "Assessments will appear here when organizations submit the form"}
@@ -321,7 +321,7 @@ export default function AssessmentsPage() {
                     {assessments.map((assessment) => (
                       <TableRow
                         key={assessment.id}
-                        className="cursor-pointer hover:bg-gray-50"
+                        className="cursor-pointer hover:bg-muted"
                         onClick={() => router.push(`/assessments/${assessment.id}`)}
                       >
                         <TableCell>
@@ -330,7 +330,7 @@ export default function AssessmentsPage() {
                         <TableCell>
                           <div className="text-sm">
                             <div className="font-medium">{assessment.full_name}</div>
-                            <div className="text-gray-500">{assessment.title_role}</div>
+                            <div className="text-muted-foreground">{assessment.title_role}</div>
                           </div>
                         </TableCell>
                         <TableCell>
@@ -349,7 +349,7 @@ export default function AssessmentsPage() {
                         </TableCell>
                         <TableCell>
                           <div className="flex items-center gap-1 text-sm">
-                            <DollarSign className="w-3 h-3 text-gray-400" />
+                            <DollarSign className="w-3 h-3 text-muted-foreground" />
                             {assessment.budget_range
                               ? budgetLabels[assessment.budget_range] || assessment.budget_range
                               : "-"}
@@ -357,21 +357,21 @@ export default function AssessmentsPage() {
                         </TableCell>
                         <TableCell>
                           <div className="flex items-center gap-1 text-sm">
-                            <Clock className="w-3 h-3 text-gray-400" />
+                            <Clock className="w-3 h-3 text-muted-foreground" />
                             {assessment.ideal_timeline
                               ? timelineLabels[assessment.ideal_timeline] || assessment.ideal_timeline
                               : "-"}
                           </div>
                         </TableCell>
                         <TableCell>
-                          <Badge className={statusConfig[assessment.status]?.color || "bg-gray-100"}>
+                          <Badge className={statusConfig[assessment.status]?.color || "bg-muted"}>
                             <span className="flex items-center gap-1">
                               {statusConfig[assessment.status]?.icon}
                               {statusConfig[assessment.status]?.label || assessment.status}
                             </span>
                           </Badge>
                         </TableCell>
-                        <TableCell className="text-sm text-gray-500">
+                        <TableCell className="text-sm text-muted-foreground">
                           {formatDate(assessment.created_at)}
                         </TableCell>
                         <TableCell>

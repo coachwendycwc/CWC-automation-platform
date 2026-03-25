@@ -45,13 +45,13 @@ interface InvoiceStats {
 }
 
 const STATUS_COLORS: Record<string, string> = {
-  draft: "bg-gray-100 text-gray-800",
-  sent: "bg-blue-100 text-blue-800",
-  viewed: "bg-purple-100 text-purple-800",
-  partial: "bg-yellow-100 text-yellow-800",
-  paid: "bg-green-100 text-green-800",
-  overdue: "bg-red-100 text-red-800",
-  cancelled: "bg-gray-100 text-gray-500",
+  draft: "bg-muted text-foreground",
+  sent: "bg-primary/10 text-primary",
+  viewed: "bg-accent/10 text-accent",
+  partial: "bg-warning/10 text-warning",
+  paid: "bg-success/10 text-success",
+  overdue: "bg-destructive/10 text-destructive",
+  cancelled: "bg-muted text-muted-foreground",
 };
 
 export default function InvoicesPage() {
@@ -163,8 +163,8 @@ export default function InvoicesPage() {
         {/* Header */}
         <div className="flex items-center justify-between">
           <div>
-            <h1 className="text-2xl font-bold text-gray-900">Invoices</h1>
-            <p className="text-gray-600">Create and manage your invoices</p>
+            <h1 className="text-2xl font-bold text-foreground">Invoices</h1>
+            <p className="text-muted-foreground">Create and manage your invoices</p>
           </div>
           <Link href="/invoices/new">
             <Button>
@@ -182,8 +182,8 @@ export default function InvoicesPage() {
                 <div className="flex items-center">
                   <DollarSign className="h-8 w-8 text-green-500" />
                   <div className="ml-4">
-                    <p className="text-sm font-medium text-gray-500">Total Revenue</p>
-                    <p className="text-2xl font-bold text-gray-900">
+                    <p className="text-sm font-medium text-muted-foreground">Total Revenue</p>
+                    <p className="text-2xl font-bold text-foreground">
                       {formatCurrency(stats.total_revenue)}
                     </p>
                   </div>
@@ -195,8 +195,8 @@ export default function InvoicesPage() {
                 <div className="flex items-center">
                   <Clock className="h-8 w-8 text-blue-500" />
                   <div className="ml-4">
-                    <p className="text-sm font-medium text-gray-500">Outstanding</p>
-                    <p className="text-2xl font-bold text-gray-900">
+                    <p className="text-sm font-medium text-muted-foreground">Outstanding</p>
+                    <p className="text-2xl font-bold text-foreground">
                       {formatCurrency(stats.total_outstanding)}
                     </p>
                   </div>
@@ -208,8 +208,8 @@ export default function InvoicesPage() {
                 <div className="flex items-center">
                   <AlertTriangle className="h-8 w-8 text-red-500" />
                   <div className="ml-4">
-                    <p className="text-sm font-medium text-gray-500">Overdue</p>
-                    <p className="text-2xl font-bold text-gray-900">
+                    <p className="text-sm font-medium text-muted-foreground">Overdue</p>
+                    <p className="text-2xl font-bold text-foreground">
                       {formatCurrency(stats.total_overdue)}
                     </p>
                   </div>
@@ -221,8 +221,8 @@ export default function InvoicesPage() {
                 <div className="flex items-center">
                   <FileText className="h-8 w-8 text-purple-500" />
                   <div className="ml-4">
-                    <p className="text-sm font-medium text-gray-500">Total Invoices</p>
-                    <p className="text-2xl font-bold text-gray-900">
+                    <p className="text-sm font-medium text-muted-foreground">Total Invoices</p>
+                    <p className="text-2xl font-bold text-foreground">
                       {stats.invoices_count}
                     </p>
                   </div>
@@ -237,9 +237,9 @@ export default function InvoicesPage() {
           <CardContent className="py-4">
             <div className="flex flex-wrap gap-4">
               <div>
-                <label className="block text-sm font-medium text-gray-700 mb-1">Status</label>
+                <label className="block text-sm font-medium text-foreground mb-1">Status</label>
                 <select
-                  className="rounded-md border border-gray-300 px-3 py-2 text-sm"
+                  className="rounded-md border border-border px-3 py-2 text-sm"
                   value={filter}
                   onChange={(e) => setFilter(e.target.value)}
                 >
@@ -254,10 +254,10 @@ export default function InvoicesPage() {
                 </select>
               </div>
               <div className="flex-1">
-                <label className="block text-sm font-medium text-gray-700 mb-1">Search</label>
+                <label className="block text-sm font-medium text-foreground mb-1">Search</label>
                 <input
                   type="text"
-                  className="w-full rounded-md border border-gray-300 px-3 py-2 text-sm"
+                  className="w-full rounded-md border border-border px-3 py-2 text-sm"
                   placeholder="Search by invoice number..."
                   value={search}
                   onChange={(e) => setSearch(e.target.value)}
@@ -285,9 +285,9 @@ export default function InvoicesPage() {
         {invoices.length === 0 ? (
           <Card>
             <CardContent className="py-12 text-center">
-              <FileText className="h-12 w-12 mx-auto text-gray-400 mb-4" />
-              <h3 className="text-lg font-medium text-gray-900 mb-2">No invoices found</h3>
-              <p className="text-gray-500 mb-4">
+              <FileText className="h-12 w-12 mx-auto text-muted-foreground mb-4" />
+              <h3 className="text-lg font-medium text-foreground mb-2">No invoices found</h3>
+              <p className="text-muted-foreground mb-4">
                 {filter || search
                   ? "Try adjusting your filters"
                   : "Create your first invoice to get started"}
@@ -306,48 +306,48 @@ export default function InvoicesPage() {
           <Card>
             <CardContent className="p-0">
               <table className="w-full">
-                <thead className="bg-gray-50 border-b">
+                <thead className="bg-muted border-b">
                   <tr>
-                    <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                    <th className="px-6 py-3 text-left text-xs font-medium text-muted-foreground uppercase tracking-wider">
                       Invoice
                     </th>
-                    <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                    <th className="px-6 py-3 text-left text-xs font-medium text-muted-foreground uppercase tracking-wider">
                       Client
                     </th>
-                    <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                    <th className="px-6 py-3 text-left text-xs font-medium text-muted-foreground uppercase tracking-wider">
                       Amount
                     </th>
-                    <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                    <th className="px-6 py-3 text-left text-xs font-medium text-muted-foreground uppercase tracking-wider">
                       Status
                     </th>
-                    <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                    <th className="px-6 py-3 text-left text-xs font-medium text-muted-foreground uppercase tracking-wider">
                       Due Date
                     </th>
-                    <th className="px-6 py-3 text-right text-xs font-medium text-gray-500 uppercase tracking-wider">
+                    <th className="px-6 py-3 text-right text-xs font-medium text-muted-foreground uppercase tracking-wider">
                       Actions
                     </th>
                   </tr>
                 </thead>
-                <tbody className="divide-y divide-gray-200">
+                <tbody className="divide-y divide-border">
                   {invoices.map((invoice) => (
-                    <tr key={invoice.id} className="hover:bg-gray-50">
+                    <tr key={invoice.id} className="hover:bg-muted cursor-pointer">
                       <td className="px-6 py-4 whitespace-nowrap">
-                        <Link href={`/invoices/${invoice.id}`} className="text-blue-600 hover:underline font-medium">
+                        <Link href={`/invoices/${invoice.id}`} className="text-primary hover:underline font-medium">
                           {invoice.invoice_number}
                         </Link>
                       </td>
                       <td className="px-6 py-4 whitespace-nowrap">
-                        <div className="text-sm text-gray-900">{invoice.contact_name || "Unknown"}</div>
+                        <div className="text-sm text-foreground">{invoice.contact_name || "Unknown"}</div>
                         {invoice.organization_name && (
-                          <div className="text-sm text-gray-500">{invoice.organization_name}</div>
+                          <div className="text-sm text-muted-foreground">{invoice.organization_name}</div>
                         )}
                       </td>
                       <td className="px-6 py-4 whitespace-nowrap">
-                        <div className="text-sm font-medium text-gray-900">
+                        <div className="text-sm font-medium text-foreground">
                           {formatCurrency(invoice.total)}
                         </div>
                         {invoice.balance_due > 0 && invoice.balance_due < invoice.total && (
-                          <div className="text-xs text-gray-500">
+                          <div className="text-xs text-muted-foreground">
                             {formatCurrency(invoice.balance_due)} due
                           </div>
                         )}
@@ -357,7 +357,7 @@ export default function InvoicesPage() {
                           {invoice.status}
                         </Badge>
                       </td>
-                      <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-500">
+                      <td className="px-6 py-4 whitespace-nowrap text-sm text-muted-foreground">
                         {formatDueDate(invoice.due_date)}
                       </td>
                       <td className="px-6 py-4 whitespace-nowrap text-right text-sm font-medium">

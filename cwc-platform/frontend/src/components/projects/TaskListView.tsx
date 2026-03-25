@@ -41,18 +41,18 @@ interface TaskListViewProps {
 }
 
 const STATUS_COLORS: Record<string, string> = {
-  todo: "bg-gray-100 text-gray-800",
+  todo: "bg-muted text-foreground",
   in_progress: "bg-blue-100 text-blue-800",
-  review: "bg-purple-100 text-purple-800",
-  completed: "bg-green-100 text-green-800",
-  blocked: "bg-red-100 text-red-800",
+  review: "bg-accent/10 text-accent",
+  completed: "bg-success/10 text-success",
+  blocked: "bg-destructive/10 text-destructive",
 };
 
 const PRIORITY_COLORS: Record<string, string> = {
-  low: "bg-gray-100 text-gray-600",
-  medium: "bg-yellow-100 text-yellow-700",
+  low: "bg-muted text-muted-foreground",
+  medium: "bg-warning/10 text-warning",
   high: "bg-orange-100 text-orange-700",
-  urgent: "bg-red-100 text-red-700",
+  urgent: "bg-destructive/10 text-destructive",
 };
 
 export function TaskListView({ projectId, tasks, onTasksChange }: TaskListViewProps) {
@@ -158,16 +158,16 @@ export function TaskListView({ projectId, tasks, onTasksChange }: TaskListViewPr
         {/* Task List */}
         {tasks.length === 0 ? (
           <div className="flex flex-col items-center justify-center py-12 text-center">
-            <CheckCircle className="h-12 w-12 text-gray-300 mb-4" />
-            <h3 className="text-lg font-medium text-gray-900">No tasks yet</h3>
-            <p className="text-gray-500 mt-1">Add your first task to get started</p>
+            <CheckCircle className="h-12 w-12 text-muted-foreground mb-4" />
+            <h3 className="text-lg font-medium text-foreground">No tasks yet</h3>
+            <p className="text-muted-foreground mt-1">Add your first task to get started</p>
           </div>
         ) : (
           <div className="divide-y">
             {sortedTasks.map((task) => (
               <div
                 key={task.id}
-                className={`flex items-center gap-4 p-4 hover:bg-gray-50 ${
+                className={`flex items-center gap-4 p-4 hover:bg-muted ${
                   task.status === "completed" ? "opacity-60" : ""
                 }`}
               >
@@ -180,21 +180,21 @@ export function TaskListView({ projectId, tasks, onTasksChange }: TaskListViewPr
                   <div className="flex items-center gap-2">
                     <span
                       className={`font-medium ${
-                        task.status === "completed" ? "line-through text-gray-500" : ""
+                        task.status === "completed" ? "line-through text-muted-foreground" : ""
                       }`}
                     >
                       {task.title}
                     </span>
-                    <span className="text-xs text-gray-400">{task.task_number}</span>
+                    <span className="text-xs text-muted-foreground">{task.task_number}</span>
                   </div>
                   {task.description && (
-                    <p className="text-sm text-gray-500 truncate">{task.description}</p>
+                    <p className="text-sm text-muted-foreground truncate">{task.description}</p>
                   )}
                 </div>
 
                 <div className="flex items-center gap-2">
                   {task.due_date && (
-                    <span className="text-sm text-gray-500 flex items-center gap-1">
+                    <span className="text-sm text-muted-foreground flex items-center gap-1">
                       <Clock className="h-3 w-3" />
                       {formatDate(task.due_date)}
                     </span>
@@ -204,15 +204,16 @@ export function TaskListView({ projectId, tasks, onTasksChange }: TaskListViewPr
                   <Badge className={STATUS_COLORS[task.status]}>{task.status.replace("_", " ")}</Badge>
 
                   {task.actual_hours > 0 && (
-                    <span className="text-sm text-gray-500">{task.actual_hours}h</span>
+                    <span className="text-sm text-muted-foreground">{task.actual_hours}h</span>
                   )}
 
                   <Button
                     variant="ghost"
                     size="sm"
+                    className="cursor-pointer"
                     onClick={() => handleDeleteTask(task.id)}
                   >
-                    <Trash2 className="h-4 w-4 text-gray-400 hover:text-red-500" />
+                    <Trash2 className="h-4 w-4 text-muted-foreground hover:text-destructive" />
                   </Button>
                 </div>
               </div>

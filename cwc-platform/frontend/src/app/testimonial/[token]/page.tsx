@@ -9,6 +9,7 @@ import { Textarea } from "@/components/ui/textarea";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Checkbox } from "@/components/ui/checkbox";
+import { Skeleton } from "@/components/ui/skeleton";
 import { publicFeedbackApi } from "@/lib/api";
 import { CheckCircle, Quote, AlertCircle, Heart, Camera, X } from "lucide-react";
 
@@ -112,20 +113,27 @@ export default function TestimonialPage() {
 
   if (loading) {
     return (
-      <div className="min-h-screen bg-gray-50 flex items-center justify-center">
-        <div className="text-gray-500">Loading...</div>
+      <div className="min-h-screen bg-muted flex items-center justify-center">
+        <div className="max-w-2xl w-full mx-auto px-4 space-y-6">
+          <div className="text-center space-y-3">
+            <Skeleton className="h-16 w-32 mx-auto" />
+            <Skeleton className="h-8 w-48 mx-auto" />
+            <Skeleton className="h-4 w-80 mx-auto" />
+          </div>
+          <Skeleton className="h-96 rounded-lg" />
+        </div>
       </div>
     );
   }
 
   if (error) {
     return (
-      <div className="min-h-screen bg-gray-50 flex items-center justify-center p-4">
+      <div className="min-h-screen bg-muted flex items-center justify-center p-4">
         <Card className="max-w-md w-full">
           <CardContent className="pt-6 text-center">
-            <AlertCircle className="h-12 w-12 text-red-500 mx-auto mb-4" />
+            <AlertCircle className="h-12 w-12 text-destructive mx-auto mb-4" />
             <h2 className="text-xl font-bold mb-2">Request Not Available</h2>
-            <p className="text-gray-500">{error}</p>
+            <p className="text-muted-foreground">{error}</p>
           </CardContent>
         </Card>
       </div>
@@ -134,12 +142,12 @@ export default function TestimonialPage() {
 
   if (submitted) {
     return (
-      <div className="min-h-screen bg-gray-50 flex items-center justify-center p-4">
+      <div className="min-h-screen bg-muted flex items-center justify-center p-4">
         <Card className="max-w-md w-full">
           <CardContent className="pt-6 text-center">
             <Heart className="h-12 w-12 text-pink-500 mx-auto mb-4" />
             <h2 className="text-xl font-bold mb-2">Thank You!</h2>
-            <p className="text-gray-500">
+            <p className="text-muted-foreground">
               Your testimonial has been submitted. We truly appreciate you sharing your story with us.
               It means the world to us!
             </p>
@@ -150,7 +158,7 @@ export default function TestimonialPage() {
   }
 
   return (
-    <div className="min-h-screen bg-gray-50 py-8 px-4">
+    <div className="min-h-screen bg-muted py-8 px-4">
       <div className="max-w-2xl mx-auto">
         {/* Header */}
         <div className="text-center mb-8">
@@ -162,7 +170,7 @@ export default function TestimonialPage() {
             className="mx-auto mb-4"
           />
           <h1 className="text-2xl font-bold mb-2">Share Your Story</h1>
-          <p className="text-gray-500">
+          <p className="text-muted-foreground">
             Dear {testimonialData?.contact_name}, we hope our work together has made a positive impact.
             We'd be honored if you'd share your experience with others.
           </p>
@@ -171,7 +179,7 @@ export default function TestimonialPage() {
         <Card>
           <CardHeader>
             <div className="flex items-center gap-3">
-              <Quote className="h-8 w-8 text-green-500" />
+              <Quote className="h-8 w-8 text-success" />
               <div>
                 <CardTitle>Your Testimonial</CardTitle>
                 <CardDescription>
@@ -186,7 +194,7 @@ export default function TestimonialPage() {
               <Label htmlFor="testimonial" className="text-base font-medium">
                 Your Experience *
               </Label>
-              <p className="text-sm text-gray-500 mb-2">
+              <p className="text-sm text-muted-foreground mb-2">
                 What transformation or results did you experience? What would you tell someone considering working with us?
               </p>
               <Textarea
@@ -232,7 +240,7 @@ export default function TestimonialPage() {
               <Label className="text-base font-medium">
                 Your Photo (Optional)
               </Label>
-              <p className="text-sm text-gray-500 mb-2">
+              <p className="text-sm text-muted-foreground mb-2">
                 Add a headshot to personalize your testimonial
               </p>
 
@@ -241,24 +249,24 @@ export default function TestimonialPage() {
                   <img
                     src={photoPreview}
                     alt="Preview"
-                    className="w-24 h-24 rounded-full object-cover border-2 border-gray-200"
+                    className="w-24 h-24 rounded-full object-cover border-2 border-border"
                   />
                   <button
                     type="button"
                     onClick={removePhoto}
-                    className="absolute -top-2 -right-2 bg-red-500 text-white rounded-full p-1 hover:bg-red-600"
+                    className="absolute -top-2 -right-2 bg-destructive text-white rounded-full p-1 hover:bg-destructive/90 cursor-pointer"
                   >
                     <X className="h-4 w-4" />
                   </button>
                 </div>
               ) : (
-                <label className="flex items-center gap-3 cursor-pointer border-2 border-dashed border-gray-300 rounded-lg p-4 hover:border-gray-400 transition-colors">
-                  <div className="bg-gray-100 rounded-full p-3">
-                    <Camera className="h-6 w-6 text-gray-500" />
+                <label className="flex items-center gap-3 cursor-pointer border-2 border-dashed border-border rounded-lg p-4 hover:border-muted-foreground transition-colors">
+                  <div className="bg-muted rounded-full p-3">
+                    <Camera className="h-6 w-6 text-muted-foreground" />
                   </div>
                   <div>
-                    <span className="text-sm font-medium text-gray-700">Upload a photo</span>
-                    <p className="text-xs text-gray-500">JPG, PNG up to 5MB</p>
+                    <span className="text-sm font-medium text-foreground">Upload a photo</span>
+                    <p className="text-sm text-muted-foreground">JPG, PNG up to 5MB</p>
                   </div>
                   <input
                     type="file"
@@ -271,7 +279,7 @@ export default function TestimonialPage() {
             </div>
 
             {/* Permission */}
-            <div className="bg-gray-50 p-4 rounded-lg">
+            <div className="bg-muted p-4 rounded-lg">
               <div className="flex items-start gap-3">
                 <Checkbox
                   id="permission"
@@ -283,7 +291,7 @@ export default function TestimonialPage() {
                   <Label htmlFor="permission" className="text-base font-medium cursor-pointer">
                     Permission to Share
                   </Label>
-                  <p className="text-sm text-gray-500 mt-1">
+                  <p className="text-sm text-muted-foreground mt-1">
                     I grant Coaching Women of Color permission to use my testimonial on their website,
                     social media, and marketing materials.
                   </p>
@@ -293,7 +301,7 @@ export default function TestimonialPage() {
 
             {/* Submit Button */}
             <Button
-              className="w-full"
+              className="w-full cursor-pointer"
               size="lg"
               onClick={handleSubmit}
               disabled={submitting}
@@ -301,7 +309,7 @@ export default function TestimonialPage() {
               {submitting ? "Submitting..." : "Submit Testimonial"}
             </Button>
 
-            <p className="text-center text-sm text-gray-500">
+            <p className="text-center text-sm text-muted-foreground">
               Thank you for taking the time to share your experience. Your words inspire us to continue our mission.
             </p>
           </CardContent>

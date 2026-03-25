@@ -1,0 +1,21 @@
+{
+  "version": "0.0.1",
+  "configurations": [
+    {
+      "name": "Backend (FastAPI)",
+      "runtimeExecutable": "uvicorn",
+      "runtimeArgs": ["app.main:app", "--reload"],
+      "port": 8001,
+      "cwd": "cwc-platform/backend",
+      "autoPort": true
+    },
+    {
+      "name": "Frontend (Next.js)",
+      "runtimeExecutable": "npx",
+      "runtimeArgs": ["next", "dev"],
+      "port": 3001,
+      "cwd": "cwc-platform/frontend",
+      "autoPort": true
+    }
+  ]
+}

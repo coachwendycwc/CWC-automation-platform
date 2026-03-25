@@ -63,6 +63,7 @@ import {
   Eye,
   EyeOff,
 } from "lucide-react";
+import { Skeleton } from "@/components/ui/skeleton";
 import { toast } from "sonner";
 
 const CONTENT_TYPE_ICONS: Record<string, React.ElementType> = {
@@ -73,10 +74,10 @@ const CONTENT_TYPE_ICONS: Record<string, React.ElementType> = {
 };
 
 const CONTENT_TYPE_COLORS: Record<string, string> = {
-  file: "bg-blue-100 text-blue-600",
-  document: "bg-purple-100 text-purple-600",
-  video: "bg-red-100 text-red-600",
-  link: "bg-green-100 text-green-600",
+  file: "bg-primary/10 text-primary",
+  document: "bg-accent/10 text-accent",
+  video: "bg-destructive/10 text-destructive",
+  link: "bg-success/10 text-success",
 };
 
 export default function ContentPage() {
@@ -165,7 +166,7 @@ export default function ContentPage() {
       <div className="flex items-center justify-between">
         <div>
           <h1 className="text-2xl font-bold">Content Library</h1>
-          <p className="text-gray-500">
+          <p className="text-muted-foreground">
             Manage files, videos, and links for your clients
           </p>
         </div>
@@ -183,7 +184,7 @@ export default function ContentPage() {
           <div className="flex gap-4">
             <div className="flex-1">
               <div className="relative">
-                <Search className="absolute left-3 top-1/2 -translate-y-1/2 h-4 w-4 text-gray-400" />
+                <Search className="absolute left-3 top-1/2 -translate-y-1/2 h-4 w-4 text-muted-foreground" />
                 <Input
                   placeholder="Search content..."
                   value={search}
@@ -254,15 +255,30 @@ export default function ContentPage() {
             <TableBody>
               {loading ? (
                 <TableRow>
-                  <TableCell colSpan={7} className="text-center py-8">
-                    Loading...
+                  <TableCell colSpan={7} className="py-4">
+                    <div className="space-y-4">
+                      {[...Array(5)].map((_, i) => (
+                        <div key={i} className="flex items-center gap-3">
+                          <Skeleton className="h-8 w-8 rounded-lg" />
+                          <div className="flex-1 space-y-1">
+                            <Skeleton className="h-4 w-48" />
+                            <Skeleton className="h-3 w-32" />
+                          </div>
+                          <Skeleton className="h-5 w-16" />
+                          <Skeleton className="h-5 w-24" />
+                          <Skeleton className="h-5 w-20" />
+                          <Skeleton className="h-5 w-20" />
+                          <Skeleton className="h-5 w-14" />
+                        </div>
+                      ))}
+                    </div>
                   </TableCell>
                 </TableRow>
               ) : content.length === 0 ? (
                 <TableRow>
                   <TableCell colSpan={7} className="text-center py-8">
-                    <FolderOpen className="h-8 w-8 text-gray-300 mx-auto mb-2" />
-                    <p className="text-gray-500">No content found</p>
+                    <FolderOpen className="h-8 w-8 text-muted-foreground/50 mx-auto mb-2" />
+                    <p className="text-muted-foreground">No content found</p>
                   </TableCell>
                 </TableRow>
               ) : (
@@ -270,7 +286,7 @@ export default function ContentPage() {
                   const Icon = CONTENT_TYPE_ICONS[item.content_type] || File;
                   const colorClass =
                     CONTENT_TYPE_COLORS[item.content_type] ||
-                    "bg-gray-100 text-gray-600";
+                    "bg-muted text-muted-foreground";
 
                   return (
                     <TableRow key={item.id}>
@@ -282,12 +298,12 @@ export default function ContentPage() {
                           <div>
                             <p className="font-medium">{item.title}</p>
                             {item.description && (
-                              <p className="text-sm text-gray-500 line-clamp-1">
+                              <p className="text-sm text-muted-foreground line-clamp-1">
                                 {item.description}
                               </p>
                             )}
                             {item.file_size && (
-                              <p className="text-xs text-gray-400">
+                              <p className="text-xs text-muted-foreground">
                                 {formatFileSize(item.file_size)}
                               </p>
                             )}
@@ -302,21 +318,21 @@ export default function ContentPage() {
                       <TableCell>
                         {item.contact_name ? (
                           <div className="flex items-center gap-1.5 text-sm">
-                            <User className="h-3.5 w-3.5 text-gray-400" />
+                            <User className="h-3.5 w-3.5 text-muted-foreground" />
                             {item.contact_name}
                           </div>
                         ) : item.organization_name ? (
                           <div className="flex items-center gap-1.5 text-sm">
-                            <Building className="h-3.5 w-3.5 text-gray-400" />
+                            <Building className="h-3.5 w-3.5 text-muted-foreground" />
                             {item.organization_name}
                           </div>
                         ) : item.project_name ? (
                           <div className="flex items-center gap-1.5 text-sm">
-                            <FolderOpen className="h-3.5 w-3.5 text-gray-400" />
+                            <FolderOpen className="h-3.5 w-3.5 text-muted-foreground" />
                             {item.project_name}
                           </div>
                         ) : (
-                          <span className="text-gray-400 text-sm">
+                          <span className="text-muted-foreground text-sm">
                             All clients
                           </span>
                         )}
@@ -325,17 +341,17 @@ export default function ContentPage() {
                         {item.category ? (
                           <Badge variant="secondary">{item.category}</Badge>
                         ) : (
-                          <span className="text-gray-400">-</span>
+                          <span className="text-muted-foreground">-</span>
                         )}
                       </TableCell>
                       <TableCell>
                         {item.release_date ? (
                           <div className="flex items-center gap-1.5 text-sm">
-                            <Calendar className="h-3.5 w-3.5 text-gray-400" />
+                            <Calendar className="h-3.5 w-3.5 text-muted-foreground" />
                             {formatDate(item.release_date)}
                           </div>
                         ) : (
-                          <span className="text-gray-400 text-sm">
+                          <span className="text-muted-foreground text-sm">
                             Immediate
                           </span>
                         )}
@@ -343,18 +359,18 @@ export default function ContentPage() {
                       <TableCell>
                         {item.is_active ? (
                           item.is_released ? (
-                            <Badge className="bg-green-100 text-green-700 hover:bg-green-100">
+                            <Badge className="bg-success/10 text-success hover:bg-success/10">
                               <Eye className="h-3 w-3 mr-1" />
                               Live
                             </Badge>
                           ) : (
-                            <Badge className="bg-orange-100 text-orange-700 hover:bg-orange-100">
+                            <Badge className="bg-warning/10 text-warning hover:bg-warning/10">
                               <Calendar className="h-3 w-3 mr-1" />
                               Scheduled
                             </Badge>
                           )
                         ) : (
-                          <Badge variant="outline" className="text-gray-500">
+                          <Badge variant="outline" className="text-muted-foreground">
                             <EyeOff className="h-3 w-3 mr-1" />
                             Hidden
                           </Badge>
@@ -376,7 +392,7 @@ export default function ContentPage() {
                             </DropdownMenuItem>
                             <DropdownMenuItem
                               onClick={() => setDeleteId(item.id)}
-                              className="text-red-600"
+                              className="text-destructive"
                             >
                               <Trash2 className="h-4 w-4 mr-2" />
                               Delete
@@ -396,7 +412,7 @@ export default function ContentPage() {
       {/* Pagination */}
       {totalPages > 1 && (
         <div className="flex items-center justify-between">
-          <p className="text-sm text-gray-500">
+          <p className="text-sm text-muted-foreground">
             Showing {(page - 1) * 20 + 1} to {Math.min(page * 20, total)} of{" "}
             {total} items
           </p>
@@ -435,7 +451,7 @@ export default function ContentPage() {
             <AlertDialogCancel>Cancel</AlertDialogCancel>
             <AlertDialogAction
               onClick={handleDelete}
-              className="bg-red-600 hover:bg-red-700"
+              className="bg-destructive hover:bg-destructive/90"
             >
               Delete
             </AlertDialogAction>

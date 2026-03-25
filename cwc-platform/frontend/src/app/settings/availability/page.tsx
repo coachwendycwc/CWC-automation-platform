@@ -8,6 +8,7 @@ import { Input } from "@/components/ui/input";
 import { Badge } from "@/components/ui/badge";
 import { availabilityApi } from "@/lib/api";
 import { WeeklyAvailability, AvailabilityOverride } from "@/types";
+import { Skeleton } from "@/components/ui/skeleton";
 import { Plus, Trash2, ArrowLeft, Calendar } from "lucide-react";
 import Link from "next/link";
 
@@ -181,8 +182,10 @@ export default function AvailabilityPage() {
   if (loading) {
     return (
       <Shell>
-        <div className="flex items-center justify-center h-64">
-          <div className="text-gray-500">Loading...</div>
+        <div className="space-y-6">
+          <Skeleton className="h-8 w-48" />
+          <Skeleton className="h-[400px] w-full" />
+          <Skeleton className="h-[200px] w-full" />
         </div>
       </Shell>
     );
@@ -193,12 +196,12 @@ export default function AvailabilityPage() {
       <div className="space-y-6">
         {/* Header */}
         <div className="flex items-center gap-4">
-          <Link href="/settings" className="text-gray-500 hover:text-gray-700">
+          <Link href="/settings" className="text-muted-foreground hover:text-foreground">
             <ArrowLeft className="h-5 w-5" />
           </Link>
           <div>
-            <h1 className="text-2xl font-bold text-gray-900">Availability</h1>
-            <p className="text-gray-600">Set your weekly schedule and date-specific overrides</p>
+            <h1 className="text-2xl font-bold text-foreground">Availability</h1>
+            <p className="text-muted-foreground">Set your weekly schedule and date-specific overrides</p>
           </div>
         </div>
 
@@ -210,11 +213,11 @@ export default function AvailabilityPage() {
           </CardHeader>
           <CardContent className="space-y-4">
             {DAYS.map(({ key, label, index }) => (
-              <div key={key} className="flex items-start gap-4 py-3 border-b border-gray-100 last:border-0">
-                <div className="w-28 pt-2 font-medium text-gray-700">{label}</div>
+              <div key={key} className="flex items-start gap-4 py-3 border-b border-border last:border-0">
+                <div className="w-28 pt-2 font-medium text-foreground">{label}</div>
                 <div className="flex-1 space-y-2">
                   {weekly[key].length === 0 ? (
-                    <p className="text-sm text-gray-400 py-2">Not available</p>
+                    <p className="text-sm text-muted-foreground py-2">Not available</p>
                   ) : (
                     weekly[key].map((slot, i) => (
                       <div key={i} className="flex items-center gap-2">
@@ -224,7 +227,7 @@ export default function AvailabilityPage() {
                           onChange={(e) => updateTimeSlot(key, i, "start_time", e.target.value)}
                           className="w-32"
                         />
-                        <span className="text-gray-500">to</span>
+                        <span className="text-muted-foreground">to</span>
                         <Input
                           type="time"
                           value={slot.end_time}
@@ -235,7 +238,7 @@ export default function AvailabilityPage() {
                           variant="ghost"
                           size="sm"
                           onClick={() => removeTimeSlot(key, i)}
-                          className="text-red-500 hover:text-red-600"
+                          className="text-destructive hover:text-destructive/80"
                         >
                           <Trash2 className="h-4 w-4" />
                         </Button>
@@ -246,7 +249,7 @@ export default function AvailabilityPage() {
                     variant="ghost"
                     size="sm"
                     onClick={() => addTimeSlot(key, index)}
-                    className="text-blue-600 hover:text-blue-700"
+                    className="text-primary hover:text-primary/80"
                   >
                     <Plus className="h-4 w-4 mr-1" />
                     Add time slot
@@ -279,10 +282,10 @@ export default function AvailabilityPage() {
           </CardHeader>
           <CardContent>
             {showOverrideForm && (
-              <div className="mb-6 p-4 border border-gray-200 rounded-lg space-y-4">
+              <div className="mb-6 p-4 border border-border rounded-lg space-y-4">
                 <div className="grid gap-4 md:grid-cols-2">
                   <div>
-                    <label className="block text-sm font-medium text-gray-700 mb-1">Date</label>
+                    <label className="block text-sm font-medium text-foreground mb-1">Date</label>
                     <Input
                       type="date"
                       value={overrideForm.date}
@@ -292,9 +295,9 @@ export default function AvailabilityPage() {
                     />
                   </div>
                   <div>
-                    <label className="block text-sm font-medium text-gray-700 mb-1">Type</label>
+                    <label className="block text-sm font-medium text-foreground mb-1">Type</label>
                     <select
-                      className="w-full rounded-md border border-gray-300 px-3 py-2 text-sm"
+                      className="w-full rounded-md border border-border px-3 py-2 text-sm"
                       value={overrideForm.is_available ? "available" : "blocked"}
                       onChange={(e) =>
                         setOverrideForm({ ...overrideForm, is_available: e.target.value === "available" })
@@ -309,7 +312,7 @@ export default function AvailabilityPage() {
                 {overrideForm.is_available && (
                   <div className="grid gap-4 md:grid-cols-2">
                     <div>
-                      <label className="block text-sm font-medium text-gray-700 mb-1">Start Time</label>
+                      <label className="block text-sm font-medium text-foreground mb-1">Start Time</label>
                       <Input
                         type="time"
                         value={overrideForm.start_time}
@@ -317,7 +320,7 @@ export default function AvailabilityPage() {
                       />
                     </div>
                     <div>
-                      <label className="block text-sm font-medium text-gray-700 mb-1">End Time</label>
+                      <label className="block text-sm font-medium text-foreground mb-1">End Time</label>
                       <Input
                         type="time"
                         value={overrideForm.end_time}
@@ -328,7 +331,7 @@ export default function AvailabilityPage() {
                 )}
 
                 <div>
-                  <label className="block text-sm font-medium text-gray-700 mb-1">Reason (optional)</label>
+                  <label className="block text-sm font-medium text-foreground mb-1">Reason (optional)</label>
                   <Input
                     value={overrideForm.reason}
                     onChange={(e) => setOverrideForm({ ...overrideForm, reason: e.target.value })}
@@ -352,16 +355,16 @@ export default function AvailabilityPage() {
             )}
 
             {overrides.length === 0 ? (
-              <p className="text-gray-500 text-center py-4">No date overrides set</p>
+              <p className="text-muted-foreground text-center py-4">No date overrides set</p>
             ) : (
               <div className="space-y-2">
                 {overrides.map((override) => (
                   <div
                     key={override.id}
-                    className="flex items-center justify-between p-3 bg-gray-50 rounded-lg"
+                    className="flex items-center justify-between p-3 bg-muted rounded-lg"
                   >
                     <div className="flex items-center gap-3">
-                      <Calendar className="h-5 w-5 text-gray-400" />
+                      <Calendar className="h-5 w-5 text-muted-foreground" />
                       <div>
                         <div className="font-medium">
                           {new Date(override.date + "T00:00:00").toLocaleDateString("en-US", {
@@ -371,11 +374,11 @@ export default function AvailabilityPage() {
                             day: "numeric",
                           })}
                         </div>
-                        <div className="text-sm text-gray-500">
+                        <div className="text-sm text-muted-foreground">
                           {override.is_available ? (
                             <>Available: {override.start_time} - {override.end_time}</>
                           ) : (
-                            <span className="text-red-600">Blocked</span>
+                            <span className="text-destructive">Blocked</span>
                           )}
                           {override.reason && ` - ${override.reason}`}
                         </div>
@@ -385,7 +388,7 @@ export default function AvailabilityPage() {
                       variant="ghost"
                       size="sm"
                       onClick={() => deleteOverride(override.id)}
-                      className="text-red-500 hover:text-red-600"
+                      className="text-destructive hover:text-destructive/80"
                     >
                       <Trash2 className="h-4 w-4" />
                     </Button>

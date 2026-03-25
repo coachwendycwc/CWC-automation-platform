@@ -9,6 +9,7 @@ import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Badge } from "@/components/ui/badge";
+import { Skeleton } from "@/components/ui/skeleton";
 import { User, Building2, Save } from "lucide-react";
 
 interface Profile {
@@ -72,8 +73,12 @@ export default function ClientProfilePage() {
 
   if (loading) {
     return (
-      <div className="flex items-center justify-center h-64">
-        <div className="text-gray-500">Loading profile...</div>
+      <div className="space-y-6 max-w-2xl">
+        <div className="space-y-2">
+          <Skeleton className="h-8 w-32" />
+          <Skeleton className="h-4 w-56" />
+        </div>
+        <Skeleton className="h-80 rounded-xl" />
       </div>
     );
   }
@@ -81,7 +86,7 @@ export default function ClientProfilePage() {
   if (!profile) {
     return (
       <div className="flex items-center justify-center h-64">
-        <div className="text-gray-500">Profile not found</div>
+        <div className="text-muted-foreground">Profile not found</div>
       </div>
     );
   }
@@ -89,23 +94,23 @@ export default function ClientProfilePage() {
   return (
     <div className="space-y-6 max-w-2xl">
       <div>
-        <h1 className="text-2xl font-bold text-gray-900">Profile</h1>
-        <p className="text-gray-500">Manage your account information</p>
+        <h1 className="text-2xl font-bold text-foreground">Profile</h1>
+        <p className="text-muted-foreground">Manage your account information</p>
       </div>
 
       <Card>
         <CardHeader>
           <div className="flex items-center gap-4">
-            <div className="w-16 h-16 bg-purple-100 rounded-full flex items-center justify-center">
-              <User className="h-8 w-8 text-purple-600" />
+            <div className="w-16 h-16 bg-accent/10 rounded-full flex items-center justify-center">
+              <User className="h-8 w-8 text-accent" />
             </div>
             <div>
               <CardTitle>
                 {profile.first_name} {profile.last_name}
               </CardTitle>
-              <p className="text-gray-500">{profile.email}</p>
+              <p className="text-muted-foreground">{profile.email}</p>
               {profile.is_org_admin && (
-                <Badge className="mt-1 bg-purple-100 text-purple-800">
+                <Badge className="mt-1 bg-accent/10 text-accent">
                   Organization Admin
                 </Badge>
               )}
@@ -115,10 +120,10 @@ export default function ClientProfilePage() {
         <CardContent className="space-y-6">
           {/* Organization Info */}
           {profile.organization_name && (
-            <div className="flex items-center gap-3 p-4 bg-gray-50 rounded-lg">
-              <Building2 className="h-5 w-5 text-gray-500" />
+            <div className="flex items-center gap-3 p-4 bg-muted rounded-lg">
+              <Building2 className="h-5 w-5 text-muted-foreground" />
               <div>
-                <p className="text-sm text-gray-500">Organization</p>
+                <p className="text-sm text-muted-foreground">Organization</p>
                 <p className="font-medium">{profile.organization_name}</p>
               </div>
             </div>
@@ -148,7 +153,7 @@ export default function ClientProfilePage() {
             <div className="space-y-2">
               <Label htmlFor="email">Email</Label>
               <Input id="email" value={profile.email || ""} disabled />
-              <p className="text-xs text-gray-500">
+              <p className="text-xs text-muted-foreground">
                 Contact support to change your email address
               </p>
             </div>

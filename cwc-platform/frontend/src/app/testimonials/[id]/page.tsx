@@ -23,13 +23,14 @@ import {
   ExternalLink,
 } from "lucide-react";
 import { toast } from "sonner";
+import { Skeleton } from "@/components/ui/skeleton";
 import { format } from "date-fns";
 import Link from "next/link";
 
 const statusColors: Record<string, string> = {
-  pending: "bg-yellow-100 text-yellow-700",
-  approved: "bg-green-100 text-green-700",
-  rejected: "bg-red-100 text-red-700",
+  pending: "bg-warning/10 text-warning",
+  approved: "bg-success/10 text-success",
+  rejected: "bg-destructive/10 text-destructive",
 };
 
 export default function TestimonialDetailPage() {
@@ -147,8 +148,20 @@ export default function TestimonialDetailPage() {
 
   if (loading) {
     return (
-      <div className="flex items-center justify-center h-64">
-        <div className="text-gray-500">Loading...</div>
+      <div className="space-y-6">
+        <div className="flex items-center gap-4">
+          <Skeleton className="h-10 w-10" />
+          <div>
+            <Skeleton className="h-7 w-48 mb-2" />
+            <Skeleton className="h-4 w-32" />
+          </div>
+        </div>
+        <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
+          <div className="lg:col-span-2">
+            <Skeleton className="h-[300px] w-full" />
+          </div>
+          <Skeleton className="h-[200px] w-full" />
+        </div>
       </div>
     );
   }
@@ -157,7 +170,7 @@ export default function TestimonialDetailPage() {
     return (
       <div className="text-center py-12">
         <h3 className="text-lg font-medium">Testimonial not found</h3>
-        <Link href="/testimonials" className="text-blue-600 hover:underline mt-2 inline-block">
+        <Link href="/testimonials" className="text-primary hover:underline mt-2 inline-block cursor-pointer">
           Back to testimonials
         </Link>
       </div>
@@ -185,7 +198,7 @@ export default function TestimonialDetailPage() {
             )}
           </div>
           {testimonial.author_title && (
-            <p className="text-gray-500">
+            <p className="text-muted-foreground">
               {testimonial.author_title}
               {testimonial.author_company && ` at ${testimonial.author_company}`}
             </p>
@@ -234,7 +247,7 @@ export default function TestimonialDetailPage() {
                       poster={testimonial.thumbnail_url || undefined}
                     />
                   </div>
-                  <div className="flex items-center gap-4 text-sm text-gray-500">
+                  <div className="flex items-center gap-4 text-sm text-muted-foreground">
                     <span>Duration: {formatDuration(testimonial.video_duration_seconds)}</span>
                     {testimonial.submitted_at && (
                       <span>
@@ -244,9 +257,9 @@ export default function TestimonialDetailPage() {
                   </div>
                 </div>
               ) : (
-                <div className="aspect-video rounded-lg bg-gray-100 flex flex-col items-center justify-center">
-                  <Video className="h-12 w-12 text-gray-300 mb-3" />
-                  <p className="text-gray-500">No video submitted yet</p>
+                <div className="aspect-video rounded-lg bg-muted flex flex-col items-center justify-center">
+                  <Video className="h-12 w-12 text-muted-foreground mb-3" />
+                  <p className="text-muted-foreground">No video submitted yet</p>
                   <div className="mt-4 flex gap-2">
                     <Button onClick={handleSendRequest} disabled={!!testimonial.request_sent_at}>
                       <Mail className="h-4 w-4 mr-2" />
@@ -305,17 +318,17 @@ export default function TestimonialDetailPage() {
               ) : (
                 <div className="space-y-4">
                   <div>
-                    <label className="text-sm font-medium text-gray-500">Pull Quote</label>
+                    <label className="text-sm font-medium text-muted-foreground">Pull Quote</label>
                     {testimonial.quote ? (
                       <p className="mt-1 text-lg italic">"{testimonial.quote}"</p>
                     ) : (
-                      <p className="mt-1 text-gray-400 italic">No quote added</p>
+                      <p className="mt-1 text-muted-foreground italic">No quote added</p>
                     )}
                   </div>
                   {testimonial.transcript && (
                     <div>
-                      <label className="text-sm font-medium text-gray-500">Transcript</label>
-                      <p className="mt-1 whitespace-pre-wrap text-gray-700">{testimonial.transcript}</p>
+                      <label className="text-sm font-medium text-muted-foreground">Transcript</label>
+                      <p className="mt-1 whitespace-pre-wrap text-foreground">{testimonial.transcript}</p>
                     </div>
                   )}
                 </div>
@@ -364,18 +377,18 @@ export default function TestimonialDetailPage() {
               ) : (
                 <div className="space-y-3">
                   <div className="flex items-center gap-3">
-                    <User className="h-4 w-4 text-gray-400" />
+                    <User className="h-4 w-4 text-muted-foreground" />
                     <span>{testimonial.author_name}</span>
                   </div>
                   {testimonial.author_title && (
                     <div className="flex items-center gap-3">
                       <span className="h-4 w-4" />
-                      <span className="text-gray-500">{testimonial.author_title}</span>
+                      <span className="text-muted-foreground">{testimonial.author_title}</span>
                     </div>
                   )}
                   {testimonial.author_company && (
                     <div className="flex items-center gap-3">
-                      <Building2 className="h-4 w-4 text-gray-400" />
+                      <Building2 className="h-4 w-4 text-muted-foreground" />
                       <span>{testimonial.author_company}</span>
                     </div>
                   )}
@@ -392,43 +405,43 @@ export default function TestimonialDetailPage() {
             <CardContent className="space-y-3">
               {testimonial.contact_name && (
                 <div className="flex items-center gap-3">
-                  <User className="h-4 w-4 text-gray-400" />
+                  <User className="h-4 w-4 text-muted-foreground" />
                   <div>
-                    <p className="text-sm text-gray-500">Contact</p>
+                    <p className="text-sm text-muted-foreground">Contact</p>
                     <p>{testimonial.contact_name}</p>
                   </div>
                 </div>
               )}
               {testimonial.organization_name && (
                 <div className="flex items-center gap-3">
-                  <Building2 className="h-4 w-4 text-gray-400" />
+                  <Building2 className="h-4 w-4 text-muted-foreground" />
                   <div>
-                    <p className="text-sm text-gray-500">Organization</p>
+                    <p className="text-sm text-muted-foreground">Organization</p>
                     <p>{testimonial.organization_name}</p>
                   </div>
                 </div>
               )}
               <div className="flex items-center gap-3">
-                <Clock className="h-4 w-4 text-gray-400" />
+                <Clock className="h-4 w-4 text-muted-foreground" />
                 <div>
-                  <p className="text-sm text-gray-500">Created</p>
+                  <p className="text-sm text-muted-foreground">Created</p>
                   <p>{format(new Date(testimonial.created_at), "MMM d, yyyy")}</p>
                 </div>
               </div>
               {testimonial.request_sent_at && (
                 <div className="flex items-center gap-3">
-                  <Mail className="h-4 w-4 text-gray-400" />
+                  <Mail className="h-4 w-4 text-muted-foreground" />
                   <div>
-                    <p className="text-sm text-gray-500">Request Sent</p>
+                    <p className="text-sm text-muted-foreground">Request Sent</p>
                     <p>{format(new Date(testimonial.request_sent_at), "MMM d, yyyy")}</p>
                   </div>
                 </div>
               )}
               {testimonial.reviewed_at && (
                 <div className="flex items-center gap-3">
-                  <CheckCircle className="h-4 w-4 text-gray-400" />
+                  <CheckCircle className="h-4 w-4 text-muted-foreground" />
                   <div>
-                    <p className="text-sm text-gray-500">Reviewed</p>
+                    <p className="text-sm text-muted-foreground">Reviewed</p>
                     <p>{format(new Date(testimonial.reviewed_at), "MMM d, yyyy")}</p>
                   </div>
                 </div>
@@ -442,7 +455,7 @@ export default function TestimonialDetailPage() {
               <CardTitle>Recording Link</CardTitle>
             </CardHeader>
             <CardContent>
-              <p className="text-sm text-gray-500 mb-3">
+              <p className="text-sm text-muted-foreground mb-3">
                 Share this link with the client to record their testimonial.
               </p>
               <div className="flex gap-2">

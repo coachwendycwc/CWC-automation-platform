@@ -8,6 +8,7 @@ import { clientPortalApi } from "@/lib/api";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
+import { Skeleton } from "@/components/ui/skeleton";
 import Link from "next/link";
 import { ArrowLeft, Video, Clock, Calendar, XCircle } from "lucide-react";
 
@@ -23,11 +24,11 @@ interface Booking {
 }
 
 const STATUS_COLORS: Record<string, string> = {
-  pending: "bg-yellow-100 text-yellow-800",
-  confirmed: "bg-green-100 text-green-800",
-  cancelled: "bg-red-100 text-red-800",
-  completed: "bg-gray-100 text-gray-800",
-  no_show: "bg-orange-100 text-orange-800",
+  pending: "bg-warning/10 text-warning",
+  confirmed: "bg-success/10 text-success",
+  cancelled: "bg-destructive/10 text-destructive",
+  completed: "bg-muted text-foreground",
+  no_show: "bg-orange-100 text-warning",
 };
 
 export default function ClientBookingDetailPage() {
@@ -95,8 +96,15 @@ export default function ClientBookingDetailPage() {
 
   if (loading) {
     return (
-      <div className="flex items-center justify-center h-64">
-        <div className="text-gray-500">Loading booking...</div>
+      <div className="space-y-6">
+        <div className="flex items-center gap-4">
+          <Skeleton className="h-9 w-20" />
+          <div className="space-y-2">
+            <Skeleton className="h-8 w-64" />
+            <Skeleton className="h-4 w-40" />
+          </div>
+        </div>
+        <Skeleton className="h-64 w-full rounded-xl" />
       </div>
     );
   }
@@ -104,7 +112,7 @@ export default function ClientBookingDetailPage() {
   if (!booking) {
     return (
       <div className="flex items-center justify-center h-64">
-        <div className="text-gray-500">Booking not found</div>
+        <div className="text-muted-foreground">Booking not found</div>
       </div>
     );
   }
@@ -127,7 +135,7 @@ export default function ClientBookingDetailPage() {
                 {booking.status}
               </Badge>
             </div>
-            <p className="text-gray-500">{formatDate(booking.start_time)}</p>
+            <p className="text-muted-foreground">{formatDate(booking.start_time)}</p>
           </div>
         </div>
 
@@ -166,21 +174,21 @@ export default function ClientBookingDetailPage() {
             </CardHeader>
             <CardContent className="space-y-6">
               <div className="flex items-center gap-4">
-                <div className="p-3 bg-purple-100 rounded-lg">
-                  <Calendar className="h-6 w-6 text-purple-600" />
+                <div className="p-3 bg-accent/10 rounded-lg">
+                  <Calendar className="h-6 w-6 text-accent" />
                 </div>
                 <div>
-                  <p className="text-sm text-gray-500">Date</p>
+                  <p className="text-sm text-muted-foreground">Date</p>
                   <p className="font-medium">{formatDate(booking.start_time)}</p>
                 </div>
               </div>
 
               <div className="flex items-center gap-4">
-                <div className="p-3 bg-blue-100 rounded-lg">
-                  <Clock className="h-6 w-6 text-blue-600" />
+                <div className="p-3 bg-primary/10 rounded-lg">
+                  <Clock className="h-6 w-6 text-primary" />
                 </div>
                 <div>
-                  <p className="text-sm text-gray-500">Time</p>
+                  <p className="text-sm text-muted-foreground">Time</p>
                   <p className="font-medium">
                     {formatTime(booking.start_time)} -{" "}
                     {formatTime(booking.end_time)}
@@ -190,16 +198,16 @@ export default function ClientBookingDetailPage() {
 
               {booking.meeting_link && (
                 <div className="flex items-center gap-4">
-                  <div className="p-3 bg-green-100 rounded-lg">
-                    <Video className="h-6 w-6 text-green-600" />
+                  <div className="p-3 bg-success/10 rounded-lg">
+                    <Video className="h-6 w-6 text-success" />
                   </div>
                   <div>
-                    <p className="text-sm text-gray-500">Meeting Link</p>
+                    <p className="text-sm text-muted-foreground">Meeting Link</p>
                     <a
                       href={booking.meeting_link}
                       target="_blank"
                       rel="noopener noreferrer"
-                      className="font-medium text-purple-600 hover:underline"
+                      className="font-medium text-accent hover:underline"
                     >
                       {booking.meeting_link}
                     </a>
@@ -209,8 +217,8 @@ export default function ClientBookingDetailPage() {
 
               {booking.notes && (
                 <div className="border-t pt-4">
-                  <p className="text-sm text-gray-500 mb-2">Notes</p>
-                  <p className="text-gray-700">{booking.notes}</p>
+                  <p className="text-sm text-muted-foreground mb-2">Notes</p>
+                  <p className="text-foreground">{booking.notes}</p>
                 </div>
               )}
             </CardContent>
@@ -241,7 +249,7 @@ export default function ClientBookingDetailPage() {
               {booking.can_cancel ? (
                 <Button
                   variant="outline"
-                  className="w-full text-red-600 hover:text-red-700 hover:bg-red-50"
+                  className="w-full text-destructive hover:text-destructive hover:bg-destructive/5"
                   onClick={handleCancel}
                   disabled={cancelling}
                 >
@@ -249,7 +257,7 @@ export default function ClientBookingDetailPage() {
                   Cancel Booking
                 </Button>
               ) : isUpcoming ? (
-                <p className="text-sm text-gray-500 text-center">
+                <p className="text-sm text-muted-foreground text-center">
                   Cancellations must be made at least 24 hours in advance
                 </p>
               ) : null}

@@ -232,6 +232,8 @@ export function Sidebar() {
       <div key={group.name} className="space-y-0.5">
         <button
           onClick={() => toggleGroup(group.name)}
+          aria-expanded={isExpanded}
+          aria-controls={`nav-group-${group.name.toLowerCase()}`}
           className={cn(
             "group flex w-full items-center rounded-md px-3 py-1.5 text-sm font-medium transition-colors",
             hasActiveItem
@@ -239,17 +241,18 @@ export function Sidebar() {
               : "text-gray-400 hover:bg-gray-800 hover:text-white"
           )}
         >
-          <group.icon className="h-4 w-4 mr-2 flex-shrink-0" />
+          <group.icon className="h-4 w-4 mr-2 flex-shrink-0" aria-hidden="true" />
           <span className="flex-1 text-left">{group.name}</span>
           <ChevronDown
             className={cn(
               "h-4 w-4 transition-transform",
               isExpanded && "rotate-180"
             )}
+            aria-hidden="true"
           />
         </button>
         {isExpanded && (
-          <div className="space-y-0.5">
+          <div id={`nav-group-${group.name.toLowerCase()}`} role="group" aria-label={`${group.name} navigation`} className="space-y-0.5">
             {group.items.map(item => renderNavItem(item, true))}
           </div>
         )}
@@ -289,16 +292,17 @@ export function Sidebar() {
         <div className="px-2 mb-1">
           <button
             onClick={toggleCollapsed}
+            aria-label={collapsed ? "Expand sidebar" : "Collapse sidebar"}
             className={cn(
               "flex items-center justify-center w-full rounded-md py-1.5 text-gray-400 hover:bg-gray-800 hover:text-white transition-colors",
               collapsed ? "px-0" : "px-2"
             )}
           >
             {collapsed ? (
-              <ChevronRight className="h-4 w-4" />
+              <ChevronRight className="h-4 w-4" aria-hidden="true" />
             ) : (
               <>
-                <ChevronLeft className="h-4 w-4 mr-1" />
+                <ChevronLeft className="h-4 w-4 mr-1" aria-hidden="true" />
                 <span className="text-xs">Collapse</span>
               </>
             )}
@@ -306,7 +310,7 @@ export function Sidebar() {
         </div>
 
         {/* Navigation */}
-        <nav className="flex-1 space-y-1 px-2 py-1 overflow-y-auto">
+        <nav aria-label="Main navigation" className="flex-1 space-y-1 px-2 py-1 overflow-y-auto">
           {/* Top items */}
           <div className="space-y-0.5">
             {topNavigation.map(item => renderNavItem(item))}
@@ -342,9 +346,10 @@ export function Sidebar() {
                   <TooltipTrigger asChild>
                     <button
                       onClick={logout}
+                      aria-label="Sign out"
                       className="group flex items-center justify-center rounded-md px-2 py-1.5 text-sm font-medium text-gray-300 hover:bg-gray-800 hover:text-white"
                     >
-                      <LogOut className="h-4 w-4 flex-shrink-0 text-gray-400 group-hover:text-white" />
+                      <LogOut className="h-4 w-4 flex-shrink-0 text-gray-400 group-hover:text-white" aria-hidden="true" />
                     </button>
                   </TooltipTrigger>
                   <TooltipContent side="right" className="bg-gray-800 text-white border-gray-700">

@@ -8,6 +8,7 @@ import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
 import { Progress } from "@/components/ui/progress";
+import { Skeleton } from "@/components/ui/skeleton";
 import Link from "next/link";
 import { ArrowLeft, CheckCircle, Circle, Clock } from "lucide-react";
 
@@ -29,16 +30,16 @@ interface Project {
 }
 
 const STATUS_COLORS: Record<string, string> = {
-  planning: "bg-yellow-100 text-yellow-800",
-  in_progress: "bg-blue-100 text-blue-800",
-  review: "bg-purple-100 text-purple-800",
-  completed: "bg-green-100 text-green-800",
-  on_hold: "bg-gray-100 text-gray-800",
-  cancelled: "bg-red-100 text-red-800",
+  planning: "bg-warning/10 text-warning",
+  in_progress: "bg-primary/10 text-primary",
+  review: "bg-accent/10 text-accent",
+  completed: "bg-success/10 text-success",
+  on_hold: "bg-muted text-foreground",
+  cancelled: "bg-destructive/10 text-destructive",
 };
 
 const TASK_STATUS_ICONS: Record<string, React.ReactNode> = {
-  todo: <Circle className="h-4 w-4 text-gray-400" />,
+  todo: <Circle className="h-4 w-4 text-muted-foreground" />,
   in_progress: <Clock className="h-4 w-4 text-blue-500" />,
   review: <Clock className="h-4 w-4 text-purple-500" />,
   completed: <CheckCircle className="h-4 w-4 text-green-500" />,
@@ -79,8 +80,15 @@ export default function ClientProjectDetailPage() {
 
   if (loading) {
     return (
-      <div className="flex items-center justify-center h-64">
-        <div className="text-gray-500">Loading project...</div>
+      <div className="space-y-6">
+        <div className="flex items-center gap-4">
+          <Skeleton className="h-9 w-20" />
+          <div className="space-y-2">
+            <Skeleton className="h-8 w-64" />
+            <Skeleton className="h-4 w-40" />
+          </div>
+        </div>
+        <Skeleton className="h-64 w-full rounded-xl" />
       </div>
     );
   }
@@ -88,7 +96,7 @@ export default function ClientProjectDetailPage() {
   if (!project) {
     return (
       <div className="flex items-center justify-center h-64">
-        <div className="text-gray-500">Project not found</div>
+        <div className="text-muted-foreground">Project not found</div>
       </div>
     );
   }
@@ -116,7 +124,7 @@ export default function ClientProjectDetailPage() {
                 {project.status.replace("_", " ")}
               </Badge>
             </div>
-            <p className="text-gray-500">
+            <p className="text-muted-foreground">
               Started {formatDate(project.created_at)}
             </p>
           </div>
@@ -133,7 +141,7 @@ export default function ClientProjectDetailPage() {
                 <CardTitle>About This Project</CardTitle>
               </CardHeader>
               <CardContent>
-                <p className="text-gray-700">{project.description}</p>
+                <p className="text-foreground">{project.description}</p>
               </CardContent>
             </Card>
           )}
@@ -145,7 +153,7 @@ export default function ClientProjectDetailPage() {
             </CardHeader>
             <CardContent>
               {project.tasks.length === 0 ? (
-                <p className="text-gray-500 text-center py-4">
+                <p className="text-muted-foreground text-center py-4">
                   No tasks to display
                 </p>
               ) : (
@@ -157,12 +165,12 @@ export default function ClientProjectDetailPage() {
                     >
                       <div className="flex items-center gap-3">
                         {TASK_STATUS_ICONS[task.status] || (
-                          <Circle className="h-4 w-4 text-gray-400" />
+                          <Circle className="h-4 w-4 text-muted-foreground" />
                         )}
                         <span
                           className={
                             task.status === "completed"
-                              ? "text-gray-500 line-through"
+                              ? "text-muted-foreground line-through"
                               : ""
                           }
                         >
@@ -170,7 +178,7 @@ export default function ClientProjectDetailPage() {
                         </span>
                       </div>
                       {task.due_date && (
-                        <span className="text-sm text-gray-500">
+                        <span className="text-sm text-muted-foreground">
                           Due {formatDate(task.due_date)}
                         </span>
                       )}
@@ -190,22 +198,22 @@ export default function ClientProjectDetailPage() {
             </CardHeader>
             <CardContent className="space-y-4">
               <div className="text-center">
-                <p className="text-4xl font-bold text-purple-600">
+                <p className="text-4xl font-bold text-accent">
                   {Math.round(project.progress)}%
                 </p>
-                <p className="text-sm text-gray-500">Complete</p>
+                <p className="text-sm text-muted-foreground">Complete</p>
               </div>
 
               <Progress value={project.progress} className="h-3" />
 
-              <div className="text-center text-sm text-gray-500">
+              <div className="text-center text-sm text-muted-foreground">
                 {completedTasks} of {totalTasks} tasks completed
               </div>
 
               <div className="border-t pt-4 space-y-2">
                 <div className="flex items-center justify-between text-sm">
                   <div className="flex items-center gap-2">
-                    <Circle className="h-3 w-3 text-gray-400" />
+                    <Circle className="h-3 w-3 text-muted-foreground" />
                     <span>To Do</span>
                   </div>
                   <span>

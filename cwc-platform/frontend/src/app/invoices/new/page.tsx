@@ -6,6 +6,7 @@ import { Shell } from "@/components/layout/Shell";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { invoicesApi, contactsApi } from "@/lib/api";
+import { Skeleton } from "@/components/ui/skeleton";
 import { Plus, Trash2, ArrowLeft, Save, Send } from "lucide-react";
 import Link from "next/link";
 
@@ -153,8 +154,11 @@ export default function NewInvoicePage() {
   if (loading) {
     return (
       <Shell>
-        <div className="flex items-center justify-center h-64">
-          <div className="text-gray-500">Loading...</div>
+        <div className="space-y-6 max-w-4xl py-8">
+          <Skeleton className="h-10 w-48" />
+          <Skeleton className="h-32 w-full rounded-lg" />
+          <Skeleton className="h-64 w-full rounded-lg" />
+          <Skeleton className="h-32 w-full rounded-lg" />
         </div>
       </Shell>
     );
@@ -173,18 +177,18 @@ export default function NewInvoicePage() {
               </Button>
             </Link>
             <div>
-              <h1 className="text-2xl font-bold text-gray-900">New Invoice</h1>
-              <p className="text-gray-600">Create a new invoice for your client</p>
+              <h1 className="text-2xl font-bold text-foreground">New Invoice</h1>
+              <p className="text-muted-foreground">Create a new invoice for your client</p>
             </div>
           </div>
           <div className="flex gap-2">
             <Button variant="outline" onClick={() => handleSave(false)} disabled={saving}>
               <Save className="h-4 w-4 mr-2" />
-              Save Draft
+              {saving ? "Saving..." : "Save Draft"}
             </Button>
             <Button onClick={() => handleSave(true)} disabled={saving}>
               <Send className="h-4 w-4 mr-2" />
-              Save & Send
+              {saving ? "Sending..." : "Save & Send"}
             </Button>
           </div>
         </div>
@@ -197,11 +201,11 @@ export default function NewInvoicePage() {
           <CardContent>
             <div className="grid grid-cols-2 gap-4">
               <div>
-                <label className="block text-sm font-medium text-gray-700 mb-1">
+                <label className="block text-sm font-medium text-foreground mb-1">
                   Select Contact *
                 </label>
                 <select
-                  className="w-full rounded-md border border-gray-300 px-3 py-2 text-sm"
+                  className="w-full rounded-md border border-border px-3 py-2 text-sm"
                   value={contactId}
                   onChange={(e) => setContactId(e.target.value)}
                 >
@@ -214,11 +218,11 @@ export default function NewInvoicePage() {
                 </select>
               </div>
               <div>
-                <label className="block text-sm font-medium text-gray-700 mb-1">
+                <label className="block text-sm font-medium text-foreground mb-1">
                   Payment Terms
                 </label>
                 <select
-                  className="w-full rounded-md border border-gray-300 px-3 py-2 text-sm"
+                  className="w-full rounded-md border border-border px-3 py-2 text-sm"
                   value={paymentTerms}
                   onChange={(e) => setPaymentTerms(e.target.value)}
                 >
@@ -245,7 +249,7 @@ export default function NewInvoicePage() {
           <CardContent>
             <div className="space-y-4">
               {/* Header */}
-              <div className="grid grid-cols-12 gap-2 text-xs font-medium text-gray-500 uppercase">
+              <div className="grid grid-cols-12 gap-2 text-xs font-medium text-muted-foreground uppercase">
                 <div className="col-span-5">Description</div>
                 <div className="col-span-2">Service Type</div>
                 <div className="col-span-1 text-center">Qty</div>
@@ -260,7 +264,7 @@ export default function NewInvoicePage() {
                   <div className="col-span-5">
                     <input
                       type="text"
-                      className="w-full rounded-md border border-gray-300 px-3 py-2 text-sm"
+                      className="w-full rounded-md border border-border px-3 py-2 text-sm"
                       placeholder="Description"
                       value={item.description}
                       onChange={(e) => updateLineItem(index, "description", e.target.value)}
@@ -268,7 +272,7 @@ export default function NewInvoicePage() {
                   </div>
                   <div className="col-span-2">
                     <select
-                      className="w-full rounded-md border border-gray-300 px-2 py-2 text-sm"
+                      className="w-full rounded-md border border-border px-2 py-2 text-sm"
                       value={item.service_type || ""}
                       onChange={(e) => updateLineItem(index, "service_type", e.target.value)}
                     >
@@ -282,7 +286,7 @@ export default function NewInvoicePage() {
                   <div className="col-span-1">
                     <input
                       type="number"
-                      className="w-full rounded-md border border-gray-300 px-2 py-2 text-sm text-center"
+                      className="w-full rounded-md border border-border px-2 py-2 text-sm text-center"
                       min="1"
                       value={item.quantity}
                       onChange={(e) => updateLineItem(index, "quantity", parseInt(e.target.value) || 1)}
@@ -290,10 +294,10 @@ export default function NewInvoicePage() {
                   </div>
                   <div className="col-span-2">
                     <div className="relative">
-                      <span className="absolute left-3 top-1/2 -translate-y-1/2 text-gray-500">$</span>
+                      <span className="absolute left-3 top-1/2 -translate-y-1/2 text-muted-foreground">$</span>
                       <input
                         type="number"
-                        className="w-full rounded-md border border-gray-300 pl-6 pr-2 py-2 text-sm text-right"
+                        className="w-full rounded-md border border-border pl-6 pr-2 py-2 text-sm text-right"
                         min="0"
                         step="0.01"
                         value={item.unit_price || ""}
@@ -310,7 +314,7 @@ export default function NewInvoicePage() {
                       variant="ghost"
                       onClick={() => removeLineItem(index)}
                       disabled={lineItems.length === 1}
-                      className="text-red-500 hover:text-red-700"
+                      className="text-destructive hover:text-destructive"
                     >
                       <Trash2 className="h-4 w-4" />
                     </Button>
@@ -324,15 +328,15 @@ export default function NewInvoicePage() {
               <div className="flex justify-end">
                 <div className="w-64 space-y-2">
                   <div className="flex justify-between text-sm">
-                    <span className="text-gray-500">Subtotal</span>
+                    <span className="text-muted-foreground">Subtotal</span>
                     <span className="font-medium">{formatCurrency(subtotal)}</span>
                   </div>
                   <div className="flex justify-between items-center text-sm">
                     <div className="flex items-center gap-2">
-                      <span className="text-gray-500">Tax</span>
+                      <span className="text-muted-foreground">Tax</span>
                       <input
                         type="number"
-                        className="w-16 rounded-md border border-gray-300 px-2 py-1 text-sm text-right"
+                        className="w-16 rounded-md border border-border px-2 py-1 text-sm text-right"
                         placeholder="%"
                         min="0"
                         max="100"
@@ -340,18 +344,18 @@ export default function NewInvoicePage() {
                         value={taxRate}
                         onChange={(e) => setTaxRate(e.target.value)}
                       />
-                      <span className="text-gray-500">%</span>
+                      <span className="text-muted-foreground">%</span>
                     </div>
                     <span className="font-medium">{formatCurrency(taxAmount)}</span>
                   </div>
                   <div className="flex justify-between items-center text-sm">
                     <div className="flex items-center gap-2">
-                      <span className="text-gray-500">Discount</span>
+                      <span className="text-muted-foreground">Discount</span>
                       <div className="relative">
-                        <span className="absolute left-2 top-1/2 -translate-y-1/2 text-gray-500 text-xs">$</span>
+                        <span className="absolute left-2 top-1/2 -translate-y-1/2 text-muted-foreground text-xs">$</span>
                         <input
                           type="number"
-                          className="w-20 rounded-md border border-gray-300 pl-5 pr-2 py-1 text-sm text-right"
+                          className="w-20 rounded-md border border-border pl-5 pr-2 py-1 text-sm text-right"
                           min="0"
                           step="0.01"
                           value={discountAmount}
@@ -359,7 +363,7 @@ export default function NewInvoicePage() {
                         />
                       </div>
                     </div>
-                    <span className="font-medium text-red-500">-{formatCurrency(discount)}</span>
+                    <span className="font-medium text-destructive">-{formatCurrency(discount)}</span>
                   </div>
                   <div className="border-t pt-2 flex justify-between text-lg font-bold">
                     <span>Total</span>
@@ -379,11 +383,11 @@ export default function NewInvoicePage() {
           <CardContent>
             <div className="grid grid-cols-2 gap-4">
               <div>
-                <label className="block text-sm font-medium text-gray-700 mb-1">
+                <label className="block text-sm font-medium text-foreground mb-1">
                   Memo (appears on invoice)
                 </label>
                 <textarea
-                  className="w-full rounded-md border border-gray-300 px-3 py-2 text-sm"
+                  className="w-full rounded-md border border-border px-3 py-2 text-sm"
                   rows={3}
                   placeholder="Thank you for your business..."
                   value={memo}
@@ -391,11 +395,11 @@ export default function NewInvoicePage() {
                 />
               </div>
               <div>
-                <label className="block text-sm font-medium text-gray-700 mb-1">
+                <label className="block text-sm font-medium text-foreground mb-1">
                   Internal Notes (not visible to client)
                 </label>
                 <textarea
-                  className="w-full rounded-md border border-gray-300 px-3 py-2 text-sm"
+                  className="w-full rounded-md border border-border px-3 py-2 text-sm"
                   rows={3}
                   placeholder="Notes for your reference..."
                   value={notes}

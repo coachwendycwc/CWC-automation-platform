@@ -7,6 +7,7 @@ import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
 import { extractionsApi } from "@/lib/api";
+import { Skeleton } from "@/components/ui/skeleton";
 import {
   Brain,
   FileText,
@@ -131,11 +132,11 @@ export default function ExtractionsPage() {
   const getConfidenceBadge = (level: string) => {
     switch (level) {
       case "high":
-        return <Badge className="bg-green-100 text-green-800">High Confidence</Badge>;
+        return <Badge className="bg-success/10 text-success">High Confidence</Badge>;
       case "medium":
-        return <Badge className="bg-yellow-100 text-yellow-800">Medium Confidence</Badge>;
+        return <Badge className="bg-warning/10 text-warning">Medium Confidence</Badge>;
       default:
-        return <Badge className="bg-red-100 text-red-800">Low Confidence</Badge>;
+        return <Badge className="bg-destructive/10 text-destructive">Low Confidence</Badge>;
     }
   };
 
@@ -144,9 +145,9 @@ export default function ExtractionsPage() {
       case "pending":
         return <Badge variant="outline">Pending Review</Badge>;
       case "approved":
-        return <Badge className="bg-green-100 text-green-800">Approved</Badge>;
+        return <Badge className="bg-success/10 text-success">Approved</Badge>;
       case "rejected":
-        return <Badge className="bg-red-100 text-red-800">Rejected</Badge>;
+        return <Badge className="bg-destructive/10 text-destructive">Rejected</Badge>;
       default:
         return <Badge variant="outline">{status}</Badge>;
     }
@@ -155,8 +156,22 @@ export default function ExtractionsPage() {
   if (loading) {
     return (
       <Shell>
-        <div className="flex items-center justify-center h-64">
-          <Loader2 className="h-8 w-8 animate-spin text-gray-400" />
+        <div className="space-y-6">
+          <div className="space-y-2">
+            <Skeleton className="h-8 w-56" />
+            <Skeleton className="h-4 w-80" />
+          </div>
+          <div className="grid grid-cols-1 md:grid-cols-4 gap-4">
+            {[...Array(4)].map((_, i) => (
+              <Card key={i}><CardContent className="pt-6"><div className="flex items-center gap-4"><Skeleton className="h-12 w-12 rounded-lg" /><div className="space-y-2"><Skeleton className="h-6 w-12" /><Skeleton className="h-3 w-24" /></div></div></CardContent></Card>
+            ))}
+          </div>
+          <Skeleton className="h-8 w-64" />
+          <div className="space-y-4">
+            {[...Array(3)].map((_, i) => (
+              <Card key={i}><CardContent className="py-4"><div className="flex items-center gap-4"><div className="flex-1 space-y-2"><Skeleton className="h-4 w-48" /><Skeleton className="h-3 w-72" /></div><Skeleton className="h-9 w-32" /></div></CardContent></Card>
+            ))}
+          </div>
         </div>
       </Shell>
     );
@@ -167,11 +182,11 @@ export default function ExtractionsPage() {
       <div className="space-y-6">
         {/* Header */}
         <div>
-          <h1 className="text-2xl font-bold text-gray-900 flex items-center gap-2">
+          <h1 className="text-2xl font-bold text-foreground flex items-center gap-2">
             <Brain className="h-6 w-6" />
             AI Invoice Extraction
           </h1>
-          <p className="text-gray-500 mt-1">
+          <p className="text-muted-foreground mt-1">
             Process Fathom transcripts and generate draft invoices with AI
           </p>
         </div>
@@ -181,12 +196,12 @@ export default function ExtractionsPage() {
           <Card>
             <CardContent className="pt-6">
               <div className="flex items-center gap-4">
-                <div className="p-3 bg-blue-100 rounded-lg">
-                  <Clock className="h-6 w-6 text-blue-600" />
+                <div className="p-3 bg-primary/10 rounded-lg">
+                  <Clock className="h-6 w-6 text-primary" />
                 </div>
                 <div>
                   <p className="text-2xl font-bold">{stats?.pending_webhooks || 0}</p>
-                  <p className="text-sm text-gray-500">Pending Webhooks</p>
+                  <p className="text-sm text-muted-foreground">Pending Webhooks</p>
                 </div>
               </div>
             </CardContent>
@@ -195,12 +210,12 @@ export default function ExtractionsPage() {
           <Card>
             <CardContent className="pt-6">
               <div className="flex items-center gap-4">
-                <div className="p-3 bg-yellow-100 rounded-lg">
-                  <AlertCircle className="h-6 w-6 text-yellow-600" />
+                <div className="p-3 bg-warning/10 rounded-lg">
+                  <AlertCircle className="h-6 w-6 text-warning" />
                 </div>
                 <div>
                   <p className="text-2xl font-bold">{stats?.pending_extractions || 0}</p>
-                  <p className="text-sm text-gray-500">Awaiting Review</p>
+                  <p className="text-sm text-muted-foreground">Awaiting Review</p>
                 </div>
               </div>
             </CardContent>
@@ -209,12 +224,12 @@ export default function ExtractionsPage() {
           <Card>
             <CardContent className="pt-6">
               <div className="flex items-center gap-4">
-                <div className="p-3 bg-green-100 rounded-lg">
-                  <CheckCircle className="h-6 w-6 text-green-600" />
+                <div className="p-3 bg-success/10 rounded-lg">
+                  <CheckCircle className="h-6 w-6 text-success" />
                 </div>
                 <div>
                   <p className="text-2xl font-bold">{stats?.approved_today || 0}</p>
-                  <p className="text-sm text-gray-500">Approved Today</p>
+                  <p className="text-sm text-muted-foreground">Approved Today</p>
                 </div>
               </div>
             </CardContent>
@@ -223,14 +238,14 @@ export default function ExtractionsPage() {
           <Card>
             <CardContent className="pt-6">
               <div className="flex items-center gap-4">
-                <div className="p-3 bg-purple-100 rounded-lg">
-                  <DollarSign className="h-6 w-6 text-purple-600" />
+                <div className="p-3 bg-accent/10 rounded-lg">
+                  <DollarSign className="h-6 w-6 text-accent" />
                 </div>
                 <div>
                   <p className="text-2xl font-bold">
                     {formatCurrency(stats?.total_extracted_value || 0)}
                   </p>
-                  <p className="text-sm text-gray-500">Total Extracted</p>
+                  <p className="text-sm text-muted-foreground">Total Extracted</p>
                 </div>
               </div>
             </CardContent>
@@ -241,20 +256,20 @@ export default function ExtractionsPage() {
         <div className="flex gap-4 border-b">
           <button
             onClick={() => setActiveTab("webhooks")}
-            className={`pb-2 px-1 font-medium ${
+            className={`pb-2 px-1 font-medium cursor-pointer ${
               activeTab === "webhooks"
-                ? "text-blue-600 border-b-2 border-blue-600"
-                : "text-gray-500 hover:text-gray-700"
+                ? "text-primary border-b-2 border-primary"
+                : "text-muted-foreground hover:text-foreground"
             }`}
           >
             Pending Webhooks ({webhooks.length})
           </button>
           <button
             onClick={() => setActiveTab("extractions")}
-            className={`pb-2 px-1 font-medium ${
+            className={`pb-2 px-1 font-medium cursor-pointer ${
               activeTab === "extractions"
-                ? "text-blue-600 border-b-2 border-blue-600"
-                : "text-gray-500 hover:text-gray-700"
+                ? "text-primary border-b-2 border-primary"
+                : "text-muted-foreground hover:text-foreground"
             }`}
           >
             Extractions ({extractions.length})
@@ -267,9 +282,9 @@ export default function ExtractionsPage() {
             {webhooks.length === 0 ? (
               <Card>
                 <CardContent className="py-12 text-center">
-                  <FileText className="h-12 w-12 text-gray-300 mx-auto mb-4" />
-                  <h3 className="text-lg font-medium text-gray-900">No pending webhooks</h3>
-                  <p className="text-gray-500 mt-1">
+                  <FileText className="h-12 w-12 text-muted-foreground/50 mx-auto mb-4" />
+                  <h3 className="text-lg font-medium text-foreground">No pending webhooks</h3>
+                  <p className="text-muted-foreground mt-1">
                     When you record calls with Fathom, they'll appear here for processing
                   </p>
                 </CardContent>
@@ -283,7 +298,7 @@ export default function ExtractionsPage() {
                         <h3 className="font-medium">
                           {webhook.meeting_title || "Untitled Meeting"}
                         </h3>
-                        <div className="flex items-center gap-4 mt-1 text-sm text-gray-500">
+                        <div className="flex items-center gap-4 mt-1 text-sm text-muted-foreground">
                           {webhook.duration_seconds && (
                             <span>{formatDuration(webhook.duration_seconds)}</span>
                           )}
@@ -324,9 +339,9 @@ export default function ExtractionsPage() {
             {extractions.length === 0 ? (
               <Card>
                 <CardContent className="py-12 text-center">
-                  <Brain className="h-12 w-12 text-gray-300 mx-auto mb-4" />
-                  <h3 className="text-lg font-medium text-gray-900">No extractions yet</h3>
-                  <p className="text-gray-500 mt-1">
+                  <Brain className="h-12 w-12 text-muted-foreground/50 mx-auto mb-4" />
+                  <h3 className="text-lg font-medium text-foreground">No extractions yet</h3>
+                  <p className="text-muted-foreground mt-1">
                     Process a webhook to see AI-extracted invoice data
                   </p>
                 </CardContent>
@@ -352,31 +367,31 @@ export default function ExtractionsPage() {
                         <div className="mt-2 space-y-1 text-sm">
                           {extraction.extracted_data.service_type && (
                             <p>
-                              <span className="text-gray-500">Service:</span>{" "}
+                              <span className="text-muted-foreground">Service:</span>{" "}
                               {extraction.extracted_data.service_type}
                             </p>
                           )}
                           {extraction.extracted_data.package_name && (
                             <p>
-                              <span className="text-gray-500">Package:</span>{" "}
+                              <span className="text-muted-foreground">Package:</span>{" "}
                               {extraction.extracted_data.package_name}
                             </p>
                           )}
                           {extraction.extracted_data.price && (
                             <p>
-                              <span className="text-gray-500">Price:</span>{" "}
+                              <span className="text-muted-foreground">Price:</span>{" "}
                               {formatCurrency(extraction.extracted_data.price)}
                             </p>
                           )}
                           {extraction.extracted_data.key_topics && (
                             <p>
-                              <span className="text-gray-500">Topics:</span>{" "}
+                              <span className="text-muted-foreground">Topics:</span>{" "}
                               {extraction.extracted_data.key_topics.slice(0, 3).join(", ")}
                             </p>
                           )}
                         </div>
 
-                        <p className="text-xs text-gray-400 mt-2">
+                        <p className="text-xs text-muted-foreground mt-2">
                           {new Date(extraction.created_at).toLocaleString()}
                         </p>
                       </div>

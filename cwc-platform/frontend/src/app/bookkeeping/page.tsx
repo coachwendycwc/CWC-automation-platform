@@ -147,13 +147,13 @@ export default function BookkeepingPage() {
           <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
             <CardTitle className="text-sm font-medium">Net Profit</CardTitle>
             {(summary?.netProfit || 0) >= 0 ? (
-              <TrendingUp className="h-4 w-4 text-green-500" />
+              <TrendingUp className="h-4 w-4 text-success" />
             ) : (
-              <TrendingDown className="h-4 w-4 text-red-500" />
+              <TrendingDown className="h-4 w-4 text-destructive" />
             )}
           </CardHeader>
           <CardContent>
-            <div className={`text-2xl font-bold ${(summary?.netProfit || 0) >= 0 ? "text-green-600" : "text-red-600"}`}>
+            <div className={`text-2xl font-bold ${(summary?.netProfit || 0) >= 0 ? "text-success" : "text-destructive"}`}>
               {loading ? "..." : formatCurrency(summary?.netProfit || 0)}
             </div>
             <p className="text-xs text-muted-foreground">

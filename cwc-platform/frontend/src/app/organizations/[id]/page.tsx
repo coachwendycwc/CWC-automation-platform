@@ -18,6 +18,7 @@ import {
   Mail,
 } from "lucide-react";
 import { organizationsApi, contactsApi } from "@/lib/api";
+import { Skeleton } from "@/components/ui/skeleton";
 import { OrganizationWithContacts, Contact } from "@/types";
 import { getInitials, formatCurrency, formatDateTime } from "@/lib/utils";
 
@@ -86,7 +87,18 @@ export default function OrganizationDetailPage() {
   if (loading) {
     return (
       <Shell user={user}>
-        <div className="text-center py-8 text-gray-500">Loading...</div>
+        <div className="max-w-4xl mx-auto space-y-6 py-8">
+          <Skeleton className="h-8 w-32" />
+          <div className="grid gap-6 lg:grid-cols-3">
+            <div className="lg:col-span-2 space-y-6">
+              <Skeleton className="h-48 w-full rounded-lg" />
+              <Skeleton className="h-64 w-full rounded-lg" />
+            </div>
+            <div className="space-y-6">
+              <Skeleton className="h-40 w-full rounded-lg" />
+            </div>
+          </div>
+        </div>
       </Shell>
     );
   }
@@ -95,7 +107,7 @@ export default function OrganizationDetailPage() {
     return (
       <Shell user={user}>
         <div className="text-center py-8">
-          <p className="text-gray-500">Organization not found</p>
+          <p className="text-muted-foreground">Organization not found</p>
           <Button
             className="mt-4"
             onClick={() => router.push("/organizations")}
@@ -122,13 +134,13 @@ export default function OrganizationDetailPage() {
               <CardContent className="p-6">
                 <div className="flex items-start justify-between">
                   <div className="flex items-start gap-4">
-                    <div className="rounded-lg bg-blue-100 p-4">
-                      <Building2 className="h-8 w-8 text-blue-600" />
+                    <div className="rounded-lg bg-primary/10 p-4">
+                      <Building2 className="h-8 w-8 text-primary" />
                     </div>
                     <div>
                       <h1 className="text-2xl font-bold">{org.name}</h1>
                       {org.industry && (
-                        <p className="text-gray-500">{org.industry}</p>
+                        <p className="text-muted-foreground">{org.industry}</p>
                       )}
                       <div className="flex gap-2 mt-2">
                         <Badge
@@ -153,7 +165,7 @@ export default function OrganizationDetailPage() {
                       variant="outline"
                       size="sm"
                       onClick={handleDelete}
-                      className="text-red-600 hover:text-red-700"
+                      className="text-destructive hover:text-destructive"
                     >
                       <Trash2 className="h-4 w-4" />
                     </Button>
@@ -163,12 +175,12 @@ export default function OrganizationDetailPage() {
                 <div className="mt-6 grid gap-4 sm:grid-cols-2">
                   {org.website && (
                     <div className="flex items-center gap-2">
-                      <Globe className="h-4 w-4 text-gray-400" />
+                      <Globe className="h-4 w-4 text-muted-foreground" />
                       <a
                         href={org.website}
                         target="_blank"
                         rel="noopener noreferrer"
-                        className="text-blue-600 hover:underline"
+                        className="text-primary hover:underline"
                       >
                         {org.website}
                       </a>
@@ -176,18 +188,18 @@ export default function OrganizationDetailPage() {
                   )}
                   {org.size && (
                     <div className="flex items-center gap-2">
-                      <Users className="h-4 w-4 text-gray-400" />
+                      <Users className="h-4 w-4 text-muted-foreground" />
                       <span>{org.size} employees</span>
                     </div>
                   )}
                 </div>
 
                 {Number(org.lifetime_value) > 0 && (
-                  <div className="mt-4 p-4 bg-green-50 rounded-lg">
-                    <span className="text-sm text-gray-600">
+                  <div className="mt-4 p-4 bg-success/10 rounded-lg">
+                    <span className="text-sm text-muted-foreground">
                       Lifetime Value:
                     </span>
-                    <span className="ml-2 text-xl font-bold text-green-600">
+                    <span className="ml-2 text-xl font-bold text-success">
                       {formatCurrency(Number(org.lifetime_value))}
                     </span>
                   </div>
@@ -209,7 +221,7 @@ export default function OrganizationDetailPage() {
               </CardHeader>
               <CardContent>
                 {contacts.length === 0 ? (
-                  <p className="text-gray-500 text-center py-4">
+                  <p className="text-muted-foreground text-center py-4">
                     No contacts yet.
                   </p>
                 ) : (
@@ -218,7 +230,7 @@ export default function OrganizationDetailPage() {
                       <Link
                         key={contact.id}
                         href={`/contacts/${contact.id}`}
-                        className="flex items-center gap-3 p-3 rounded-lg hover:bg-gray-50"
+                        className="flex items-center gap-3 p-3 rounded-lg hover:bg-muted"
                       >
                         <Avatar className="h-10 w-10">
                           <AvatarFallback>
@@ -232,7 +244,7 @@ export default function OrganizationDetailPage() {
                             {contact.first_name} {contact.last_name}
                           </p>
                           {contact.title && (
-                            <p className="text-sm text-gray-500">
+                            <p className="text-sm text-muted-foreground">
                               {contact.title}
                             </p>
                           )}
@@ -248,7 +260,7 @@ export default function OrganizationDetailPage() {
                             {contact.contact_type}
                           </Badge>
                           {contact.email && (
-                            <Mail className="h-4 w-4 text-gray-400" />
+                            <Mail className="h-4 w-4 text-muted-foreground" />
                           )}
                         </div>
                       </Link>
@@ -267,16 +279,16 @@ export default function OrganizationDetailPage() {
               </CardHeader>
               <CardContent className="space-y-3 text-sm">
                 <div>
-                  <span className="text-gray-500">Source:</span>
+                  <span className="text-muted-foreground">Source:</span>
                   <span className="ml-2">{org.source || "Not set"}</span>
                 </div>
                 <div>
-                  <span className="text-gray-500">Created:</span>
+                  <span className="text-muted-foreground">Created:</span>
                   <span className="ml-2">{formatDateTime(org.created_at)}</span>
                 </div>
                 {org.tags && org.tags.length > 0 && (
                   <div>
-                    <span className="text-gray-500">Tags:</span>
+                    <span className="text-muted-foreground">Tags:</span>
                     <div className="flex flex-wrap gap-1 mt-1">
                       {org.tags.map((tag) => (
                         <Badge key={tag} variant="outline" className="text-xs">

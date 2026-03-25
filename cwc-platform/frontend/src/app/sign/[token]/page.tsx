@@ -8,6 +8,7 @@ import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Checkbox } from "@/components/ui/checkbox";
+import { Skeleton } from "@/components/ui/skeleton";
 import { SignaturePad } from "@/components/contracts/SignaturePad";
 import { publicContractApi } from "@/lib/api";
 import {
@@ -111,20 +112,28 @@ export default function SignContractPage() {
 
   if (loading) {
     return (
-      <div className="min-h-screen bg-gray-50 flex items-center justify-center">
-        <div className="text-gray-500">Loading contract...</div>
+      <div className="min-h-screen bg-muted flex items-center justify-center">
+        <div className="max-w-4xl w-full mx-auto px-4 space-y-6">
+          <div className="text-center space-y-3">
+            <Skeleton className="h-20 w-48 mx-auto" />
+            <Skeleton className="h-8 w-64 mx-auto" />
+            <Skeleton className="h-4 w-48 mx-auto" />
+          </div>
+          <Skeleton className="h-96 rounded-lg" />
+          <Skeleton className="h-64 rounded-lg" />
+        </div>
       </div>
     );
   }
 
   if (error) {
     return (
-      <div className="min-h-screen bg-gray-50 flex items-center justify-center">
+      <div className="min-h-screen bg-muted flex items-center justify-center">
         <Card className="max-w-md w-full mx-4">
           <CardContent className="pt-6 text-center">
-            <XCircle className="h-12 w-12 text-red-500 mx-auto mb-4" />
+            <XCircle className="h-12 w-12 text-destructive mx-auto mb-4" />
             <h2 className="text-xl font-bold mb-2">Contract Not Found</h2>
-            <p className="text-gray-500">{error}</p>
+            <p className="text-muted-foreground">{error}</p>
           </CardContent>
         </Card>
       </div>
@@ -138,15 +147,15 @@ export default function SignContractPage() {
   // Already signed
   if (contract.status === "signed" || signed) {
     return (
-      <div className="min-h-screen bg-gray-50 flex items-center justify-center">
+      <div className="min-h-screen bg-muted flex items-center justify-center">
         <Card className="max-w-md w-full mx-4">
           <CardContent className="pt-6 text-center">
-            <CheckCircle className="h-16 w-16 text-green-500 mx-auto mb-4" />
+            <CheckCircle className="h-16 w-16 text-success mx-auto mb-4" />
             <h2 className="text-2xl font-bold mb-2">Contract Signed!</h2>
-            <p className="text-gray-500 mb-4">
+            <p className="text-muted-foreground mb-4">
               Thank you for signing. A confirmation email will be sent to you shortly.
             </p>
-            <p className="text-sm text-gray-400">
+            <p className="text-sm text-muted-foreground">
               Contract: {contract.contract_number}
             </p>
           </CardContent>
@@ -158,12 +167,12 @@ export default function SignContractPage() {
   // Declined
   if (contract.status === "declined" || declined) {
     return (
-      <div className="min-h-screen bg-gray-50 flex items-center justify-center">
+      <div className="min-h-screen bg-muted flex items-center justify-center">
         <Card className="max-w-md w-full mx-4">
           <CardContent className="pt-6 text-center">
-            <XCircle className="h-16 w-16 text-gray-400 mx-auto mb-4" />
+            <XCircle className="h-16 w-16 text-muted-foreground mx-auto mb-4" />
             <h2 className="text-2xl font-bold mb-2">Contract Declined</h2>
-            <p className="text-gray-500 mb-4">
+            <p className="text-muted-foreground mb-4">
               This contract has been declined. Please contact us if you have any questions.
             </p>
           </CardContent>
@@ -175,12 +184,12 @@ export default function SignContractPage() {
   // Expired
   if (contract.is_expired || contract.status === "expired") {
     return (
-      <div className="min-h-screen bg-gray-50 flex items-center justify-center">
+      <div className="min-h-screen bg-muted flex items-center justify-center">
         <Card className="max-w-md w-full mx-4">
           <CardContent className="pt-6 text-center">
-            <Clock className="h-16 w-16 text-orange-500 mx-auto mb-4" />
+            <Clock className="h-16 w-16 text-warning mx-auto mb-4" />
             <h2 className="text-2xl font-bold mb-2">Contract Expired</h2>
-            <p className="text-gray-500 mb-4">
+            <p className="text-muted-foreground mb-4">
               This contract has expired. Please contact us for a new contract.
             </p>
           </CardContent>
@@ -192,12 +201,12 @@ export default function SignContractPage() {
   // Void
   if (contract.status === "void") {
     return (
-      <div className="min-h-screen bg-gray-50 flex items-center justify-center">
+      <div className="min-h-screen bg-muted flex items-center justify-center">
         <Card className="max-w-md w-full mx-4">
           <CardContent className="pt-6 text-center">
-            <AlertTriangle className="h-16 w-16 text-gray-400 mx-auto mb-4" />
+            <AlertTriangle className="h-16 w-16 text-muted-foreground mx-auto mb-4" />
             <h2 className="text-2xl font-bold mb-2">Contract Cancelled</h2>
-            <p className="text-gray-500 mb-4">
+            <p className="text-muted-foreground mb-4">
               This contract has been cancelled. Please contact us for more information.
             </p>
           </CardContent>
@@ -208,7 +217,7 @@ export default function SignContractPage() {
 
   // Can sign - show signing form
   return (
-    <div className="min-h-screen bg-gray-50 py-8">
+    <div className="min-h-screen bg-muted py-8">
       <div className="max-w-4xl mx-auto px-4 space-y-6">
         {/* Header */}
         <div className="text-center">
@@ -220,12 +229,12 @@ export default function SignContractPage() {
             className="h-20 w-auto mx-auto mb-4"
           />
           <h1 className="text-2xl font-bold">{contract.title}</h1>
-          <p className="text-gray-500">
+          <p className="text-muted-foreground">
             Contract for {contract.contact_name}
             {contract.organization_name && ` (${contract.organization_name})`}
           </p>
           {contract.expires_at && (
-            <p className="text-sm text-orange-600 mt-2">
+            <p className="text-sm text-warning mt-2">
               Please sign by{" "}
               {new Date(contract.expires_at).toLocaleDateString("en-US", {
                 month: "long",
@@ -291,7 +300,7 @@ export default function SignContractPage() {
                 checked={agreedToTerms}
                 onCheckedChange={(checked) => setAgreedToTerms(checked as boolean)}
               />
-              <label htmlFor="terms" className="text-sm text-gray-600 leading-relaxed">
+              <label htmlFor="terms" className="text-sm text-muted-foreground leading-relaxed cursor-pointer">
                 I have read and agree to the terms of this contract. I understand that
                 by signing electronically, I am creating a legally binding agreement.
               </label>
@@ -303,6 +312,7 @@ export default function SignContractPage() {
                 variant="outline"
                 onClick={handleDecline}
                 disabled={submitting}
+                className="cursor-pointer"
               >
                 Decline Contract
               </Button>
@@ -315,6 +325,7 @@ export default function SignContractPage() {
                   !agreedToTerms ||
                   submitting
                 }
+                className="cursor-pointer"
               >
                 {submitting ? "Signing..." : "Sign Contract"}
               </Button>
@@ -323,7 +334,7 @@ export default function SignContractPage() {
         </Card>
 
         {/* Footer */}
-        <div className="text-center text-sm text-gray-500 py-4">
+        <div className="text-center text-sm text-muted-foreground py-4">
           <p>Contract #{contract.contract_number}</p>
           <p className="mt-1">
             Coaching Women of Color | Electronic signatures are legally binding

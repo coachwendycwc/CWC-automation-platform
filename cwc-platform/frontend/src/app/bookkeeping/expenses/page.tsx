@@ -446,7 +446,7 @@ export default function ExpensesPage() {
                       </TableCell>
                       <TableCell>
                         {expense.is_tax_deductible ? (
-                          <Badge variant="default" className="bg-green-100 text-green-800">Yes</Badge>
+                          <Badge variant="default" className="bg-success/10 text-success">Yes</Badge>
                         ) : (
                           <Badge variant="secondary">No</Badge>
                         )}

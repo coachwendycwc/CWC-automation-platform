@@ -1,6 +1,8 @@
 "use client";
 
-import { Bell, Search } from "lucide-react";
+import { useState, useEffect } from "react";
+import { useRouter } from "next/navigation";
+import { Search, Moon, Sun } from "lucide-react";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
@@ -15,25 +17,59 @@ interface HeaderProps {
 }
 
 export function Header({ user }: HeaderProps) {
+  const router = useRouter();
+  const [searchQuery, setSearchQuery] = useState("");
+  const [isDark, setIsDark] = useState(false);
+
+  useEffect(() => {
+    const stored = localStorage.getItem("theme");
+    const prefersDark = window.matchMedia("(prefers-color-scheme: dark)").matches;
+    const shouldBeDark = stored === "dark" || (!stored && prefersDark);
+    setIsDark(shouldBeDark);
+    document.documentElement.classList.toggle("dark", shouldBeDark);
+  }, []);
+
+  const toggleTheme = () => {
+    const newDark = !isDark;
+    setIsDark(newDark);
+    document.documentElement.classList.toggle("dark", newDark);
+    localStorage.setItem("theme", newDark ? "dark" : "light");
+  };
+
+  const handleSearch = (e: React.FormEvent) => {
+    e.preventDefault();
+    const query = searchQuery.trim();
+    if (query) {
+      router.push(`/contacts?search=${encodeURIComponent(query)}`);
+    }
+  };
+
   return (
-    <header className="flex h-16 items-center justify-between border-b bg-white px-6">
+    <header className="flex h-16 items-center justify-between border-b bg-card px-6">
       {/* Search */}
       <div className="flex flex-1 items-center">
-        <div className="relative w-full max-w-md">
-          <Search className="absolute left-3 top-1/2 h-4 w-4 -translate-y-1/2 text-gray-400" />
+        <form onSubmit={handleSearch} role="search" className="relative w-full max-w-md">
+          <Search className="absolute left-3 top-1/2 h-4 w-4 -translate-y-1/2 text-muted-foreground" aria-hidden="true" />
           <Input
             type="search"
             placeholder="Search contacts, organizations..."
             className="pl-10"
+            aria-label="Search contacts and organizations"
+            value={searchQuery}
+            onChange={(e) => setSearchQuery(e.target.value)}
           />
-        </div>
+        </form>
       </div>
 
       {/* Right side */}
       <div className="flex items-center gap-4">
-        <Button variant="ghost" size="icon" className="relative">
-          <Bell className="h-5 w-5" />
-          <span className="absolute right-1 top-1 h-2 w-2 rounded-full bg-red-500" />
+        <Button
+          variant="ghost"
+          size="icon"
+          onClick={toggleTheme}
+          aria-label={isDark ? "Switch to light mode" : "Switch to dark mode"}
+        >
+          {isDark ? <Sun className="h-5 w-5" /> : <Moon className="h-5 w-5" />}
         </Button>
 
         <div className="flex items-center gap-3">
@@ -47,7 +83,7 @@ export function Header({ user }: HeaderProps) {
           </Avatar>
           <div className="hidden md:block">
             <p className="text-sm font-medium">{user?.name || "User"}</p>
-            <p className="text-xs text-gray-500">{user?.email || ""}</p>
+            <p className="text-xs text-muted-foreground">{user?.email || ""}</p>
           </div>
         </div>
       </div>

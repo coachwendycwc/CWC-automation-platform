@@ -1,4 +1,4 @@
-import type { Metadata } from "next";
+import type { Metadata, Viewport } from "next";
 import { Inter } from "next/font/google";
 import "./globals.css";
 import { AuthProvider } from "@/contexts/AuthContext";
@@ -6,8 +6,16 @@ import { Toaster } from "sonner";
 
 const inter = Inter({ subsets: ["latin"] });
 
+export const viewport: Viewport = {
+  width: "device-width",
+  initialScale: 1,
+};
+
 export const metadata: Metadata = {
-  title: "CWC Platform",
+  title: {
+    default: "CWC Platform",
+    template: "%s | CWC Platform",
+  },
   description: "Unified business platform for Coaching Women of Color",
 };
 

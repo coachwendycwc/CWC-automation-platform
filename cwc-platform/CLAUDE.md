@@ -647,6 +647,29 @@ test.describe('Feature', () => {
 })
 ```
 
+### Phase 17: UI/UX Design System Overhaul
+- **Branded Design Tokens**: Replaced all hard-coded Tailwind grays/blues with semantic CSS custom properties
+  - Primary: Teal `#2A7B8C` (hsl 190 53% 35%)
+  - Accent: Warm Gold `#D4A574` (hsl 27 52% 64%)
+  - Success/Warning semantic tokens
+  - Full dark mode token set
+- **Dark Mode**: Class-based toggle with localStorage persistence and system preference detection
+  - Sun/Moon toggle in Header
+  - `darkMode: ["class"]` in Tailwind config
+- **Accessibility (WCAG 2.1 AA)**:
+  - aria-label, aria-expanded, aria-hidden, role attributes across Sidebar and navigation
+  - `prefers-reduced-motion` media query disabling animations
+  - Viewport meta via Next.js Viewport export
+  - Chart accessibility with role="img" and aria-label
+- **Skeleton Loading States**: shadcn/ui Skeleton component added to ~90 pages replacing "Loading..." text
+- **Interactive Feedback**: `cursor-pointer` on all clickable non-link elements across all pages
+- **Typography**: Minimum `text-sm` for readable content (replaced `text-xs` where used for body text)
+- **Layout**: `max-w-7xl` content constraint in Shell for readable line lengths
+- **Header**: Functional search bar (routes to /contacts?search=), removed fake notification bell
+- **Page Metadata**: Next.js Metadata API with template titles (`%s | CWC Platform`)
+- **Button States**: Disabled buttons with loading spinners during async operations across all pages
+- Files changed: ~100 across admin, client portal, and public routes
+
 ## Notes
 
 - bcrypt must be pinned to <5.0.0 for passlib compatibility

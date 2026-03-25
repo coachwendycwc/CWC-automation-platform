@@ -22,6 +22,7 @@ import {
   Calendar,
 } from "lucide-react";
 import Link from "next/link";
+import { Skeleton, SkeletonStats, SkeletonTable } from "@/components/ui/skeleton";
 
 interface Project {
   id: string;
@@ -52,11 +53,11 @@ interface ProjectStats {
 }
 
 const STATUS_COLORS: Record<string, string> = {
-  planning: "bg-gray-100 text-gray-800",
-  active: "bg-blue-100 text-blue-800",
-  paused: "bg-yellow-100 text-yellow-800",
-  completed: "bg-green-100 text-green-800",
-  cancelled: "bg-red-100 text-red-800",
+  planning: "bg-muted text-foreground",
+  active: "bg-primary/10 text-primary",
+  paused: "bg-warning/10 text-warning",
+  completed: "bg-success/10 text-success",
+  cancelled: "bg-destructive/10 text-destructive",
 };
 
 const STATUS_ICONS: Record<string, React.ReactNode> = {
@@ -122,14 +123,19 @@ export default function ProjectsPage() {
     if (percent >= 100) return "bg-green-500";
     if (percent >= 75) return "bg-blue-500";
     if (percent >= 50) return "bg-yellow-500";
-    return "bg-gray-300";
+    return "bg-muted";
   };
 
   if (loading) {
     return (
       <Shell>
-        <div className="flex items-center justify-center h-64">
-          <div className="text-gray-500">Loading...</div>
+        <div className="space-y-6">
+          <div className="flex items-center justify-between">
+            <Skeleton className="h-8 w-32" />
+            <Skeleton className="h-10 w-36" />
+          </div>
+          <SkeletonStats count={4} />
+          <SkeletonTable rows={5} />
         </div>
       </Shell>
     );
@@ -142,7 +148,7 @@ export default function ProjectsPage() {
         <div className="flex items-center justify-between">
           <div>
             <h1 className="text-2xl font-bold">Projects</h1>
-            <p className="text-gray-500">Manage projects and track progress</p>
+            <p className="text-muted-foreground">Manage projects and track progress</p>
           </div>
           <div className="flex gap-2">
             <Link href="/projects/templates">
@@ -164,13 +170,13 @@ export default function ProjectsPage() {
         <div className="grid grid-cols-1 md:grid-cols-4 gap-4">
           <Card>
             <CardHeader className="pb-2">
-              <CardTitle className="text-sm font-medium text-gray-500">
+              <CardTitle className="text-sm font-medium text-muted-foreground">
                 Total Projects
               </CardTitle>
             </CardHeader>
             <CardContent>
               <div className="flex items-center gap-2">
-                <FolderKanban className="h-5 w-5 text-gray-400" />
+                <FolderKanban className="h-5 w-5 text-muted-foreground" />
                 <span className="text-2xl font-bold">{stats?.total_projects || 0}</span>
               </div>
             </CardContent>
@@ -178,14 +184,14 @@ export default function ProjectsPage() {
 
           <Card>
             <CardHeader className="pb-2">
-              <CardTitle className="text-sm font-medium text-gray-500">
+              <CardTitle className="text-sm font-medium text-muted-foreground">
                 Active
               </CardTitle>
             </CardHeader>
             <CardContent>
               <div className="flex items-center gap-2">
                 <Play className="h-5 w-5 text-blue-500" />
-                <span className="text-2xl font-bold text-blue-600">
+                <span className="text-2xl font-bold text-primary">
                   {stats?.active_count || 0}
                 </span>
               </div>
@@ -194,14 +200,14 @@ export default function ProjectsPage() {
 
           <Card>
             <CardHeader className="pb-2">
-              <CardTitle className="text-sm font-medium text-gray-500">
+              <CardTitle className="text-sm font-medium text-muted-foreground">
                 Completed
               </CardTitle>
             </CardHeader>
             <CardContent>
               <div className="flex items-center gap-2">
                 <CheckCircle className="h-5 w-5 text-green-500" />
-                <span className="text-2xl font-bold text-green-600">
+                <span className="text-2xl font-bold text-success">
                   {stats?.completed_count || 0}
                 </span>
               </div>
@@ -210,14 +216,14 @@ export default function ProjectsPage() {
 
           <Card>
             <CardHeader className="pb-2">
-              <CardTitle className="text-sm font-medium text-gray-500">
+              <CardTitle className="text-sm font-medium text-muted-foreground">
                 Hours Logged
               </CardTitle>
             </CardHeader>
             <CardContent>
               <div className="flex items-center gap-2">
                 <Clock className="h-5 w-5 text-purple-500" />
-                <span className="text-2xl font-bold text-purple-600">
+                <span className="text-2xl font-bold text-accent">
                   {Math.round(stats?.total_actual_hours || 0)}h
                 </span>
               </div>
@@ -277,9 +283,9 @@ export default function ProjectsPage() {
           <CardContent className="p-0">
             {projects.length === 0 ? (
               <div className="flex flex-col items-center justify-center py-12 text-center">
-                <FolderKanban className="h-12 w-12 text-gray-300 mb-4" />
-                <h3 className="text-lg font-medium text-gray-900">No projects yet</h3>
-                <p className="text-gray-500 mt-1">
+                <FolderKanban className="h-12 w-12 text-muted-foreground mb-4" />
+                <h3 className="text-lg font-medium text-foreground">No projects yet</h3>
+                <p className="text-muted-foreground mt-1">
                   Create your first project to get started
                 </p>
                 <Link href="/projects/new">
@@ -294,19 +300,19 @@ export default function ProjectsPage() {
                 {projects.map((project) => (
                   <div
                     key={project.id}
-                    className="flex items-center justify-between p-4 hover:bg-gray-50"
+                    className="flex items-center justify-between p-4 hover:bg-muted cursor-pointer"
                   >
                     <div className="flex items-center gap-4 flex-1">
-                      <div className="flex items-center justify-center w-10 h-10 rounded-full bg-gray-100">
+                      <div className="flex items-center justify-center w-10 h-10 rounded-full bg-muted">
                         {STATUS_ICONS[project.status] || <FolderKanban className="h-4 w-4" />}
                       </div>
                       <div className="flex-1 min-w-0">
                         <Link href={`/projects/${project.id}`}>
-                          <h3 className="font-medium text-gray-900 hover:text-blue-600 truncate">
+                          <h3 className="font-medium text-foreground hover:text-primary/80 truncate">
                             {project.title}
                           </h3>
                         </Link>
-                        <div className="flex items-center gap-2 text-sm text-gray-500">
+                        <div className="flex items-center gap-2 text-sm text-muted-foreground">
                           <span>{project.project_number}</span>
                           <span>•</span>
                           <span>{PROJECT_TYPE_LABELS[project.project_type] || project.project_type}</span>
@@ -323,21 +329,21 @@ export default function ProjectsPage() {
                       {/* Progress */}
                       <div className="w-32">
                         <div className="flex items-center justify-between text-sm mb-1">
-                          <span className="text-gray-500">Progress</span>
+                          <span className="text-muted-foreground">Progress</span>
                           <span className="font-medium">{project.progress_percent}%</span>
                         </div>
                         <Progress value={project.progress_percent} className="h-2" />
                       </div>
 
                       {/* Tasks */}
-                      <div className="flex items-center gap-1 text-sm text-gray-500 w-20">
+                      <div className="flex items-center gap-1 text-sm text-muted-foreground w-20">
                         <ListTodo className="h-4 w-4" />
                         <span>{project.task_count} tasks</span>
                       </div>
 
                       {/* Dates */}
                       {project.target_end_date && (
-                        <div className="flex items-center gap-1 text-sm text-gray-500 w-28">
+                        <div className="flex items-center gap-1 text-sm text-muted-foreground w-28">
                           <Calendar className="h-4 w-4" />
                           <span>{formatDate(project.target_end_date)}</span>
                         </div>

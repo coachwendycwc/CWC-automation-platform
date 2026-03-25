@@ -49,16 +49,16 @@ export default function ResetPasswordPage() {
 
   if (submitted) {
     return (
-      <div className="min-h-screen flex items-center justify-center bg-gray-50 py-12 px-4 sm:px-6 lg:px-8">
+      <div className="min-h-screen flex items-center justify-center bg-muted py-12 px-4 sm:px-6 lg:px-8">
         <Card className="w-full max-w-md">
           <CardContent className="pt-6 text-center">
             <div className="flex justify-center mb-4">
-              <div className="rounded-full bg-green-100 p-3">
-                <CheckCircle className="h-8 w-8 text-green-600" />
+              <div className="rounded-full bg-success/10 p-3">
+                <CheckCircle className="h-8 w-8 text-success" />
               </div>
             </div>
             <h2 className="text-xl font-semibold mb-2">Password Reset!</h2>
-            <p className="text-gray-600 mb-6">
+            <p className="text-muted-foreground mb-6">
               Your password has been successfully reset.
             </p>
             <Link href="/login">
@@ -71,7 +71,7 @@ export default function ResetPasswordPage() {
   }
 
   return (
-    <div className="min-h-screen flex items-center justify-center bg-gray-50 py-12 px-4 sm:px-6 lg:px-8">
+    <div className="min-h-screen flex items-center justify-center bg-muted py-12 px-4 sm:px-6 lg:px-8">
       <Card className="w-full max-w-md">
         <CardHeader className="text-center">
           <CardTitle className="text-2xl font-bold">Reset Password</CardTitle>
@@ -80,7 +80,7 @@ export default function ResetPasswordPage() {
         <CardContent>
           <form onSubmit={handleSubmit} className="space-y-4">
             {error && (
-              <div className="bg-red-50 border border-red-200 text-red-700 px-4 py-3 rounded">
+              <div className="bg-destructive/10 border border-destructive/20 text-destructive px-4 py-3 rounded">
                 {error}
               </div>
             )}

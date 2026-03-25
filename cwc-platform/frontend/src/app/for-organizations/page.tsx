@@ -61,17 +61,17 @@ const formatOptions = [
 
 const budgetRanges = [
   { value: "under_5k", label: "Under $5,000" },
-  { value: "5k_10k", label: "$5,000–$9,999" },
-  { value: "10k_20k", label: "$10,000–$19,999" },
-  { value: "20k_40k", label: "$20,000–$39,999" },
+  { value: "5k_10k", label: "$5,000\u2013$9,999" },
+  { value: "10k_20k", label: "$10,000\u2013$19,999" },
+  { value: "20k_40k", label: "$20,000\u2013$39,999" },
   { value: "40k_plus", label: "$40,000+" },
   { value: "not_sure", label: "Not sure yet / need guidance" },
 ];
 
 const timelineOptions = [
-  { value: "asap", label: "ASAP (within 2–4 weeks)" },
-  { value: "1_2_months", label: "1–2 months" },
-  { value: "3_4_months", label: "3–4 months" },
+  { value: "asap", label: "ASAP (within 2\u20134 weeks)" },
+  { value: "1_2_months", label: "1\u20132 months" },
+  { value: "3_4_months", label: "3\u20134 months" },
   { value: "5_plus_months", label: "5+ months" },
   { value: "not_sure", label: "Not sure yet" },
 ];
@@ -231,10 +231,10 @@ export default function ForOrganizationsPage() {
       {/* Header */}
       <div className="bg-white shadow-sm">
         <div className="max-w-4xl mx-auto px-4 py-6">
-          <h1 className="text-3xl font-bold text-gray-900">
+          <h1 className="text-3xl font-bold text-foreground">
             Coaching Women of Color, LLC
           </h1>
-          <p className="text-gray-600 mt-1">Organizational Needs Assessment</p>
+          <p className="text-muted-foreground mt-1">Organizational Needs Assessment</p>
         </div>
       </div>
 
@@ -245,12 +245,12 @@ export default function ForOrganizationsPage() {
             <div
               key={section}
               className={`flex-1 h-2 rounded-full ${
-                section <= currentSection ? "bg-purple-600" : "bg-gray-200"
+                section <= currentSection ? "bg-purple-600" : "bg-muted"
               }`}
             />
           ))}
         </div>
-        <p className="text-sm text-gray-500 mt-2">
+        <p className="text-sm text-muted-foreground mt-2">
           Section {currentSection} of 6
         </p>
       </div>
@@ -269,7 +269,7 @@ export default function ForOrganizationsPage() {
 
           <CardContent className="space-y-8">
             {error && (
-              <div className="bg-red-50 border border-red-200 text-red-700 px-4 py-3 rounded">
+              <div className="bg-destructive/10 border border-destructive/20 text-destructive px-4 py-3 rounded">
                 {error}
               </div>
             )}
@@ -348,7 +348,7 @@ export default function ForOrganizationsPage() {
             {currentSection === 2 && (
               <div className="space-y-6">
                 <CardTitle>2) Areas of Interest</CardTitle>
-                <p className="text-gray-600">What are you interested in working with CWC on? (Select all that apply)</p>
+                <p className="text-muted-foreground">What are you interested in working with CWC on? (Select all that apply)</p>
 
                 <div className="space-y-3">
                   {areasOfInterest.map((area) => (
@@ -385,7 +385,7 @@ export default function ForOrganizationsPage() {
                 <CardTitle>3) Goals and Needs</CardTitle>
 
                 <div className="space-y-4">
-                  <p className="text-gray-600">What outcomes are you hoping to achieve? (Select up to 3)</p>
+                  <p className="text-muted-foreground">What outcomes are you hoping to achieve? (Select up to 3)</p>
                   <div className="space-y-3">
                     {desiredOutcomes.map((outcome) => (
                       <div key={outcome.value} className="flex items-center space-x-3">
@@ -431,7 +431,7 @@ export default function ForOrganizationsPage() {
                 </div>
 
                 <div className="space-y-4">
-                  <p className="text-gray-600">Who is the primary audience for this work?</p>
+                  <p className="text-muted-foreground">Who is the primary audience for this work?</p>
                   <div className="space-y-3">
                     {primaryAudienceOptions.map((audience) => (
                       <div key={audience.value} className="flex items-center space-x-3">
@@ -466,7 +466,7 @@ export default function ForOrganizationsPage() {
                       value={formData.participant_count}
                       onValueChange={(value) => updateField("participant_count", value)}
                     >
-                      <SelectTrigger>
+                      <SelectTrigger className="cursor-pointer">
                         <SelectValue placeholder="Select range" />
                       </SelectTrigger>
                       <SelectContent>
@@ -485,7 +485,7 @@ export default function ForOrganizationsPage() {
                       value={formData.preferred_format}
                       onValueChange={(value) => updateField("preferred_format", value)}
                     >
-                      <SelectTrigger>
+                      <SelectTrigger className="cursor-pointer">
                         <SelectValue placeholder="Select format" />
                       </SelectTrigger>
                       <SelectContent>
@@ -586,7 +586,7 @@ export default function ForOrganizationsPage() {
                 <CardTitle>5) Decision Process</CardTitle>
 
                 <div className="space-y-4">
-                  <p className="text-gray-600">Who will be involved in approving this engagement? (Select all that apply)</p>
+                  <p className="text-muted-foreground">Who will be involved in approving this engagement? (Select all that apply)</p>
                   <div className="space-y-3">
                     {decisionMakerOptions.map((dm) => (
                       <div key={dm.value} className="flex items-center space-x-3">
@@ -652,7 +652,7 @@ export default function ForOrganizationsPage() {
 
                 <div className="space-y-2">
                   <Label htmlFor="success_definition">
-                    What would make this partnership a "win" six months from now? (optional)
+                    What would make this partnership a &ldquo;win&rdquo; six months from now? (optional)
                   </Label>
                   <Textarea
                     id="success_definition"
@@ -676,9 +676,9 @@ export default function ForOrganizationsPage() {
                   />
                 </div>
 
-                <div className="bg-purple-50 border border-purple-200 rounded-lg p-6 mt-8">
-                  <h3 className="text-lg font-semibold text-purple-900 mb-2">Next Step</h3>
-                  <p className="text-purple-700">
+                <div className="bg-accent/10 border border-accent/20 rounded-lg p-6 mt-8">
+                  <h3 className="text-lg font-semibold text-foreground mb-2">Next Step</h3>
+                  <p className="text-muted-foreground">
                     After submitting this assessment, you'll be directed to book a discovery call
                     to review your needs and co-create the best solution together.
                   </p>
@@ -692,6 +692,7 @@ export default function ForOrganizationsPage() {
                 <Button
                   variant="outline"
                   onClick={() => setCurrentSection(currentSection - 1)}
+                  className="cursor-pointer"
                 >
                   Previous
                 </Button>
@@ -703,6 +704,7 @@ export default function ForOrganizationsPage() {
                 <Button
                   onClick={() => setCurrentSection(currentSection + 1)}
                   disabled={!canProceed()}
+                  className="cursor-pointer"
                 >
                   Next
                 </Button>
@@ -710,7 +712,7 @@ export default function ForOrganizationsPage() {
                 <Button
                   onClick={handleSubmit}
                   disabled={isSubmitting || !canProceed()}
-                  className="bg-purple-600 hover:bg-purple-700"
+                  className="bg-purple-600 hover:bg-purple-700 cursor-pointer"
                 >
                   {isSubmitting ? "Submitting..." : "Submit & Book Discovery Call"}
                 </Button>

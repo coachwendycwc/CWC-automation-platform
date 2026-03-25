@@ -449,15 +449,15 @@ export default function ContractorsPage() {
 
       {/* 1099 Alert */}
       {needs1099Count > 0 && (
-        <Card className="border-yellow-500 bg-yellow-50">
+        <Card className="border-warning bg-warning/10">
           <CardHeader className="pb-2">
-            <CardTitle className="flex items-center gap-2 text-yellow-800">
+            <CardTitle className="flex items-center gap-2 text-warning">
               <AlertTriangle className="h-5 w-5" />
               1099 Forms Required
             </CardTitle>
           </CardHeader>
           <CardContent>
-            <p className="text-yellow-700">
+            <p className="text-warning">
               {needs1099Count} contractor{needs1099Count > 1 ? "s have" : " has"} been paid $600 or more in {taxYear} and will need a 1099-NEC form.
             </p>
           </CardContent>
@@ -583,7 +583,7 @@ export default function ContractorsPage() {
                       <TableCell>{contractor.service_type || "—"}</TableCell>
                       <TableCell>
                         {contractor.w9_on_file ? (
-                          <Badge variant="default" className="bg-green-100 text-green-800">On File</Badge>
+                          <Badge variant="default" className="bg-success/10 text-success">On File</Badge>
                         ) : (
                           <Badge variant="destructive">Missing</Badge>
                         )}
@@ -593,7 +593,7 @@ export default function ContractorsPage() {
                       </TableCell>
                       <TableCell>
                         {needs1099 ? (
-                          <Badge variant="default" className="bg-yellow-100 text-yellow-800">Required</Badge>
+                          <Badge variant="default" className="bg-warning/10 text-warning">Required</Badge>
                         ) : (
                           <Badge variant="secondary">N/A</Badge>
                         )}

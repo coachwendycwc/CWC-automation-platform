@@ -8,6 +8,7 @@ import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Textarea } from "@/components/ui/textarea";
 import { Checkbox } from "@/components/ui/checkbox";
+import { Skeleton } from "@/components/ui/skeleton";
 import VideoRecorder from "@/components/VideoRecorder";
 import {
   Video,
@@ -124,8 +125,16 @@ export default function RecordTestimonialPage() {
   // Loading state
   if (pageState === "loading") {
     return (
-      <div className="min-h-screen bg-gray-50 flex items-center justify-center">
-        <div className="text-gray-500">Loading...</div>
+      <div className="min-h-screen bg-muted flex items-center justify-center">
+        <div className="max-w-2xl w-full mx-auto px-4 space-y-6">
+          <div className="text-center space-y-3">
+            <Skeleton className="h-16 w-16 rounded-full mx-auto" />
+            <Skeleton className="h-8 w-48 mx-auto" />
+            <Skeleton className="h-4 w-72 mx-auto" />
+          </div>
+          <Skeleton className="h-64 rounded-lg" />
+          <Skeleton className="h-48 rounded-lg" />
+        </div>
       </div>
     );
   }
@@ -133,14 +142,14 @@ export default function RecordTestimonialPage() {
   // Not found
   if (pageState === "not_found") {
     return (
-      <div className="min-h-screen bg-gray-50 flex items-center justify-center p-4">
+      <div className="min-h-screen bg-muted flex items-center justify-center p-4">
         <Card className="max-w-md w-full">
           <CardContent className="pt-8 text-center">
-            <AlertCircle className="h-16 w-16 text-gray-300 mx-auto mb-4" />
-            <h2 className="text-xl font-semibold text-gray-900 mb-2">
+            <AlertCircle className="h-16 w-16 text-muted-foreground/40 mx-auto mb-4" />
+            <h2 className="text-xl font-semibold text-foreground mb-2">
               Testimonial Request Not Found
             </h2>
-            <p className="text-gray-500">
+            <p className="text-muted-foreground">
               This link may be invalid or expired. Please contact us if you believe this is an error.
             </p>
           </CardContent>
@@ -152,15 +161,15 @@ export default function RecordTestimonialPage() {
   // Error state
   if (pageState === "error") {
     return (
-      <div className="min-h-screen bg-gray-50 flex items-center justify-center p-4">
+      <div className="min-h-screen bg-muted flex items-center justify-center p-4">
         <Card className="max-w-md w-full">
           <CardContent className="pt-8 text-center">
-            <AlertCircle className="h-16 w-16 text-red-300 mx-auto mb-4" />
-            <h2 className="text-xl font-semibold text-gray-900 mb-2">
+            <AlertCircle className="h-16 w-16 text-destructive/40 mx-auto mb-4" />
+            <h2 className="text-xl font-semibold text-foreground mb-2">
               Something went wrong
             </h2>
-            <p className="text-gray-500 mb-4">{error}</p>
-            <Button onClick={loadRequest}>Try Again</Button>
+            <p className="text-muted-foreground mb-4">{error}</p>
+            <Button onClick={loadRequest} className="cursor-pointer">Try Again</Button>
           </CardContent>
         </Card>
       </div>
@@ -170,14 +179,14 @@ export default function RecordTestimonialPage() {
   // Already submitted
   if (pageState === "submitted") {
     return (
-      <div className="min-h-screen bg-gray-50 flex items-center justify-center p-4">
+      <div className="min-h-screen bg-muted flex items-center justify-center p-4">
         <Card className="max-w-md w-full">
           <CardContent className="pt-8 text-center">
-            <CheckCircle className="h-16 w-16 text-green-500 mx-auto mb-4" />
-            <h2 className="text-xl font-semibold text-gray-900 mb-2">
+            <CheckCircle className="h-16 w-16 text-success mx-auto mb-4" />
+            <h2 className="text-xl font-semibold text-foreground mb-2">
               Thank You!
             </h2>
-            <p className="text-gray-500">
+            <p className="text-muted-foreground">
               Your testimonial has been submitted successfully. We really appreciate you taking the time to share your experience!
             </p>
           </CardContent>
@@ -188,15 +197,15 @@ export default function RecordTestimonialPage() {
 
   // Ready to record
   return (
-    <div className="min-h-screen bg-gray-50 py-8 px-4">
+    <div className="min-h-screen bg-muted py-8 px-4">
       <div className="max-w-2xl mx-auto space-y-6">
         {/* Header */}
         <div className="text-center">
           <div className="inline-flex items-center justify-center w-16 h-16 bg-violet-100 rounded-full mb-4">
             <Video className="h-8 w-8 text-violet-600" />
           </div>
-          <h1 className="text-2xl font-bold text-gray-900">Share Your Story</h1>
-          <p className="text-gray-500 mt-2">
+          <h1 className="text-2xl font-bold text-foreground">Share Your Story</h1>
+          <p className="text-muted-foreground mt-2">
             Record a short video testimonial about your experience
           </p>
         </div>
@@ -213,7 +222,7 @@ export default function RecordTestimonialPage() {
               onComplete={handleVideoComplete}
             />
             {videoData && (
-              <div className="mt-4 p-3 bg-green-50 rounded-lg flex items-center gap-2 text-green-700">
+              <div className="mt-4 p-3 bg-success/10 rounded-lg flex items-center gap-2 text-success">
                 <CheckCircle className="h-5 w-5" />
                 Video ready!
               </div>
@@ -229,7 +238,7 @@ export default function RecordTestimonialPage() {
           <CardContent className="space-y-4">
             <div className="space-y-2">
               <label className="text-sm font-medium flex items-center gap-2">
-                <User className="h-4 w-4 text-gray-400" />
+                <User className="h-4 w-4 text-muted-foreground" />
                 Your Name
               </label>
               <Input
@@ -242,7 +251,7 @@ export default function RecordTestimonialPage() {
             <div className="grid grid-cols-2 gap-4">
               <div className="space-y-2">
                 <label className="text-sm font-medium flex items-center gap-2">
-                  <Briefcase className="h-4 w-4 text-gray-400" />
+                  <Briefcase className="h-4 w-4 text-muted-foreground" />
                   Title (optional)
                 </label>
                 <Input
@@ -253,7 +262,7 @@ export default function RecordTestimonialPage() {
               </div>
               <div className="space-y-2">
                 <label className="text-sm font-medium flex items-center gap-2">
-                  <Building2 className="h-4 w-4 text-gray-400" />
+                  <Building2 className="h-4 w-4 text-muted-foreground" />
                   Company (optional)
                 </label>
                 <Input
@@ -266,7 +275,7 @@ export default function RecordTestimonialPage() {
 
             <div className="space-y-2">
               <label className="text-sm font-medium flex items-center gap-2">
-                <Quote className="h-4 w-4 text-gray-400" />
+                <Quote className="h-4 w-4 text-muted-foreground" />
                 Key Quote (optional)
               </label>
               <Textarea
@@ -275,7 +284,7 @@ export default function RecordTestimonialPage() {
                 placeholder="A brief summary of your testimonial that we can use as a pull quote..."
                 rows={3}
               />
-              <p className="text-xs text-gray-400">
+              <p className="text-sm text-muted-foreground">
                 This will be displayed alongside your video
               </p>
             </div>
@@ -294,7 +303,7 @@ export default function RecordTestimonialPage() {
                 onCheckedChange={(checked) => setPermissionGranted(checked === true)}
                 className="mt-0.5"
               />
-              <span className="text-sm text-gray-600">
+              <span className="text-sm text-muted-foreground">
                 I grant permission to use my video testimonial on the website, social media, and marketing materials. I understand my testimonial may be edited for length or clarity.
               </span>
             </label>
@@ -307,13 +316,14 @@ export default function RecordTestimonialPage() {
             size="lg"
             onClick={handleSubmit}
             disabled={!videoData || !permissionGranted || !formData.author_name.trim() || submitting}
+            className="cursor-pointer"
           >
             {submitting ? "Submitting..." : "Submit Testimonial"}
           </Button>
         </div>
 
         {/* Footer */}
-        <p className="text-center text-sm text-gray-400">
+        <p className="text-center text-sm text-muted-foreground">
           Your testimonial will be reviewed before being published.
           <br />
           Thank you for sharing your experience!

@@ -6,6 +6,7 @@ import { clientPortalApi } from "@/lib/api";
 import { Card, CardContent } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
+import { Skeleton } from "@/components/ui/skeleton";
 import Link from "next/link";
 import { Calendar, ExternalLink, Video, Clock } from "lucide-react";
 
@@ -19,11 +20,11 @@ interface Booking {
 }
 
 const STATUS_COLORS: Record<string, string> = {
-  pending: "bg-yellow-100 text-yellow-800",
-  confirmed: "bg-green-100 text-green-800",
-  cancelled: "bg-red-100 text-red-800",
-  completed: "bg-gray-100 text-gray-800",
-  no_show: "bg-orange-100 text-orange-800",
+  pending: "bg-warning/10 text-warning",
+  confirmed: "bg-success/10 text-success",
+  cancelled: "bg-destructive/10 text-destructive",
+  completed: "bg-muted text-foreground",
+  no_show: "bg-orange-100 text-warning",
 };
 
 export default function ClientBookingsPage() {
@@ -74,8 +75,16 @@ export default function ClientBookingsPage() {
 
   if (loading) {
     return (
-      <div className="flex items-center justify-center h-64">
-        <div className="text-gray-500">Loading bookings...</div>
+      <div className="space-y-6">
+        <div className="space-y-2">
+          <Skeleton className="h-8 w-48" />
+          <Skeleton className="h-4 w-72" />
+        </div>
+        <div className="space-y-3">
+          {[1, 2, 3].map((i) => (
+            <Skeleton key={i} className="h-20 w-full rounded-xl" />
+          ))}
+        </div>
       </div>
     );
   }
@@ -84,8 +93,8 @@ export default function ClientBookingsPage() {
     <div className="space-y-6">
       <div className="flex items-center justify-between">
         <div>
-          <h1 className="text-2xl font-bold text-gray-900">Bookings</h1>
-          <p className="text-gray-500">Your upcoming and past sessions</p>
+          <h1 className="text-2xl font-bold text-foreground">Bookings</h1>
+          <p className="text-muted-foreground">Your upcoming and past sessions</p>
         </div>
       </div>
 
@@ -110,9 +119,9 @@ export default function ClientBookingsPage() {
       {bookings.length === 0 ? (
         <Card>
           <CardContent className="py-12 text-center">
-            <Calendar className="h-12 w-12 text-gray-300 mx-auto mb-4" />
-            <h3 className="text-lg font-medium text-gray-900">No bookings</h3>
-            <p className="text-gray-500">
+            <Calendar className="h-12 w-12 text-muted-foreground/40 mx-auto mb-4" />
+            <h3 className="text-lg font-medium text-foreground">No bookings</h3>
+            <p className="text-muted-foreground">
               {showUpcoming
                 ? "You don't have any upcoming sessions"
                 : "You don't have any sessions yet"}
@@ -127,25 +136,25 @@ export default function ClientBookingsPage() {
             return (
               <Card
                 key={booking.id}
-                className="hover:shadow-md transition-shadow"
+                className="hover:shadow-md transition-shadow cursor-pointer"
               >
                 <CardContent className="py-4">
                   <div className="flex items-center justify-between">
                     <div className="flex items-center gap-4">
                       <div
                         className={`p-2 rounded-lg ${
-                          upcoming ? "bg-purple-100" : "bg-gray-100"
+                          upcoming ? "bg-accent/10" : "bg-muted"
                         }`}
                       >
                         <Clock
                           className={`h-5 w-5 ${
-                            upcoming ? "text-purple-600" : "text-gray-500"
+                            upcoming ? "text-accent" : "text-muted-foreground"
                           }`}
                         />
                       </div>
                       <div>
                         <p className="font-medium">{booking.booking_type_name}</p>
-                        <p className="text-sm text-gray-500">
+                        <p className="text-sm text-muted-foreground">
                           {formatDate(booking.start_time)} at{" "}
                           {formatTime(booking.start_time)} -{" "}
                           {formatTime(booking.end_time)}

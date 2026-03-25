@@ -25,6 +25,7 @@ import {
   Quote,
   Award,
 } from "lucide-react";
+import { Skeleton } from "@/components/ui/skeleton";
 import Link from "next/link";
 
 interface Contact {
@@ -148,8 +149,11 @@ export default function NewOffboardingPage() {
   if (loadingData) {
     return (
       <Shell>
-        <div className="flex items-center justify-center h-64">
-          <div className="text-gray-500">Loading...</div>
+        <div className="max-w-2xl mx-auto space-y-6">
+          <Skeleton className="h-8 w-64" />
+          <Skeleton className="h-[150px] w-full" />
+          <Skeleton className="h-[200px] w-full" />
+          <Skeleton className="h-[200px] w-full" />
         </div>
       </Shell>
     );
@@ -168,7 +172,7 @@ export default function NewOffboardingPage() {
           </Link>
           <div>
             <h1 className="text-2xl font-bold">New Offboarding Workflow</h1>
-            <p className="text-gray-500">Start the offboarding process for a client</p>
+            <p className="text-muted-foreground">Start the offboarding process for a client</p>
           </div>
         </div>
 
@@ -208,13 +212,13 @@ export default function NewOffboardingPage() {
                   onClick={() => setWorkflowType("client")}
                   className={`p-4 rounded-lg border-2 text-center transition-colors ${
                     workflowType === "client"
-                      ? "border-blue-500 bg-blue-50"
-                      : "border-gray-200 hover:border-gray-300"
+                      ? "border-primary bg-primary/10"
+                      : "border-border hover:border-border/80"
                   }`}
                 >
-                  <User className="h-8 w-8 mx-auto mb-2 text-gray-600" />
+                  <User className="h-8 w-8 mx-auto mb-2 text-muted-foreground" />
                   <div className="font-medium">Client</div>
-                  <div className="text-xs text-gray-500">Engagement ends</div>
+                  <div className="text-sm text-muted-foreground">Engagement ends</div>
                 </button>
 
                 <button
@@ -222,13 +226,13 @@ export default function NewOffboardingPage() {
                   onClick={() => setWorkflowType("project")}
                   className={`p-4 rounded-lg border-2 text-center transition-colors ${
                     workflowType === "project"
-                      ? "border-blue-500 bg-blue-50"
-                      : "border-gray-200 hover:border-gray-300"
+                      ? "border-primary bg-primary/10"
+                      : "border-border hover:border-border/80"
                   }`}
                 >
-                  <FolderKanban className="h-8 w-8 mx-auto mb-2 text-gray-600" />
+                  <FolderKanban className="h-8 w-8 mx-auto mb-2 text-muted-foreground" />
                   <div className="font-medium">Project</div>
-                  <div className="text-xs text-gray-500">Project completed</div>
+                  <div className="text-sm text-muted-foreground">Project completed</div>
                 </button>
 
                 <button
@@ -236,13 +240,13 @@ export default function NewOffboardingPage() {
                   onClick={() => setWorkflowType("contract")}
                   className={`p-4 rounded-lg border-2 text-center transition-colors ${
                     workflowType === "contract"
-                      ? "border-blue-500 bg-blue-50"
-                      : "border-gray-200 hover:border-gray-300"
+                      ? "border-primary bg-primary/10"
+                      : "border-border hover:border-border/80"
                   }`}
                 >
-                  <FileText className="h-8 w-8 mx-auto mb-2 text-gray-600" />
+                  <FileText className="h-8 w-8 mx-auto mb-2 text-muted-foreground" />
                   <div className="font-medium">Contract</div>
-                  <div className="text-xs text-gray-500">Contract ends</div>
+                  <div className="text-sm text-muted-foreground">Contract ends</div>
                 </button>
               </div>
 
@@ -297,7 +301,7 @@ export default function NewOffboardingPage() {
                   <MessageSquare className="h-5 w-5 text-purple-500" />
                   <div>
                     <div className="font-medium">Send Feedback Survey</div>
-                    <div className="text-sm text-gray-500">Request feedback about their experience</div>
+                    <div className="text-sm text-muted-foreground">Request feedback about their experience</div>
                   </div>
                 </div>
                 <Switch checked={sendSurvey} onCheckedChange={setSendSurvey} />
@@ -308,7 +312,7 @@ export default function NewOffboardingPage() {
                   <Quote className="h-5 w-5 text-green-500" />
                   <div>
                     <div className="font-medium">Request Testimonial</div>
-                    <div className="text-sm text-gray-500">Ask for a testimonial to share</div>
+                    <div className="text-sm text-muted-foreground">Ask for a testimonial to share</div>
                   </div>
                 </div>
                 <Switch checked={requestTestimonial} onCheckedChange={setRequestTestimonial} />
@@ -319,7 +323,7 @@ export default function NewOffboardingPage() {
                   <Award className="h-5 w-5 text-yellow-500" />
                   <div>
                     <div className="font-medium">Send Certificate</div>
-                    <div className="text-sm text-gray-500">Send a completion certificate</div>
+                    <div className="text-sm text-muted-foreground">Send a completion certificate</div>
                   </div>
                 </div>
                 <Switch checked={sendCertificate} onCheckedChange={setSendCertificate} />

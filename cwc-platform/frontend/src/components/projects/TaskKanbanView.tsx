@@ -39,14 +39,14 @@ interface TaskKanbanViewProps {
 }
 
 const COLUMNS = [
-  { id: "todo", title: "To Do", color: "bg-gray-500" },
+  { id: "todo", title: "To Do", color: "bg-muted-foreground" },
   { id: "in_progress", title: "In Progress", color: "bg-blue-500" },
   { id: "review", title: "Review", color: "bg-purple-500" },
   { id: "completed", title: "Done", color: "bg-green-500" },
 ];
 
 const PRIORITY_COLORS: Record<string, string> = {
-  low: "border-l-gray-300",
+  low: "border-l-border",
   medium: "border-l-yellow-400",
   high: "border-l-orange-500",
   urgent: "border-l-red-500",
@@ -149,7 +149,7 @@ export function TaskKanbanView({ projectId, tasks, onTasksChange }: TaskKanbanVi
         return (
           <div
             key={column.id}
-            className="bg-gray-50 rounded-lg p-4 min-h-[400px]"
+            className="bg-muted rounded-lg p-4 min-h-[400px]"
             onDragOver={handleDragOver}
             onDrop={(e) => handleDrop(e, column.id)}
           >
@@ -158,12 +158,13 @@ export function TaskKanbanView({ projectId, tasks, onTasksChange }: TaskKanbanVi
               <div className="flex items-center gap-2">
                 <div className={`w-2 h-2 rounded-full ${column.color}`} />
                 <h3 className="font-medium">{column.title}</h3>
-                <span className="text-sm text-gray-500">({columnTasks.length})</span>
+                <span className="text-sm text-muted-foreground">({columnTasks.length})</span>
               </div>
               <Button
                 variant="ghost"
                 size="sm"
                 onClick={() => setAddingToColumn(column.id)}
+              className="cursor-pointer"
               >
                 <Plus className="h-4 w-4" />
               </Button>
@@ -222,7 +223,7 @@ export function TaskKanbanView({ projectId, tasks, onTasksChange }: TaskKanbanVi
                     <div className="flex-1 min-w-0">
                       <p className="font-medium text-sm truncate">{task.title}</p>
                       {task.description && (
-                        <p className="text-xs text-gray-500 truncate mt-1">
+                        <p className="text-xs text-muted-foreground truncate mt-1">
                           {task.description}
                         </p>
                       )}
@@ -230,25 +231,25 @@ export function TaskKanbanView({ projectId, tasks, onTasksChange }: TaskKanbanVi
                     <Button
                       variant="ghost"
                       size="sm"
-                      className="h-6 w-6 p-0 opacity-0 group-hover:opacity-100"
+                      className="h-6 w-6 p-0 opacity-0 group-hover:opacity-100 cursor-pointer"
                       onClick={() => handleDeleteTask(task.id)}
                     >
-                      <Trash2 className="h-3 w-3 text-gray-400 hover:text-red-500" />
+                      <Trash2 className="h-3 w-3 text-muted-foreground hover:text-destructive" />
                     </Button>
                   </div>
 
                   <div className="flex items-center gap-2 mt-2 flex-wrap">
-                    <span className="text-xs text-gray-400">{task.task_number}</span>
+                    <span className="text-xs text-muted-foreground">{task.task_number}</span>
 
                     {task.due_date && (
-                      <span className="text-xs text-gray-500 flex items-center gap-1">
+                      <span className="text-xs text-muted-foreground flex items-center gap-1">
                         <Clock className="h-3 w-3" />
                         {formatDate(task.due_date)}
                       </span>
                     )}
 
                     {task.assigned_to && (
-                      <span className="text-xs text-gray-500 flex items-center gap-1">
+                      <span className="text-xs text-muted-foreground flex items-center gap-1">
                         <User className="h-3 w-3" />
                         {task.assigned_to}
                       </span>
@@ -264,7 +265,7 @@ export function TaskKanbanView({ projectId, tasks, onTasksChange }: TaskKanbanVi
               ))}
 
               {columnTasks.length === 0 && (
-                <div className="text-center py-8 text-gray-400 text-sm">
+                <div className="text-center py-8 text-muted-foreground text-sm">
                   Drop tasks here
                 </div>
               )}

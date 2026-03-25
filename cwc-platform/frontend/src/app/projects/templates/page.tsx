@@ -34,6 +34,7 @@ import {
   ListTodo,
   Clock,
 } from "lucide-react";
+import { Skeleton } from "@/components/ui/skeleton";
 import Link from "next/link";
 
 interface TaskTemplate {
@@ -210,8 +211,12 @@ export default function ProjectTemplatesPage() {
   if (loading) {
     return (
       <Shell>
-        <div className="flex items-center justify-center h-64">
-          <div className="text-gray-500">Loading...</div>
+        <div className="space-y-6">
+          <div className="flex items-center justify-between">
+            <Skeleton className="h-8 w-64" />
+            <Skeleton className="h-10 w-36" />
+          </div>
+          <Skeleton className="h-[300px] w-full" />
         </div>
       </Shell>
     );
@@ -231,7 +236,7 @@ export default function ProjectTemplatesPage() {
             </Link>
             <div>
               <h1 className="text-2xl font-bold">Project Templates</h1>
-              <p className="text-gray-500">Reusable project structures with pre-defined tasks</p>
+              <p className="text-muted-foreground">Reusable project structures with pre-defined tasks</p>
             </div>
           </div>
           <Button onClick={openCreateDialog}>
@@ -245,9 +250,9 @@ export default function ProjectTemplatesPage() {
           <CardContent className="p-0">
             {templates.length === 0 ? (
               <div className="flex flex-col items-center justify-center py-12 text-center">
-                <FileText className="h-12 w-12 text-gray-300 mb-4" />
-                <h3 className="text-lg font-medium text-gray-900">No templates yet</h3>
-                <p className="text-gray-500 mt-1">
+                <FileText className="h-12 w-12 text-muted-foreground mb-4" />
+                <h3 className="text-lg font-medium text-foreground">No templates yet</h3>
+                <p className="text-muted-foreground mt-1">
                   Create your first template to streamline project creation
                 </p>
                 <Button className="mt-4" onClick={openCreateDialog}>
@@ -260,15 +265,15 @@ export default function ProjectTemplatesPage() {
                 {templates.map((template) => (
                   <div
                     key={template.id}
-                    className="flex items-center justify-between p-4 hover:bg-gray-50"
+                    className="flex items-center justify-between p-4 hover:bg-muted"
                   >
                     <div className="flex items-center gap-4">
-                      <div className="flex items-center justify-center w-10 h-10 rounded-full bg-blue-100">
-                        <FileText className="h-5 w-5 text-blue-600" />
+                      <div className="flex items-center justify-center w-10 h-10 rounded-full bg-primary/10">
+                        <FileText className="h-5 w-5 text-primary" />
                       </div>
                       <div>
-                        <h3 className="font-medium text-gray-900">{template.name}</h3>
-                        <div className="flex items-center gap-2 text-sm text-gray-500">
+                        <h3 className="font-medium text-foreground">{template.name}</h3>
+                        <div className="flex items-center gap-2 text-sm text-muted-foreground">
                           <span>{PROJECT_TYPES.find((t) => t.value === template.project_type)?.label}</span>
                           <span>•</span>
                           <span className="flex items-center gap-1">
@@ -286,7 +291,7 @@ export default function ProjectTemplatesPage() {
 
                     <div className="flex items-center gap-4">
                       {!template.is_active && (
-                        <Badge variant="outline" className="text-gray-500">
+                        <Badge variant="outline" className="text-muted-foreground">
                           Inactive
                         </Badge>
                       )}
@@ -313,7 +318,7 @@ export default function ProjectTemplatesPage() {
                           onClick={() => handleDelete(template.id)}
                           title="Delete"
                         >
-                          <Trash2 className="h-4 w-4 text-gray-400 hover:text-red-500" />
+                          <Trash2 className="h-4 w-4 text-muted-foreground hover:text-destructive" />
                         </Button>
                       </div>
                     </div>
@@ -415,7 +420,7 @@ export default function ProjectTemplatesPage() {
                 </div>
 
                 {taskTemplates.length === 0 ? (
-                  <p className="text-sm text-gray-500 text-center py-4">
+                  <p className="text-sm text-muted-foreground text-center py-4">
                     No tasks defined. Add tasks to include them when creating projects from this template.
                   </p>
                 ) : (
@@ -423,9 +428,9 @@ export default function ProjectTemplatesPage() {
                     {taskTemplates.map((task, index) => (
                       <div
                         key={index}
-                        className="flex items-start gap-3 p-3 bg-gray-50 rounded-lg"
+                        className="flex items-start gap-3 p-3 bg-muted rounded-lg"
                       >
-                        <span className="text-sm text-gray-400 mt-2">{index + 1}.</span>
+                        <span className="text-sm text-muted-foreground mt-2">{index + 1}.</span>
                         <div className="flex-1 space-y-2">
                           <Input
                             value={task.title}
@@ -464,7 +469,7 @@ export default function ProjectTemplatesPage() {
                           size="sm"
                           onClick={() => removeTaskTemplate(index)}
                         >
-                          <Trash2 className="h-4 w-4 text-gray-400 hover:text-red-500" />
+                          <Trash2 className="h-4 w-4 text-muted-foreground hover:text-destructive" />
                         </Button>
                       </div>
                     ))}

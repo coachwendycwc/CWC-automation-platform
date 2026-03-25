@@ -38,6 +38,7 @@ import {
   Clock,
   User,
 } from "lucide-react";
+import { Skeleton } from "@/components/ui/skeleton";
 import { toast } from "sonner";
 import { formatDistanceToNow } from "date-fns";
 
@@ -189,10 +190,10 @@ export default function NotesPage() {
           <h1 className="text-2xl font-bold flex items-center gap-2">
             Client Notes
             {unreadCount > 0 && (
-              <Badge className="bg-red-500 text-white">{unreadCount} new</Badge>
+              <Badge className="bg-destructive text-white">{unreadCount} new</Badge>
             )}
           </h1>
-          <p className="text-gray-500">Messages between you and your clients</p>
+          <p className="text-muted-foreground">Messages between you and your clients</p>
         </div>
         <Button onClick={() => setShowNewNote(true)}>
           <Send className="h-4 w-4 mr-2" />
@@ -206,7 +207,7 @@ export default function NotesPage() {
           <div className="flex gap-4 items-center">
             <div className="flex-1">
               <div className="relative">
-                <Search className="absolute left-3 top-1/2 -translate-y-1/2 h-4 w-4 text-gray-400" />
+                <Search className="absolute left-3 top-1/2 -translate-y-1/2 h-4 w-4 text-muted-foreground" />
                 <Input
                   placeholder="Search notes..."
                   value={search}
@@ -246,7 +247,7 @@ export default function NotesPage() {
                   setPage(1);
                 }}
               />
-              <label htmlFor="unread" className="text-sm text-gray-600">
+              <label htmlFor="unread" className="text-sm text-muted-foreground">
                 Unread only
               </label>
             </div>
@@ -258,12 +259,23 @@ export default function NotesPage() {
       <Card>
         <CardContent className="p-0">
           {loading ? (
-            <div className="p-8 text-center text-gray-500">Loading...</div>
+            <div className="p-4 space-y-4">
+              {[...Array(5)].map((_, i) => (
+                <div key={i} className="flex items-start gap-4 p-4">
+                  <Skeleton className="h-8 w-8 rounded-full" />
+                  <div className="flex-1 space-y-2">
+                    <Skeleton className="h-4 w-32" />
+                    <Skeleton className="h-3 w-full" />
+                    <Skeleton className="h-3 w-24" />
+                  </div>
+                </div>
+              ))}
+            </div>
           ) : notes.length === 0 ? (
             <div className="p-8 text-center">
-              <MessageSquare className="h-12 w-12 text-gray-300 mx-auto mb-4" />
-              <h3 className="text-lg font-medium text-gray-900">No notes</h3>
-              <p className="text-gray-500 mt-1">
+              <MessageSquare className="h-12 w-12 text-muted-foreground/50 mx-auto mb-4" />
+              <h3 className="text-lg font-medium text-foreground">No notes</h3>
+              <p className="text-muted-foreground mt-1">
                 {filterUnread
                   ? "No unread notes"
                   : "Start by sending a note to a client"}
@@ -274,28 +286,28 @@ export default function NotesPage() {
               {notes.map((note) => (
                 <div
                   key={note.id}
-                  className="p-4 hover:bg-gray-50 cursor-pointer transition-colors"
+                  className="p-4 hover:bg-muted cursor-pointer transition-colors"
                   onClick={() => openNoteDetail(note)}
                 >
                   <div className="flex items-start gap-4">
                     <div className="flex-shrink-0">
                       {note.direction === "to_coach" ? (
-                        <div className="p-2 rounded-full bg-blue-100">
-                          <ArrowDownLeft className="h-4 w-4 text-blue-600" />
+                        <div className="p-2 rounded-full bg-primary/10">
+                          <ArrowDownLeft className="h-4 w-4 text-primary" />
                         </div>
                       ) : (
-                        <div className="p-2 rounded-full bg-green-100">
-                          <ArrowUpRight className="h-4 w-4 text-green-600" />
+                        <div className="p-2 rounded-full bg-success/10">
+                          <ArrowUpRight className="h-4 w-4 text-success" />
                         </div>
                       )}
                     </div>
                     <div className="flex-1 min-w-0">
                       <div className="flex items-center gap-2">
-                        <span className="font-medium text-gray-900">
+                        <span className="font-medium text-foreground">
                           {note.contact_name}
                         </span>
                         {note.direction === "to_coach" && !note.is_read && (
-                          <span className="w-2 h-2 rounded-full bg-blue-500" />
+                          <span className="w-2 h-2 rounded-full bg-primary" />
                         )}
                         {note.replies.length > 0 && (
                           <Badge variant="outline" className="text-xs">
@@ -303,13 +315,13 @@ export default function NotesPage() {
                           </Badge>
                         )}
                       </div>
-                      <p className="text-sm text-gray-600 line-clamp-2 mt-1">
+                      <p className="text-sm text-muted-foreground line-clamp-2 mt-1">
                         {note.content}
                       </p>
-                      <div className="flex items-center gap-2 mt-2 text-xs text-gray-400">
+                      <div className="flex items-center gap-2 mt-2 text-xs text-muted-foreground">
                         <Clock className="h-3 w-3" />
                         {formatDistanceToNow(new Date(note.created_at), { addSuffix: true })}
-                        <span className="text-gray-300">·</span>
+                        <span className="text-muted-foreground/50">·</span>
                         {note.direction === "to_coach" ? "From client" : "To client"}
                       </div>
                     </div>
@@ -324,7 +336,7 @@ export default function NotesPage() {
       {/* Pagination */}
       {totalPages > 1 && (
         <div className="flex items-center justify-between">
-          <p className="text-sm text-gray-500">
+          <p className="text-sm text-muted-foreground">
             Showing {(page - 1) * 20 + 1} to {Math.min(page * 20, total)} of {total}
           </p>
           <div className="flex gap-2">
@@ -409,12 +421,12 @@ export default function NotesPage() {
               <div
                 className={`p-3 rounded-lg ${
                   selectedNote.direction === "to_coach"
-                    ? "bg-blue-50 ml-0 mr-8"
-                    : "bg-green-50 ml-8 mr-0"
+                    ? "bg-primary/5 ml-0 mr-8"
+                    : "bg-success/5 ml-8 mr-0"
                 }`}
               >
                 <p className="text-sm">{selectedNote.content}</p>
-                <p className="text-xs text-gray-400 mt-2">
+                <p className="text-xs text-muted-foreground mt-2">
                   {formatDistanceToNow(new Date(selectedNote.created_at), { addSuffix: true })}
                   {" · "}
                   {selectedNote.direction === "to_coach" ? "From client" : "You"}
@@ -427,12 +439,12 @@ export default function NotesPage() {
                   key={reply.id}
                   className={`p-3 rounded-lg ${
                     reply.direction === "to_coach"
-                      ? "bg-blue-50 ml-0 mr-8"
-                      : "bg-green-50 ml-8 mr-0"
+                      ? "bg-primary/5 ml-0 mr-8"
+                      : "bg-success/5 ml-8 mr-0"
                   }`}
                 >
                   <p className="text-sm">{reply.content}</p>
-                  <p className="text-xs text-gray-400 mt-2">
+                  <p className="text-xs text-muted-foreground mt-2">
                     {formatDistanceToNow(new Date(reply.created_at), { addSuffix: true })}
                     {" · "}
                     {reply.direction === "to_coach" ? "From client" : "You"}

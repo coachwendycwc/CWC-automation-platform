@@ -23,6 +23,7 @@ import {
   CheckCircle,
 } from "lucide-react";
 import Link from "next/link";
+import { Skeleton } from "@/components/ui/skeleton";
 
 interface Contact {
   id: string;
@@ -141,8 +142,11 @@ export default function NewProjectPage() {
   if (loading) {
     return (
       <Shell>
-        <div className="flex items-center justify-center h-64">
-          <div className="text-gray-500">Loading...</div>
+        <div className="max-w-3xl mx-auto space-y-6 py-8">
+          <Skeleton className="h-10 w-48" />
+          <Skeleton className="h-24 w-full rounded-lg" />
+          <Skeleton className="h-24 w-full rounded-lg" />
+          <Skeleton className="h-24 w-full rounded-lg" />
         </div>
       </Shell>
     );
@@ -161,7 +165,7 @@ export default function NewProjectPage() {
           </Link>
           <div>
             <h1 className="text-2xl font-bold">New Project</h1>
-            <p className="text-gray-500">
+            <p className="text-muted-foreground">
               {step === "template" ? "Choose a template or start from scratch" : "Enter project details"}
             </p>
           </div>
@@ -172,16 +176,16 @@ export default function NewProjectPage() {
           <div className="space-y-4">
             {/* Start from Scratch */}
             <Card
-              className="cursor-pointer hover:border-blue-500 transition-colors"
+              className="cursor-pointer hover:border-primary transition-colors"
               onClick={() => handleSelectTemplate(null)}
             >
               <CardContent className="flex items-center gap-4 p-6">
-                <div className="flex items-center justify-center w-12 h-12 rounded-full bg-gray-100">
-                  <FolderKanban className="h-6 w-6 text-gray-600" />
+                <div className="flex items-center justify-center w-12 h-12 rounded-full bg-muted">
+                  <FolderKanban className="h-6 w-6 text-muted-foreground" />
                 </div>
                 <div>
                   <h3 className="font-medium">Start from Scratch</h3>
-                  <p className="text-sm text-gray-500">Create a blank project without any tasks</p>
+                  <p className="text-sm text-muted-foreground">Create a blank project without any tasks</p>
                 </div>
               </CardContent>
             </Card>
@@ -189,24 +193,24 @@ export default function NewProjectPage() {
             {/* Templates */}
             {templates.length > 0 && (
               <>
-                <div className="text-sm font-medium text-gray-500 mt-6 mb-2">Or choose a template</div>
+                <div className="text-sm font-medium text-muted-foreground mt-6 mb-2">Or choose a template</div>
                 <div className="grid gap-4">
                   {templates.map((template) => (
                     <Card
                       key={template.id}
-                      className="cursor-pointer hover:border-blue-500 transition-colors"
+                      className="cursor-pointer hover:border-primary transition-colors"
                       onClick={() => handleSelectTemplate(template.id)}
                     >
                       <CardContent className="flex items-center gap-4 p-6">
-                        <div className="flex items-center justify-center w-12 h-12 rounded-full bg-blue-100">
-                          <FileText className="h-6 w-6 text-blue-600" />
+                        <div className="flex items-center justify-center w-12 h-12 rounded-full bg-primary/10">
+                          <FileText className="h-6 w-6 text-primary" />
                         </div>
                         <div className="flex-1">
                           <h3 className="font-medium">{template.name}</h3>
-                          <p className="text-sm text-gray-500">
+                          <p className="text-sm text-muted-foreground">
                             {template.description || `${template.project_type} • ${template.default_duration_days} days`}
                           </p>
-                          <p className="text-xs text-gray-400 mt-1">
+                          <p className="text-sm text-muted-foreground mt-1">
                             {template.task_count} tasks included
                           </p>
                         </div>

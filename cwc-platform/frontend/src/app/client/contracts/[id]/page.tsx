@@ -7,6 +7,7 @@ import { clientPortalApi } from "@/lib/api";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
+import { Skeleton } from "@/components/ui/skeleton";
 import Link from "next/link";
 import { ArrowLeft, ExternalLink, CheckCircle, Clock, Download } from "lucide-react";
 
@@ -23,13 +24,13 @@ interface Contract {
 }
 
 const STATUS_COLORS: Record<string, string> = {
-  draft: "bg-gray-100 text-gray-800",
-  sent: "bg-blue-100 text-blue-800",
-  viewed: "bg-purple-100 text-purple-800",
-  signed: "bg-green-100 text-green-800",
-  expired: "bg-orange-100 text-orange-800",
-  declined: "bg-red-100 text-red-800",
-  void: "bg-gray-100 text-gray-500",
+  draft: "bg-muted text-foreground",
+  sent: "bg-primary/10 text-primary",
+  viewed: "bg-accent/10 text-accent",
+  signed: "bg-success/10 text-success",
+  expired: "bg-orange-100 text-warning",
+  declined: "bg-destructive/10 text-destructive",
+  void: "bg-muted text-muted-foreground",
 };
 
 export default function ClientContractDetailPage() {
@@ -95,8 +96,15 @@ export default function ClientContractDetailPage() {
 
   if (loading) {
     return (
-      <div className="flex items-center justify-center h-64">
-        <div className="text-gray-500">Loading contract...</div>
+      <div className="space-y-6">
+        <div className="flex items-center gap-4">
+          <Skeleton className="h-9 w-20" />
+          <div className="space-y-2">
+            <Skeleton className="h-8 w-64" />
+            <Skeleton className="h-4 w-40" />
+          </div>
+        </div>
+        <Skeleton className="h-64 w-full rounded-xl" />
       </div>
     );
   }
@@ -104,7 +112,7 @@ export default function ClientContractDetailPage() {
   if (!contract) {
     return (
       <div className="flex items-center justify-center h-64">
-        <div className="text-gray-500">Contract not found</div>
+        <div className="text-muted-foreground">Contract not found</div>
       </div>
     );
   }
@@ -129,7 +137,7 @@ export default function ClientContractDetailPage() {
                 {contract.status}
               </Badge>
             </div>
-            <p className="text-gray-500">{contract.contract_number}</p>
+            <p className="text-muted-foreground">{contract.contract_number}</p>
           </div>
         </div>
 
@@ -172,18 +180,18 @@ export default function ClientContractDetailPage() {
             <CardContent className="space-y-4">
               <div className="flex items-center gap-3">
                 {contract.status === "signed" ? (
-                  <div className="p-2 bg-green-100 rounded-full">
-                    <CheckCircle className="h-6 w-6 text-green-600" />
+                  <div className="p-2 bg-success/10 rounded-full">
+                    <CheckCircle className="h-6 w-6 text-success" />
                   </div>
                 ) : (
-                  <div className="p-2 bg-purple-100 rounded-full">
-                    <Clock className="h-6 w-6 text-purple-600" />
+                  <div className="p-2 bg-accent/10 rounded-full">
+                    <Clock className="h-6 w-6 text-accent" />
                   </div>
                 )}
                 <div>
                   <p className="font-medium capitalize">{contract.status}</p>
                   {contract.signed_at && (
-                    <p className="text-sm text-gray-500">
+                    <p className="text-sm text-muted-foreground">
                       Signed on {formatDate(contract.signed_at)}
                     </p>
                   )}
@@ -192,12 +200,12 @@ export default function ClientContractDetailPage() {
 
               <div className="border-t pt-4 space-y-2">
                 <div className="flex justify-between text-sm">
-                  <span className="text-gray-500">Created</span>
+                  <span className="text-muted-foreground">Created</span>
                   <span>{formatDate(contract.created_at)}</span>
                 </div>
                 {contract.expires_at && (
                   <div className="flex justify-between text-sm">
-                    <span className="text-gray-500">Expires</span>
+                    <span className="text-muted-foreground">Expires</span>
                     <span>{formatDate(contract.expires_at)}</span>
                   </div>
                 )}

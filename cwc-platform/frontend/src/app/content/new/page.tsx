@@ -140,7 +140,7 @@ export default function NewContentPage() {
         </Link>
         <div>
           <h1 className="text-2xl font-bold">Add Content</h1>
-          <p className="text-gray-500">
+          <p className="text-muted-foreground">
             Create a new file, video, or link for clients
           </p>
         </div>
@@ -215,7 +215,7 @@ export default function NewContentPage() {
                         onChange={(e) => updateFormData("file_url", e.target.value)}
                         placeholder="https://storage.example.com/file.pdf"
                       />
-                      <p className="text-xs text-gray-500">
+                      <p className="text-sm text-muted-foreground">
                         Enter the URL where the file is hosted (e.g., Google Drive, Dropbox, S3)
                       </p>
                     </div>
@@ -274,7 +274,7 @@ export default function NewContentPage() {
                     value={formData.release_date || ""}
                     onChange={(e) => updateFormData("release_date", e.target.value)}
                   />
-                  <p className="text-xs text-gray-500">
+                  <p className="text-sm text-muted-foreground">
                     Leave empty for immediate availability
                   </p>
                 </div>

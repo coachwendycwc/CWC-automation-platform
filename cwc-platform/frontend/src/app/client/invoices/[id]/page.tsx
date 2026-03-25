@@ -7,6 +7,7 @@ import { clientPortalApi } from "@/lib/api";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
+import { Skeleton } from "@/components/ui/skeleton";
 import Link from "next/link";
 import { ArrowLeft, CreditCard, CheckCircle } from "lucide-react";
 
@@ -34,12 +35,12 @@ interface Invoice {
 }
 
 const STATUS_COLORS: Record<string, string> = {
-  draft: "bg-gray-100 text-gray-800",
-  sent: "bg-blue-100 text-blue-800",
-  viewed: "bg-purple-100 text-purple-800",
-  partial: "bg-yellow-100 text-yellow-800",
-  paid: "bg-green-100 text-green-800",
-  overdue: "bg-red-100 text-red-800",
+  draft: "bg-muted text-foreground",
+  sent: "bg-primary/10 text-primary",
+  viewed: "bg-accent/10 text-accent",
+  partial: "bg-warning/10 text-warning",
+  paid: "bg-success/10 text-success",
+  overdue: "bg-destructive/10 text-destructive",
 };
 
 export default function ClientInvoiceDetailPage() {
@@ -91,8 +92,15 @@ export default function ClientInvoiceDetailPage() {
 
   if (loading) {
     return (
-      <div className="flex items-center justify-center h-64">
-        <div className="text-gray-500">Loading invoice...</div>
+      <div className="space-y-6">
+        <div className="flex items-center gap-4">
+          <Skeleton className="h-9 w-20" />
+          <div className="space-y-2">
+            <Skeleton className="h-8 w-64" />
+            <Skeleton className="h-4 w-40" />
+          </div>
+        </div>
+        <Skeleton className="h-64 w-full rounded-xl" />
       </div>
     );
   }
@@ -100,7 +108,7 @@ export default function ClientInvoiceDetailPage() {
   if (!invoice) {
     return (
       <div className="flex items-center justify-center h-64">
-        <div className="text-gray-500">Invoice not found</div>
+        <div className="text-muted-foreground">Invoice not found</div>
       </div>
     );
   }
@@ -123,7 +131,7 @@ export default function ClientInvoiceDetailPage() {
                 {invoice.status}
               </Badge>
             </div>
-            <p className="text-gray-500">
+            <p className="text-muted-foreground">
               Issued {formatDate(invoice.created_at)}
             </p>
           </div>
@@ -194,20 +202,20 @@ export default function ClientInvoiceDetailPage() {
                   {invoice.payments.map((payment) => (
                     <div
                       key={payment.id}
-                      className="flex items-center justify-between p-3 bg-green-50 rounded-lg"
+                      className="flex items-center justify-between p-3 bg-success/5 rounded-lg"
                     >
                       <div className="flex items-center gap-3">
-                        <CheckCircle className="h-5 w-5 text-green-600" />
+                        <CheckCircle className="h-5 w-5 text-success" />
                         <div>
                           <p className="font-medium">Payment Received</p>
-                          <p className="text-sm text-gray-500">
+                          <p className="text-sm text-muted-foreground">
                             {formatDate(payment.payment_date)}
                             {payment.payment_method &&
                               ` via ${payment.payment_method}`}
                           </p>
                         </div>
                       </div>
-                      <p className="font-semibold text-green-700">
+                      <p className="font-semibold text-success">
                         {formatCurrency(payment.amount)}
                       </p>
                     </div>
@@ -226,12 +234,12 @@ export default function ClientInvoiceDetailPage() {
             </CardHeader>
             <CardContent className="space-y-4">
               <div className="flex justify-between">
-                <span className="text-gray-500">Total</span>
+                <span className="text-muted-foreground">Total</span>
                 <span className="font-medium">{formatCurrency(invoice.total)}</span>
               </div>
               <div className="flex justify-between">
-                <span className="text-gray-500">Paid</span>
-                <span className="font-medium text-green-600">
+                <span className="text-muted-foreground">Paid</span>
+                <span className="font-medium text-success">
                   {formatCurrency(invoice.total - invoice.balance_due)}
                 </span>
               </div>
@@ -245,9 +253,9 @@ export default function ClientInvoiceDetailPage() {
               </div>
 
               <div className="pt-4">
-                <p className="text-sm text-gray-500">
+                <p className="text-sm text-muted-foreground">
                   Due Date:{" "}
-                  <span className="font-medium text-gray-900">
+                  <span className="font-medium text-foreground">
                     {formatDate(invoice.due_date)}
                   </span>
                 </p>

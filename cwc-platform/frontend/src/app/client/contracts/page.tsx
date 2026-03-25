@@ -6,6 +6,7 @@ import { clientPortalApi } from "@/lib/api";
 import { Card, CardContent } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
+import { Skeleton } from "@/components/ui/skeleton";
 import Link from "next/link";
 import { FileSignature, ExternalLink, CheckCircle, Clock, User } from "lucide-react";
 
@@ -20,13 +21,13 @@ interface Contract {
 }
 
 const STATUS_COLORS: Record<string, string> = {
-  draft: "bg-gray-100 text-gray-800",
-  sent: "bg-blue-100 text-blue-800",
-  viewed: "bg-purple-100 text-purple-800",
-  signed: "bg-green-100 text-green-800",
-  expired: "bg-orange-100 text-orange-800",
-  declined: "bg-red-100 text-red-800",
-  void: "bg-gray-100 text-gray-500",
+  draft: "bg-muted text-foreground",
+  sent: "bg-primary/10 text-primary",
+  viewed: "bg-accent/10 text-accent",
+  signed: "bg-success/10 text-success",
+  expired: "bg-orange-100 text-warning",
+  declined: "bg-destructive/10 text-destructive",
+  void: "bg-muted text-muted-foreground",
 };
 
 export default function ClientContractsPage() {
@@ -61,8 +62,16 @@ export default function ClientContractsPage() {
 
   if (loading) {
     return (
-      <div className="flex items-center justify-center h-64">
-        <div className="text-gray-500">Loading contracts...</div>
+      <div className="space-y-6">
+        <div className="space-y-2">
+          <Skeleton className="h-8 w-48" />
+          <Skeleton className="h-4 w-72" />
+        </div>
+        <div className="space-y-3">
+          {[1, 2, 3].map((i) => (
+            <Skeleton key={i} className="h-20 w-full rounded-xl" />
+          ))}
+        </div>
       </div>
     );
   }
@@ -70,39 +79,39 @@ export default function ClientContractsPage() {
   return (
     <div className="space-y-6">
       <div>
-        <h1 className="text-2xl font-bold text-gray-900">Contracts</h1>
-        <p className="text-gray-500">View and sign your contracts</p>
+        <h1 className="text-2xl font-bold text-foreground">Contracts</h1>
+        <p className="text-muted-foreground">View and sign your contracts</p>
       </div>
 
       {contracts.length === 0 ? (
         <Card>
           <CardContent className="py-12 text-center">
-            <FileSignature className="h-12 w-12 text-gray-300 mx-auto mb-4" />
-            <h3 className="text-lg font-medium text-gray-900">No contracts</h3>
-            <p className="text-gray-500">You don&apos;t have any contracts yet</p>
+            <FileSignature className="h-12 w-12 text-muted-foreground/40 mx-auto mb-4" />
+            <h3 className="text-lg font-medium text-foreground">No contracts</h3>
+            <p className="text-muted-foreground">You don&apos;t have any contracts yet</p>
           </CardContent>
         </Card>
       ) : (
         <div className="space-y-3">
           {contracts.map((contract) => (
-            <Card key={contract.id} className="hover:shadow-md transition-shadow">
+            <Card key={contract.id} className="hover:shadow-md transition-shadow cursor-pointer">
               <CardContent className="py-4">
                 <div className="flex items-center justify-between">
                   <div className="flex items-center gap-4">
                     <div className={`p-2 rounded-lg ${
                       contract.status === "signed"
-                        ? "bg-green-100"
-                        : "bg-purple-100"
+                        ? "bg-success/10"
+                        : "bg-accent/10"
                     }`}>
                       {contract.status === "signed" ? (
-                        <CheckCircle className="h-5 w-5 text-green-600" />
+                        <CheckCircle className="h-5 w-5 text-success" />
                       ) : (
-                        <Clock className="h-5 w-5 text-purple-600" />
+                        <Clock className="h-5 w-5 text-accent" />
                       )}
                     </div>
                     <div>
                       <p className="font-medium">{contract.title}</p>
-                      <p className="text-sm text-gray-500">
+                      <p className="text-sm text-muted-foreground">
                         {contract.contract_number} &middot; Created{" "}
                         {formatDate(contract.created_at)}
                         {contract.contact_name && (
@@ -120,7 +129,7 @@ export default function ClientContractsPage() {
 
                   <div className="flex items-center gap-4">
                     {contract.signed_at && (
-                      <p className="text-sm text-gray-500">
+                      <p className="text-sm text-muted-foreground">
                         Signed {formatDate(contract.signed_at)}
                       </p>
                     )}

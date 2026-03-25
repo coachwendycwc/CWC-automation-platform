@@ -129,10 +129,10 @@ export default function ReportsPage() {
                 <Card>
                   <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
                     <CardTitle className="text-sm font-medium">Revenue</CardTitle>
-                    <TrendingUp className="h-4 w-4 text-green-500" />
+                    <TrendingUp className="h-4 w-4 text-success" />
                   </CardHeader>
                   <CardContent>
-                    <div className="text-2xl font-bold text-green-600">
+                    <div className="text-2xl font-bold text-success">
                       {formatCurrency(profitLoss.total_revenue)}
                     </div>
                     <p className="text-xs text-muted-foreground">{profitLoss.invoices_paid} invoices paid</p>
@@ -142,10 +142,10 @@ export default function ReportsPage() {
                 <Card>
                   <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
                     <CardTitle className="text-sm font-medium">Expenses</CardTitle>
-                    <Receipt className="h-4 w-4 text-red-500" />
+                    <Receipt className="h-4 w-4 text-destructive" />
                   </CardHeader>
                   <CardContent>
-                    <div className="text-2xl font-bold text-red-600">
+                    <div className="text-2xl font-bold text-destructive">
                       {formatCurrency(profitLoss.total_expenses)}
                     </div>
                   </CardContent>
@@ -154,7 +154,7 @@ export default function ReportsPage() {
                 <Card>
                   <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
                     <CardTitle className="text-sm font-medium">Mileage</CardTitle>
-                    <Car className="h-4 w-4 text-blue-500" />
+                    <Car className="h-4 w-4 text-primary" />
                   </CardHeader>
                   <CardContent>
                     <div className="text-2xl font-bold">
@@ -167,13 +167,13 @@ export default function ReportsPage() {
                   <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
                     <CardTitle className="text-sm font-medium">Net Profit</CardTitle>
                     {profitLoss.net_profit >= 0 ? (
-                      <TrendingUp className="h-4 w-4 text-green-500" />
+                      <TrendingUp className="h-4 w-4 text-success" />
                     ) : (
-                      <TrendingDown className="h-4 w-4 text-red-500" />
+                      <TrendingDown className="h-4 w-4 text-destructive" />
                     )}
                   </CardHeader>
                   <CardContent>
-                    <div className={`text-2xl font-bold ${profitLoss.net_profit >= 0 ? "text-green-600" : "text-red-600"}`}>
+                    <div className={`text-2xl font-bold ${profitLoss.net_profit >= 0 ? "text-success" : "text-destructive"}`}>
                       {formatCurrency(profitLoss.net_profit)}
                     </div>
                     <p className="text-xs text-muted-foreground">
@@ -202,7 +202,7 @@ export default function ReportsPage() {
                       </div>
                       <div className="flex justify-between py-1 font-semibold border-t mt-2 pt-2">
                         <span>Total Revenue</span>
-                        <span className="text-green-600">{formatCurrency(profitLoss.total_revenue)}</span>
+                        <span className="text-success">{formatCurrency(profitLoss.total_revenue)}</span>
                       </div>
                     </div>
 
@@ -240,7 +240,7 @@ export default function ReportsPage() {
                     <div className="pt-2">
                       <div className="flex justify-between py-2 text-xl font-bold">
                         <span>Net Profit / (Loss)</span>
-                        <span className={profitLoss.net_profit >= 0 ? "text-green-600" : "text-red-600"}>
+                        <span className={profitLoss.net_profit >= 0 ? "text-success" : "text-destructive"}>
                           {formatCurrency(profitLoss.net_profit)}
                         </span>
                       </div>
@@ -343,7 +343,7 @@ export default function ReportsPage() {
                           <TableCell className="text-right">{formatCurrency(q.income)}</TableCell>
                           <TableCell className="text-right">{formatCurrency(q.expenses)}</TableCell>
                           <TableCell className="text-right">{formatCurrency(q.mileage)}</TableCell>
-                          <TableCell className={`text-right font-medium ${q.net >= 0 ? "text-green-600" : "text-red-600"}`}>
+                          <TableCell className={`text-right font-medium ${q.net >= 0 ? "text-success" : "text-destructive"}`}>
                             {formatCurrency(q.net)}
                           </TableCell>
                         </TableRow>
@@ -382,7 +382,7 @@ export default function ReportsPage() {
                             <TableCell className="text-right">{formatCurrency(c.total_paid)}</TableCell>
                             <TableCell className="text-right">{c.payment_count}</TableCell>
                             <TableCell>
-                              <Badge variant="default" className="bg-yellow-100 text-yellow-800">
+                              <Badge variant="default" className="bg-warning/10 text-warning">
                                 1099 Required
                               </Badge>
                             </TableCell>

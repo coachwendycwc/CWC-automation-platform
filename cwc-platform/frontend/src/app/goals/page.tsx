@@ -44,6 +44,7 @@ import {
   Trophy,
   XCircle,
 } from "lucide-react";
+import { Skeleton } from "@/components/ui/skeleton";
 import { toast } from "sonner";
 import { format } from "date-fns";
 
@@ -69,18 +70,18 @@ const categoryOptions = [
 ];
 
 const categoryColors: Record<string, string> = {
-  career: "bg-blue-100 text-blue-700",
-  health: "bg-green-100 text-green-700",
+  career: "bg-primary/10 text-primary",
+  health: "bg-success/10 text-success",
   relationships: "bg-pink-100 text-pink-700",
-  finance: "bg-yellow-100 text-yellow-700",
-  personal: "bg-purple-100 text-purple-700",
+  finance: "bg-warning/10 text-warning",
+  personal: "bg-accent/10 text-accent",
   education: "bg-indigo-100 text-indigo-700",
 };
 
 const statusColors: Record<string, string> = {
-  active: "bg-blue-100 text-blue-700",
-  completed: "bg-green-100 text-green-700",
-  abandoned: "bg-gray-100 text-gray-500",
+  active: "bg-primary/10 text-primary",
+  completed: "bg-success/10 text-success",
+  abandoned: "bg-muted text-muted-foreground",
 };
 
 export default function GoalsPage() {
@@ -323,7 +324,7 @@ export default function GoalsPage() {
       <div className="flex items-center justify-between">
         <div>
           <h1 className="text-2xl font-bold flex items-center gap-2">Goals</h1>
-          <p className="text-gray-500">Client goals with milestone tracking</p>
+          <p className="text-muted-foreground">Client goals with milestone tracking</p>
         </div>
         <Button onClick={openNewDialog}>
           <Plus className="h-4 w-4 mr-2" />
@@ -379,12 +380,23 @@ export default function GoalsPage() {
       <Card>
         <CardContent className="p-0">
           {loading ? (
-            <div className="p-8 text-center text-gray-500">Loading...</div>
+            <div className="p-4 space-y-4">
+              {[...Array(4)].map((_, i) => (
+                <div key={i} className="flex items-start gap-4 p-4">
+                  <Skeleton className="h-5 w-5 rounded-full" />
+                  <div className="flex-1 space-y-2">
+                    <Skeleton className="h-4 w-48" />
+                    <Skeleton className="h-3 w-full" />
+                    <Skeleton className="h-2 w-64 mt-3" />
+                  </div>
+                </div>
+              ))}
+            </div>
           ) : goals.length === 0 ? (
             <div className="p-8 text-center">
-              <Target className="h-12 w-12 text-gray-300 mx-auto mb-4" />
-              <h3 className="text-lg font-medium text-gray-900">No goals</h3>
-              <p className="text-gray-500 mt-1">
+              <Target className="h-12 w-12 text-muted-foreground/50 mx-auto mb-4" />
+              <h3 className="text-lg font-medium text-foreground">No goals</h3>
+              <p className="text-muted-foreground mt-1">
                 Create goals to help clients track their progress
               </p>
             </div>
@@ -401,11 +413,11 @@ export default function GoalsPage() {
                         onClick={() => toggleExpand(goal.id)}
                       >
                         {goal.status === "completed" ? (
-                          <Trophy className="h-5 w-5 text-green-500" />
+                          <Trophy className="h-5 w-5 text-success" />
                         ) : goal.status === "abandoned" ? (
-                          <XCircle className="h-5 w-5 text-gray-400" />
+                          <XCircle className="h-5 w-5 text-muted-foreground" />
                         ) : (
-                          <Target className="h-5 w-5 text-blue-500" />
+                          <Target className="h-5 w-5 text-primary" />
                         )}
                       </div>
                       <div
@@ -413,7 +425,7 @@ export default function GoalsPage() {
                         onClick={() => toggleExpand(goal.id)}
                       >
                         <div className="flex items-center gap-2 flex-wrap">
-                          <span className="font-medium text-gray-900">
+                          <span className="font-medium text-foreground">
                             {goal.title}
                           </span>
                           <Badge className={statusColors[goal.status]}>
@@ -423,7 +435,7 @@ export default function GoalsPage() {
                             <Badge
                               className={
                                 categoryColors[goal.category] ||
-                                "bg-gray-100 text-gray-700"
+                                "bg-muted text-foreground"
                               }
                             >
                               {goal.category}
@@ -431,11 +443,11 @@ export default function GoalsPage() {
                           )}
                         </div>
                         {goal.description && (
-                          <p className="text-sm text-gray-600 mt-1 line-clamp-1">
+                          <p className="text-sm text-muted-foreground mt-1 line-clamp-1">
                             {goal.description}
                           </p>
                         )}
-                        <div className="flex items-center gap-3 mt-2 text-xs text-gray-400 flex-wrap">
+                        <div className="flex items-center gap-3 mt-2 text-xs text-muted-foreground flex-wrap">
                           <span className="flex items-center gap-1">
                             <User className="h-3 w-3" />
                             {goal.contact_name}
@@ -451,7 +463,7 @@ export default function GoalsPage() {
                         {/* Progress */}
                         <div className="mt-3 max-w-md">
                           <div className="flex items-center justify-between text-xs mb-1">
-                            <span className="text-gray-500">
+                            <span className="text-muted-foreground">
                               {goal.milestones.filter((m) => m.is_completed).length}/
                               {goal.milestones.length} milestones
                             </span>
@@ -506,7 +518,7 @@ export default function GoalsPage() {
                               Add Milestone
                             </DropdownMenuItem>
                             <DropdownMenuItem
-                              className="text-red-600"
+                              className="text-destructive"
                               onClick={() => setDeletingId(goal.id)}
                             >
                               <Trash2 className="h-4 w-4 mr-2" />
@@ -519,9 +531,9 @@ export default function GoalsPage() {
 
                     {/* Expanded Milestones */}
                     {isExpanded && (
-                      <div className="mt-4 ml-9 pl-4 border-l-2 border-gray-100">
+                      <div className="mt-4 ml-9 pl-4 border-l-2 border-border">
                         {goal.milestones.length === 0 ? (
-                          <p className="text-sm text-gray-400 italic">
+                          <p className="text-sm text-muted-foreground italic">
                             No milestones. Add milestones to track progress.
                           </p>
                         ) : (
@@ -538,22 +550,22 @@ export default function GoalsPage() {
                                     className="flex-shrink-0"
                                   >
                                     {m.is_completed ? (
-                                      <CheckCircle2 className="h-4 w-4 text-green-500" />
+                                      <CheckCircle2 className="h-4 w-4 text-success" />
                                     ) : (
-                                      <Circle className="h-4 w-4 text-gray-300" />
+                                      <Circle className="h-4 w-4 text-muted-foreground/50" />
                                     )}
                                   </button>
                                   <span
                                     className={`text-sm flex-1 ${
                                       m.is_completed
-                                        ? "text-gray-400 line-through"
-                                        : "text-gray-700"
+                                        ? "text-muted-foreground line-through"
+                                        : "text-foreground"
                                     }`}
                                   >
                                     {m.title}
                                   </span>
                                   {m.target_date && (
-                                    <span className="text-xs text-gray-400">
+                                    <span className="text-xs text-muted-foreground">
                                       {format(new Date(m.target_date), "MMM d")}
                                     </span>
                                   )}
@@ -565,7 +577,7 @@ export default function GoalsPage() {
                                       handleDeleteMilestone(goal.id, m.id)
                                     }
                                   >
-                                    <Trash2 className="h-3 w-3 text-gray-400" />
+                                    <Trash2 className="h-3 w-3 text-muted-foreground" />
                                   </Button>
                                 </div>
                               ))}
@@ -574,7 +586,7 @@ export default function GoalsPage() {
                         <Button
                           variant="ghost"
                           size="sm"
-                          className="mt-2 text-gray-500"
+                          className="mt-2 text-muted-foreground"
                           onClick={() => setAddMilestoneGoalId(goal.id)}
                         >
                           <Plus className="h-3 w-3 mr-1" />
@@ -593,7 +605,7 @@ export default function GoalsPage() {
       {/* Pagination */}
       {totalPages > 1 && (
         <div className="flex items-center justify-between">
-          <p className="text-sm text-gray-500">
+          <p className="text-sm text-muted-foreground">
             Showing {(page - 1) * 20 + 1} to {Math.min(page * 20, total)} of{" "}
             {total}
           </p>
@@ -718,7 +730,7 @@ export default function GoalsPage() {
                   </Button>
                 </div>
                 {milestones.length === 0 ? (
-                  <p className="text-sm text-gray-400 italic">
+                  <p className="text-sm text-muted-foreground italic">
                     No milestones. Add milestones to track progress.
                   </p>
                 ) : (
@@ -747,7 +759,7 @@ export default function GoalsPage() {
                           size="icon"
                           onClick={() => removeMilestone(i)}
                         >
-                          <Trash2 className="h-4 w-4 text-gray-400" />
+                          <Trash2 className="h-4 w-4 text-muted-foreground" />
                         </Button>
                       </div>
                     ))}
@@ -845,7 +857,7 @@ export default function GoalsPage() {
             <DialogTitle>Delete Goal</DialogTitle>
           </DialogHeader>
           <div className="py-4">
-            <p className="text-gray-600">
+            <p className="text-muted-foreground">
               Are you sure you want to delete this goal and all its milestones?
               This cannot be undone.
             </p>

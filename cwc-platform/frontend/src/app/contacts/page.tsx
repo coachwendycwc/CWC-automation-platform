@@ -80,7 +80,7 @@ export default function ContactsPage() {
         <div className="flex items-center justify-between">
           <div>
             <h1 className="text-2xl font-bold">Contacts</h1>
-            <p className="text-gray-500">{total} total contacts</p>
+            <p className="text-muted-foreground">{total} total contacts</p>
           </div>
           <Button onClick={() => router.push("/contacts/new")}>
             <Plus className="mr-2 h-4 w-4" />
@@ -91,7 +91,7 @@ export default function ContactsPage() {
         {/* Search */}
         <form onSubmit={handleSearch} className="flex gap-2">
           <div className="relative flex-1 max-w-md">
-            <Search className="absolute left-3 top-1/2 h-4 w-4 -translate-y-1/2 text-gray-400" />
+            <Search className="absolute left-3 top-1/2 h-4 w-4 -translate-y-1/2 text-muted-foreground" />
             <Input
               type="search"
               placeholder="Search by name or email..."
@@ -111,7 +111,7 @@ export default function ContactsPage() {
         ) : contacts.length === 0 ? (
           <Card>
             <CardContent className="py-8 text-center">
-              <p className="text-gray-500">No contacts found.</p>
+              <p className="text-muted-foreground">No contacts found.</p>
               <Button
                 className="mt-4"
                 onClick={() => router.push("/contacts/new")}
@@ -142,19 +142,19 @@ export default function ContactsPage() {
                           {getContactTypeBadge(contact.contact_type)}
                         </div>
                         {contact.title && (
-                          <p className="text-sm text-gray-500 truncate">
+                          <p className="text-sm text-muted-foreground truncate">
                             {contact.title}
                           </p>
                         )}
                         <div className="mt-2 space-y-1">
                           {contact.email && (
-                            <div className="flex items-center gap-1 text-xs text-gray-500">
+                            <div className="flex items-center gap-1 text-sm text-muted-foreground">
                               <Mail className="h-3 w-3" />
                               <span className="truncate">{contact.email}</span>
                             </div>
                           )}
                           {contact.phone && (
-                            <div className="flex items-center gap-1 text-xs text-gray-500">
+                            <div className="flex items-center gap-1 text-sm text-muted-foreground">
                               <Phone className="h-3 w-3" />
                               <span>{contact.phone}</span>
                             </div>

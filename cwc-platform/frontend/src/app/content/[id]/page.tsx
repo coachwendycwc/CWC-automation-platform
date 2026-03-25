@@ -34,6 +34,7 @@ import {
   AlertDialogTitle,
   AlertDialogTrigger,
 } from "@/components/ui/alert-dialog";
+import { Skeleton } from "@/components/ui/skeleton";
 import Link from "next/link";
 import { ArrowLeft, Save, Trash2, ExternalLink } from "lucide-react";
 import { toast } from "sonner";
@@ -208,8 +209,10 @@ export default function EditContentPage() {
 
   if (loading) {
     return (
-      <div className="flex items-center justify-center h-64">
-        <div className="text-gray-500">Loading content...</div>
+      <div className="space-y-6">
+        <Skeleton className="h-8 w-48" />
+        <Skeleton className="h-[300px] w-full" />
+        <Skeleton className="h-[200px] w-full" />
       </div>
     );
   }
@@ -225,14 +228,14 @@ export default function EditContentPage() {
           </Link>
           <div>
             <h1 className="text-2xl font-bold">Edit Content</h1>
-            <p className="text-gray-500">
+            <p className="text-muted-foreground">
               Update content details and settings
             </p>
           </div>
         </div>
         <AlertDialog>
           <AlertDialogTrigger asChild>
-            <Button variant="outline" className="text-red-600 hover:text-red-700">
+            <Button variant="outline" className="text-destructive hover:text-destructive/80">
               <Trash2 className="h-4 w-4 mr-2" />
               Delete
             </Button>
@@ -249,7 +252,7 @@ export default function EditContentPage() {
               <AlertDialogCancel>Cancel</AlertDialogCancel>
               <AlertDialogAction
                 onClick={handleDelete}
-                className="bg-red-600 hover:bg-red-700"
+                className="bg-destructive hover:bg-destructive/90"
               >
                 Delete
               </AlertDialogAction>
@@ -353,7 +356,7 @@ export default function EditContentPage() {
                           </Button>
                         )}
                       </div>
-                      <p className="text-xs text-gray-500">
+                      <p className="text-sm text-muted-foreground">
                         Enter the URL where the file is hosted (e.g., Google Drive, Dropbox, S3)
                       </p>
                     </div>
@@ -412,7 +415,7 @@ export default function EditContentPage() {
                     value={formData.release_date || ""}
                     onChange={(e) => updateFormData("release_date", e.target.value)}
                   />
-                  <p className="text-xs text-gray-500">
+                  <p className="text-sm text-muted-foreground">
                     Leave empty for immediate availability
                   </p>
                 </div>

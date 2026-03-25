@@ -22,6 +22,7 @@ import {
   UserMinus,
 } from "lucide-react";
 import Link from "next/link";
+import { Skeleton } from "@/components/ui/skeleton";
 
 interface Contract {
   id: string;
@@ -63,13 +64,13 @@ interface AuditLog {
 }
 
 const STATUS_COLORS: Record<string, string> = {
-  draft: "bg-gray-100 text-gray-800",
-  sent: "bg-blue-100 text-blue-800",
-  viewed: "bg-purple-100 text-purple-800",
-  signed: "bg-green-100 text-green-800",
-  expired: "bg-orange-100 text-orange-800",
-  declined: "bg-red-100 text-red-800",
-  void: "bg-gray-100 text-gray-500",
+  draft: "bg-muted text-foreground",
+  sent: "bg-primary/10 text-primary",
+  viewed: "bg-accent/10 text-accent",
+  signed: "bg-success/10 text-success",
+  expired: "bg-warning/10 text-warning",
+  declined: "bg-destructive/10 text-destructive",
+  void: "bg-muted text-muted-foreground",
 };
 
 const ACTION_LABELS: Record<string, string> = {
@@ -227,8 +228,17 @@ export default function ContractDetailPage() {
   if (loading) {
     return (
       <Shell>
-        <div className="flex items-center justify-center h-64">
-          <div className="text-gray-500">Loading...</div>
+        <div className="space-y-6 py-8">
+          <Skeleton className="h-10 w-64" />
+          <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
+            <div className="lg:col-span-2 space-y-6">
+              <Skeleton className="h-96 w-full rounded-lg" />
+            </div>
+            <div className="space-y-6">
+              <Skeleton className="h-48 w-full rounded-lg" />
+              <Skeleton className="h-40 w-full rounded-lg" />
+            </div>
+          </div>
         </div>
       </Shell>
     );
@@ -238,7 +248,7 @@ export default function ContractDetailPage() {
     return (
       <Shell>
         <div className="flex items-center justify-center h-64">
-          <div className="text-gray-500">Contract not found</div>
+          <div className="text-muted-foreground">Contract not found</div>
         </div>
       </Shell>
     );
@@ -263,7 +273,7 @@ export default function ContractDetailPage() {
                   {contract.status}
                 </Badge>
               </div>
-              <p className="text-gray-500">{contract.contract_number}</p>
+              <p className="text-muted-foreground">{contract.contract_number}</p>
             </div>
           </div>
 
@@ -330,7 +340,7 @@ export default function ContractDetailPage() {
             {contract.status === "signed" && (
               <Card>
                 <CardHeader>
-                  <CardTitle className="flex items-center gap-2 text-green-700">
+                  <CardTitle className="flex items-center gap-2 text-success">
                     <CheckCircle className="h-5 w-5" />
                     Signature Details
                   </CardTitle>
@@ -338,19 +348,19 @@ export default function ContractDetailPage() {
                 <CardContent className="space-y-4">
                   <div className="grid grid-cols-2 gap-4">
                     <div>
-                      <p className="text-sm text-gray-500">Signed by</p>
+                      <p className="text-sm text-muted-foreground">Signed by</p>
                       <p className="font-medium">{contract.signer_name}</p>
                     </div>
                     <div>
-                      <p className="text-sm text-gray-500">Email</p>
+                      <p className="text-sm text-muted-foreground">Email</p>
                       <p className="font-medium">{contract.signer_email}</p>
                     </div>
                     <div>
-                      <p className="text-sm text-gray-500">Signature Type</p>
+                      <p className="text-sm text-muted-foreground">Signature Type</p>
                       <p className="font-medium capitalize">{contract.signature_type}</p>
                     </div>
                     <div>
-                      <p className="text-sm text-gray-500">Signed At</p>
+                      <p className="text-sm text-muted-foreground">Signed At</p>
                       <p className="font-medium">
                         {contract.signed_at && formatDate(contract.signed_at)}
                       </p>
@@ -362,18 +372,18 @@ export default function ContractDetailPage() {
 
             {/* Decline Info */}
             {contract.status === "declined" && (
-              <Card className="border-red-200">
+              <Card className="border-destructive/20">
                 <CardHeader>
-                  <CardTitle className="flex items-center gap-2 text-red-700">
+                  <CardTitle className="flex items-center gap-2 text-destructive">
                     <XCircle className="h-5 w-5" />
                     Contract Declined
                   </CardTitle>
                 </CardHeader>
                 <CardContent>
-                  <p className="text-gray-600">
+                  <p className="text-muted-foreground">
                     {contract.decline_reason || "No reason provided"}
                   </p>
-                  <p className="text-sm text-gray-500 mt-2">
+                  <p className="text-sm text-muted-foreground mt-2">
                     Declined on{" "}
                     {contract.declined_at && formatDate(contract.declined_at)}
                   </p>
@@ -391,43 +401,43 @@ export default function ContractDetailPage() {
               </CardHeader>
               <CardContent className="space-y-4">
                 <div>
-                  <p className="text-sm text-gray-500">Client</p>
+                  <p className="text-sm text-muted-foreground">Client</p>
                   <p className="font-medium">{contract.contact_name || "Unknown"}</p>
                   {contract.contact_email && (
-                    <p className="text-sm text-gray-500">{contract.contact_email}</p>
+                    <p className="text-sm text-muted-foreground">{contract.contact_email}</p>
                   )}
                 </div>
                 {contract.organization_name && (
                   <div>
-                    <p className="text-sm text-gray-500">Organization</p>
+                    <p className="text-sm text-muted-foreground">Organization</p>
                     <p className="font-medium">{contract.organization_name}</p>
                   </div>
                 )}
                 {contract.template_name && (
                   <div>
-                    <p className="text-sm text-gray-500">Template</p>
+                    <p className="text-sm text-muted-foreground">Template</p>
                     <p className="font-medium">{contract.template_name}</p>
                   </div>
                 )}
                 <div>
-                  <p className="text-sm text-gray-500">Created</p>
+                  <p className="text-sm text-muted-foreground">Created</p>
                   <p className="font-medium">{formatDate(contract.created_at)}</p>
                 </div>
                 {contract.sent_at && (
                   <div>
-                    <p className="text-sm text-gray-500">Sent</p>
+                    <p className="text-sm text-muted-foreground">Sent</p>
                     <p className="font-medium">{formatDate(contract.sent_at)}</p>
                   </div>
                 )}
                 {contract.expires_at && ["sent", "viewed"].includes(contract.status) && (
                   <div>
-                    <p className="text-sm text-gray-500">Expires</p>
+                    <p className="text-sm text-muted-foreground">Expires</p>
                     <p className="font-medium">{formatDate(contract.expires_at)}</p>
                   </div>
                 )}
                 {contract.notes && (
                   <div>
-                    <p className="text-sm text-gray-500">Notes</p>
+                    <p className="text-sm text-muted-foreground">Notes</p>
                     <p className="text-sm">{contract.notes}</p>
                   </div>
                 )}
@@ -441,7 +451,7 @@ export default function ContractDetailPage() {
                   <CardTitle>Signing Link</CardTitle>
                 </CardHeader>
                 <CardContent className="space-y-2">
-                  <p className="text-sm text-gray-500">
+                  <p className="text-sm text-muted-foreground">
                     Share this link with your client to sign the contract
                   </p>
                   <div className="flex gap-2">
@@ -472,26 +482,26 @@ export default function ContractDetailPage() {
               <CardContent>
                 <div className="space-y-3">
                   {contract.audit_logs.length === 0 ? (
-                    <p className="text-sm text-gray-500">No activity yet</p>
+                    <p className="text-sm text-muted-foreground">No activity yet</p>
                   ) : (
                     contract.audit_logs.map((log) => (
                       <div key={log.id} className="flex items-start gap-3 text-sm">
                         <div className="mt-1">
                           {log.action === "signed" ? (
-                            <CheckCircle className="h-4 w-4 text-green-500" />
+                            <CheckCircle className="h-4 w-4 text-success" />
                           ) : log.action === "viewed" ? (
-                            <Eye className="h-4 w-4 text-purple-500" />
+                            <Eye className="h-4 w-4 text-accent" />
                           ) : log.action === "sent" || log.action === "resent" ? (
-                            <Send className="h-4 w-4 text-blue-500" />
+                            <Send className="h-4 w-4 text-primary" />
                           ) : (
-                            <Clock className="h-4 w-4 text-gray-400" />
+                            <Clock className="h-4 w-4 text-muted-foreground" />
                           )}
                         </div>
                         <div className="flex-1">
                           <p className="font-medium">
                             {ACTION_LABELS[log.action] || log.action}
                           </p>
-                          <p className="text-gray-500">
+                          <p className="text-muted-foreground">
                             {formatDate(log.created_at)}
                           </p>
                         </div>

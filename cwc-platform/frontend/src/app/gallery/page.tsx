@@ -4,6 +4,7 @@ import { useEffect, useState } from "react";
 import { publicTestimonialsApi } from "@/lib/api";
 import { Card, CardContent } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
+import { Skeleton } from "@/components/ui/skeleton";
 import {
   Dialog,
   DialogContent,
@@ -77,7 +78,7 @@ export default function GalleryPage() {
             />
           ) : (
             <div className="w-full h-full flex items-center justify-center">
-              <Video className="h-12 w-12 text-gray-600" />
+              <Video className="h-12 w-12 text-gray-400" />
             </div>
           )}
 
@@ -85,21 +86,21 @@ export default function GalleryPage() {
           {testimonial.video_url && (
             <div className="absolute inset-0 flex items-center justify-center bg-black/30 opacity-0 hover:opacity-100 transition-opacity">
               <div className="w-16 h-16 rounded-full bg-white/90 flex items-center justify-center">
-                <Play className="h-8 w-8 text-gray-900 ml-1" />
+                <Play className="h-8 w-8 text-foreground ml-1" />
               </div>
             </div>
           )}
 
           {/* Duration badge */}
           {testimonial.video_duration_seconds && (
-            <span className="absolute bottom-2 right-2 text-xs bg-black/70 text-white px-2 py-0.5 rounded">
+            <span className="absolute bottom-2 right-2 text-sm bg-black/70 text-white px-2 py-0.5 rounded">
               {formatDuration(testimonial.video_duration_seconds)}
             </span>
           )}
 
           {/* Featured badge */}
           {testimonial.featured && (
-            <div className="absolute top-2 left-2 bg-amber-500 text-white px-2 py-1 rounded-full text-xs font-medium flex items-center gap-1">
+            <div className="absolute top-2 left-2 bg-amber-500 text-white px-2 py-1 rounded-full text-sm font-medium flex items-center gap-1">
               <Star className="h-3 w-3 fill-current" />
               Featured
             </div>
@@ -109,8 +110,8 @@ export default function GalleryPage() {
         {/* Content */}
         <div className="p-4">
           {testimonial.quote && (
-            <p className="text-gray-600 text-sm mb-3 line-clamp-2 italic">
-              "{testimonial.quote}"
+            <p className="text-muted-foreground text-sm mb-3 line-clamp-2 italic">
+              &ldquo;{testimonial.quote}&rdquo;
             </p>
           )}
 
@@ -129,11 +130,11 @@ export default function GalleryPage() {
               </div>
             )}
             <div className="min-w-0">
-              <p className="font-medium text-gray-900 truncate">
+              <p className="font-medium text-foreground truncate">
                 {testimonial.author_name}
               </p>
               {(testimonial.author_title || testimonial.author_company) && (
-                <p className="text-sm text-gray-500 truncate">
+                <p className="text-sm text-muted-foreground truncate">
                   {testimonial.author_title}
                   {testimonial.author_title && testimonial.author_company && " at "}
                   {testimonial.author_company}
@@ -148,8 +149,32 @@ export default function GalleryPage() {
 
   if (loading) {
     return (
-      <div className="min-h-screen bg-gray-50 flex items-center justify-center">
-        <div className="text-gray-500">Loading testimonials...</div>
+      <div className="min-h-screen bg-muted">
+        <div className="bg-white border-b">
+          <div className="max-w-7xl mx-auto py-16 px-4 text-center space-y-4">
+            <Skeleton className="h-10 w-80 mx-auto" />
+            <Skeleton className="h-6 w-[32rem] mx-auto" />
+          </div>
+        </div>
+        <div className="max-w-7xl mx-auto py-12 px-4">
+          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
+            {Array.from({ length: 6 }).map((_, i) => (
+              <div key={i} className="rounded-lg border bg-card overflow-hidden">
+                <Skeleton className="aspect-[4/3]" />
+                <div className="p-4 space-y-3">
+                  <Skeleton className="h-4 w-full" />
+                  <div className="flex items-center gap-3">
+                    <Skeleton className="h-10 w-10 rounded-full" />
+                    <div className="space-y-1">
+                      <Skeleton className="h-4 w-24" />
+                      <Skeleton className="h-3 w-32" />
+                    </div>
+                  </div>
+                </div>
+              </div>
+            ))}
+          </div>
+        </div>
       </div>
     );
   }
@@ -158,25 +183,25 @@ export default function GalleryPage() {
 
   if (allTestimonials.length === 0) {
     return (
-      <div className="min-h-screen bg-gray-50 flex items-center justify-center">
+      <div className="min-h-screen bg-muted flex items-center justify-center">
         <div className="text-center">
-          <Video className="h-16 w-16 text-gray-300 mx-auto mb-4" />
-          <h2 className="text-xl font-semibold text-gray-900">No testimonials yet</h2>
-          <p className="text-gray-500 mt-2">Check back soon!</p>
+          <Video className="h-16 w-16 text-muted-foreground/40 mx-auto mb-4" />
+          <h2 className="text-xl font-semibold text-foreground">No testimonials yet</h2>
+          <p className="text-muted-foreground mt-2">Check back soon!</p>
         </div>
       </div>
     );
   }
 
   return (
-    <div className="min-h-screen bg-gray-50">
+    <div className="min-h-screen bg-muted">
       {/* Header */}
       <div className="bg-white border-b">
         <div className="max-w-7xl mx-auto py-16 px-4 text-center">
-          <h1 className="text-4xl font-bold text-gray-900 mb-4">
+          <h1 className="text-4xl font-bold text-foreground mb-4">
             What Our Clients Say
           </h1>
-          <p className="text-xl text-gray-500 max-w-2xl mx-auto">
+          <p className="text-xl text-muted-foreground max-w-2xl mx-auto">
             Hear from the amazing women who have transformed their careers and lives through our coaching programs.
           </p>
         </div>
@@ -185,7 +210,7 @@ export default function GalleryPage() {
       {/* Featured Testimonials */}
       {featured.length > 0 && (
         <div className="max-w-7xl mx-auto py-12 px-4">
-          <h2 className="text-2xl font-bold text-gray-900 mb-6 flex items-center gap-2">
+          <h2 className="text-2xl font-bold text-foreground mb-6 flex items-center gap-2">
             <Star className="h-6 w-6 text-amber-500" />
             Featured Stories
           </h2>
@@ -201,7 +226,7 @@ export default function GalleryPage() {
       {testimonials.length > 0 && (
         <div className="max-w-7xl mx-auto py-12 px-4">
           {featured.length > 0 && (
-            <h2 className="text-2xl font-bold text-gray-900 mb-6">
+            <h2 className="text-2xl font-bold text-foreground mb-6">
               More Stories
             </h2>
           )}
@@ -219,7 +244,7 @@ export default function GalleryPage() {
           <Button
             variant="ghost"
             size="icon"
-            className="absolute top-2 right-2 z-10 bg-black/50 hover:bg-black/70 text-white"
+            className="absolute top-2 right-2 z-10 bg-black/50 hover:bg-black/70 text-white cursor-pointer"
             onClick={() => setActiveVideo(null)}
           >
             <X className="h-5 w-5" />
@@ -239,7 +264,7 @@ export default function GalleryPage() {
                 {activeVideo.quote && (
                   <div className="flex gap-3 mb-4">
                     <Quote className="h-6 w-6 text-violet-400 flex-shrink-0" />
-                    <p className="text-gray-700 italic">{activeVideo.quote}</p>
+                    <p className="text-foreground italic">{activeVideo.quote}</p>
                   </div>
                 )}
                 <div className="flex items-center gap-4">
@@ -257,11 +282,11 @@ export default function GalleryPage() {
                     </div>
                   )}
                   <div>
-                    <p className="font-semibold text-lg text-gray-900">
+                    <p className="font-semibold text-lg text-foreground">
                       {activeVideo.author_name}
                     </p>
                     {(activeVideo.author_title || activeVideo.author_company) && (
-                      <p className="text-gray-500">
+                      <p className="text-muted-foreground">
                         {activeVideo.author_title}
                         {activeVideo.author_title && activeVideo.author_company && " at "}
                         {activeVideo.author_company}

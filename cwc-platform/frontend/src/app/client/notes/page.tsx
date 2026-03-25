@@ -6,6 +6,7 @@ import { clientPortalApi } from "@/lib/api";
 import { Card, CardContent } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { Textarea } from "@/components/ui/textarea";
+import { Skeleton } from "@/components/ui/skeleton";
 import { Send, MessageSquare } from "lucide-react";
 import { toast } from "sonner";
 import { format } from "date-fns";
@@ -100,8 +101,12 @@ export default function ClientNotesPage() {
 
   if (loading) {
     return (
-      <div className="flex items-center justify-center h-64">
-        <div className="text-gray-500">Loading messages...</div>
+      <div className="space-y-6">
+        <div className="space-y-2">
+          <Skeleton className="h-8 w-36" />
+          <Skeleton className="h-4 w-64" />
+        </div>
+        <Skeleton className="h-[calc(100vh-280px)] rounded-xl" />
       </div>
     );
   }
@@ -109,8 +114,8 @@ export default function ClientNotesPage() {
   return (
     <div className="space-y-6">
       <div>
-        <h1 className="text-2xl font-bold text-gray-900">Messages</h1>
-        <p className="text-gray-500">
+        <h1 className="text-2xl font-bold text-foreground">Messages</h1>
+        <p className="text-muted-foreground">
           Send notes and updates to your coach
         </p>
       </div>
@@ -121,9 +126,9 @@ export default function ClientNotesPage() {
           <div className="flex-1 overflow-y-auto p-6 space-y-4">
             {notes.length === 0 ? (
               <div className="flex flex-col items-center justify-center h-full text-center">
-                <MessageSquare className="h-12 w-12 text-gray-300 mb-4" />
-                <h3 className="text-lg font-medium text-gray-900">No messages yet</h3>
-                <p className="text-gray-500 mt-1">
+                <MessageSquare className="h-12 w-12 text-muted-foreground/40 mb-4" />
+                <h3 className="text-lg font-medium text-foreground">No messages yet</h3>
+                <p className="text-muted-foreground mt-1">
                   Send a message to your coach to get started
                 </p>
               </div>
@@ -140,7 +145,7 @@ export default function ClientNotesPage() {
                     <div key={note.id}>
                       {showDate && (
                         <div className="flex justify-center my-4">
-                          <span className="text-xs text-gray-400 bg-gray-100 px-3 py-1 rounded-full">
+                          <span className="text-xs text-muted-foreground bg-muted px-3 py-1 rounded-full">
                             {format(new Date(note.created_at), "EEEE, MMMM d, yyyy")}
                           </span>
                         </div>
@@ -151,14 +156,14 @@ export default function ClientNotesPage() {
                         <div
                           className={`max-w-[80%] rounded-2xl px-4 py-3 ${
                             isFromCoach
-                              ? "bg-gray-100 text-gray-900 rounded-bl-md"
+                              ? "bg-muted text-foreground rounded-bl-md"
                               : "bg-gray-900 text-white rounded-br-md"
                           }`}
                         >
                           <p className="text-sm whitespace-pre-wrap">{note.content}</p>
                           <p
                             className={`text-xs mt-1 ${
-                              isFromCoach ? "text-gray-500" : "text-gray-400"
+                              isFromCoach ? "text-muted-foreground" : "text-muted-foreground"
                             }`}
                           >
                             {format(new Date(note.created_at), "h:mm a")}
@@ -166,7 +171,7 @@ export default function ClientNotesPage() {
                         </div>
                       </div>
                       {isFromCoach && index === notes.length - 1 && (
-                        <p className="text-xs text-gray-400 mt-1 ml-1">Coach</p>
+                        <p className="text-xs text-muted-foreground mt-1 ml-1">Coach</p>
                       )}
                     </div>
                   );
@@ -177,7 +182,7 @@ export default function ClientNotesPage() {
           </div>
 
           {/* Input Area */}
-          <div className="border-t p-4 bg-gray-50">
+          <div className="border-t p-4 bg-muted">
             <div className="flex gap-3">
               <Textarea
                 value={newMessage}
@@ -196,7 +201,7 @@ export default function ClientNotesPage() {
                 <Send className="h-4 w-4" />
               </Button>
             </div>
-            <p className="text-xs text-gray-400 mt-2">
+            <p className="text-xs text-muted-foreground mt-2">
               Press Enter to send, Shift+Enter for new line
             </p>
           </div>

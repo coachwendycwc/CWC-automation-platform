@@ -13,6 +13,7 @@ import {
   SelectTrigger,
   SelectValue,
 } from "@/components/ui/select";
+import { Skeleton } from "@/components/ui/skeleton";
 import {
   Clock,
   Calendar,
@@ -50,11 +51,11 @@ const iconMap: Record<string, React.ComponentType<{ className?: string }>> = {
 };
 
 const colorMap: Record<string, string> = {
-  blue: "bg-blue-100 text-blue-600",
-  green: "bg-green-100 text-green-600",
-  purple: "bg-purple-100 text-purple-600",
-  gold: "bg-yellow-100 text-yellow-600",
-  gray: "bg-gray-100 text-gray-600",
+  blue: "bg-primary/10 text-primary",
+  green: "bg-success/10 text-success",
+  purple: "bg-accent/10 text-accent",
+  gold: "bg-warning/10 text-warning",
+  gray: "bg-muted text-muted-foreground",
 };
 
 const eventTypeLabels: Record<string, string> = {
@@ -116,8 +117,16 @@ export default function ClientTimelinePage() {
 
   if (loading) {
     return (
-      <div className="flex items-center justify-center h-64">
-        <div className="text-gray-500">Loading your journey...</div>
+      <div className="space-y-6">
+        <div className="space-y-2">
+          <Skeleton className="h-8 w-48" />
+          <Skeleton className="h-4 w-72" />
+        </div>
+        <div className="space-y-3">
+          {[1, 2, 3].map((i) => (
+            <Skeleton key={i} className="h-20 w-full rounded-xl" />
+          ))}
+        </div>
       </div>
     );
   }
@@ -125,13 +134,13 @@ export default function ClientTimelinePage() {
   return (
     <div className="space-y-6">
       <div>
-        <h1 className="text-2xl font-bold text-gray-900">My Journey</h1>
-        <p className="text-gray-500">Your coaching progress over time</p>
+        <h1 className="text-2xl font-bold text-foreground">My Journey</h1>
+        <p className="text-muted-foreground">Your coaching progress over time</p>
       </div>
 
       {/* Filter */}
       <div className="flex items-center gap-3">
-        <Filter className="h-4 w-4 text-gray-400" />
+        <Filter className="h-4 w-4 text-muted-foreground" />
         <Select value={filter} onValueChange={setFilter}>
           <SelectTrigger className="w-48">
             <SelectValue placeholder="Filter events" />
@@ -151,9 +160,9 @@ export default function ClientTimelinePage() {
       {events.length === 0 ? (
         <Card>
           <CardContent className="p-8 text-center">
-            <Clock className="h-12 w-12 text-gray-300 mx-auto mb-4" />
-            <h3 className="text-lg font-medium text-gray-900">No events yet</h3>
-            <p className="text-gray-500 mt-1">
+            <Clock className="h-12 w-12 text-muted-foreground/40 mx-auto mb-4" />
+            <h3 className="text-lg font-medium text-foreground">No events yet</h3>
+            <p className="text-muted-foreground mt-1">
               {filter === "all"
                 ? "Your coaching journey events will appear here"
                 : `No ${filter.replace("_", " ")} events found`}
@@ -165,16 +174,16 @@ export default function ClientTimelinePage() {
           {Object.entries(groupedEvents).map(([dateLabel, dayEvents]) => (
             <div key={dateLabel}>
               <div className="flex items-center gap-3 mb-4">
-                <div className="h-px flex-1 bg-gray-200" />
-                <span className="text-sm font-medium text-gray-500 bg-white px-3">
+                <div className="h-px flex-1 bg-border" />
+                <span className="text-sm font-medium text-muted-foreground bg-card px-3">
                   {dateLabel}
                 </span>
-                <div className="h-px flex-1 bg-gray-200" />
+                <div className="h-px flex-1 bg-border" />
               </div>
 
               <div className="relative">
                 {/* Timeline line */}
-                <div className="absolute left-5 top-0 bottom-0 w-px bg-gray-200" />
+                <div className="absolute left-5 top-0 bottom-0 w-px bg-border" />
 
                 <div className="space-y-4">
                   {dayEvents.map((event, index) => {
@@ -195,17 +204,17 @@ export default function ClientTimelinePage() {
                           <CardContent className="p-4">
                             <div className="flex items-start justify-between gap-2">
                               <div>
-                                <p className="font-medium text-gray-900">
+                                <p className="font-medium text-foreground">
                                   {event.title}
                                 </p>
                                 {event.description && (
-                                  <p className="text-sm text-gray-600 mt-1">
+                                  <p className="text-sm text-muted-foreground mt-1">
                                     {event.description}
                                   </p>
                                 )}
                               </div>
                               <div className="flex-shrink-0 text-right">
-                                <p className="text-xs text-gray-400">
+                                <p className="text-xs text-muted-foreground">
                                   {format(parseISO(event.date), "h:mm a")}
                                 </p>
                                 <Badge

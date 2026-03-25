@@ -6,6 +6,7 @@ import { clientPortalApi, OnboardingAssessmentResponse } from "@/lib/api";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
+import { Skeleton } from "@/components/ui/skeleton";
 import Link from "next/link";
 import {
   FileText,
@@ -33,12 +34,12 @@ interface DashboardData {
 }
 
 const STATUS_COLORS: Record<string, string> = {
-  sent: "bg-blue-100 text-blue-800",
-  viewed: "bg-purple-100 text-purple-800",
-  partial: "bg-yellow-100 text-yellow-800",
-  paid: "bg-green-100 text-green-800",
-  overdue: "bg-red-100 text-red-800",
-  confirmed: "bg-green-100 text-green-800",
+  sent: "bg-primary/10 text-primary",
+  viewed: "bg-accent/10 text-accent",
+  partial: "bg-warning/10 text-warning",
+  paid: "bg-success/10 text-success",
+  overdue: "bg-destructive/10 text-destructive",
+  confirmed: "bg-success/10 text-success",
 };
 
 export default function ClientDashboardPage() {
@@ -111,8 +112,20 @@ export default function ClientDashboardPage() {
 
   if (loading) {
     return (
-      <div className="flex items-center justify-center h-64">
-        <div className="text-gray-500">Loading dashboard...</div>
+      <div className="space-y-6">
+        <div className="space-y-2">
+          <Skeleton className="h-8 w-64" />
+          <Skeleton className="h-4 w-48" />
+        </div>
+        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4">
+          {[1, 2, 3, 4].map((i) => (
+            <Skeleton key={i} className="h-24 rounded-xl" />
+          ))}
+        </div>
+        <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
+          <Skeleton className="h-64 rounded-xl" />
+          <Skeleton className="h-64 rounded-xl" />
+        </div>
       </div>
     );
   }
@@ -121,10 +134,10 @@ export default function ClientDashboardPage() {
     <div className="space-y-6">
       {/* Welcome */}
       <div>
-        <h1 className="text-2xl font-bold text-gray-900">
+        <h1 className="text-2xl font-bold text-foreground">
           Welcome back, {contact?.first_name}!
         </h1>
-        <p className="text-gray-500">
+        <p className="text-muted-foreground">
           {isOrgCoachee && contact?.organization_name
             ? `Your coaching is sponsored by ${contact.organization_name}`
             : "Here's an overview of your account"}
@@ -168,11 +181,11 @@ export default function ClientDashboardPage() {
           <Card>
             <CardContent className="pt-6">
               <div className="flex items-center gap-4">
-                <div className="p-3 bg-green-100 rounded-lg">
-                  <Calendar className="h-6 w-6 text-green-600" />
+                <div className="p-3 bg-success/10 rounded-lg">
+                  <Calendar className="h-6 w-6 text-success" />
                 </div>
                 <div>
-                  <p className="text-sm text-gray-500">Upcoming Sessions</p>
+                  <p className="text-sm text-muted-foreground">Upcoming Sessions</p>
                   <p className="text-2xl font-bold">
                     {data?.stats.upcoming_bookings || 0}
                   </p>
@@ -184,12 +197,12 @@ export default function ClientDashboardPage() {
           <Card>
             <CardContent className="pt-6">
               <div className="flex items-center gap-4">
-                <div className="p-3 bg-purple-100 rounded-lg">
-                  <Video className="h-6 w-6 text-purple-600" />
+                <div className="p-3 bg-accent/10 rounded-lg">
+                  <Video className="h-6 w-6 text-accent" />
                 </div>
                 <div>
-                  <p className="text-sm text-gray-500">Session Recordings</p>
-                  <Link href="/client/sessions" className="text-2xl font-bold text-purple-600 hover:underline">
+                  <p className="text-sm text-muted-foreground">Session Recordings</p>
+                  <Link href="/client/sessions" className="text-2xl font-bold text-accent hover:underline">
                     View All
                   </Link>
                 </div>
@@ -203,11 +216,11 @@ export default function ClientDashboardPage() {
           <Card>
             <CardContent className="pt-6">
               <div className="flex items-center gap-4">
-                <div className="p-3 bg-purple-100 rounded-lg">
-                  <DollarSign className="h-6 w-6 text-purple-600" />
+                <div className="p-3 bg-accent/10 rounded-lg">
+                  <DollarSign className="h-6 w-6 text-accent" />
                 </div>
                 <div>
-                  <p className="text-sm text-gray-500">Amount Due</p>
+                  <p className="text-sm text-muted-foreground">Amount Due</p>
                   <p className="text-2xl font-bold">
                     {formatCurrency(data?.stats.total_due || 0)}
                   </p>
@@ -219,11 +232,11 @@ export default function ClientDashboardPage() {
           <Card>
             <CardContent className="pt-6">
               <div className="flex items-center gap-4">
-                <div className="p-3 bg-blue-100 rounded-lg">
-                  <FileText className="h-6 w-6 text-blue-600" />
+                <div className="p-3 bg-primary/10 rounded-lg">
+                  <FileText className="h-6 w-6 text-primary" />
                 </div>
                 <div>
-                  <p className="text-sm text-gray-500">Unpaid Invoices</p>
+                  <p className="text-sm text-muted-foreground">Unpaid Invoices</p>
                   <p className="text-2xl font-bold">
                     {data?.stats.unpaid_invoices || 0}
                   </p>
@@ -235,11 +248,11 @@ export default function ClientDashboardPage() {
           <Card>
             <CardContent className="pt-6">
               <div className="flex items-center gap-4">
-                <div className="p-3 bg-green-100 rounded-lg">
-                  <Calendar className="h-6 w-6 text-green-600" />
+                <div className="p-3 bg-success/10 rounded-lg">
+                  <Calendar className="h-6 w-6 text-success" />
                 </div>
                 <div>
-                  <p className="text-sm text-gray-500">Upcoming Sessions</p>
+                  <p className="text-sm text-muted-foreground">Upcoming Sessions</p>
                   <p className="text-2xl font-bold">
                     {data?.stats.upcoming_bookings || 0}
                   </p>
@@ -255,7 +268,7 @@ export default function ClientDashboardPage() {
                   <FileSignature className="h-6 w-6 text-orange-600" />
                 </div>
                 <div>
-                  <p className="text-sm text-gray-500">Pending Contracts</p>
+                  <p className="text-sm text-muted-foreground">Pending Contracts</p>
                   <p className="text-2xl font-bold">
                     {data?.stats.pending_contracts || 0}
                   </p>
@@ -281,7 +294,7 @@ export default function ClientDashboardPage() {
           </CardHeader>
           <CardContent>
             {data?.upcoming_bookings.length === 0 ? (
-              <p className="text-gray-500 text-center py-4">
+              <p className="text-muted-foreground text-center py-4">
                 No upcoming sessions scheduled
               </p>
             ) : (
@@ -289,15 +302,15 @@ export default function ClientDashboardPage() {
                 {data?.upcoming_bookings.map((booking) => (
                   <div
                     key={booking.id}
-                    className="flex items-center justify-between p-4 rounded-lg bg-gray-50"
+                    className="flex items-center justify-between p-4 rounded-lg bg-muted"
                   >
                     <div className="flex items-center gap-3">
-                      <div className="p-2 bg-purple-100 rounded-lg">
-                        <Clock className="h-5 w-5 text-purple-600" />
+                      <div className="p-2 bg-accent/10 rounded-lg">
+                        <Clock className="h-5 w-5 text-accent" />
                       </div>
                       <div>
                         <p className="font-medium">{booking.booking_type_name}</p>
-                        <p className="text-sm text-gray-500">
+                        <p className="text-sm text-muted-foreground">
                           {formatDate(booking.start_time)} at{" "}
                           {formatTime(booking.start_time)}
                         </p>
@@ -334,18 +347,18 @@ export default function ClientDashboardPage() {
             </CardHeader>
             <CardContent>
               {data?.recent_invoices.length === 0 ? (
-                <p className="text-gray-500 text-center py-4">No invoices yet</p>
+                <p className="text-muted-foreground text-center py-4">No invoices yet</p>
               ) : (
                 <div className="space-y-3">
                   {data?.recent_invoices.map((invoice) => (
                     <Link
                       key={invoice.id}
                       href={`/client/invoices/${invoice.id}`}
-                      className="flex items-center justify-between p-3 rounded-lg hover:bg-gray-50 transition-colors"
+                      className="flex items-center justify-between p-3 rounded-lg hover:bg-muted transition-colors cursor-pointer"
                     >
                       <div>
                         <p className="font-medium">{invoice.invoice_number}</p>
-                        <p className="text-sm text-gray-500">
+                        <p className="text-sm text-muted-foreground">
                           Due {formatDate(invoice.due_date)}
                         </p>
                       </div>
@@ -353,7 +366,7 @@ export default function ClientDashboardPage() {
                         <p className="font-semibold">
                           {formatCurrency(invoice.balance_due)}
                         </p>
-                        <Badge className={STATUS_COLORS[invoice.status] || "bg-gray-100"}>
+                        <Badge className={STATUS_COLORS[invoice.status] || "bg-muted"}>
                           {invoice.status}
                         </Badge>
                       </div>
@@ -377,7 +390,7 @@ export default function ClientDashboardPage() {
             </CardHeader>
             <CardContent>
               {data?.upcoming_bookings.length === 0 ? (
-                <p className="text-gray-500 text-center py-4">
+                <p className="text-muted-foreground text-center py-4">
                   No upcoming sessions
                 </p>
               ) : (
@@ -385,15 +398,15 @@ export default function ClientDashboardPage() {
                   {data?.upcoming_bookings.map((booking) => (
                     <div
                       key={booking.id}
-                      className="flex items-center justify-between p-3 rounded-lg hover:bg-gray-50 transition-colors"
+                      className="flex items-center justify-between p-3 rounded-lg hover:bg-muted transition-colors cursor-pointer"
                     >
                       <div className="flex items-center gap-3">
-                        <div className="p-2 bg-purple-100 rounded-lg">
-                          <Clock className="h-5 w-5 text-purple-600" />
+                        <div className="p-2 bg-accent/10 rounded-lg">
+                          <Clock className="h-5 w-5 text-accent" />
                         </div>
                         <div>
                           <p className="font-medium">{booking.booking_type_name}</p>
-                          <p className="text-sm text-gray-500">
+                          <p className="text-sm text-muted-foreground">
                             {formatDate(booking.start_time)} at{" "}
                             {formatTime(booking.start_time)}
                           </p>

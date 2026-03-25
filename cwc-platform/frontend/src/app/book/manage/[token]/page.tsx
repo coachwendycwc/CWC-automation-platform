@@ -5,6 +5,7 @@ import { useParams } from "next/navigation";
 import { Card, CardContent, CardHeader, CardTitle, CardDescription } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
+import { Skeleton } from "@/components/ui/skeleton";
 import { publicBookingApi } from "@/lib/api";
 import { TimeSlot } from "@/types";
 import { Calendar, Clock, Check, X, AlertTriangle, ChevronLeft, ChevronRight } from "lucide-react";
@@ -128,29 +129,32 @@ export default function ManageBookingPage() {
   };
 
   const STATUS_STYLES: Record<string, { bg: string; text: string; icon: any }> = {
-    pending: { bg: "bg-yellow-100", text: "text-yellow-800", icon: Clock },
-    confirmed: { bg: "bg-green-100", text: "text-green-800", icon: Check },
-    completed: { bg: "bg-blue-100", text: "text-blue-800", icon: Check },
-    cancelled: { bg: "bg-red-100", text: "text-red-800", icon: X },
-    no_show: { bg: "bg-gray-100", text: "text-gray-800", icon: X },
+    pending: { bg: "bg-warning/10", text: "text-warning", icon: Clock },
+    confirmed: { bg: "bg-success/10", text: "text-success", icon: Check },
+    completed: { bg: "bg-primary/10", text: "text-primary", icon: Check },
+    cancelled: { bg: "bg-destructive/10", text: "text-destructive", icon: X },
+    no_show: { bg: "bg-muted", text: "text-muted-foreground", icon: X },
   };
 
   if (loading) {
     return (
-      <div className="min-h-screen bg-gray-50 flex items-center justify-center">
-        <div className="text-gray-500">Loading...</div>
+      <div className="min-h-screen bg-muted flex items-center justify-center">
+        <div className="max-w-lg w-full mx-auto px-4 space-y-4">
+          <Skeleton className="h-48 rounded-lg" />
+          <Skeleton className="h-12 rounded-lg" />
+        </div>
       </div>
     );
   }
 
   if (error && !booking) {
     return (
-      <div className="min-h-screen bg-gray-50 flex items-center justify-center p-4">
+      <div className="min-h-screen bg-muted flex items-center justify-center p-4">
         <Card className="max-w-md w-full">
           <CardContent className="py-8 text-center">
-            <AlertTriangle className="h-12 w-12 text-red-500 mx-auto mb-4" />
-            <h2 className="text-lg font-semibold text-gray-900 mb-2">Booking Not Found</h2>
-            <p className="text-gray-500">{error}</p>
+            <AlertTriangle className="h-12 w-12 text-destructive mx-auto mb-4" />
+            <h2 className="text-lg font-semibold text-foreground mb-2">Booking Not Found</h2>
+            <p className="text-muted-foreground">{error}</p>
           </CardContent>
         </Card>
       </div>
@@ -163,7 +167,7 @@ export default function ManageBookingPage() {
   const StatusIcon = statusStyle.icon;
 
   return (
-    <div className="min-h-screen bg-gray-50 py-8 px-4">
+    <div className="min-h-screen bg-muted py-8 px-4">
       <div className="max-w-lg mx-auto">
         {/* Booking Details */}
         <Card className="mb-6">
@@ -178,20 +182,20 @@ export default function ManageBookingPage() {
           </CardHeader>
           <CardContent className="space-y-4">
             <div className="flex items-start gap-4">
-              <div className="w-12 h-12 bg-blue-100 rounded-lg flex items-center justify-center flex-shrink-0">
-                <Calendar className="h-6 w-6 text-blue-600" />
+              <div className="w-12 h-12 bg-primary/10 rounded-lg flex items-center justify-center flex-shrink-0">
+                <Calendar className="h-6 w-6 text-primary" />
               </div>
               <div>
-                <h3 className="font-semibold text-gray-900">{booking.booking_type_name}</h3>
-                <p className="text-gray-600">{formatDateTime(booking.start_time)}</p>
-                <p className="text-sm text-gray-500">
+                <h3 className="font-semibold text-foreground">{booking.booking_type_name}</h3>
+                <p className="text-muted-foreground">{formatDateTime(booking.start_time)}</p>
+                <p className="text-sm text-muted-foreground">
                   {booking.booking_type_duration} minutes
                 </p>
               </div>
             </div>
 
             {error && (
-              <div className="rounded-md bg-red-50 p-3 text-sm text-red-600">{error}</div>
+              <div className="rounded-md bg-destructive/10 border border-destructive/20 p-3 text-sm text-destructive">{error}</div>
             )}
 
             {/* Action buttons */}
@@ -202,7 +206,7 @@ export default function ManageBookingPage() {
                     variant="outline"
                     onClick={() => setShowReschedule(true)}
                     disabled={showReschedule}
-                    className="flex-1"
+                    className="flex-1 cursor-pointer"
                   >
                     Reschedule
                   </Button>
@@ -212,7 +216,7 @@ export default function ManageBookingPage() {
                     variant="outline"
                     onClick={() => setShowCancel(true)}
                     disabled={showCancel}
-                    className="flex-1 text-red-600 border-red-600 hover:bg-red-50"
+                    className="flex-1 text-destructive border-destructive hover:bg-destructive/10 cursor-pointer"
                   >
                     Cancel
                   </Button>
@@ -222,7 +226,7 @@ export default function ManageBookingPage() {
 
             {!booking.can_cancel && !booking.can_reschedule && booking.status === "confirmed" && (
               <div className="pt-4 border-t">
-                <p className="text-sm text-gray-500 text-center">
+                <p className="text-sm text-muted-foreground text-center">
                   Changes cannot be made less than 24 hours before the appointment.
                   Please contact us directly if you need to make changes.
                 </p>
@@ -235,18 +239,18 @@ export default function ManageBookingPage() {
         {showCancel && (
           <Card className="mb-6">
             <CardHeader>
-              <CardTitle className="text-red-600">Cancel Booking</CardTitle>
+              <CardTitle className="text-destructive">Cancel Booking</CardTitle>
               <CardDescription>
                 Are you sure you want to cancel this booking?
               </CardDescription>
             </CardHeader>
             <CardContent className="space-y-4">
               <div>
-                <label className="block text-sm font-medium text-gray-700 mb-1">
+                <label className="block text-sm font-medium text-foreground mb-1">
                   Reason (optional)
                 </label>
                 <textarea
-                  className="w-full rounded-md border border-gray-300 px-3 py-2 text-sm"
+                  className="w-full rounded-md border border-border px-3 py-2 text-sm"
                   value={cancelReason}
                   onChange={(e) => setCancelReason(e.target.value)}
                   rows={3}
@@ -257,12 +261,13 @@ export default function ManageBookingPage() {
                 <Button
                   onClick={handleCancel}
                   disabled={submitting}
-                  className="bg-red-600 hover:bg-red-700"
+                  className="bg-destructive hover:bg-destructive/90 cursor-pointer"
                 >
                   {submitting ? "Cancelling..." : "Yes, Cancel Booking"}
                 </Button>
                 <Button
                   variant="outline"
+                  className="cursor-pointer"
                   onClick={() => {
                     setShowCancel(false);
                     setCancelReason("");
@@ -284,6 +289,7 @@ export default function ManageBookingPage() {
                 <Button
                   variant="ghost"
                   size="sm"
+                  className="cursor-pointer"
                   onClick={() => {
                     setShowReschedule(false);
                     setSelectedDate(null);
@@ -296,8 +302,8 @@ export default function ManageBookingPage() {
               <CardDescription>Select a new date and time for your appointment</CardDescription>
             </CardHeader>
             <CardContent>
-              <div className="text-center py-8 text-gray-500">
-                <Calendar className="h-12 w-12 mx-auto mb-4 text-gray-300" />
+              <div className="text-center py-8 text-muted-foreground">
+                <Calendar className="h-12 w-12 mx-auto mb-4 text-muted-foreground/40" />
                 <p className="mb-4">
                   To reschedule your appointment, please contact us directly or book a new appointment and cancel this one.
                 </p>
@@ -310,7 +316,7 @@ export default function ManageBookingPage() {
         )}
 
         {/* Help text */}
-        <p className="text-center text-sm text-gray-500 mt-6">
+        <p className="text-center text-sm text-muted-foreground mt-6">
           Need help? Contact us at support@example.com
         </p>
       </div>

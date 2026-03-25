@@ -79,7 +79,7 @@ export default function ClientLoginPage() {
               <div className="space-y-2">
                 <Label htmlFor="email">Email Address</Label>
                 <div className="relative">
-                  <Mail className="absolute left-3 top-1/2 -translate-y-1/2 h-4 w-4 text-gray-400" />
+                  <Mail className="absolute left-3 top-1/2 -translate-y-1/2 h-4 w-4 text-muted-foreground" />
                   <Input
                     id="email"
                     type="email"
@@ -104,20 +104,20 @@ export default function ClientLoginPage() {
                 )}
               </Button>
 
-              <p className="text-center text-sm text-gray-500">
+              <p className="text-center text-sm text-muted-foreground">
                 We&apos;ll send you a magic link to sign in instantly.
               </p>
             </form>
           ) : (
             <div className="text-center space-y-4 py-4">
-              <div className="mx-auto w-16 h-16 bg-green-100 rounded-full flex items-center justify-center">
-                <CheckCircle className="h-8 w-8 text-green-600" />
+              <div className="mx-auto w-16 h-16 bg-success/10 rounded-full flex items-center justify-center">
+                <CheckCircle className="h-8 w-8 text-success" />
               </div>
               <h3 className="text-lg font-semibold">Check your email</h3>
-              <p className="text-gray-600">
+              <p className="text-muted-foreground">
                 We sent a login link to <strong>{email}</strong>
               </p>
-              <p className="text-sm text-gray-500">
+              <p className="text-sm text-muted-foreground">
                 The link will expire in 15 minutes.
               </p>
               <Button

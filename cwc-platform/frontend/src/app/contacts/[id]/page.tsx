@@ -31,6 +31,7 @@ import {
   RefreshCw,
 } from "lucide-react";
 import Link from "next/link";
+import { Skeleton } from "@/components/ui/skeleton";
 import { contactsApi, interactionsApi, offboardingApi, notesApi, onboardingAssessmentsApi, Note, OnboardingAssessmentResponse } from "@/lib/api";
 import { ContactWithOrganization, Interaction } from "@/types";
 import { getInitials, formatDateTime } from "@/lib/utils";
@@ -127,7 +128,9 @@ export default function ContactDetailPage() {
     setResendingAssessment(true);
     try {
       const data = await onboardingAssessmentsApi.createForContact(token, contactId);
-      setAssessment(data);
+      // Re-fetch the full assessment after creation
+      const full = await onboardingAssessmentsApi.getForContact(token, contactId);
+      setAssessment(full);
       toast.success("Assessment created and email sent");
     } catch (error: any) {
       console.error("Failed to create assessment:", error);
@@ -249,7 +252,19 @@ export default function ContactDetailPage() {
   if (loading) {
     return (
       <Shell user={user}>
-        <div className="text-center py-8 text-gray-500">Loading...</div>
+        <div className="max-w-4xl mx-auto space-y-6 py-8">
+          <Skeleton className="h-8 w-32" />
+          <div className="grid gap-6 lg:grid-cols-3">
+            <div className="lg:col-span-2 space-y-6">
+              <Skeleton className="h-48 w-full rounded-lg" />
+              <Skeleton className="h-64 w-full rounded-lg" />
+            </div>
+            <div className="space-y-6">
+              <Skeleton className="h-40 w-full rounded-lg" />
+              <Skeleton className="h-32 w-full rounded-lg" />
+            </div>
+          </div>
+        </div>
       </Shell>
     );
   }
@@ -258,7 +273,7 @@ export default function ContactDetailPage() {
     return (
       <Shell user={user}>
         <div className="text-center py-8">
-          <p className="text-gray-500">Contact not found</p>
+          <p className="text-muted-foreground">Contact not found</p>
           <Button className="mt-4" onClick={() => router.push("/contacts")}>
             Back to Contacts
           </Button>
@@ -294,7 +309,7 @@ export default function ContactDetailPage() {
                         {contact.first_name} {contact.last_name}
                       </h1>
                       {contact.title && (
-                        <p className="text-gray-500">{contact.title}</p>
+                        <p className="text-muted-foreground">{contact.title}</p>
                       )}
                       <div className="flex gap-2 mt-2">
                         <Badge
@@ -325,7 +340,7 @@ export default function ContactDetailPage() {
                       variant="outline"
                       size="sm"
                       onClick={handleDelete}
-                      className="text-red-600 hover:text-red-700"
+                      className="text-destructive hover:text-destructive"
                     >
                       <Trash2 className="h-4 w-4" />
                     </Button>
@@ -335,10 +350,10 @@ export default function ContactDetailPage() {
                 <div className="mt-6 grid gap-4 sm:grid-cols-2">
                   {contact.email && (
                     <div className="flex items-center gap-2">
-                      <Mail className="h-4 w-4 text-gray-400" />
+                      <Mail className="h-4 w-4 text-muted-foreground" />
                       <a
                         href={`mailto:${contact.email}`}
-                        className="text-blue-600 hover:underline"
+                        className="text-primary hover:underline"
                       >
                         {contact.email}
                       </a>
@@ -346,10 +361,10 @@ export default function ContactDetailPage() {
                   )}
                   {contact.phone && (
                     <div className="flex items-center gap-2">
-                      <Phone className="h-4 w-4 text-gray-400" />
+                      <Phone className="h-4 w-4 text-muted-foreground" />
                       <a
                         href={`tel:${contact.phone}`}
-                        className="text-blue-600 hover:underline"
+                        className="text-primary hover:underline"
                       >
                         {contact.phone}
                       </a>
@@ -357,7 +372,7 @@ export default function ContactDetailPage() {
                   )}
                   {contact.organization && (
                     <div className="flex items-center gap-2">
-                      <Building2 className="h-4 w-4 text-gray-400" />
+                      <Building2 className="h-4 w-4 text-muted-foreground" />
                       <span>{contact.organization.name}</span>
                     </div>
                   )}
@@ -404,7 +419,7 @@ export default function ContactDetailPage() {
                 )}
 
                 {interactions.length === 0 ? (
-                  <p className="text-gray-500 text-center py-4">
+                  <p className="text-muted-foreground text-center py-4">
                     No activity yet. Add a note to get started.
                   </p>
                 ) : (
@@ -412,17 +427,17 @@ export default function ContactDetailPage() {
                     {interactions.map((interaction) => (
                       <div
                         key={interaction.id}
-                        className="flex gap-3 border-l-2 border-gray-200 pl-4"
+                        className="flex gap-3 border-l-2 border-border pl-4"
                       >
-                        <div className="mt-1 rounded-full bg-gray-100 p-2">
+                        <div className="mt-1 rounded-full bg-muted p-2">
                           {getInteractionIcon(interaction.interaction_type)}
                         </div>
                         <div className="flex-1">
                           <div className="flex items-center gap-2">
-                            <Badge variant="outline" className="text-xs">
+                            <Badge variant="outline" className="text-sm">
                               {interaction.interaction_type}
                             </Badge>
-                            <span className="text-xs text-gray-400">
+                            <span className="text-sm text-muted-foreground">
                               {formatDateTime(interaction.created_at)}
                             </span>
                           </div>
@@ -432,7 +447,7 @@ export default function ContactDetailPage() {
                             </p>
                           )}
                           {interaction.content && (
-                            <p className="text-gray-600 text-sm mt-1 whitespace-pre-wrap">
+                            <p className="text-muted-foreground text-sm mt-1 whitespace-pre-wrap">
                               {interaction.content}
                             </p>
                           )}
@@ -477,7 +492,7 @@ export default function ContactDetailPage() {
                   <Button
                     variant="ghost"
                     size="sm"
-                    className="text-xs"
+                    className="text-sm"
                     onClick={() => {
                       const token = localStorage.getItem("token");
                       if (token) {
@@ -492,7 +507,7 @@ export default function ContactDetailPage() {
               <CardContent className="space-y-3">
                 {/* Recent notes */}
                 {clientNotes.length === 0 ? (
-                  <p className="text-sm text-gray-500 text-center py-2">
+                  <p className="text-sm text-muted-foreground text-center py-2">
                     No messages yet
                   </p>
                 ) : (
@@ -500,22 +515,22 @@ export default function ContactDetailPage() {
                     {clientNotes.slice(0, 3).map((note) => (
                       <div
                         key={note.id}
-                        className="text-sm p-2 rounded bg-gray-50"
+                        className="text-sm p-2 rounded bg-muted"
                       >
                         <div className="flex items-center gap-1 mb-1">
                           {note.direction === "to_coach" ? (
-                            <ArrowDownLeft className="h-3 w-3 text-blue-500" />
+                            <ArrowDownLeft className="h-3 w-3 text-primary" />
                           ) : (
-                            <ArrowUpRight className="h-3 w-3 text-green-500" />
+                            <ArrowUpRight className="h-3 w-3 text-success" />
                           )}
-                          <span className="text-xs text-gray-400">
+                          <span className="text-sm text-muted-foreground">
                             {note.direction === "to_coach" ? "From client" : "To client"}
                           </span>
                           {note.direction === "to_coach" && !note.is_read && (
-                            <span className="w-1.5 h-1.5 rounded-full bg-blue-500 ml-1" />
+                            <span className="w-1.5 h-1.5 rounded-full bg-primary ml-1" />
                           )}
                         </div>
-                        <p className="text-gray-600 line-clamp-2">{note.content}</p>
+                        <p className="text-muted-foreground line-clamp-2">{note.content}</p>
                       </div>
                     ))}
                   </div>
@@ -570,10 +585,10 @@ export default function ContactDetailPage() {
                 </CardHeader>
                 <CardContent className="space-y-3">
                   {assessmentLoading ? (
-                    <p className="text-sm text-gray-500 text-center py-2">Loading...</p>
+                    <p className="text-sm text-muted-foreground text-center py-2">Loading...</p>
                   ) : !assessment ? (
                     <div className="text-center py-2">
-                      <p className="text-sm text-gray-500 mb-3">
+                      <p className="text-sm text-muted-foreground mb-3">
                         No assessment sent yet
                       </p>
                       <Button
@@ -590,18 +605,18 @@ export default function ContactDetailPage() {
                     <>
                       {assessment.completed_at ? (
                         <div className="space-y-2">
-                          <p className="text-sm text-gray-500">
+                          <p className="text-sm text-muted-foreground">
                             Completed {formatDateTime(assessment.completed_at)}
                           </p>
                           {assessment.role_title && (
                             <p className="text-sm">
-                              <span className="text-gray-500">Role:</span>{" "}
+                              <span className="text-muted-foreground">Role:</span>{" "}
                               {assessment.role_title}
                             </p>
                           )}
                           {assessment.organization_industry && (
                             <p className="text-sm">
-                              <span className="text-gray-500">Industry:</span>{" "}
+                              <span className="text-muted-foreground">Industry:</span>{" "}
                               {assessment.organization_industry}
                             </p>
                           )}
@@ -615,7 +630,7 @@ export default function ContactDetailPage() {
                         </div>
                       ) : (
                         <div className="space-y-2">
-                          <p className="text-sm text-gray-500">
+                          <p className="text-sm text-muted-foreground">
                             Sent {formatDateTime(assessment.created_at)}
                           </p>
                           <p className="text-sm text-amber-600">
@@ -645,22 +660,22 @@ export default function ContactDetailPage() {
               </CardHeader>
               <CardContent className="space-y-3 text-sm">
                 <div>
-                  <span className="text-gray-500">Source:</span>
+                  <span className="text-muted-foreground">Source:</span>
                   <span className="ml-2">{contact.source || "Not set"}</span>
                 </div>
                 <div>
-                  <span className="text-gray-500">Role:</span>
+                  <span className="text-muted-foreground">Role:</span>
                   <span className="ml-2">{contact.role || "Not set"}</span>
                 </div>
                 <div>
-                  <span className="text-gray-500">Created:</span>
+                  <span className="text-muted-foreground">Created:</span>
                   <span className="ml-2">
                     {formatDateTime(contact.created_at)}
                   </span>
                 </div>
                 {contact.tags && contact.tags.length > 0 && (
                   <div>
-                    <span className="text-gray-500">Tags:</span>
+                    <span className="text-muted-foreground">Tags:</span>
                     <div className="flex flex-wrap gap-1 mt-1">
                       {contact.tags.map((tag) => (
                         <Badge key={tag} variant="outline" className="text-xs">

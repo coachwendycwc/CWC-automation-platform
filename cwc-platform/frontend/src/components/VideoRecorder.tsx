@@ -219,7 +219,7 @@ export default function VideoRecorder({
           <div className="absolute inset-0 flex flex-col items-center justify-center bg-gray-900/80 text-white">
             <Camera className="h-16 w-16 mb-4 opacity-50" />
             <p className="text-lg mb-4">Ready to record your testimonial?</p>
-            <Button onClick={requestPermissions} size="lg">
+            <Button onClick={requestPermissions} size="lg" className="cursor-pointer">
               <Video className="h-5 w-5 mr-2" />
               Start Camera
             </Button>
@@ -237,9 +237,9 @@ export default function VideoRecorder({
 
         {state === "error" && (
           <div className="absolute inset-0 flex flex-col items-center justify-center bg-gray-900/80 text-white">
-            <AlertCircle className="h-16 w-16 mb-4 text-red-400" />
+            <AlertCircle className="h-16 w-16 mb-4 text-destructive" />
             <p className="text-lg text-center max-w-sm">{error}</p>
-            <Button onClick={requestPermissions} className="mt-4">
+            <Button onClick={requestPermissions} className="mt-4 cursor-pointer">
               Try Again
             </Button>
           </div>
@@ -278,14 +278,14 @@ export default function VideoRecorder({
       {/* Controls */}
       <div className="flex justify-center gap-3">
         {state === "ready" && (
-          <Button onClick={startRecording} size="lg" className="bg-red-600 hover:bg-red-700">
+          <Button onClick={startRecording} size="lg" className="bg-red-600 hover:bg-red-700 cursor-pointer">
             <Video className="h-5 w-5 mr-2" />
             Start Recording
           </Button>
         )}
 
         {state === "recording" && (
-          <Button onClick={stopRecording} size="lg" variant="destructive">
+          <Button onClick={stopRecording} size="lg" variant="destructive" className="cursor-pointer">
             <Square className="h-5 w-5 mr-2" />
             Stop Recording
           </Button>
@@ -307,7 +307,7 @@ export default function VideoRecorder({
 
       {/* Tips */}
       {(state === "idle" || state === "ready") && (
-        <div className="bg-gray-50 rounded-lg p-4 text-sm text-gray-600">
+        <div className="bg-muted rounded-lg p-4 text-sm text-muted-foreground">
           <h4 className="font-medium mb-2">Tips for a great testimonial:</h4>
           <ul className="space-y-1">
             <li>Find a quiet place with good lighting</li>

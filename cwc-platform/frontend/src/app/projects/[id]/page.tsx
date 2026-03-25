@@ -35,6 +35,7 @@ import {
   UserMinus,
 } from "lucide-react";
 import Link from "next/link";
+import { Skeleton } from "@/components/ui/skeleton";
 
 interface Task {
   id: string;
@@ -108,11 +109,11 @@ interface Project {
 }
 
 const STATUS_COLORS: Record<string, string> = {
-  planning: "bg-gray-100 text-gray-800",
-  active: "bg-blue-100 text-blue-800",
-  paused: "bg-yellow-100 text-yellow-800",
-  completed: "bg-green-100 text-green-800",
-  cancelled: "bg-red-100 text-red-800",
+  planning: "bg-muted text-foreground",
+  active: "bg-primary/10 text-primary",
+  paused: "bg-warning/10 text-warning",
+  completed: "bg-success/10 text-success",
+  cancelled: "bg-destructive/10 text-destructive",
 };
 
 const PROJECT_TYPE_LABELS: Record<string, string> = {
@@ -223,8 +224,14 @@ export default function ProjectDetailPage() {
   if (loading) {
     return (
       <Shell>
-        <div className="flex items-center justify-center h-64">
-          <div className="text-gray-500">Loading...</div>
+        <div className="space-y-6 py-8">
+          <Skeleton className="h-10 w-64" />
+          <Skeleton className="h-16 w-full rounded-lg" />
+          <Skeleton className="h-12 w-full rounded-lg" />
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+            <Skeleton className="h-48 w-full rounded-lg" />
+            <Skeleton className="h-48 w-full rounded-lg" />
+          </div>
         </div>
       </Shell>
     );
@@ -262,7 +269,7 @@ export default function ProjectDetailPage() {
                   {project.status}
                 </Badge>
               </div>
-              <div className="flex items-center gap-2 text-sm text-gray-500 mt-1">
+              <div className="flex items-center gap-2 text-sm text-muted-foreground mt-1">
                 <span>{project.project_number}</span>
                 <span>•</span>
                 <span>{PROJECT_TYPE_LABELS[project.project_type] || project.project_type}</span>
@@ -324,7 +331,7 @@ export default function ProjectDetailPage() {
             </div>
             <Progress value={project.progress_percent} className="h-3" />
             {project.task_stats && (
-              <div className="flex gap-4 mt-3 text-sm text-gray-500">
+              <div className="flex gap-4 mt-3 text-sm text-muted-foreground">
                 <span>{project.task_stats.completed_count} / {project.task_stats.total_tasks} tasks completed</span>
                 {project.task_stats.actual_hours > 0 && (
                   <>
@@ -358,23 +365,23 @@ export default function ProjectDetailPage() {
                 <CardContent className="space-y-4">
                   {project.description && (
                     <div>
-                      <label className="text-sm text-gray-500">Description</label>
+                      <label className="text-sm text-muted-foreground">Description</label>
                       <p className="mt-1">{project.description}</p>
                     </div>
                   )}
 
                   <div className="grid grid-cols-2 gap-4">
                     <div>
-                      <label className="text-sm text-gray-500">Start Date</label>
+                      <label className="text-sm text-muted-foreground">Start Date</label>
                       <p className="mt-1 flex items-center gap-2">
-                        <Calendar className="h-4 w-4 text-gray-400" />
+                        <Calendar className="h-4 w-4 text-muted-foreground" />
                         {project.start_date ? formatDate(project.start_date) : "Not set"}
                       </p>
                     </div>
                     <div>
-                      <label className="text-sm text-gray-500">Target End Date</label>
+                      <label className="text-sm text-muted-foreground">Target End Date</label>
                       <p className="mt-1 flex items-center gap-2">
-                        <Calendar className="h-4 w-4 text-gray-400" />
+                        <Calendar className="h-4 w-4 text-muted-foreground" />
                         {project.target_end_date ? formatDate(project.target_end_date) : "Not set"}
                       </p>
                     </div>
@@ -382,16 +389,16 @@ export default function ProjectDetailPage() {
 
                   <div className="grid grid-cols-2 gap-4">
                     <div>
-                      <label className="text-sm text-gray-500">Budget</label>
+                      <label className="text-sm text-muted-foreground">Budget</label>
                       <p className="mt-1 flex items-center gap-2">
-                        <DollarSign className="h-4 w-4 text-gray-400" />
+                        <DollarSign className="h-4 w-4 text-muted-foreground" />
                         {project.budget_amount ? `$${project.budget_amount.toLocaleString()}` : "Not set"}
                       </p>
                     </div>
                     <div>
-                      <label className="text-sm text-gray-500">Estimated Hours</label>
+                      <label className="text-sm text-muted-foreground">Estimated Hours</label>
                       <p className="mt-1 flex items-center gap-2">
-                        <Clock className="h-4 w-4 text-gray-400" />
+                        <Clock className="h-4 w-4 text-muted-foreground" />
                         {project.estimated_hours ? `${project.estimated_hours}h` : "Not set"}
                       </p>
                     </div>
@@ -406,24 +413,24 @@ export default function ProjectDetailPage() {
                 </CardHeader>
                 <CardContent className="space-y-4">
                   <div>
-                    <label className="text-sm text-gray-500">Contact</label>
+                    <label className="text-sm text-muted-foreground">Contact</label>
                     <p className="mt-1 flex items-center gap-2">
-                      <User className="h-4 w-4 text-gray-400" />
-                      <Link href={`/contacts/${project.contact_id}`} className="text-blue-600 hover:underline">
+                      <User className="h-4 w-4 text-muted-foreground" />
+                      <Link href={`/contacts/${project.contact_id}`} className="text-primary hover:underline">
                         {project.contact_name}
                       </Link>
                     </p>
                     {project.contact_email && (
-                      <p className="text-sm text-gray-500 ml-6">{project.contact_email}</p>
+                      <p className="text-sm text-muted-foreground ml-6">{project.contact_email}</p>
                     )}
                   </div>
 
                   {project.organization_name && (
                     <div>
-                      <label className="text-sm text-gray-500">Organization</label>
+                      <label className="text-sm text-muted-foreground">Organization</label>
                       <p className="mt-1 flex items-center gap-2">
-                        <Building2 className="h-4 w-4 text-gray-400" />
-                        <Link href={`/organizations/${project.organization_id}`} className="text-blue-600 hover:underline">
+                        <Building2 className="h-4 w-4 text-muted-foreground" />
+                        <Link href={`/organizations/${project.organization_id}`} className="text-primary hover:underline">
                           {project.organization_name}
                         </Link>
                       </p>
@@ -432,10 +439,10 @@ export default function ProjectDetailPage() {
 
                   {project.linked_contract_number && (
                     <div>
-                      <label className="text-sm text-gray-500">Linked Contract</label>
+                      <label className="text-sm text-muted-foreground">Linked Contract</label>
                       <p className="mt-1 flex items-center gap-2">
-                        <FileSignature className="h-4 w-4 text-gray-400" />
-                        <Link href={`/contracts/${project.linked_contract_id}`} className="text-blue-600 hover:underline">
+                        <FileSignature className="h-4 w-4 text-muted-foreground" />
+                        <Link href={`/contracts/${project.linked_contract_id}`} className="text-primary hover:underline">
                           {project.linked_contract_number}
                         </Link>
                       </p>
@@ -444,10 +451,10 @@ export default function ProjectDetailPage() {
 
                   {project.linked_invoice_number && (
                     <div>
-                      <label className="text-sm text-gray-500">Linked Invoice</label>
+                      <label className="text-sm text-muted-foreground">Linked Invoice</label>
                       <p className="mt-1 flex items-center gap-2">
-                        <FileText className="h-4 w-4 text-gray-400" />
-                        <Link href={`/invoices/${project.linked_invoice_id}`} className="text-blue-600 hover:underline">
+                        <FileText className="h-4 w-4 text-muted-foreground" />
+                        <Link href={`/invoices/${project.linked_invoice_id}`} className="text-primary hover:underline">
                           {project.linked_invoice_number}
                         </Link>
                       </p>
@@ -465,25 +472,25 @@ export default function ProjectDetailPage() {
                 </CardHeader>
                 <CardContent>
                   <div className="grid grid-cols-2 md:grid-cols-5 gap-4">
-                    <div className="text-center p-3 bg-gray-50 rounded-lg">
+                    <div className="text-center p-3 bg-muted rounded-lg">
                       <p className="text-2xl font-bold">{project.task_stats.todo_count}</p>
-                      <p className="text-sm text-gray-500">To Do</p>
+                      <p className="text-sm text-muted-foreground">To Do</p>
                     </div>
-                    <div className="text-center p-3 bg-blue-50 rounded-lg">
-                      <p className="text-2xl font-bold text-blue-600">{project.task_stats.in_progress_count}</p>
-                      <p className="text-sm text-gray-500">In Progress</p>
+                    <div className="text-center p-3 bg-primary/10 rounded-lg">
+                      <p className="text-2xl font-bold text-primary">{project.task_stats.in_progress_count}</p>
+                      <p className="text-sm text-muted-foreground">In Progress</p>
                     </div>
-                    <div className="text-center p-3 bg-purple-50 rounded-lg">
-                      <p className="text-2xl font-bold text-purple-600">{project.task_stats.review_count}</p>
-                      <p className="text-sm text-gray-500">Review</p>
+                    <div className="text-center p-3 bg-accent/10 rounded-lg">
+                      <p className="text-2xl font-bold text-accent">{project.task_stats.review_count}</p>
+                      <p className="text-sm text-muted-foreground">Review</p>
                     </div>
-                    <div className="text-center p-3 bg-green-50 rounded-lg">
-                      <p className="text-2xl font-bold text-green-600">{project.task_stats.completed_count}</p>
-                      <p className="text-sm text-gray-500">Completed</p>
+                    <div className="text-center p-3 bg-success/10 rounded-lg">
+                      <p className="text-2xl font-bold text-success">{project.task_stats.completed_count}</p>
+                      <p className="text-sm text-muted-foreground">Completed</p>
                     </div>
-                    <div className="text-center p-3 bg-red-50 rounded-lg">
-                      <p className="text-2xl font-bold text-red-600">{project.task_stats.blocked_count}</p>
-                      <p className="text-sm text-gray-500">Blocked</p>
+                    <div className="text-center p-3 bg-destructive/10 rounded-lg">
+                      <p className="text-2xl font-bold text-destructive">{project.task_stats.blocked_count}</p>
+                      <p className="text-sm text-muted-foreground">Blocked</p>
                     </div>
                   </div>
                 </CardContent>
@@ -537,24 +544,24 @@ export default function ProjectDetailPage() {
               </CardHeader>
               <CardContent>
                 {project.activity_logs?.length === 0 ? (
-                  <p className="text-gray-500 text-center py-8">No activity yet</p>
+                  <p className="text-muted-foreground text-center py-8">No activity yet</p>
                 ) : (
                   <div className="space-y-4">
                     {project.activity_logs?.map((log) => (
-                      <div key={log.id} className="flex items-start gap-4 border-l-2 border-gray-200 pl-4">
+                      <div key={log.id} className="flex items-start gap-4 border-l-2 border-border pl-4">
                         <div className="flex-1">
                           <p className="font-medium">
                             {ACTION_LABELS[log.action] || log.action}
                           </p>
                           {log.details && (
-                            <p className="text-sm text-gray-500">
+                            <p className="text-sm text-muted-foreground">
                               {log.details.task_title && `Task: ${log.details.task_title}`}
                               {log.details.old_status && log.details.new_status &&
                                 ` (${log.details.old_status} → ${log.details.new_status})`}
                               {log.details.hours && ` (${log.details.hours}h)`}
                             </p>
                           )}
-                          <p className="text-xs text-gray-400 mt-1">
+                          <p className="text-sm text-muted-foreground mt-1">
                             {formatDateTime(log.created_at)}
                             {log.actor && ` by ${log.actor}`}
                           </p>

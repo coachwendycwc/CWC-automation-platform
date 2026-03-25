@@ -7,6 +7,7 @@ import { clientPortalApi } from "@/lib/api";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
+import { Skeleton } from "@/components/ui/skeleton";
 import Link from "next/link";
 import {
   ArrowLeft,
@@ -44,10 +45,10 @@ const CONTENT_TYPE_ICONS: Record<string, any> = {
 };
 
 const CONTENT_TYPE_COLORS: Record<string, string> = {
-  file: "bg-blue-100 text-blue-600",
-  document: "bg-purple-100 text-purple-600",
-  video: "bg-red-100 text-red-600",
-  link: "bg-green-100 text-green-600",
+  file: "bg-primary/10 text-primary",
+  document: "bg-accent/10 text-accent",
+  video: "bg-destructive/10 text-destructive",
+  link: "bg-success/10 text-success",
 };
 
 export default function ResourceDetailPage() {
@@ -115,8 +116,15 @@ export default function ResourceDetailPage() {
 
   if (loading) {
     return (
-      <div className="flex items-center justify-center h-64">
-        <div className="text-gray-500">Loading resource...</div>
+      <div className="space-y-6">
+        <div className="flex items-center gap-4">
+          <Skeleton className="h-9 w-20" />
+          <div className="space-y-2">
+            <Skeleton className="h-8 w-64" />
+            <Skeleton className="h-4 w-40" />
+          </div>
+        </div>
+        <Skeleton className="h-64 w-full rounded-xl" />
       </div>
     );
   }
@@ -126,14 +134,14 @@ export default function ResourceDetailPage() {
       <div className="space-y-6">
         <Link
           href="/client/resources"
-          className="inline-flex items-center text-sm text-gray-500 hover:text-gray-900 transition-colors"
+          className="inline-flex items-center text-sm text-muted-foreground hover:text-foreground transition-colors"
         >
           <ArrowLeft className="h-4 w-4 mr-1" />
           Back to Resources
         </Link>
         <Card>
           <CardContent className="py-12 text-center">
-            <div className="text-red-500 mb-2">{error}</div>
+            <div className="text-destructive mb-2">{error}</div>
             <Button variant="outline" onClick={() => router.push("/client/resources")}>
               Return to Resources
             </Button>
@@ -149,14 +157,14 @@ export default function ResourceDetailPage() {
 
   const Icon = CONTENT_TYPE_ICONS[resource.content_type] || File;
   const colorClass =
-    CONTENT_TYPE_COLORS[resource.content_type] || "bg-gray-100 text-gray-600";
+    CONTENT_TYPE_COLORS[resource.content_type] || "bg-muted text-muted-foreground";
 
   return (
     <div className="space-y-6">
       {/* Back link */}
       <Link
         href="/client/resources"
-        className="inline-flex items-center text-sm text-gray-500 hover:text-gray-900 transition-colors"
+        className="inline-flex items-center text-sm text-muted-foreground hover:text-foreground transition-colors"
       >
         <ArrowLeft className="h-4 w-4 mr-1" />
         Back to Resources
@@ -210,8 +218,8 @@ export default function ResourceDetailPage() {
           {/* Description */}
           {resource.description && (
             <div>
-              <h3 className="text-sm font-medium text-gray-500 mb-2">Description</h3>
-              <p className="text-gray-700 whitespace-pre-wrap">{resource.description}</p>
+              <h3 className="text-sm font-medium text-muted-foreground mb-2">Description</h3>
+              <p className="text-foreground whitespace-pre-wrap">{resource.description}</p>
             </div>
           )}
 
@@ -219,27 +227,27 @@ export default function ResourceDetailPage() {
           <div className="grid grid-cols-2 gap-4 text-sm">
             {resource.file_name && (
               <div>
-                <span className="text-gray-500">File name:</span>
-                <span className="ml-2 text-gray-900">{resource.file_name}</span>
+                <span className="text-muted-foreground">File name:</span>
+                <span className="ml-2 text-foreground">{resource.file_name}</span>
               </div>
             )}
             {resource.file_size && (
               <div>
-                <span className="text-gray-500">Size:</span>
-                <span className="ml-2 text-gray-900">
+                <span className="text-muted-foreground">Size:</span>
+                <span className="ml-2 text-foreground">
                   {formatFileSize(resource.file_size)}
                 </span>
               </div>
             )}
             {resource.mime_type && (
               <div>
-                <span className="text-gray-500">Type:</span>
-                <span className="ml-2 text-gray-900">{resource.mime_type}</span>
+                <span className="text-muted-foreground">Type:</span>
+                <span className="ml-2 text-foreground">{resource.mime_type}</span>
               </div>
             )}
             <div>
-              <span className="text-gray-500">Added:</span>
-              <span className="ml-2 text-gray-900">
+              <span className="text-muted-foreground">Added:</span>
+              <span className="ml-2 text-foreground">
                 {formatDate(resource.created_at)}
               </span>
             </div>
@@ -248,10 +256,10 @@ export default function ResourceDetailPage() {
           {/* Video Preview (for video content) */}
           {resource.content_type === "video" && resource.external_url && (
             <div className="mt-4">
-              <h3 className="text-sm font-medium text-gray-500 mb-3">Preview</h3>
+              <h3 className="text-sm font-medium text-muted-foreground mb-3">Preview</h3>
               {resource.external_url.includes("youtube.com") ||
               resource.external_url.includes("youtu.be") ? (
-                <div className="aspect-video rounded-lg overflow-hidden bg-gray-100">
+                <div className="aspect-video rounded-lg overflow-hidden bg-muted">
                   <iframe
                     src={convertToEmbedUrl(resource.external_url)}
                     className="w-full h-full"
@@ -260,7 +268,7 @@ export default function ResourceDetailPage() {
                   />
                 </div>
               ) : resource.external_url.includes("vimeo.com") ? (
-                <div className="aspect-video rounded-lg overflow-hidden bg-gray-100">
+                <div className="aspect-video rounded-lg overflow-hidden bg-muted">
                   <iframe
                     src={convertVimeoToEmbed(resource.external_url)}
                     className="w-full h-full"
@@ -278,9 +286,9 @@ export default function ResourceDetailPage() {
 
           {/* Document Preview hint */}
           {resource.content_type === "document" && resource.file_url && (
-            <div className="p-4 bg-gray-50 rounded-lg text-center">
-              <FileText className="h-12 w-12 text-gray-300 mx-auto mb-2" />
-              <p className="text-sm text-gray-500">
+            <div className="p-4 bg-muted rounded-lg text-center">
+              <FileText className="h-12 w-12 text-muted-foreground/40 mx-auto mb-2" />
+              <p className="text-sm text-muted-foreground">
                 Click the Download button to view this document
               </p>
             </div>

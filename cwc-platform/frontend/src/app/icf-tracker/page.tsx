@@ -67,6 +67,7 @@ import {
   DropdownMenuItem,
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
+import { Skeleton } from "@/components/ui/skeleton";
 import { toast } from "sonner";
 
 export default function ICFTrackerPage() {
@@ -302,7 +303,7 @@ export default function ICFTrackerPage() {
         <div className="flex items-center justify-between">
           <div>
             <h1 className="text-2xl font-bold">ICF Hours Tracker</h1>
-            <p className="text-gray-500">
+            <p className="text-muted-foreground">
               Track coaching hours for ICF certification
             </p>
           </div>
@@ -334,7 +335,7 @@ export default function ICFTrackerPage() {
                 <div className="flex items-center gap-2">
                   <Clock className="h-5 w-5 text-purple-600" />
                   <div>
-                    <p className="text-sm text-gray-500">Total Hours</p>
+                    <p className="text-sm text-muted-foreground">Total Hours</p>
                     <p className="text-2xl font-bold">{summary.total_hours}</p>
                   </div>
                 </div>
@@ -346,7 +347,7 @@ export default function ICFTrackerPage() {
                 <div className="flex items-center gap-2">
                   <User className="h-5 w-5 text-blue-600" />
                   <div>
-                    <p className="text-sm text-gray-500">Individual</p>
+                    <p className="text-sm text-muted-foreground">Individual</p>
                     <p className="text-2xl font-bold">{summary.individual_hours}</p>
                   </div>
                 </div>
@@ -356,9 +357,9 @@ export default function ICFTrackerPage() {
             <Card>
               <CardContent className="p-4">
                 <div className="flex items-center gap-2">
-                  <Users className="h-5 w-5 text-green-600" />
+                  <Users className="h-5 w-5 text-success" />
                   <div>
-                    <p className="text-sm text-gray-500">Group</p>
+                    <p className="text-sm text-muted-foreground">Group</p>
                     <p className="text-2xl font-bold">{summary.group_hours}</p>
                   </div>
                 </div>
@@ -370,7 +371,7 @@ export default function ICFTrackerPage() {
                 <div className="flex items-center gap-2">
                   <DollarSign className="h-5 w-5 text-emerald-600" />
                   <div>
-                    <p className="text-sm text-gray-500">Paid</p>
+                    <p className="text-sm text-muted-foreground">Paid</p>
                     <p className="text-2xl font-bold">{summary.paid_hours}</p>
                   </div>
                 </div>
@@ -382,7 +383,7 @@ export default function ICFTrackerPage() {
                 <div className="flex items-center gap-2">
                   <Heart className="h-5 w-5 text-pink-600" />
                   <div>
-                    <p className="text-sm text-gray-500">Pro Bono</p>
+                    <p className="text-sm text-muted-foreground">Pro Bono</p>
                     <p className="text-2xl font-bold">{summary.pro_bono_hours}</p>
                   </div>
                 </div>
@@ -394,7 +395,7 @@ export default function ICFTrackerPage() {
                 <div className="flex items-center gap-2">
                   <Users className="h-5 w-5 text-orange-600" />
                   <div>
-                    <p className="text-sm text-gray-500">Clients</p>
+                    <p className="text-sm text-muted-foreground">Clients</p>
                     <p className="text-2xl font-bold">{summary.total_clients}</p>
                   </div>
                 </div>
@@ -500,91 +501,91 @@ export default function ICFTrackerPage() {
                 <CardTitle className="flex items-center gap-2">
                   <Award className="h-5 w-5 text-purple-600" />
                   ACC - Associate Certified Coach
-                  {certDashboard.acc_ready && <Badge className="bg-green-500 ml-2">Ready to Apply!</Badge>}
+                  {certDashboard.acc_ready && <Badge className="bg-success ml-2">Ready to Apply!</Badge>}
                   {certDashboard.progress.acc_credential_received && <Badge className="bg-purple-600 ml-2">Certified!</Badge>}
                 </CardTitle>
               </CardHeader>
               <CardContent className="space-y-3">
                 {/* Step 1: Training */}
-                <div className={`flex items-start gap-3 p-3 rounded-lg ${certDashboard.progress.acc_training_hours >= certDashboard.requirements.acc_training_required ? 'bg-green-50' : 'bg-gray-50'}`}>
-                  <div className={`mt-0.5 flex-shrink-0 w-6 h-6 rounded-full flex items-center justify-center ${certDashboard.progress.acc_training_hours >= certDashboard.requirements.acc_training_required ? 'bg-green-500 text-white' : 'bg-gray-300 text-gray-600'}`}>
+                <div className={`flex items-start gap-3 p-3 rounded-lg ${certDashboard.progress.acc_training_hours >= certDashboard.requirements.acc_training_required ? 'bg-success/5' : 'bg-muted'}`}>
+                  <div className={`mt-0.5 flex-shrink-0 w-6 h-6 rounded-full flex items-center justify-center ${certDashboard.progress.acc_training_hours >= certDashboard.requirements.acc_training_required ? 'bg-success text-white' : 'bg-muted-foreground/30 text-muted-foreground'}`}>
                     {certDashboard.progress.acc_training_hours >= certDashboard.requirements.acc_training_required ? <CheckCircle className="h-4 w-4" /> : '1'}
                   </div>
                   <div className="flex-1">
                     <p className="font-medium">Complete Coach-Specific Training</p>
-                    <p className="text-sm text-gray-600">{certDashboard.progress.acc_training_hours}/{certDashboard.requirements.acc_training_required} hours {certDashboard.progress.acc_training_provider && `(${certDashboard.progress.acc_training_provider})`}</p>
+                    <p className="text-sm text-muted-foreground">{certDashboard.progress.acc_training_hours}/{certDashboard.requirements.acc_training_required} hours {certDashboard.progress.acc_training_provider && `(${certDashboard.progress.acc_training_provider})`}</p>
                     <a href="https://coachingfederation.org/find-a-program" target="_blank" rel="noopener noreferrer" className="text-xs text-purple-600 hover:underline">Find ICF-accredited programs →</a>
                   </div>
                 </div>
 
                 {/* Step 2: Coaching Hours */}
-                <div className={`flex items-start gap-3 p-3 rounded-lg ${certDashboard.total_coaching_hours >= certDashboard.requirements.acc_coaching_hours_required ? 'bg-green-50' : 'bg-gray-50'}`}>
-                  <div className={`mt-0.5 flex-shrink-0 w-6 h-6 rounded-full flex items-center justify-center ${certDashboard.total_coaching_hours >= certDashboard.requirements.acc_coaching_hours_required ? 'bg-green-500 text-white' : 'bg-gray-300 text-gray-600'}`}>
+                <div className={`flex items-start gap-3 p-3 rounded-lg ${certDashboard.total_coaching_hours >= certDashboard.requirements.acc_coaching_hours_required ? 'bg-success/5' : 'bg-muted'}`}>
+                  <div className={`mt-0.5 flex-shrink-0 w-6 h-6 rounded-full flex items-center justify-center ${certDashboard.total_coaching_hours >= certDashboard.requirements.acc_coaching_hours_required ? 'bg-success text-white' : 'bg-muted-foreground/30 text-muted-foreground'}`}>
                     {certDashboard.total_coaching_hours >= certDashboard.requirements.acc_coaching_hours_required ? <CheckCircle className="h-4 w-4" /> : '2'}
                   </div>
                   <div className="flex-1">
                     <p className="font-medium">Log 100+ Coaching Experience Hours</p>
-                    <p className="text-sm text-gray-600">{certDashboard.total_coaching_hours}/{certDashboard.requirements.acc_coaching_hours_required} hours logged</p>
+                    <p className="text-sm text-muted-foreground">{certDashboard.total_coaching_hours}/{certDashboard.requirements.acc_coaching_hours_required} hours logged</p>
                   </div>
                 </div>
 
                 {/* Step 3: Paid Hours */}
-                <div className={`flex items-start gap-3 p-3 rounded-lg ${certDashboard.paid_coaching_hours >= certDashboard.requirements.acc_paid_hours_required ? 'bg-green-50' : 'bg-gray-50'}`}>
-                  <div className={`mt-0.5 flex-shrink-0 w-6 h-6 rounded-full flex items-center justify-center ${certDashboard.paid_coaching_hours >= certDashboard.requirements.acc_paid_hours_required ? 'bg-green-500 text-white' : 'bg-gray-300 text-gray-600'}`}>
+                <div className={`flex items-start gap-3 p-3 rounded-lg ${certDashboard.paid_coaching_hours >= certDashboard.requirements.acc_paid_hours_required ? 'bg-success/5' : 'bg-muted'}`}>
+                  <div className={`mt-0.5 flex-shrink-0 w-6 h-6 rounded-full flex items-center justify-center ${certDashboard.paid_coaching_hours >= certDashboard.requirements.acc_paid_hours_required ? 'bg-success text-white' : 'bg-muted-foreground/30 text-muted-foreground'}`}>
                     {certDashboard.paid_coaching_hours >= certDashboard.requirements.acc_paid_hours_required ? <CheckCircle className="h-4 w-4" /> : '3'}
                   </div>
                   <div className="flex-1">
                     <p className="font-medium">75+ Hours Must Be Paid</p>
-                    <p className="text-sm text-gray-600">{certDashboard.paid_coaching_hours}/{certDashboard.requirements.acc_paid_hours_required} paid hours</p>
+                    <p className="text-sm text-muted-foreground">{certDashboard.paid_coaching_hours}/{certDashboard.requirements.acc_paid_hours_required} paid hours</p>
                   </div>
                 </div>
 
                 {/* Step 4: Clients */}
-                <div className={`flex items-start gap-3 p-3 rounded-lg ${certDashboard.total_clients >= certDashboard.requirements.acc_clients_required ? 'bg-green-50' : 'bg-gray-50'}`}>
-                  <div className={`mt-0.5 flex-shrink-0 w-6 h-6 rounded-full flex items-center justify-center ${certDashboard.total_clients >= certDashboard.requirements.acc_clients_required ? 'bg-green-500 text-white' : 'bg-gray-300 text-gray-600'}`}>
+                <div className={`flex items-start gap-3 p-3 rounded-lg ${certDashboard.total_clients >= certDashboard.requirements.acc_clients_required ? 'bg-success/5' : 'bg-muted'}`}>
+                  <div className={`mt-0.5 flex-shrink-0 w-6 h-6 rounded-full flex items-center justify-center ${certDashboard.total_clients >= certDashboard.requirements.acc_clients_required ? 'bg-success text-white' : 'bg-muted-foreground/30 text-muted-foreground'}`}>
                     {certDashboard.total_clients >= certDashboard.requirements.acc_clients_required ? <CheckCircle className="h-4 w-4" /> : '4'}
                   </div>
                   <div className="flex-1">
                     <p className="font-medium">Coach 8+ Unique Clients</p>
-                    <p className="text-sm text-gray-600">{certDashboard.total_clients}/{certDashboard.requirements.acc_clients_required} clients</p>
+                    <p className="text-sm text-muted-foreground">{certDashboard.total_clients}/{certDashboard.requirements.acc_clients_required} clients</p>
                   </div>
                 </div>
 
                 {/* Step 5: Mentor Coaching */}
-                <div className={`flex items-start gap-3 p-3 rounded-lg ${certDashboard.progress.acc_mentor_hours >= certDashboard.requirements.acc_mentor_hours_required ? 'bg-green-50' : 'bg-gray-50'}`}>
-                  <div className={`mt-0.5 flex-shrink-0 w-6 h-6 rounded-full flex items-center justify-center ${certDashboard.progress.acc_mentor_hours >= certDashboard.requirements.acc_mentor_hours_required ? 'bg-green-500 text-white' : 'bg-gray-300 text-gray-600'}`}>
+                <div className={`flex items-start gap-3 p-3 rounded-lg ${certDashboard.progress.acc_mentor_hours >= certDashboard.requirements.acc_mentor_hours_required ? 'bg-success/5' : 'bg-muted'}`}>
+                  <div className={`mt-0.5 flex-shrink-0 w-6 h-6 rounded-full flex items-center justify-center ${certDashboard.progress.acc_mentor_hours >= certDashboard.requirements.acc_mentor_hours_required ? 'bg-success text-white' : 'bg-muted-foreground/30 text-muted-foreground'}`}>
                     {certDashboard.progress.acc_mentor_hours >= certDashboard.requirements.acc_mentor_hours_required ? <CheckCircle className="h-4 w-4" /> : '5'}
                   </div>
                   <div className="flex-1">
                     <p className="font-medium">Complete 10 Hours Mentor Coaching</p>
-                    <p className="text-sm text-gray-600">
+                    <p className="text-sm text-muted-foreground">
                       {certDashboard.progress.acc_mentor_hours}/{certDashboard.requirements.acc_mentor_hours_required} hrs
                       (Individual: {certDashboard.progress.acc_mentor_individual_hours}/3 min, Group: {certDashboard.progress.acc_mentor_group_hours}/7 max)
                     </p>
-                    {certDashboard.progress.acc_mentor_name && <p className="text-xs text-gray-500">Mentor: {certDashboard.progress.acc_mentor_name}</p>}
+                    {certDashboard.progress.acc_mentor_name && <p className="text-xs text-muted-foreground">Mentor: {certDashboard.progress.acc_mentor_name}</p>}
                   </div>
                 </div>
 
                 {/* Step 6: Exam */}
-                <div className={`flex items-start gap-3 p-3 rounded-lg ${certDashboard.progress.acc_exam_passed ? 'bg-green-50' : 'bg-gray-50'}`}>
-                  <div className={`mt-0.5 flex-shrink-0 w-6 h-6 rounded-full flex items-center justify-center ${certDashboard.progress.acc_exam_passed ? 'bg-green-500 text-white' : 'bg-gray-300 text-gray-600'}`}>
+                <div className={`flex items-start gap-3 p-3 rounded-lg ${certDashboard.progress.acc_exam_passed ? 'bg-success/5' : 'bg-muted'}`}>
+                  <div className={`mt-0.5 flex-shrink-0 w-6 h-6 rounded-full flex items-center justify-center ${certDashboard.progress.acc_exam_passed ? 'bg-success text-white' : 'bg-muted-foreground/30 text-muted-foreground'}`}>
                     {certDashboard.progress.acc_exam_passed ? <CheckCircle className="h-4 w-4" /> : '6'}
                   </div>
                   <div className="flex-1">
                     <p className="font-medium">Pass ICF Credentialing Exam</p>
-                    <p className="text-sm text-gray-600">{certDashboard.progress.acc_exam_passed ? 'Passed!' : 'Not yet taken'}</p>
+                    <p className="text-sm text-muted-foreground">{certDashboard.progress.acc_exam_passed ? 'Passed!' : 'Not yet taken'}</p>
                     <a href="https://coachingfederation.org/credentials-and-standards/credentialing-exam" target="_blank" rel="noopener noreferrer" className="text-xs text-purple-600 hover:underline">Register for exam ($75) →</a>
                   </div>
                 </div>
 
                 {/* Step 7: Apply */}
-                <div className={`flex items-start gap-3 p-3 rounded-lg ${certDashboard.progress.acc_credential_received ? 'bg-green-50' : 'bg-gray-50'}`}>
-                  <div className={`mt-0.5 flex-shrink-0 w-6 h-6 rounded-full flex items-center justify-center ${certDashboard.progress.acc_credential_received ? 'bg-green-500 text-white' : 'bg-gray-300 text-gray-600'}`}>
+                <div className={`flex items-start gap-3 p-3 rounded-lg ${certDashboard.progress.acc_credential_received ? 'bg-success/5' : 'bg-muted'}`}>
+                  <div className={`mt-0.5 flex-shrink-0 w-6 h-6 rounded-full flex items-center justify-center ${certDashboard.progress.acc_credential_received ? 'bg-success text-white' : 'bg-muted-foreground/30 text-muted-foreground'}`}>
                     {certDashboard.progress.acc_credential_received ? <CheckCircle className="h-4 w-4" /> : '7'}
                   </div>
                   <div className="flex-1">
                     <p className="font-medium">Submit ACC Application & Receive Credential</p>
-                    <p className="text-sm text-gray-600">{certDashboard.progress.acc_credential_received ? `Certified! #${certDashboard.progress.acc_credential_number || 'N/A'}` : certDashboard.progress.acc_applied ? 'Application submitted' : 'Not yet applied'}</p>
+                    <p className="text-sm text-muted-foreground">{certDashboard.progress.acc_credential_received ? `Certified! #${certDashboard.progress.acc_credential_number || 'N/A'}` : certDashboard.progress.acc_applied ? 'Application submitted' : 'Not yet applied'}</p>
                     <a href="https://coachingfederation.org/credentials-and-standards/acc" target="_blank" rel="noopener noreferrer" className="text-xs text-purple-600 hover:underline">Apply for ACC ($175) →</a>
                   </div>
                 </div>
@@ -597,90 +598,90 @@ export default function ICFTrackerPage() {
                 <CardTitle className="flex items-center gap-2">
                   <Award className="h-5 w-5 text-amber-600" />
                   PCC - Professional Certified Coach
-                  {certDashboard.pcc_ready && <Badge className="bg-green-500 ml-2">Ready to Apply!</Badge>}
+                  {certDashboard.pcc_ready && <Badge className="bg-success ml-2">Ready to Apply!</Badge>}
                   {certDashboard.progress.pcc_credential_received && <Badge className="bg-amber-600 ml-2">Certified!</Badge>}
                 </CardTitle>
               </CardHeader>
               <CardContent className="space-y-3">
                 {/* Step 1: Training */}
-                <div className={`flex items-start gap-3 p-3 rounded-lg ${(certDashboard.progress.acc_training_hours + certDashboard.progress.pcc_training_hours) >= certDashboard.requirements.pcc_training_required ? 'bg-green-50' : 'bg-gray-50'}`}>
-                  <div className={`mt-0.5 flex-shrink-0 w-6 h-6 rounded-full flex items-center justify-center ${(certDashboard.progress.acc_training_hours + certDashboard.progress.pcc_training_hours) >= certDashboard.requirements.pcc_training_required ? 'bg-green-500 text-white' : 'bg-gray-300 text-gray-600'}`}>
+                <div className={`flex items-start gap-3 p-3 rounded-lg ${(certDashboard.progress.acc_training_hours + certDashboard.progress.pcc_training_hours) >= certDashboard.requirements.pcc_training_required ? 'bg-success/5' : 'bg-muted'}`}>
+                  <div className={`mt-0.5 flex-shrink-0 w-6 h-6 rounded-full flex items-center justify-center ${(certDashboard.progress.acc_training_hours + certDashboard.progress.pcc_training_hours) >= certDashboard.requirements.pcc_training_required ? 'bg-success text-white' : 'bg-muted-foreground/30 text-muted-foreground'}`}>
                     {(certDashboard.progress.acc_training_hours + certDashboard.progress.pcc_training_hours) >= certDashboard.requirements.pcc_training_required ? <CheckCircle className="h-4 w-4" /> : '1'}
                   </div>
                   <div className="flex-1">
                     <p className="font-medium">Complete 125+ Hours Coach Training</p>
-                    <p className="text-sm text-gray-600">{certDashboard.progress.acc_training_hours + certDashboard.progress.pcc_training_hours}/{certDashboard.requirements.pcc_training_required} total hours</p>
+                    <p className="text-sm text-muted-foreground">{certDashboard.progress.acc_training_hours + certDashboard.progress.pcc_training_hours}/{certDashboard.requirements.pcc_training_required} total hours</p>
                   </div>
                 </div>
 
                 {/* Step 2: Coaching Hours */}
-                <div className={`flex items-start gap-3 p-3 rounded-lg ${certDashboard.total_coaching_hours >= certDashboard.requirements.pcc_coaching_hours_required ? 'bg-green-50' : 'bg-gray-50'}`}>
-                  <div className={`mt-0.5 flex-shrink-0 w-6 h-6 rounded-full flex items-center justify-center ${certDashboard.total_coaching_hours >= certDashboard.requirements.pcc_coaching_hours_required ? 'bg-green-500 text-white' : 'bg-gray-300 text-gray-600'}`}>
+                <div className={`flex items-start gap-3 p-3 rounded-lg ${certDashboard.total_coaching_hours >= certDashboard.requirements.pcc_coaching_hours_required ? 'bg-success/5' : 'bg-muted'}`}>
+                  <div className={`mt-0.5 flex-shrink-0 w-6 h-6 rounded-full flex items-center justify-center ${certDashboard.total_coaching_hours >= certDashboard.requirements.pcc_coaching_hours_required ? 'bg-success text-white' : 'bg-muted-foreground/30 text-muted-foreground'}`}>
                     {certDashboard.total_coaching_hours >= certDashboard.requirements.pcc_coaching_hours_required ? <CheckCircle className="h-4 w-4" /> : '2'}
                   </div>
                   <div className="flex-1">
                     <p className="font-medium">Log 500+ Coaching Experience Hours</p>
-                    <p className="text-sm text-gray-600">{certDashboard.total_coaching_hours}/{certDashboard.requirements.pcc_coaching_hours_required} hours logged</p>
+                    <p className="text-sm text-muted-foreground">{certDashboard.total_coaching_hours}/{certDashboard.requirements.pcc_coaching_hours_required} hours logged</p>
                   </div>
                 </div>
 
                 {/* Step 3: Paid Hours */}
-                <div className={`flex items-start gap-3 p-3 rounded-lg ${certDashboard.paid_coaching_hours >= certDashboard.requirements.pcc_paid_hours_required ? 'bg-green-50' : 'bg-gray-50'}`}>
-                  <div className={`mt-0.5 flex-shrink-0 w-6 h-6 rounded-full flex items-center justify-center ${certDashboard.paid_coaching_hours >= certDashboard.requirements.pcc_paid_hours_required ? 'bg-green-500 text-white' : 'bg-gray-300 text-gray-600'}`}>
+                <div className={`flex items-start gap-3 p-3 rounded-lg ${certDashboard.paid_coaching_hours >= certDashboard.requirements.pcc_paid_hours_required ? 'bg-success/5' : 'bg-muted'}`}>
+                  <div className={`mt-0.5 flex-shrink-0 w-6 h-6 rounded-full flex items-center justify-center ${certDashboard.paid_coaching_hours >= certDashboard.requirements.pcc_paid_hours_required ? 'bg-success text-white' : 'bg-muted-foreground/30 text-muted-foreground'}`}>
                     {certDashboard.paid_coaching_hours >= certDashboard.requirements.pcc_paid_hours_required ? <CheckCircle className="h-4 w-4" /> : '3'}
                   </div>
                   <div className="flex-1">
                     <p className="font-medium">450+ Hours Must Be Paid</p>
-                    <p className="text-sm text-gray-600">{certDashboard.paid_coaching_hours}/{certDashboard.requirements.pcc_paid_hours_required} paid hours</p>
+                    <p className="text-sm text-muted-foreground">{certDashboard.paid_coaching_hours}/{certDashboard.requirements.pcc_paid_hours_required} paid hours</p>
                   </div>
                 </div>
 
                 {/* Step 4: Clients */}
-                <div className={`flex items-start gap-3 p-3 rounded-lg ${certDashboard.total_clients >= certDashboard.requirements.pcc_clients_required ? 'bg-green-50' : 'bg-gray-50'}`}>
-                  <div className={`mt-0.5 flex-shrink-0 w-6 h-6 rounded-full flex items-center justify-center ${certDashboard.total_clients >= certDashboard.requirements.pcc_clients_required ? 'bg-green-500 text-white' : 'bg-gray-300 text-gray-600'}`}>
+                <div className={`flex items-start gap-3 p-3 rounded-lg ${certDashboard.total_clients >= certDashboard.requirements.pcc_clients_required ? 'bg-success/5' : 'bg-muted'}`}>
+                  <div className={`mt-0.5 flex-shrink-0 w-6 h-6 rounded-full flex items-center justify-center ${certDashboard.total_clients >= certDashboard.requirements.pcc_clients_required ? 'bg-success text-white' : 'bg-muted-foreground/30 text-muted-foreground'}`}>
                     {certDashboard.total_clients >= certDashboard.requirements.pcc_clients_required ? <CheckCircle className="h-4 w-4" /> : '4'}
                   </div>
                   <div className="flex-1">
                     <p className="font-medium">Coach 25+ Unique Clients</p>
-                    <p className="text-sm text-gray-600">{certDashboard.total_clients}/{certDashboard.requirements.pcc_clients_required} clients</p>
+                    <p className="text-sm text-muted-foreground">{certDashboard.total_clients}/{certDashboard.requirements.pcc_clients_required} clients</p>
                   </div>
                 </div>
 
                 {/* Step 5: Mentor Coaching */}
-                <div className={`flex items-start gap-3 p-3 rounded-lg ${certDashboard.progress.pcc_mentor_hours >= certDashboard.requirements.pcc_mentor_hours_required ? 'bg-green-50' : 'bg-gray-50'}`}>
-                  <div className={`mt-0.5 flex-shrink-0 w-6 h-6 rounded-full flex items-center justify-center ${certDashboard.progress.pcc_mentor_hours >= certDashboard.requirements.pcc_mentor_hours_required ? 'bg-green-500 text-white' : 'bg-gray-300 text-gray-600'}`}>
+                <div className={`flex items-start gap-3 p-3 rounded-lg ${certDashboard.progress.pcc_mentor_hours >= certDashboard.requirements.pcc_mentor_hours_required ? 'bg-success/5' : 'bg-muted'}`}>
+                  <div className={`mt-0.5 flex-shrink-0 w-6 h-6 rounded-full flex items-center justify-center ${certDashboard.progress.pcc_mentor_hours >= certDashboard.requirements.pcc_mentor_hours_required ? 'bg-success text-white' : 'bg-muted-foreground/30 text-muted-foreground'}`}>
                     {certDashboard.progress.pcc_mentor_hours >= certDashboard.requirements.pcc_mentor_hours_required ? <CheckCircle className="h-4 w-4" /> : '5'}
                   </div>
                   <div className="flex-1">
                     <p className="font-medium">Complete 10 Hours Mentor Coaching (PCC/MCC mentor)</p>
-                    <p className="text-sm text-gray-600">
+                    <p className="text-sm text-muted-foreground">
                       {certDashboard.progress.pcc_mentor_hours}/{certDashboard.requirements.pcc_mentor_hours_required} hrs
                       (Individual: {certDashboard.progress.pcc_mentor_individual_hours}/3 min, Group: {certDashboard.progress.pcc_mentor_group_hours}/7 max)
                     </p>
-                    {certDashboard.progress.pcc_mentor_name && <p className="text-xs text-gray-500">Mentor: {certDashboard.progress.pcc_mentor_name}</p>}
+                    {certDashboard.progress.pcc_mentor_name && <p className="text-xs text-muted-foreground">Mentor: {certDashboard.progress.pcc_mentor_name}</p>}
                   </div>
                 </div>
 
                 {/* Step 6: Exam */}
-                <div className={`flex items-start gap-3 p-3 rounded-lg ${certDashboard.progress.pcc_exam_passed ? 'bg-green-50' : 'bg-gray-50'}`}>
-                  <div className={`mt-0.5 flex-shrink-0 w-6 h-6 rounded-full flex items-center justify-center ${certDashboard.progress.pcc_exam_passed ? 'bg-green-500 text-white' : 'bg-gray-300 text-gray-600'}`}>
+                <div className={`flex items-start gap-3 p-3 rounded-lg ${certDashboard.progress.pcc_exam_passed ? 'bg-success/5' : 'bg-muted'}`}>
+                  <div className={`mt-0.5 flex-shrink-0 w-6 h-6 rounded-full flex items-center justify-center ${certDashboard.progress.pcc_exam_passed ? 'bg-success text-white' : 'bg-muted-foreground/30 text-muted-foreground'}`}>
                     {certDashboard.progress.pcc_exam_passed ? <CheckCircle className="h-4 w-4" /> : '6'}
                   </div>
                   <div className="flex-1">
                     <p className="font-medium">Pass ICF Credentialing Exam</p>
-                    <p className="text-sm text-gray-600">{certDashboard.progress.pcc_exam_passed ? 'Passed!' : 'Not yet taken'}</p>
+                    <p className="text-sm text-muted-foreground">{certDashboard.progress.pcc_exam_passed ? 'Passed!' : 'Not yet taken'}</p>
                     <a href="https://coachingfederation.org/credentials-and-standards/credentialing-exam" target="_blank" rel="noopener noreferrer" className="text-xs text-amber-600 hover:underline">Register for exam ($75) →</a>
                   </div>
                 </div>
 
                 {/* Step 7: Apply */}
-                <div className={`flex items-start gap-3 p-3 rounded-lg ${certDashboard.progress.pcc_credential_received ? 'bg-green-50' : 'bg-gray-50'}`}>
-                  <div className={`mt-0.5 flex-shrink-0 w-6 h-6 rounded-full flex items-center justify-center ${certDashboard.progress.pcc_credential_received ? 'bg-green-500 text-white' : 'bg-gray-300 text-gray-600'}`}>
+                <div className={`flex items-start gap-3 p-3 rounded-lg ${certDashboard.progress.pcc_credential_received ? 'bg-success/5' : 'bg-muted'}`}>
+                  <div className={`mt-0.5 flex-shrink-0 w-6 h-6 rounded-full flex items-center justify-center ${certDashboard.progress.pcc_credential_received ? 'bg-success text-white' : 'bg-muted-foreground/30 text-muted-foreground'}`}>
                     {certDashboard.progress.pcc_credential_received ? <CheckCircle className="h-4 w-4" /> : '7'}
                   </div>
                   <div className="flex-1">
                     <p className="font-medium">Submit PCC Application & Receive Credential</p>
-                    <p className="text-sm text-gray-600">{certDashboard.progress.pcc_credential_received ? `Certified! #${certDashboard.progress.pcc_credential_number || 'N/A'}` : certDashboard.progress.pcc_applied ? 'Application submitted' : 'Not yet applied'}</p>
+                    <p className="text-sm text-muted-foreground">{certDashboard.progress.pcc_credential_received ? `Certified! #${certDashboard.progress.pcc_credential_number || 'N/A'}` : certDashboard.progress.pcc_applied ? 'Application submitted' : 'Not yet applied'}</p>
                     <a href="https://coachingfederation.org/credentials-and-standards/pcc" target="_blank" rel="noopener noreferrer" className="text-xs text-amber-600 hover:underline">Apply for PCC ($300) →</a>
                   </div>
                 </div>
@@ -693,91 +694,91 @@ export default function ICFTrackerPage() {
                 <CardTitle className="flex items-center gap-2">
                   <Award className="h-5 w-5 text-emerald-600" />
                   MCC - Master Certified Coach
-                  {certDashboard.mcc_ready && <Badge className="bg-green-500 ml-2">Ready to Apply!</Badge>}
+                  {certDashboard.mcc_ready && <Badge className="bg-success ml-2">Ready to Apply!</Badge>}
                   {certDashboard.progress.mcc_credential_received && <Badge className="bg-emerald-600 ml-2">Certified!</Badge>}
                 </CardTitle>
               </CardHeader>
               <CardContent className="space-y-3">
                 {/* Step 1: Training */}
-                <div className={`flex items-start gap-3 p-3 rounded-lg ${(certDashboard.progress.acc_training_hours + certDashboard.progress.pcc_training_hours + certDashboard.progress.mcc_training_hours) >= certDashboard.requirements.mcc_training_required ? 'bg-green-50' : 'bg-gray-50'}`}>
-                  <div className={`mt-0.5 flex-shrink-0 w-6 h-6 rounded-full flex items-center justify-center ${(certDashboard.progress.acc_training_hours + certDashboard.progress.pcc_training_hours + certDashboard.progress.mcc_training_hours) >= certDashboard.requirements.mcc_training_required ? 'bg-green-500 text-white' : 'bg-gray-300 text-gray-600'}`}>
+                <div className={`flex items-start gap-3 p-3 rounded-lg ${(certDashboard.progress.acc_training_hours + certDashboard.progress.pcc_training_hours + certDashboard.progress.mcc_training_hours) >= certDashboard.requirements.mcc_training_required ? 'bg-success/5' : 'bg-muted'}`}>
+                  <div className={`mt-0.5 flex-shrink-0 w-6 h-6 rounded-full flex items-center justify-center ${(certDashboard.progress.acc_training_hours + certDashboard.progress.pcc_training_hours + certDashboard.progress.mcc_training_hours) >= certDashboard.requirements.mcc_training_required ? 'bg-success text-white' : 'bg-muted-foreground/30 text-muted-foreground'}`}>
                     {(certDashboard.progress.acc_training_hours + certDashboard.progress.pcc_training_hours + certDashboard.progress.mcc_training_hours) >= certDashboard.requirements.mcc_training_required ? <CheckCircle className="h-4 w-4" /> : '1'}
                   </div>
                   <div className="flex-1">
                     <p className="font-medium">Complete 200+ Hours Coach Training</p>
-                    <p className="text-sm text-gray-600">{certDashboard.progress.acc_training_hours + certDashboard.progress.pcc_training_hours + certDashboard.progress.mcc_training_hours}/{certDashboard.requirements.mcc_training_required} total hours</p>
+                    <p className="text-sm text-muted-foreground">{certDashboard.progress.acc_training_hours + certDashboard.progress.pcc_training_hours + certDashboard.progress.mcc_training_hours}/{certDashboard.requirements.mcc_training_required} total hours</p>
                   </div>
                 </div>
 
                 {/* Step 2: Coaching Hours */}
-                <div className={`flex items-start gap-3 p-3 rounded-lg ${certDashboard.total_coaching_hours >= certDashboard.requirements.mcc_coaching_hours_required ? 'bg-green-50' : 'bg-gray-50'}`}>
-                  <div className={`mt-0.5 flex-shrink-0 w-6 h-6 rounded-full flex items-center justify-center ${certDashboard.total_coaching_hours >= certDashboard.requirements.mcc_coaching_hours_required ? 'bg-green-500 text-white' : 'bg-gray-300 text-gray-600'}`}>
+                <div className={`flex items-start gap-3 p-3 rounded-lg ${certDashboard.total_coaching_hours >= certDashboard.requirements.mcc_coaching_hours_required ? 'bg-success/5' : 'bg-muted'}`}>
+                  <div className={`mt-0.5 flex-shrink-0 w-6 h-6 rounded-full flex items-center justify-center ${certDashboard.total_coaching_hours >= certDashboard.requirements.mcc_coaching_hours_required ? 'bg-success text-white' : 'bg-muted-foreground/30 text-muted-foreground'}`}>
                     {certDashboard.total_coaching_hours >= certDashboard.requirements.mcc_coaching_hours_required ? <CheckCircle className="h-4 w-4" /> : '2'}
                   </div>
                   <div className="flex-1">
                     <p className="font-medium">Log 2,500+ Coaching Experience Hours</p>
-                    <p className="text-sm text-gray-600">{certDashboard.total_coaching_hours}/{certDashboard.requirements.mcc_coaching_hours_required} hours logged</p>
-                    <p className="text-xs text-gray-500">{(certDashboard.requirements.mcc_coaching_hours_required - certDashboard.total_coaching_hours).toFixed(1)} hours remaining</p>
+                    <p className="text-sm text-muted-foreground">{certDashboard.total_coaching_hours}/{certDashboard.requirements.mcc_coaching_hours_required} hours logged</p>
+                    <p className="text-xs text-muted-foreground">{(certDashboard.requirements.mcc_coaching_hours_required - certDashboard.total_coaching_hours).toFixed(1)} hours remaining</p>
                   </div>
                 </div>
 
                 {/* Step 3: Paid Hours */}
-                <div className={`flex items-start gap-3 p-3 rounded-lg ${certDashboard.paid_coaching_hours >= certDashboard.requirements.mcc_paid_hours_required ? 'bg-green-50' : 'bg-gray-50'}`}>
-                  <div className={`mt-0.5 flex-shrink-0 w-6 h-6 rounded-full flex items-center justify-center ${certDashboard.paid_coaching_hours >= certDashboard.requirements.mcc_paid_hours_required ? 'bg-green-500 text-white' : 'bg-gray-300 text-gray-600'}`}>
+                <div className={`flex items-start gap-3 p-3 rounded-lg ${certDashboard.paid_coaching_hours >= certDashboard.requirements.mcc_paid_hours_required ? 'bg-success/5' : 'bg-muted'}`}>
+                  <div className={`mt-0.5 flex-shrink-0 w-6 h-6 rounded-full flex items-center justify-center ${certDashboard.paid_coaching_hours >= certDashboard.requirements.mcc_paid_hours_required ? 'bg-success text-white' : 'bg-muted-foreground/30 text-muted-foreground'}`}>
                     {certDashboard.paid_coaching_hours >= certDashboard.requirements.mcc_paid_hours_required ? <CheckCircle className="h-4 w-4" /> : '3'}
                   </div>
                   <div className="flex-1">
                     <p className="font-medium">2,250+ Hours Must Be Paid (90%)</p>
-                    <p className="text-sm text-gray-600">{certDashboard.paid_coaching_hours}/{certDashboard.requirements.mcc_paid_hours_required} paid hours</p>
+                    <p className="text-sm text-muted-foreground">{certDashboard.paid_coaching_hours}/{certDashboard.requirements.mcc_paid_hours_required} paid hours</p>
                   </div>
                 </div>
 
                 {/* Step 4: Clients */}
-                <div className={`flex items-start gap-3 p-3 rounded-lg ${certDashboard.total_clients >= certDashboard.requirements.mcc_clients_required ? 'bg-green-50' : 'bg-gray-50'}`}>
-                  <div className={`mt-0.5 flex-shrink-0 w-6 h-6 rounded-full flex items-center justify-center ${certDashboard.total_clients >= certDashboard.requirements.mcc_clients_required ? 'bg-green-500 text-white' : 'bg-gray-300 text-gray-600'}`}>
+                <div className={`flex items-start gap-3 p-3 rounded-lg ${certDashboard.total_clients >= certDashboard.requirements.mcc_clients_required ? 'bg-success/5' : 'bg-muted'}`}>
+                  <div className={`mt-0.5 flex-shrink-0 w-6 h-6 rounded-full flex items-center justify-center ${certDashboard.total_clients >= certDashboard.requirements.mcc_clients_required ? 'bg-success text-white' : 'bg-muted-foreground/30 text-muted-foreground'}`}>
                     {certDashboard.total_clients >= certDashboard.requirements.mcc_clients_required ? <CheckCircle className="h-4 w-4" /> : '4'}
                   </div>
                   <div className="flex-1">
                     <p className="font-medium">Coach 35+ Unique Clients</p>
-                    <p className="text-sm text-gray-600">{certDashboard.total_clients}/{certDashboard.requirements.mcc_clients_required} clients</p>
+                    <p className="text-sm text-muted-foreground">{certDashboard.total_clients}/{certDashboard.requirements.mcc_clients_required} clients</p>
                   </div>
                 </div>
 
                 {/* Step 5: Mentor Coaching */}
-                <div className={`flex items-start gap-3 p-3 rounded-lg ${certDashboard.progress.mcc_mentor_hours >= certDashboard.requirements.mcc_mentor_hours_required ? 'bg-green-50' : 'bg-gray-50'}`}>
-                  <div className={`mt-0.5 flex-shrink-0 w-6 h-6 rounded-full flex items-center justify-center ${certDashboard.progress.mcc_mentor_hours >= certDashboard.requirements.mcc_mentor_hours_required ? 'bg-green-500 text-white' : 'bg-gray-300 text-gray-600'}`}>
+                <div className={`flex items-start gap-3 p-3 rounded-lg ${certDashboard.progress.mcc_mentor_hours >= certDashboard.requirements.mcc_mentor_hours_required ? 'bg-success/5' : 'bg-muted'}`}>
+                  <div className={`mt-0.5 flex-shrink-0 w-6 h-6 rounded-full flex items-center justify-center ${certDashboard.progress.mcc_mentor_hours >= certDashboard.requirements.mcc_mentor_hours_required ? 'bg-success text-white' : 'bg-muted-foreground/30 text-muted-foreground'}`}>
                     {certDashboard.progress.mcc_mentor_hours >= certDashboard.requirements.mcc_mentor_hours_required ? <CheckCircle className="h-4 w-4" /> : '5'}
                   </div>
                   <div className="flex-1">
                     <p className="font-medium">Complete 10 Hours Mentor Coaching (MCC mentor only)</p>
-                    <p className="text-sm text-gray-600">
+                    <p className="text-sm text-muted-foreground">
                       {certDashboard.progress.mcc_mentor_hours}/{certDashboard.requirements.mcc_mentor_hours_required} hrs
                       (Individual: {certDashboard.progress.mcc_mentor_individual_hours}/3 min, Group: {certDashboard.progress.mcc_mentor_group_hours}/7 max)
                     </p>
-                    {certDashboard.progress.mcc_mentor_name && <p className="text-xs text-gray-500">Mentor: {certDashboard.progress.mcc_mentor_name}</p>}
+                    {certDashboard.progress.mcc_mentor_name && <p className="text-xs text-muted-foreground">Mentor: {certDashboard.progress.mcc_mentor_name}</p>}
                   </div>
                 </div>
 
                 {/* Step 6: Performance Evaluation */}
-                <div className={`flex items-start gap-3 p-3 rounded-lg ${certDashboard.progress.mcc_exam_passed ? 'bg-green-50' : 'bg-gray-50'}`}>
-                  <div className={`mt-0.5 flex-shrink-0 w-6 h-6 rounded-full flex items-center justify-center ${certDashboard.progress.mcc_exam_passed ? 'bg-green-500 text-white' : 'bg-gray-300 text-gray-600'}`}>
+                <div className={`flex items-start gap-3 p-3 rounded-lg ${certDashboard.progress.mcc_exam_passed ? 'bg-success/5' : 'bg-muted'}`}>
+                  <div className={`mt-0.5 flex-shrink-0 w-6 h-6 rounded-full flex items-center justify-center ${certDashboard.progress.mcc_exam_passed ? 'bg-success text-white' : 'bg-muted-foreground/30 text-muted-foreground'}`}>
                     {certDashboard.progress.mcc_exam_passed ? <CheckCircle className="h-4 w-4" /> : '6'}
                   </div>
                   <div className="flex-1">
                     <p className="font-medium">Pass Performance Evaluation</p>
-                    <p className="text-sm text-gray-600">{certDashboard.progress.mcc_exam_passed ? 'Passed!' : 'Not yet taken'}</p>
+                    <p className="text-sm text-muted-foreground">{certDashboard.progress.mcc_exam_passed ? 'Passed!' : 'Not yet taken'}</p>
                     <a href="https://coachingfederation.org/credentials-and-standards/mcc" target="_blank" rel="noopener noreferrer" className="text-xs text-emerald-600 hover:underline">Learn about MCC requirements →</a>
                   </div>
                 </div>
 
                 {/* Step 7: Apply */}
-                <div className={`flex items-start gap-3 p-3 rounded-lg ${certDashboard.progress.mcc_credential_received ? 'bg-green-50' : 'bg-gray-50'}`}>
-                  <div className={`mt-0.5 flex-shrink-0 w-6 h-6 rounded-full flex items-center justify-center ${certDashboard.progress.mcc_credential_received ? 'bg-green-500 text-white' : 'bg-gray-300 text-gray-600'}`}>
+                <div className={`flex items-start gap-3 p-3 rounded-lg ${certDashboard.progress.mcc_credential_received ? 'bg-success/5' : 'bg-muted'}`}>
+                  <div className={`mt-0.5 flex-shrink-0 w-6 h-6 rounded-full flex items-center justify-center ${certDashboard.progress.mcc_credential_received ? 'bg-success text-white' : 'bg-muted-foreground/30 text-muted-foreground'}`}>
                     {certDashboard.progress.mcc_credential_received ? <CheckCircle className="h-4 w-4" /> : '7'}
                   </div>
                   <div className="flex-1">
                     <p className="font-medium">Submit MCC Application & Receive Credential</p>
-                    <p className="text-sm text-gray-600">{certDashboard.progress.mcc_credential_received ? `Certified! #${certDashboard.progress.mcc_credential_number || 'N/A'}` : certDashboard.progress.mcc_applied ? 'Application submitted' : 'Not yet applied'}</p>
+                    <p className="text-sm text-muted-foreground">{certDashboard.progress.mcc_credential_received ? `Certified! #${certDashboard.progress.mcc_credential_number || 'N/A'}` : certDashboard.progress.mcc_applied ? 'Application submitted' : 'Not yet applied'}</p>
                     <a href="https://coachingfederation.org/credentials-and-standards/mcc" target="_blank" rel="noopener noreferrer" className="text-xs text-emerald-600 hover:underline">Apply for MCC ($450) →</a>
                   </div>
                 </div>
@@ -795,35 +796,35 @@ export default function ICFTrackerPage() {
               <CardContent>
                 <div className="grid md:grid-cols-2 gap-4">
                   <a href="https://coachingfederation.org/find-a-program" target="_blank" rel="noopener noreferrer"
-                    className="flex items-center gap-3 p-3 rounded-lg border hover:bg-gray-50 transition-colors">
+                    className="flex items-center gap-3 p-3 rounded-lg border hover:bg-muted transition-colors">
                     <GraduationCap className="h-5 w-5 text-purple-600" />
                     <div>
                       <p className="font-medium">Find Training Programs</p>
-                      <p className="text-sm text-gray-500">ICF-accredited coach training</p>
+                      <p className="text-sm text-muted-foreground">ICF-accredited coach training</p>
                     </div>
                   </a>
                   <a href="https://coachingfederation.org/credentials-and-standards/credentialing-exam" target="_blank" rel="noopener noreferrer"
-                    className="flex items-center gap-3 p-3 rounded-lg border hover:bg-gray-50 transition-colors">
+                    className="flex items-center gap-3 p-3 rounded-lg border hover:bg-muted transition-colors">
                     <FileCheck className="h-5 w-5 text-blue-600" />
                     <div>
                       <p className="font-medium">ICF Credentialing Exam</p>
-                      <p className="text-sm text-gray-500">Register & prepare for exam</p>
+                      <p className="text-sm text-muted-foreground">Register & prepare for exam</p>
                     </div>
                   </a>
                   <a href="https://coachingfederation.org/mentor-coaching" target="_blank" rel="noopener noreferrer"
-                    className="flex items-center gap-3 p-3 rounded-lg border hover:bg-gray-50 transition-colors">
-                    <Users className="h-5 w-5 text-green-600" />
+                    className="flex items-center gap-3 p-3 rounded-lg border hover:bg-muted transition-colors">
+                    <Users className="h-5 w-5 text-success" />
                     <div>
                       <p className="font-medium">Find a Mentor Coach</p>
-                      <p className="text-sm text-gray-500">ICF mentor coaching requirements</p>
+                      <p className="text-sm text-muted-foreground">ICF mentor coaching requirements</p>
                     </div>
                   </a>
                   <a href="https://coachingfederation.org/credentials-and-standards" target="_blank" rel="noopener noreferrer"
-                    className="flex items-center gap-3 p-3 rounded-lg border hover:bg-gray-50 transition-colors">
+                    className="flex items-center gap-3 p-3 rounded-lg border hover:bg-muted transition-colors">
                     <Award className="h-5 w-5 text-amber-600" />
                     <div>
                       <p className="font-medium">ICF Credentials Overview</p>
-                      <p className="text-sm text-gray-500">ACC, PCC, MCC requirements</p>
+                      <p className="text-sm text-muted-foreground">ACC, PCC, MCC requirements</p>
                     </div>
                   </a>
                 </div>
@@ -838,7 +839,7 @@ export default function ICFTrackerPage() {
             <Card className="mb-4">
               <CardContent className="pt-6">
                 <div className="relative">
-                  <Search className="absolute left-3 top-1/2 -translate-y-1/2 h-4 w-4 text-gray-400" />
+                  <Search className="absolute left-3 top-1/2 -translate-y-1/2 h-4 w-4 text-muted-foreground" />
                   <Input
                     placeholder="Search clients..."
                     value={search}
@@ -867,8 +868,17 @@ export default function ICFTrackerPage() {
                 <TableBody>
                   {loading ? (
                     <TableRow>
-                      <TableCell colSpan={9} className="text-center py-8">
-                        Loading...
+                      <TableCell colSpan={9} className="py-4">
+                        <div className="space-y-3">
+                          {[...Array(5)].map((_, i) => (
+                            <div key={i} className="flex items-center gap-4">
+                              <Skeleton className="h-4 w-32" />
+                              {[...Array(8)].map((_, j) => (
+                                <Skeleton key={j} className="h-4 w-16" />
+                              ))}
+                            </div>
+                          ))}
+                        </div>
                       </TableCell>
                     </TableRow>
                   ) : clientSummary.length === 0 ? (
@@ -919,7 +929,7 @@ export default function ICFTrackerPage() {
                 <div className="flex gap-4">
                   <div className="flex-1">
                     <div className="relative">
-                      <Search className="absolute left-3 top-1/2 -translate-y-1/2 h-4 w-4 text-gray-400" />
+                      <Search className="absolute left-3 top-1/2 -translate-y-1/2 h-4 w-4 text-muted-foreground" />
                       <Input
                         placeholder="Search by client name..."
                         value={search}
@@ -985,8 +995,17 @@ export default function ICFTrackerPage() {
                   <TableBody>
                     {loading ? (
                       <TableRow>
-                        <TableCell colSpan={8} className="text-center py-8">
-                          Loading...
+                        <TableCell colSpan={8} className="py-4">
+                          <div className="space-y-3">
+                            {[...Array(5)].map((_, i) => (
+                              <div key={i} className="flex items-center gap-4">
+                                <Skeleton className="h-4 w-32" />
+                                {[...Array(7)].map((_, j) => (
+                                  <Skeleton key={j} className="h-4 w-16" />
+                                ))}
+                              </div>
+                            ))}
+                          </div>
                         </TableCell>
                       </TableRow>
                     ) : sessions.length === 0 ? (
@@ -1013,14 +1032,14 @@ export default function ICFTrackerPage() {
                               {session.payment_type === "paid" ? "Paid" : "Pro Bono"}
                             </Badge>
                           </TableCell>
-                          <TableCell className="text-gray-500 text-sm">
+                          <TableCell className="text-muted-foreground text-sm">
                             {session.source}
                           </TableCell>
                           <TableCell>
                             {session.is_verified ? (
-                              <CheckCircle className="h-4 w-4 text-green-600" />
+                              <CheckCircle className="h-4 w-4 text-success" />
                             ) : (
-                              <XCircle className="h-4 w-4 text-gray-300" />
+                              <XCircle className="h-4 w-4 text-muted-foreground/50" />
                             )}
                           </TableCell>
                           <TableCell>
@@ -1037,7 +1056,7 @@ export default function ICFTrackerPage() {
                                 </DropdownMenuItem>
                                 <DropdownMenuItem
                                   onClick={() => handleDeleteSession(session.id)}
-                                  className="text-red-600"
+                                  className="text-destructive"
                                 >
                                   <Trash2 className="h-4 w-4 mr-2" />
                                   Delete
@@ -1056,7 +1075,7 @@ export default function ICFTrackerPage() {
             {/* Pagination */}
             {total > 50 && (
               <div className="flex items-center justify-between">
-                <p className="text-sm text-gray-500">
+                <p className="text-sm text-muted-foreground">
                   Showing {(page - 1) * 50 + 1} to {Math.min(page * 50, total)} of {total}
                 </p>
                 <div className="flex gap-2">
@@ -1096,7 +1115,7 @@ export default function ICFTrackerPage() {
                       ACC - Associate Certified Coach
                     </CardTitle>
                     {certDashboard.acc_ready ? (
-                      <Badge className="bg-green-500">Ready to Apply</Badge>
+                      <Badge className="bg-success">Ready to Apply</Badge>
                     ) : (
                       <Badge variant="outline">In Progress</Badge>
                     )}
@@ -1110,13 +1129,13 @@ export default function ICFTrackerPage() {
                         <GraduationCap className="h-4 w-4" />
                         Coach Training
                       </span>
-                      <span className={certDashboard.acc_training_progress >= 100 ? "text-green-600 font-medium" : ""}>
+                      <span className={certDashboard.acc_training_progress >= 100 ? "text-success font-medium" : ""}>
                         {certDashboard.progress.acc_training_hours}/{certDashboard.requirements.acc_training_required} hrs
                         {certDashboard.acc_training_progress >= 100 && <CheckCircle className="h-4 w-4 inline ml-1" />}
                       </span>
                     </div>
-                    <div className="w-full bg-gray-200 rounded-full h-2">
-                      <div className={`h-2 rounded-full ${certDashboard.acc_training_progress >= 100 ? "bg-green-500" : "bg-purple-600"}`}
+                    <div className="w-full bg-muted rounded-full h-2">
+                      <div className={`h-2 rounded-full ${certDashboard.acc_training_progress >= 100 ? "bg-success" : "bg-purple-600"}`}
                         style={{ width: `${certDashboard.acc_training_progress}%` }} />
                     </div>
                   </div>
@@ -1128,13 +1147,13 @@ export default function ICFTrackerPage() {
                         <Clock className="h-4 w-4" />
                         Coaching Hours
                       </span>
-                      <span className={certDashboard.acc_coaching_progress >= 100 ? "text-green-600 font-medium" : ""}>
+                      <span className={certDashboard.acc_coaching_progress >= 100 ? "text-success font-medium" : ""}>
                         {certDashboard.total_coaching_hours}/{certDashboard.requirements.acc_coaching_hours_required} hrs
                         {certDashboard.acc_coaching_progress >= 100 && <CheckCircle className="h-4 w-4 inline ml-1" />}
                       </span>
                     </div>
-                    <div className="w-full bg-gray-200 rounded-full h-2">
-                      <div className={`h-2 rounded-full ${certDashboard.acc_coaching_progress >= 100 ? "bg-green-500" : "bg-purple-600"}`}
+                    <div className="w-full bg-muted rounded-full h-2">
+                      <div className={`h-2 rounded-full ${certDashboard.acc_coaching_progress >= 100 ? "bg-success" : "bg-purple-600"}`}
                         style={{ width: `${certDashboard.acc_coaching_progress}%` }} />
                     </div>
                   </div>
@@ -1146,13 +1165,13 @@ export default function ICFTrackerPage() {
                         <DollarSign className="h-4 w-4" />
                         Paid Hours
                       </span>
-                      <span className={certDashboard.acc_paid_progress >= 100 ? "text-green-600 font-medium" : ""}>
+                      <span className={certDashboard.acc_paid_progress >= 100 ? "text-success font-medium" : ""}>
                         {certDashboard.paid_coaching_hours}/{certDashboard.requirements.acc_paid_hours_required} hrs
                         {certDashboard.acc_paid_progress >= 100 && <CheckCircle className="h-4 w-4 inline ml-1" />}
                       </span>
                     </div>
-                    <div className="w-full bg-gray-200 rounded-full h-2">
-                      <div className={`h-2 rounded-full ${certDashboard.acc_paid_progress >= 100 ? "bg-green-500" : "bg-purple-600"}`}
+                    <div className="w-full bg-muted rounded-full h-2">
+                      <div className={`h-2 rounded-full ${certDashboard.acc_paid_progress >= 100 ? "bg-success" : "bg-purple-600"}`}
                         style={{ width: `${certDashboard.acc_paid_progress}%` }} />
                     </div>
                   </div>
@@ -1164,13 +1183,13 @@ export default function ICFTrackerPage() {
                         <Users className="h-4 w-4" />
                         Unique Clients
                       </span>
-                      <span className={certDashboard.acc_clients_progress >= 100 ? "text-green-600 font-medium" : ""}>
+                      <span className={certDashboard.acc_clients_progress >= 100 ? "text-success font-medium" : ""}>
                         {certDashboard.total_clients}/{certDashboard.requirements.acc_clients_required}
                         {certDashboard.acc_clients_progress >= 100 && <CheckCircle className="h-4 w-4 inline ml-1" />}
                       </span>
                     </div>
-                    <div className="w-full bg-gray-200 rounded-full h-2">
-                      <div className={`h-2 rounded-full ${certDashboard.acc_clients_progress >= 100 ? "bg-green-500" : "bg-purple-600"}`}
+                    <div className="w-full bg-muted rounded-full h-2">
+                      <div className={`h-2 rounded-full ${certDashboard.acc_clients_progress >= 100 ? "bg-success" : "bg-purple-600"}`}
                         style={{ width: `${certDashboard.acc_clients_progress}%` }} />
                     </div>
                   </div>
@@ -1182,13 +1201,13 @@ export default function ICFTrackerPage() {
                         <BookOpen className="h-4 w-4" />
                         Mentor Coaching
                       </span>
-                      <span className={certDashboard.acc_mentor_progress >= 100 ? "text-green-600 font-medium" : ""}>
+                      <span className={certDashboard.acc_mentor_progress >= 100 ? "text-success font-medium" : ""}>
                         {certDashboard.progress.acc_mentor_hours}/{certDashboard.requirements.acc_mentor_hours_required} hrs
                         {certDashboard.acc_mentor_progress >= 100 && <CheckCircle className="h-4 w-4 inline ml-1" />}
                       </span>
                     </div>
-                    <div className="w-full bg-gray-200 rounded-full h-2">
-                      <div className={`h-2 rounded-full ${certDashboard.acc_mentor_progress >= 100 ? "bg-green-500" : "bg-purple-600"}`}
+                    <div className="w-full bg-muted rounded-full h-2">
+                      <div className={`h-2 rounded-full ${certDashboard.acc_mentor_progress >= 100 ? "bg-success" : "bg-purple-600"}`}
                         style={{ width: `${certDashboard.acc_mentor_progress}%` }} />
                     </div>
                   </div>
@@ -1200,7 +1219,7 @@ export default function ICFTrackerPage() {
                       ICF Credentialing Exam
                     </span>
                     {certDashboard.progress.acc_exam_passed ? (
-                      <Badge className="bg-green-500">Passed</Badge>
+                      <Badge className="bg-success">Passed</Badge>
                     ) : (
                       <Badge variant="outline">Not Taken</Badge>
                     )}
@@ -1217,7 +1236,7 @@ export default function ICFTrackerPage() {
                       PCC - Professional Certified Coach
                     </CardTitle>
                     {certDashboard.pcc_ready ? (
-                      <Badge className="bg-green-500">Ready to Apply</Badge>
+                      <Badge className="bg-success">Ready to Apply</Badge>
                     ) : (
                       <Badge variant="outline">In Progress</Badge>
                     )}
@@ -1231,13 +1250,13 @@ export default function ICFTrackerPage() {
                         <GraduationCap className="h-4 w-4" />
                         Coach Training
                       </span>
-                      <span className={certDashboard.pcc_training_progress >= 100 ? "text-green-600 font-medium" : ""}>
+                      <span className={certDashboard.pcc_training_progress >= 100 ? "text-success font-medium" : ""}>
                         {certDashboard.progress.acc_training_hours + certDashboard.progress.pcc_training_hours}/{certDashboard.requirements.pcc_training_required} hrs
                         {certDashboard.pcc_training_progress >= 100 && <CheckCircle className="h-4 w-4 inline ml-1" />}
                       </span>
                     </div>
-                    <div className="w-full bg-gray-200 rounded-full h-2">
-                      <div className={`h-2 rounded-full ${certDashboard.pcc_training_progress >= 100 ? "bg-green-500" : "bg-amber-500"}`}
+                    <div className="w-full bg-muted rounded-full h-2">
+                      <div className={`h-2 rounded-full ${certDashboard.pcc_training_progress >= 100 ? "bg-success" : "bg-amber-500"}`}
                         style={{ width: `${certDashboard.pcc_training_progress}%` }} />
                     </div>
                   </div>
@@ -1249,13 +1268,13 @@ export default function ICFTrackerPage() {
                         <Clock className="h-4 w-4" />
                         Coaching Hours
                       </span>
-                      <span className={certDashboard.pcc_coaching_progress >= 100 ? "text-green-600 font-medium" : ""}>
+                      <span className={certDashboard.pcc_coaching_progress >= 100 ? "text-success font-medium" : ""}>
                         {certDashboard.total_coaching_hours}/{certDashboard.requirements.pcc_coaching_hours_required} hrs
                         {certDashboard.pcc_coaching_progress >= 100 && <CheckCircle className="h-4 w-4 inline ml-1" />}
                       </span>
                     </div>
-                    <div className="w-full bg-gray-200 rounded-full h-2">
-                      <div className={`h-2 rounded-full ${certDashboard.pcc_coaching_progress >= 100 ? "bg-green-500" : "bg-amber-500"}`}
+                    <div className="w-full bg-muted rounded-full h-2">
+                      <div className={`h-2 rounded-full ${certDashboard.pcc_coaching_progress >= 100 ? "bg-success" : "bg-amber-500"}`}
                         style={{ width: `${certDashboard.pcc_coaching_progress}%` }} />
                     </div>
                   </div>
@@ -1267,13 +1286,13 @@ export default function ICFTrackerPage() {
                         <DollarSign className="h-4 w-4" />
                         Paid Hours
                       </span>
-                      <span className={certDashboard.pcc_paid_progress >= 100 ? "text-green-600 font-medium" : ""}>
+                      <span className={certDashboard.pcc_paid_progress >= 100 ? "text-success font-medium" : ""}>
                         {certDashboard.paid_coaching_hours}/{certDashboard.requirements.pcc_paid_hours_required} hrs
                         {certDashboard.pcc_paid_progress >= 100 && <CheckCircle className="h-4 w-4 inline ml-1" />}
                       </span>
                     </div>
-                    <div className="w-full bg-gray-200 rounded-full h-2">
-                      <div className={`h-2 rounded-full ${certDashboard.pcc_paid_progress >= 100 ? "bg-green-500" : "bg-amber-500"}`}
+                    <div className="w-full bg-muted rounded-full h-2">
+                      <div className={`h-2 rounded-full ${certDashboard.pcc_paid_progress >= 100 ? "bg-success" : "bg-amber-500"}`}
                         style={{ width: `${certDashboard.pcc_paid_progress}%` }} />
                     </div>
                   </div>
@@ -1285,13 +1304,13 @@ export default function ICFTrackerPage() {
                         <Users className="h-4 w-4" />
                         Unique Clients
                       </span>
-                      <span className={certDashboard.pcc_clients_progress >= 100 ? "text-green-600 font-medium" : ""}>
+                      <span className={certDashboard.pcc_clients_progress >= 100 ? "text-success font-medium" : ""}>
                         {certDashboard.total_clients}/{certDashboard.requirements.pcc_clients_required}
                         {certDashboard.pcc_clients_progress >= 100 && <CheckCircle className="h-4 w-4 inline ml-1" />}
                       </span>
                     </div>
-                    <div className="w-full bg-gray-200 rounded-full h-2">
-                      <div className={`h-2 rounded-full ${certDashboard.pcc_clients_progress >= 100 ? "bg-green-500" : "bg-amber-500"}`}
+                    <div className="w-full bg-muted rounded-full h-2">
+                      <div className={`h-2 rounded-full ${certDashboard.pcc_clients_progress >= 100 ? "bg-success" : "bg-amber-500"}`}
                         style={{ width: `${certDashboard.pcc_clients_progress}%` }} />
                     </div>
                   </div>
@@ -1303,13 +1322,13 @@ export default function ICFTrackerPage() {
                         <BookOpen className="h-4 w-4" />
                         Mentor Coaching (PCC/MCC)
                       </span>
-                      <span className={certDashboard.pcc_mentor_progress >= 100 ? "text-green-600 font-medium" : ""}>
+                      <span className={certDashboard.pcc_mentor_progress >= 100 ? "text-success font-medium" : ""}>
                         {certDashboard.progress.pcc_mentor_hours}/{certDashboard.requirements.pcc_mentor_hours_required} hrs
                         {certDashboard.pcc_mentor_progress >= 100 && <CheckCircle className="h-4 w-4 inline ml-1" />}
                       </span>
                     </div>
-                    <div className="w-full bg-gray-200 rounded-full h-2">
-                      <div className={`h-2 rounded-full ${certDashboard.pcc_mentor_progress >= 100 ? "bg-green-500" : "bg-amber-500"}`}
+                    <div className="w-full bg-muted rounded-full h-2">
+                      <div className={`h-2 rounded-full ${certDashboard.pcc_mentor_progress >= 100 ? "bg-success" : "bg-amber-500"}`}
                         style={{ width: `${certDashboard.pcc_mentor_progress}%` }} />
                     </div>
                   </div>
@@ -1321,7 +1340,7 @@ export default function ICFTrackerPage() {
                       ICF Credentialing Exam
                     </span>
                     {certDashboard.progress.pcc_exam_passed ? (
-                      <Badge className="bg-green-500">Passed</Badge>
+                      <Badge className="bg-success">Passed</Badge>
                     ) : (
                       <Badge variant="outline">Not Taken</Badge>
                     )}
@@ -1338,7 +1357,7 @@ export default function ICFTrackerPage() {
                       MCC - Master Certified Coach
                     </CardTitle>
                     {certDashboard.mcc_ready ? (
-                      <Badge className="bg-green-500">Ready to Apply</Badge>
+                      <Badge className="bg-success">Ready to Apply</Badge>
                     ) : (
                       <Badge variant="outline">In Progress</Badge>
                     )}
@@ -1352,13 +1371,13 @@ export default function ICFTrackerPage() {
                         <GraduationCap className="h-4 w-4" />
                         Coach Training
                       </span>
-                      <span className={certDashboard.mcc_training_progress >= 100 ? "text-green-600 font-medium" : ""}>
+                      <span className={certDashboard.mcc_training_progress >= 100 ? "text-success font-medium" : ""}>
                         {certDashboard.progress.acc_training_hours + certDashboard.progress.pcc_training_hours + (certDashboard.progress.mcc_training_hours || 0)}/{certDashboard.requirements.mcc_training_required} hrs
                         {certDashboard.mcc_training_progress >= 100 && <CheckCircle className="h-4 w-4 inline ml-1" />}
                       </span>
                     </div>
-                    <div className="w-full bg-gray-200 rounded-full h-2">
-                      <div className={`h-2 rounded-full ${certDashboard.mcc_training_progress >= 100 ? "bg-green-500" : "bg-emerald-500"}`}
+                    <div className="w-full bg-muted rounded-full h-2">
+                      <div className={`h-2 rounded-full ${certDashboard.mcc_training_progress >= 100 ? "bg-success" : "bg-emerald-500"}`}
                         style={{ width: `${certDashboard.mcc_training_progress}%` }} />
                     </div>
                   </div>
@@ -1370,13 +1389,13 @@ export default function ICFTrackerPage() {
                         <Clock className="h-4 w-4" />
                         Coaching Hours
                       </span>
-                      <span className={certDashboard.mcc_coaching_progress >= 100 ? "text-green-600 font-medium" : ""}>
+                      <span className={certDashboard.mcc_coaching_progress >= 100 ? "text-success font-medium" : ""}>
                         {certDashboard.total_coaching_hours}/{certDashboard.requirements.mcc_coaching_hours_required} hrs
                         {certDashboard.mcc_coaching_progress >= 100 && <CheckCircle className="h-4 w-4 inline ml-1" />}
                       </span>
                     </div>
-                    <div className="w-full bg-gray-200 rounded-full h-2">
-                      <div className={`h-2 rounded-full ${certDashboard.mcc_coaching_progress >= 100 ? "bg-green-500" : "bg-emerald-500"}`}
+                    <div className="w-full bg-muted rounded-full h-2">
+                      <div className={`h-2 rounded-full ${certDashboard.mcc_coaching_progress >= 100 ? "bg-success" : "bg-emerald-500"}`}
                         style={{ width: `${certDashboard.mcc_coaching_progress}%` }} />
                     </div>
                   </div>
@@ -1388,13 +1407,13 @@ export default function ICFTrackerPage() {
                         <DollarSign className="h-4 w-4" />
                         Paid Hours
                       </span>
-                      <span className={certDashboard.mcc_paid_progress >= 100 ? "text-green-600 font-medium" : ""}>
+                      <span className={certDashboard.mcc_paid_progress >= 100 ? "text-success font-medium" : ""}>
                         {certDashboard.paid_coaching_hours}/{certDashboard.requirements.mcc_paid_hours_required} hrs
                         {certDashboard.mcc_paid_progress >= 100 && <CheckCircle className="h-4 w-4 inline ml-1" />}
                       </span>
                     </div>
-                    <div className="w-full bg-gray-200 rounded-full h-2">
-                      <div className={`h-2 rounded-full ${certDashboard.mcc_paid_progress >= 100 ? "bg-green-500" : "bg-emerald-500"}`}
+                    <div className="w-full bg-muted rounded-full h-2">
+                      <div className={`h-2 rounded-full ${certDashboard.mcc_paid_progress >= 100 ? "bg-success" : "bg-emerald-500"}`}
                         style={{ width: `${certDashboard.mcc_paid_progress}%` }} />
                     </div>
                   </div>
@@ -1406,13 +1425,13 @@ export default function ICFTrackerPage() {
                         <Users className="h-4 w-4" />
                         Unique Clients
                       </span>
-                      <span className={certDashboard.mcc_clients_progress >= 100 ? "text-green-600 font-medium" : ""}>
+                      <span className={certDashboard.mcc_clients_progress >= 100 ? "text-success font-medium" : ""}>
                         {certDashboard.total_clients}/{certDashboard.requirements.mcc_clients_required}
                         {certDashboard.mcc_clients_progress >= 100 && <CheckCircle className="h-4 w-4 inline ml-1" />}
                       </span>
                     </div>
-                    <div className="w-full bg-gray-200 rounded-full h-2">
-                      <div className={`h-2 rounded-full ${certDashboard.mcc_clients_progress >= 100 ? "bg-green-500" : "bg-emerald-500"}`}
+                    <div className="w-full bg-muted rounded-full h-2">
+                      <div className={`h-2 rounded-full ${certDashboard.mcc_clients_progress >= 100 ? "bg-success" : "bg-emerald-500"}`}
                         style={{ width: `${certDashboard.mcc_clients_progress}%` }} />
                     </div>
                   </div>
@@ -1424,13 +1443,13 @@ export default function ICFTrackerPage() {
                         <BookOpen className="h-4 w-4" />
                         Mentor Coaching (MCC)
                       </span>
-                      <span className={certDashboard.mcc_mentor_progress >= 100 ? "text-green-600 font-medium" : ""}>
+                      <span className={certDashboard.mcc_mentor_progress >= 100 ? "text-success font-medium" : ""}>
                         {certDashboard.progress.mcc_mentor_hours || 0}/{certDashboard.requirements.mcc_mentor_hours_required} hrs
                         {certDashboard.mcc_mentor_progress >= 100 && <CheckCircle className="h-4 w-4 inline ml-1" />}
                       </span>
                     </div>
-                    <div className="w-full bg-gray-200 rounded-full h-2">
-                      <div className={`h-2 rounded-full ${certDashboard.mcc_mentor_progress >= 100 ? "bg-green-500" : "bg-emerald-500"}`}
+                    <div className="w-full bg-muted rounded-full h-2">
+                      <div className={`h-2 rounded-full ${certDashboard.mcc_mentor_progress >= 100 ? "bg-success" : "bg-emerald-500"}`}
                         style={{ width: `${certDashboard.mcc_mentor_progress}%` }} />
                     </div>
                   </div>
@@ -1442,7 +1461,7 @@ export default function ICFTrackerPage() {
                       Performance Evaluation
                     </span>
                     {certDashboard.progress.mcc_exam_passed ? (
-                      <Badge className="bg-green-500">Passed</Badge>
+                      <Badge className="bg-success">Passed</Badge>
                     ) : (
                       <Badge variant="outline">Not Taken</Badge>
                     )}
@@ -1460,10 +1479,10 @@ export default function ICFTrackerPage() {
                 <div className="grid md:grid-cols-2 gap-8">
                   <div className="space-y-4">
                     <div className="flex justify-between items-center">
-                      <span className="text-gray-600">Individual Coaching</span>
+                      <span className="text-muted-foreground">Individual Coaching</span>
                       <span className="font-medium">{summary.individual_hours} hours</span>
                     </div>
-                    <div className="w-full bg-gray-200 rounded-full h-2">
+                    <div className="w-full bg-muted rounded-full h-2">
                       <div
                         className="bg-blue-600 h-2 rounded-full"
                         style={{
@@ -1473,10 +1492,10 @@ export default function ICFTrackerPage() {
                     </div>
 
                     <div className="flex justify-between items-center">
-                      <span className="text-gray-600">Group Coaching</span>
+                      <span className="text-muted-foreground">Group Coaching</span>
                       <span className="font-medium">{summary.group_hours} hours</span>
                     </div>
-                    <div className="w-full bg-gray-200 rounded-full h-2">
+                    <div className="w-full bg-muted rounded-full h-2">
                       <div
                         className="bg-green-600 h-2 rounded-full"
                         style={{
@@ -1488,10 +1507,10 @@ export default function ICFTrackerPage() {
 
                   <div className="space-y-4">
                     <div className="flex justify-between items-center">
-                      <span className="text-gray-600">Paid Hours</span>
+                      <span className="text-muted-foreground">Paid Hours</span>
                       <span className="font-medium">{summary.paid_hours} hours</span>
                     </div>
-                    <div className="w-full bg-gray-200 rounded-full h-2">
+                    <div className="w-full bg-muted rounded-full h-2">
                       <div
                         className="bg-emerald-600 h-2 rounded-full"
                         style={{
@@ -1501,10 +1520,10 @@ export default function ICFTrackerPage() {
                     </div>
 
                     <div className="flex justify-between items-center">
-                      <span className="text-gray-600">Pro Bono Hours</span>
+                      <span className="text-muted-foreground">Pro Bono Hours</span>
                       <span className="font-medium">{summary.pro_bono_hours} hours</span>
                     </div>
-                    <div className="w-full bg-gray-200 rounded-full h-2">
+                    <div className="w-full bg-muted rounded-full h-2">
                       <div
                         className="bg-pink-600 h-2 rounded-full"
                         style={{
@@ -1730,7 +1749,7 @@ export default function ICFTrackerPage() {
                       id="acc_exam"
                       checked={progressFormData.acc_exam_passed}
                       onChange={(e) => setProgressFormData({ ...progressFormData, acc_exam_passed: e.target.checked })}
-                      className="h-4 w-4 rounded border-gray-300"
+                      className="h-4 w-4 rounded border-border"
                     />
                     <Label htmlFor="acc_exam">ICF Exam Passed</Label>
                   </div>
@@ -1806,7 +1825,7 @@ export default function ICFTrackerPage() {
                       id="pcc_exam"
                       checked={progressFormData.pcc_exam_passed}
                       onChange={(e) => setProgressFormData({ ...progressFormData, pcc_exam_passed: e.target.checked })}
-                      className="h-4 w-4 rounded border-gray-300"
+                      className="h-4 w-4 rounded border-border"
                     />
                     <Label htmlFor="pcc_exam">ICF Exam Passed</Label>
                   </div>
@@ -1882,7 +1901,7 @@ export default function ICFTrackerPage() {
                       id="mcc_exam"
                       checked={progressFormData.mcc_exam_passed}
                       onChange={(e) => setProgressFormData({ ...progressFormData, mcc_exam_passed: e.target.checked })}
-                      className="h-4 w-4 rounded border-gray-300"
+                      className="h-4 w-4 rounded border-border"
                     />
                     <Label htmlFor="mcc_exam">Performance Evaluation Passed</Label>
                   </div>

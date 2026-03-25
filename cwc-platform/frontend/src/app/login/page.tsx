@@ -44,7 +44,7 @@ export default function LoginPage() {
   };
 
   return (
-    <div className="min-h-screen flex items-center justify-center bg-gray-50 py-12 px-4 sm:px-6 lg:px-8">
+    <div className="min-h-screen flex items-center justify-center bg-muted py-12 px-4 sm:px-6 lg:px-8">
       <div className="w-full max-w-md">
         {/* Logo */}
         <div className="flex justify-center mb-8">
@@ -66,7 +66,7 @@ export default function LoginPage() {
         <CardContent>
           <form onSubmit={handleSubmit} className="space-y-4">
             {error && (
-              <div className="bg-red-50 border border-red-200 text-red-700 px-4 py-3 rounded">
+              <div className="bg-destructive/10 border border-destructive/20 text-destructive px-4 py-3 rounded">
                 {error}
               </div>
             )}
@@ -89,7 +89,7 @@ export default function LoginPage() {
                 <Label htmlFor="password">Password</Label>
                 <Link
                   href="/forgot-password"
-                  className="text-sm text-blue-600 hover:text-blue-500"
+                  className="text-sm text-primary hover:text-primary/80"
                 >
                   Forgot password?
                 </Link>
@@ -112,10 +112,10 @@ export default function LoginPage() {
 
           <div className="relative my-6">
             <div className="absolute inset-0 flex items-center">
-              <div className="w-full border-t border-gray-200" />
+              <div className="w-full border-t border-border" />
             </div>
             <div className="relative flex justify-center text-sm">
-              <span className="bg-white px-2 text-gray-500">Or</span>
+              <span className="bg-card px-2 text-muted-foreground">Or</span>
             </div>
           </div>
 
@@ -130,8 +130,8 @@ export default function LoginPage() {
           </Button>
 
           <div className="mt-6 text-center text-sm">
-            <span className="text-gray-600">Don't have an account? </span>
-            <Link href="/register" className="text-blue-600 hover:text-blue-500 font-medium">
+            <span className="text-muted-foreground">Don't have an account? </span>
+            <Link href="/register" className="text-primary hover:text-primary/80 font-medium">
               Sign up
             </Link>
           </div>

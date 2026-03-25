@@ -33,7 +33,7 @@ import {
   Archive,
   ExternalLink,
 } from "lucide-react";
-import Sidebar from "@/components/layout/Sidebar";
+import { Sidebar } from "@/components/layout/Sidebar";
 
 const API_URL = process.env.NEXT_PUBLIC_API_URL || "http://localhost:8001";
 
@@ -74,11 +74,11 @@ interface Assessment {
 }
 
 const statusConfig: Record<string, { label: string; color: string; icon: React.ReactNode }> = {
-  submitted: { label: "New", color: "bg-blue-100 text-blue-800", icon: <Clock className="w-4 h-4" /> },
-  reviewed: { label: "Reviewed", color: "bg-yellow-100 text-yellow-800", icon: <Eye className="w-4 h-4" /> },
-  contacted: { label: "Contacted", color: "bg-purple-100 text-purple-800", icon: <MessageSquare className="w-4 h-4" /> },
-  converted: { label: "Converted", color: "bg-green-100 text-green-800", icon: <CheckCircle className="w-4 h-4" /> },
-  archived: { label: "Archived", color: "bg-gray-100 text-gray-800", icon: <Archive className="w-4 h-4" /> },
+  submitted: { label: "New", color: "bg-primary/10 text-primary", icon: <Clock className="w-4 h-4" /> },
+  reviewed: { label: "Reviewed", color: "bg-warning/10 text-warning", icon: <Eye className="w-4 h-4" /> },
+  contacted: { label: "Contacted", color: "bg-accent/10 text-accent", icon: <MessageSquare className="w-4 h-4" /> },
+  converted: { label: "Converted", color: "bg-success/10 text-success", icon: <CheckCircle className="w-4 h-4" /> },
+  archived: { label: "Archived", color: "bg-muted text-muted-foreground", icon: <Archive className="w-4 h-4" /> },
 };
 
 const areaLabels: Record<string, string> = {
@@ -223,7 +223,7 @@ export default function AssessmentDetailPage() {
 
   if (loading) {
     return (
-      <div className="flex min-h-screen bg-gray-50">
+      <div className="flex min-h-screen bg-muted">
         <Sidebar />
         <main className="flex-1 p-8">
           <div className="max-w-4xl mx-auto space-y-6">
@@ -241,21 +241,21 @@ export default function AssessmentDetailPage() {
   }
 
   return (
-    <div className="flex min-h-screen bg-gray-50">
+    <div className="flex min-h-screen bg-muted">
       <Sidebar />
       <main className="flex-1 p-8">
         <div className="max-w-4xl mx-auto">
           {/* Header */}
           <div className="mb-6">
-            <Link href="/assessments" className="inline-flex items-center text-gray-600 hover:text-gray-900 mb-4">
+            <Link href="/assessments" className="inline-flex items-center text-muted-foreground hover:text-foreground mb-4">
               <ArrowLeft className="w-4 h-4 mr-2" />
               Back to Assessments
             </Link>
 
             <div className="flex items-start justify-between">
               <div>
-                <h1 className="text-3xl font-bold text-gray-900">{assessment.organization_name}</h1>
-                <p className="text-gray-600 mt-1">
+                <h1 className="text-3xl font-bold text-foreground">{assessment.organization_name}</h1>
+                <p className="text-muted-foreground mt-1">
                   Submitted {formatDate(assessment.created_at)}
                 </p>
               </div>
@@ -326,29 +326,29 @@ export default function AssessmentDetailPage() {
               <div className="grid md:grid-cols-2 gap-6">
                 <div className="space-y-4">
                   <div>
-                    <p className="text-sm text-gray-500">Full Name</p>
+                    <p className="text-sm text-muted-foreground">Full Name</p>
                     <p className="font-medium">{assessment.full_name}</p>
                   </div>
                   <div>
-                    <p className="text-sm text-gray-500">Title / Role</p>
+                    <p className="text-sm text-muted-foreground">Title / Role</p>
                     <p className="font-medium">{assessment.title_role}</p>
                   </div>
                   <div>
-                    <p className="text-sm text-gray-500">Organization</p>
+                    <p className="text-sm text-muted-foreground">Organization</p>
                     <p className="font-medium">{assessment.organization_name}</p>
                   </div>
                 </div>
                 <div className="space-y-4">
                   <div>
-                    <p className="text-sm text-gray-500">Email</p>
-                    <a href={`mailto:${assessment.work_email}`} className="font-medium text-purple-600 hover:underline flex items-center gap-1">
+                    <p className="text-sm text-muted-foreground">Email</p>
+                    <a href={`mailto:${assessment.work_email}`} className="font-medium text-accent hover:underline flex items-center gap-1">
                       <Mail className="w-4 h-4" />
                       {assessment.work_email}
                     </a>
                   </div>
                   {assessment.phone_number && (
                     <div>
-                      <p className="text-sm text-gray-500">Phone</p>
+                      <p className="text-sm text-muted-foreground">Phone</p>
                       <a href={`tel:${assessment.phone_number}`} className="font-medium flex items-center gap-1">
                         <Phone className="w-4 h-4" />
                         {assessment.phone_number}
@@ -357,8 +357,8 @@ export default function AssessmentDetailPage() {
                   )}
                   {assessment.organization_website && (
                     <div>
-                      <p className="text-sm text-gray-500">Website</p>
-                      <a href={assessment.organization_website} target="_blank" rel="noopener noreferrer" className="font-medium text-purple-600 hover:underline flex items-center gap-1">
+                      <p className="text-sm text-muted-foreground">Website</p>
+                      <a href={assessment.organization_website} target="_blank" rel="noopener noreferrer" className="font-medium text-accent hover:underline flex items-center gap-1">
                         <Globe className="w-4 h-4" />
                         {assessment.organization_website}
                         <ExternalLink className="w-3 h-3" />
@@ -387,8 +387,8 @@ export default function AssessmentDetailPage() {
                 ))}
               </div>
               {assessment.areas_of_interest_other && (
-                <div className="mt-4 p-4 bg-gray-50 rounded-lg">
-                  <p className="text-sm text-gray-500 mb-1">Additional details:</p>
+                <div className="mt-4 p-4 bg-muted rounded-lg">
+                  <p className="text-sm text-muted-foreground mb-1">Additional details:</p>
                   <p>{assessment.areas_of_interest_other}</p>
                 </div>
               )}
@@ -406,24 +406,24 @@ export default function AssessmentDetailPage() {
             <CardContent className="space-y-6">
               {assessment.desired_outcomes.length > 0 && (
                 <div>
-                  <p className="text-sm text-gray-500 mb-2">Desired Outcomes</p>
+                  <p className="text-sm text-muted-foreground mb-2">Desired Outcomes</p>
                   <ul className="space-y-2">
                     {assessment.desired_outcomes.map((outcome) => (
                       <li key={outcome} className="flex items-start gap-2">
-                        <CheckCircle className="w-4 h-4 text-green-500 mt-0.5 flex-shrink-0" />
+                        <CheckCircle className="w-4 h-4 text-success mt-0.5 flex-shrink-0" />
                         <span>{outcomeLabels[outcome] || outcome}</span>
                       </li>
                     ))}
                   </ul>
                   {assessment.desired_outcomes_other && (
-                    <p className="mt-2 text-gray-600 italic">Other: {assessment.desired_outcomes_other}</p>
+                    <p className="mt-2 text-muted-foreground italic">Other: {assessment.desired_outcomes_other}</p>
                   )}
                 </div>
               )}
 
               {assessment.current_challenge && (
                 <div>
-                  <p className="text-sm text-gray-500 mb-2">Current Challenge</p>
+                  <p className="text-sm text-muted-foreground mb-2">Current Challenge</p>
                   <div className="p-4 bg-amber-50 border border-amber-200 rounded-lg">
                     <p>{assessment.current_challenge}</p>
                   </div>
@@ -432,7 +432,7 @@ export default function AssessmentDetailPage() {
 
               {assessment.primary_audience.length > 0 && (
                 <div>
-                  <p className="text-sm text-gray-500 mb-2">Primary Audience</p>
+                  <p className="text-sm text-muted-foreground mb-2">Primary Audience</p>
                   <div className="flex flex-wrap gap-2">
                     {assessment.primary_audience.map((audience) => (
                       <Badge key={audience} variant="outline">
@@ -441,7 +441,7 @@ export default function AssessmentDetailPage() {
                     ))}
                   </div>
                   {assessment.primary_audience_other && (
-                    <p className="mt-2 text-gray-600 italic">Other: {assessment.primary_audience_other}</p>
+                    <p className="mt-2 text-muted-foreground italic">Other: {assessment.primary_audience_other}</p>
                   )}
                 </div>
               )}
@@ -449,22 +449,22 @@ export default function AssessmentDetailPage() {
               <div className="grid md:grid-cols-2 gap-4">
                 {assessment.participant_count && (
                   <div className="flex items-center gap-2">
-                    <Users className="w-4 h-4 text-gray-400" />
-                    <span className="text-sm text-gray-500">Participants:</span>
+                    <Users className="w-4 h-4 text-muted-foreground" />
+                    <span className="text-sm text-muted-foreground">Participants:</span>
                     <span className="font-medium">{assessment.participant_count}</span>
                   </div>
                 )}
                 {assessment.preferred_format && (
                   <div className="flex items-center gap-2">
-                    <Briefcase className="w-4 h-4 text-gray-400" />
-                    <span className="text-sm text-gray-500">Format:</span>
+                    <Briefcase className="w-4 h-4 text-muted-foreground" />
+                    <span className="text-sm text-muted-foreground">Format:</span>
                     <span className="font-medium">{formatLabels[assessment.preferred_format] || assessment.preferred_format}</span>
                   </div>
                 )}
                 {assessment.location && (
                   <div className="flex items-center gap-2 md:col-span-2">
-                    <Globe className="w-4 h-4 text-gray-400" />
-                    <span className="text-sm text-gray-500">Location:</span>
+                    <Globe className="w-4 h-4 text-muted-foreground" />
+                    <span className="text-sm text-muted-foreground">Location:</span>
                     <span className="font-medium">{assessment.location}</span>
                   </div>
                 )}
@@ -484,28 +484,28 @@ export default function AssessmentDetailPage() {
               <div className="grid md:grid-cols-2 gap-6">
                 <div className="space-y-4">
                   <div>
-                    <p className="text-sm text-gray-500">Budget Range</p>
+                    <p className="text-sm text-muted-foreground">Budget Range</p>
                     <p className="font-medium text-lg">
                       {assessment.budget_range ? budgetLabels[assessment.budget_range] || assessment.budget_range : "Not specified"}
                     </p>
                   </div>
                   {assessment.specific_budget && (
                     <div>
-                      <p className="text-sm text-gray-500">Specific Budget</p>
+                      <p className="text-sm text-muted-foreground">Specific Budget</p>
                       <p className="font-medium">{assessment.specific_budget}</p>
                     </div>
                   )}
                 </div>
                 <div className="space-y-4">
                   <div>
-                    <p className="text-sm text-gray-500">Ideal Timeline</p>
+                    <p className="text-sm text-muted-foreground">Ideal Timeline</p>
                     <p className="font-medium text-lg">
                       {assessment.ideal_timeline ? timelineLabels[assessment.ideal_timeline] || assessment.ideal_timeline : "Not specified"}
                     </p>
                   </div>
                   {assessment.specific_date && (
                     <div>
-                      <p className="text-sm text-gray-500">Tied to Specific Date/Event</p>
+                      <p className="text-sm text-muted-foreground">Tied to Specific Date/Event</p>
                       <p className="font-medium">{assessment.specific_date}</p>
                     </div>
                   )}
@@ -525,7 +525,7 @@ export default function AssessmentDetailPage() {
             <CardContent className="space-y-4">
               {assessment.decision_makers.length > 0 && (
                 <div>
-                  <p className="text-sm text-gray-500 mb-2">Decision Makers Involved</p>
+                  <p className="text-sm text-muted-foreground mb-2">Decision Makers Involved</p>
                   <div className="flex flex-wrap gap-2">
                     {assessment.decision_makers.map((dm) => (
                       <Badge key={dm} variant="outline">
@@ -534,19 +534,19 @@ export default function AssessmentDetailPage() {
                     ))}
                   </div>
                   {assessment.decision_makers_other && (
-                    <p className="mt-2 text-gray-600 italic">Other: {assessment.decision_makers_other}</p>
+                    <p className="mt-2 text-muted-foreground italic">Other: {assessment.decision_makers_other}</p>
                   )}
                 </div>
               )}
 
               {assessment.decision_stage && (
                 <div>
-                  <p className="text-sm text-gray-500 mb-1">Decision Stage</p>
+                  <p className="text-sm text-muted-foreground mb-1">Decision Stage</p>
                   <p className="font-medium">
                     {decisionStageLabels[assessment.decision_stage] || assessment.decision_stage}
                   </p>
                   {assessment.decision_stage_other && (
-                    <p className="text-gray-600 italic">Other: {assessment.decision_stage_other}</p>
+                    <p className="text-muted-foreground italic">Other: {assessment.decision_stage_other}</p>
                   )}
                 </div>
               )}
@@ -565,8 +565,8 @@ export default function AssessmentDetailPage() {
               <CardContent className="space-y-6">
                 {assessment.success_definition && (
                   <div>
-                    <p className="text-sm text-gray-500 mb-2">What would make this partnership a "win" six months from now?</p>
-                    <div className="p-4 bg-blue-50 border border-blue-200 rounded-lg">
+                    <p className="text-sm text-muted-foreground mb-2">What would make this partnership a "win" six months from now?</p>
+                    <div className="p-4 bg-primary/10 border border-primary/20 rounded-lg">
                       <p>{assessment.success_definition}</p>
                     </div>
                   </div>
@@ -574,8 +574,8 @@ export default function AssessmentDetailPage() {
 
                 {assessment.accessibility_needs && (
                   <div>
-                    <p className="text-sm text-gray-500 mb-2">Accessibility needs or considerations</p>
-                    <div className="p-4 bg-purple-50 border border-purple-200 rounded-lg">
+                    <p className="text-sm text-muted-foreground mb-2">Accessibility needs or considerations</p>
+                    <div className="p-4 bg-accent/10 border border-accent/20 rounded-lg">
                       <p>{assessment.accessibility_needs}</p>
                     </div>
                   </div>

@@ -8,6 +8,7 @@ import { Input } from "@/components/ui/input";
 import { Badge } from "@/components/ui/badge";
 import { bookingTypesApi } from "@/lib/api";
 import { BookingType, BookingTypeFormData } from "@/types";
+import { Skeleton } from "@/components/ui/skeleton";
 import { Plus, Pencil, Trash2, Copy, ArrowLeft } from "lucide-react";
 import Link from "next/link";
 
@@ -126,8 +127,10 @@ export default function BookingTypesPage() {
   if (loading) {
     return (
       <Shell>
-        <div className="flex items-center justify-center h-64">
-          <div className="text-gray-500">Loading...</div>
+        <div className="space-y-6">
+          <Skeleton className="h-8 w-48" />
+          <Skeleton className="h-[200px] w-full" />
+          <Skeleton className="h-[200px] w-full" />
         </div>
       </Shell>
     );
@@ -139,12 +142,12 @@ export default function BookingTypesPage() {
         {/* Header */}
         <div className="flex items-center justify-between">
           <div className="flex items-center gap-4">
-            <Link href="/settings" className="text-gray-500 hover:text-gray-700">
+            <Link href="/settings" className="text-muted-foreground hover:text-foreground">
               <ArrowLeft className="h-5 w-5" />
             </Link>
             <div>
-              <h1 className="text-2xl font-bold text-gray-900">Booking Types</h1>
-              <p className="text-gray-600">Manage the types of sessions you offer</p>
+              <h1 className="text-2xl font-bold text-foreground">Booking Types</h1>
+              <p className="text-muted-foreground">Manage the types of sessions you offer</p>
             </div>
           </div>
           {!showForm && (
@@ -164,12 +167,12 @@ export default function BookingTypesPage() {
             <CardContent>
               <form onSubmit={handleSubmit} className="space-y-4">
                 {error && (
-                  <div className="rounded-md bg-red-50 p-3 text-sm text-red-600">{error}</div>
+                  <div className="rounded-md bg-destructive/10 p-3 text-sm text-destructive">{error}</div>
                 )}
 
                 <div className="grid gap-4 md:grid-cols-2">
                   <div>
-                    <label className="block text-sm font-medium text-gray-700 mb-1">Name</label>
+                    <label className="block text-sm font-medium text-foreground mb-1">Name</label>
                     <Input
                       value={formData.name}
                       onChange={(e) => {
@@ -186,7 +189,7 @@ export default function BookingTypesPage() {
                   </div>
 
                   <div>
-                    <label className="block text-sm font-medium text-gray-700 mb-1">Slug (URL)</label>
+                    <label className="block text-sm font-medium text-foreground mb-1">Slug (URL)</label>
                     <Input
                       value={formData.slug}
                       onChange={(e) => setFormData({ ...formData, slug: e.target.value })}
@@ -194,16 +197,16 @@ export default function BookingTypesPage() {
                       pattern="[a-z0-9-]+"
                       required
                     />
-                    <p className="mt-1 text-xs text-gray-500">
+                    <p className="mt-1 text-sm text-muted-foreground">
                       Booking URL: /book/{formData.slug || "your-slug"}
                     </p>
                   </div>
                 </div>
 
                 <div>
-                  <label className="block text-sm font-medium text-gray-700 mb-1">Description</label>
+                  <label className="block text-sm font-medium text-foreground mb-1">Description</label>
                   <textarea
-                    className="w-full rounded-md border border-gray-300 px-3 py-2 text-sm focus:border-blue-500 focus:outline-none focus:ring-1 focus:ring-blue-500"
+                    className="w-full rounded-md border border-border px-3 py-2 text-sm focus:border-primary focus:outline-none focus:ring-1 focus:ring-primary"
                     value={formData.description}
                     onChange={(e) => setFormData({ ...formData, description: e.target.value })}
                     placeholder="A 60-minute coaching session to discuss your goals..."
@@ -213,7 +216,7 @@ export default function BookingTypesPage() {
 
                 <div className="grid gap-4 md:grid-cols-3">
                   <div>
-                    <label className="block text-sm font-medium text-gray-700 mb-1">Duration (minutes)</label>
+                    <label className="block text-sm font-medium text-foreground mb-1">Duration (minutes)</label>
                     <Input
                       type="number"
                       value={formData.duration_minutes}
@@ -225,7 +228,7 @@ export default function BookingTypesPage() {
                   </div>
 
                   <div>
-                    <label className="block text-sm font-medium text-gray-700 mb-1">Price ($)</label>
+                    <label className="block text-sm font-medium text-foreground mb-1">Price ($)</label>
                     <Input
                       type="number"
                       value={formData.price || ""}
@@ -237,13 +240,13 @@ export default function BookingTypesPage() {
                   </div>
 
                   <div>
-                    <label className="block text-sm font-medium text-gray-700 mb-1">Color</label>
+                    <label className="block text-sm font-medium text-foreground mb-1">Color</label>
                     <div className="flex gap-2">
                       <input
                         type="color"
                         value={formData.color}
                         onChange={(e) => setFormData({ ...formData, color: e.target.value })}
-                        className="h-9 w-12 cursor-pointer rounded border border-gray-300"
+                        className="h-9 w-12 cursor-pointer rounded border border-border"
                       />
                       <Input
                         value={formData.color}
@@ -257,7 +260,7 @@ export default function BookingTypesPage() {
 
                 <div className="grid gap-4 md:grid-cols-4">
                   <div>
-                    <label className="block text-sm font-medium text-gray-700 mb-1">Buffer Before (min)</label>
+                    <label className="block text-sm font-medium text-foreground mb-1">Buffer Before (min)</label>
                     <Input
                       type="number"
                       value={formData.buffer_before}
@@ -268,7 +271,7 @@ export default function BookingTypesPage() {
                   </div>
 
                   <div>
-                    <label className="block text-sm font-medium text-gray-700 mb-1">Buffer After (min)</label>
+                    <label className="block text-sm font-medium text-foreground mb-1">Buffer After (min)</label>
                     <Input
                       type="number"
                       value={formData.buffer_after}
@@ -279,7 +282,7 @@ export default function BookingTypesPage() {
                   </div>
 
                   <div>
-                    <label className="block text-sm font-medium text-gray-700 mb-1">Min Notice (hours)</label>
+                    <label className="block text-sm font-medium text-foreground mb-1">Min Notice (hours)</label>
                     <Input
                       type="number"
                       value={formData.min_notice_hours}
@@ -290,7 +293,7 @@ export default function BookingTypesPage() {
                   </div>
 
                   <div>
-                    <label className="block text-sm font-medium text-gray-700 mb-1">Max Advance (days)</label>
+                    <label className="block text-sm font-medium text-foreground mb-1">Max Advance (days)</label>
                     <Input
                       type="number"
                       value={formData.max_advance_days}
@@ -307,9 +310,9 @@ export default function BookingTypesPage() {
                       type="checkbox"
                       checked={formData.requires_confirmation}
                       onChange={(e) => setFormData({ ...formData, requires_confirmation: e.target.checked })}
-                      className="rounded border-gray-300"
+                      className="rounded border-border"
                     />
-                    <span className="text-sm text-gray-700">Requires manual confirmation</span>
+                    <span className="text-sm text-foreground">Requires manual confirmation</span>
                   </label>
 
                   <label className="flex items-center gap-2">
@@ -317,9 +320,9 @@ export default function BookingTypesPage() {
                       type="checkbox"
                       checked={formData.is_active}
                       onChange={(e) => setFormData({ ...formData, is_active: e.target.checked })}
-                      className="rounded border-gray-300"
+                      className="rounded border-border"
                     />
-                    <span className="text-sm text-gray-700">Active (visible for booking)</span>
+                    <span className="text-sm text-foreground">Active (visible for booking)</span>
                   </label>
                 </div>
 
@@ -350,7 +353,7 @@ export default function BookingTypesPage() {
           {bookingTypes.length === 0 ? (
             <Card>
               <CardContent className="py-12 text-center">
-                <p className="text-gray-500">No booking types yet. Create your first one!</p>
+                <p className="text-muted-foreground">No booking types yet. Create your first one!</p>
               </CardContent>
             </Card>
           ) : (
@@ -365,7 +368,7 @@ export default function BookingTypesPage() {
                     <div className="flex items-start justify-between">
                       <div>
                         <div className="flex items-center gap-2">
-                          <h3 className="font-semibold text-gray-900">{bt.name}</h3>
+                          <h3 className="font-semibold text-foreground">{bt.name}</h3>
                           {!bt.is_active && (
                             <Badge variant="secondary">Inactive</Badge>
                           )}
@@ -373,15 +376,15 @@ export default function BookingTypesPage() {
                             <Badge variant="outline">Requires Approval</Badge>
                           )}
                         </div>
-                        <p className="text-sm text-gray-500 mt-1">
+                        <p className="text-sm text-muted-foreground mt-1">
                           {bt.duration_minutes} minutes
                           {bt.price ? ` • $${bt.price}` : " • Free"}
                           {" • "}{bt.buffer_after}min buffer
                         </p>
                         {bt.description && (
-                          <p className="text-sm text-gray-600 mt-2">{bt.description}</p>
+                          <p className="text-sm text-muted-foreground mt-2">{bt.description}</p>
                         )}
-                        <p className="text-xs text-gray-400 mt-2">
+                        <p className="text-sm text-muted-foreground mt-2">
                           /book/{bt.slug}
                         </p>
                       </div>
@@ -405,7 +408,7 @@ export default function BookingTypesPage() {
                           variant="ghost"
                           size="sm"
                           onClick={() => handleDelete(bt.id)}
-                          className="text-red-600 hover:text-red-700 hover:bg-red-50"
+                          className="text-destructive hover:text-destructive/80 hover:bg-destructive/10"
                         >
                           <Trash2 className="h-4 w-4" />
                         </Button>

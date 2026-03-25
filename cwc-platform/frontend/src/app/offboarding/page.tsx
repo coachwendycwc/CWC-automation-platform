@@ -23,6 +23,7 @@ import {
   FileText,
   Settings,
 } from "lucide-react";
+import { Skeleton } from "@/components/ui/skeleton";
 import Link from "next/link";
 
 interface OffboardingWorkflow {
@@ -60,10 +61,10 @@ interface OffboardingStats {
 }
 
 const STATUS_COLORS: Record<string, string> = {
-  pending: "bg-gray-100 text-gray-800",
-  in_progress: "bg-blue-100 text-blue-800",
-  completed: "bg-green-100 text-green-800",
-  cancelled: "bg-red-100 text-red-800",
+  pending: "bg-muted text-foreground",
+  in_progress: "bg-primary/10 text-primary",
+  completed: "bg-success/10 text-success",
+  cancelled: "bg-destructive/10 text-destructive",
 };
 
 const STATUS_ICONS: Record<string, React.ReactNode> = {
@@ -128,8 +129,36 @@ export default function OffboardingPage() {
   if (loading) {
     return (
       <Shell>
-        <div className="flex items-center justify-center h-64">
-          <div className="text-gray-500">Loading...</div>
+        <div className="space-y-6">
+          <div className="flex items-center justify-between">
+            <div className="space-y-2">
+              <Skeleton className="h-8 w-40" />
+              <Skeleton className="h-4 w-72" />
+            </div>
+            <div className="flex gap-2">
+              <Skeleton className="h-10 w-28" />
+              <Skeleton className="h-10 w-32" />
+            </div>
+          </div>
+          <div className="grid grid-cols-1 md:grid-cols-4 gap-4">
+            {[...Array(4)].map((_, i) => (
+              <Card key={i}><CardContent className="pt-6"><Skeleton className="h-12 w-full" /></CardContent></Card>
+            ))}
+          </div>
+          <Card>
+            <CardContent className="p-4 space-y-4">
+              {[...Array(5)].map((_, i) => (
+                <div key={i} className="flex items-center gap-4">
+                  <Skeleton className="h-10 w-10 rounded-full" />
+                  <div className="flex-1 space-y-2">
+                    <Skeleton className="h-4 w-48" />
+                    <Skeleton className="h-3 w-72" />
+                  </div>
+                  <Skeleton className="h-6 w-20" />
+                </div>
+              ))}
+            </CardContent>
+          </Card>
         </div>
       </Shell>
     );
@@ -142,7 +171,7 @@ export default function OffboardingPage() {
         <div className="flex items-center justify-between">
           <div>
             <h1 className="text-2xl font-bold">Offboarding</h1>
-            <p className="text-gray-500">Manage client offboarding and completion workflows</p>
+            <p className="text-muted-foreground">Manage client offboarding and completion workflows</p>
           </div>
           <div className="flex gap-2">
             <Link href="/offboarding/templates">
@@ -164,13 +193,13 @@ export default function OffboardingPage() {
         <div className="grid grid-cols-1 md:grid-cols-4 gap-4">
           <Card>
             <CardHeader className="pb-2">
-              <CardTitle className="text-sm font-medium text-gray-500">
+              <CardTitle className="text-sm font-medium text-muted-foreground">
                 Total Workflows
               </CardTitle>
             </CardHeader>
             <CardContent>
               <div className="flex items-center gap-2">
-                <UserMinus className="h-5 w-5 text-gray-400" />
+                <UserMinus className="h-5 w-5 text-muted-foreground" />
                 <span className="text-2xl font-bold">{stats?.total_workflows || 0}</span>
               </div>
             </CardContent>
@@ -178,14 +207,14 @@ export default function OffboardingPage() {
 
           <Card>
             <CardHeader className="pb-2">
-              <CardTitle className="text-sm font-medium text-gray-500">
+              <CardTitle className="text-sm font-medium text-muted-foreground">
                 In Progress
               </CardTitle>
             </CardHeader>
             <CardContent>
               <div className="flex items-center gap-2">
-                <Play className="h-5 w-5 text-blue-500" />
-                <span className="text-2xl font-bold text-blue-600">
+                <Play className="h-5 w-5 text-primary" />
+                <span className="text-2xl font-bold text-primary">
                   {stats?.in_progress || 0}
                 </span>
               </div>
@@ -194,14 +223,14 @@ export default function OffboardingPage() {
 
           <Card>
             <CardHeader className="pb-2">
-              <CardTitle className="text-sm font-medium text-gray-500">
+              <CardTitle className="text-sm font-medium text-muted-foreground">
                 Surveys Completed
               </CardTitle>
             </CardHeader>
             <CardContent>
               <div className="flex items-center gap-2">
-                <MessageSquare className="h-5 w-5 text-purple-500" />
-                <span className="text-2xl font-bold text-purple-600">
+                <MessageSquare className="h-5 w-5 text-accent" />
+                <span className="text-2xl font-bold text-accent">
                   {stats?.surveys_completed || 0}
                 </span>
               </div>
@@ -210,14 +239,14 @@ export default function OffboardingPage() {
 
           <Card>
             <CardHeader className="pb-2">
-              <CardTitle className="text-sm font-medium text-gray-500">
+              <CardTitle className="text-sm font-medium text-muted-foreground">
                 Testimonials Received
               </CardTitle>
             </CardHeader>
             <CardContent>
               <div className="flex items-center gap-2">
-                <Quote className="h-5 w-5 text-green-500" />
-                <span className="text-2xl font-bold text-green-600">
+                <Quote className="h-5 w-5 text-success" />
+                <span className="text-2xl font-bold text-success">
                   {stats?.testimonials_received || 0}
                 </span>
               </div>
@@ -303,9 +332,9 @@ export default function OffboardingPage() {
           <CardContent className="p-0">
             {workflows.length === 0 ? (
               <div className="flex flex-col items-center justify-center py-12 text-center">
-                <UserMinus className="h-12 w-12 text-gray-300 mb-4" />
-                <h3 className="text-lg font-medium text-gray-900">No offboarding workflows</h3>
-                <p className="text-gray-500 mt-1">
+                <UserMinus className="h-12 w-12 text-muted-foreground/50 mb-4" />
+                <h3 className="text-lg font-medium text-foreground">No offboarding workflows</h3>
+                <p className="text-muted-foreground mt-1">
                   Start an offboarding workflow when a client engagement ends
                 </p>
                 <Link href="/offboarding/new">
@@ -320,19 +349,19 @@ export default function OffboardingPage() {
                 {workflows.map((workflow) => (
                   <div
                     key={workflow.id}
-                    className="flex items-center justify-between p-4 hover:bg-gray-50"
+                    className="flex items-center justify-between p-4 hover:bg-muted cursor-pointer"
                   >
                     <div className="flex items-center gap-4 flex-1">
-                      <div className="flex items-center justify-center w-10 h-10 rounded-full bg-gray-100">
+                      <div className="flex items-center justify-center w-10 h-10 rounded-full bg-muted">
                         {WORKFLOW_TYPE_ICONS[workflow.workflow_type] || <UserMinus className="h-4 w-4" />}
                       </div>
                       <div className="flex-1 min-w-0">
                         <Link href={`/offboarding/${workflow.id}`}>
-                          <h3 className="font-medium text-gray-900 hover:text-blue-600 truncate">
+                          <h3 className="font-medium text-foreground hover:text-primary/80 truncate">
                             {workflow.contact_name || "Unknown Contact"}
                           </h3>
                         </Link>
-                        <div className="flex items-center gap-2 text-sm text-gray-500">
+                        <div className="flex items-center gap-2 text-sm text-muted-foreground">
                           <span>{WORKFLOW_TYPE_LABELS[workflow.workflow_type]}</span>
                           {workflow.related_project_title && (
                             <>
@@ -352,7 +381,7 @@ export default function OffboardingPage() {
                         <div className="text-sm font-medium">
                           {getChecklistProgress(workflow.checklist)}%
                         </div>
-                        <div className="text-xs text-gray-500">
+                        <div className="text-xs text-muted-foreground">
                           {workflow.checklist?.filter((i) => i.completed).length || 0}/
                           {workflow.checklist?.length || 0} items
                         </div>
@@ -363,7 +392,7 @@ export default function OffboardingPage() {
                         {workflow.send_survey && (
                           <Badge
                             variant="outline"
-                            className={workflow.survey_completed_at ? "border-green-500 text-green-600" : "border-gray-300"}
+                            className={workflow.survey_completed_at ? "border-success text-success" : "border-border"}
                           >
                             <MessageSquare className="h-3 w-3 mr-1" />
                             Survey {workflow.survey_completed_at ? "Done" : "Pending"}
@@ -372,7 +401,7 @@ export default function OffboardingPage() {
                         {workflow.request_testimonial && (
                           <Badge
                             variant="outline"
-                            className={workflow.testimonial_received ? "border-green-500 text-green-600" : "border-gray-300"}
+                            className={workflow.testimonial_received ? "border-success text-success" : "border-border"}
                           >
                             <Quote className="h-3 w-3 mr-1" />
                             {workflow.testimonial_received ? "Received" : "Requested"}

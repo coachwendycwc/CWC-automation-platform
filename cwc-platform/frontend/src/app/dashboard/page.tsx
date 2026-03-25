@@ -146,32 +146,32 @@ export default function DashboardPage() {
       title: "Total Revenue",
       value: formatCurrency(dashboard?.revenue.total || 0),
       icon: DollarSign,
-      color: "text-green-600",
-      bgColor: "bg-green-100",
+      color: "text-success",
+      bgColor: "bg-success/10",
       href: "/invoices",
     },
     {
       title: "This Month",
       value: formatCurrency(dashboard?.revenue.this_month || 0),
       icon: TrendingUp,
-      color: "text-blue-600",
-      bgColor: "bg-blue-100",
+      color: "text-primary",
+      bgColor: "bg-primary/10",
       href: "/invoices",
     },
     {
       title: "Outstanding",
       value: formatCurrency(dashboard?.revenue.outstanding || 0),
       icon: AlertCircle,
-      color: "text-orange-600",
-      bgColor: "bg-orange-100",
+      color: "text-warning",
+      bgColor: "bg-warning/10",
       href: "/invoices?status=sent",
     },
     {
       title: "Upcoming Bookings",
       value: dashboard?.bookings.upcoming || 0,
       icon: Calendar,
-      color: "text-purple-600",
-      bgColor: "bg-purple-100",
+      color: "text-accent",
+      bgColor: "bg-accent/10",
       href: "/bookings",
     },
   ];
@@ -190,7 +190,7 @@ export default function DashboardPage() {
         <div className="flex items-center justify-between">
           <div>
             <h1 className="text-2xl font-bold">Dashboard</h1>
-            <p className="text-gray-500">Welcome back, {user?.name || "User"}</p>
+            <p className="text-muted-foreground">Welcome back, {user?.name || "User"}</p>
           </div>
           <div className="flex gap-2">
             <Button variant="outline" size="sm" asChild>
@@ -208,7 +208,7 @@ export default function DashboardPage() {
             <Link key={stat.title} href={stat.href}>
               <Card className="hover:shadow-md transition-shadow cursor-pointer">
                 <CardHeader className="flex flex-row items-center justify-between pb-2">
-                  <CardTitle className="text-sm font-medium text-gray-500">
+                  <CardTitle className="text-sm font-medium text-muted-foreground">
                     {stat.title}
                   </CardTitle>
                   <div className={`rounded-full p-2 ${stat.bgColor}`}>
@@ -230,13 +230,13 @@ export default function DashboardPage() {
             <CardHeader>
               <CardTitle className="flex items-center justify-between">
                 <span>Monthly Revenue ({monthlyRevenue?.year})</span>
-                <span className="text-sm font-normal text-gray-500">
+                <span className="text-sm font-normal text-muted-foreground">
                   Total: {formatCurrency(monthlyRevenue?.total || 0)}
                 </span>
               </CardTitle>
             </CardHeader>
             <CardContent>
-              <div className="h-[300px]">
+              <div className="h-[300px]" role="img" aria-label="Monthly revenue bar chart">
                 <ResponsiveContainer width="100%" height="100%">
                   <BarChart data={monthlyRevenue?.months || []}>
                     <CartesianGrid strokeDasharray="3 3" vertical={false} />
@@ -249,7 +249,7 @@ export default function DashboardPage() {
                       formatter={(value) => [formatCurrency(value as number), "Revenue"]}
                       labelFormatter={(label) => `${label} ${monthlyRevenue?.year}`}
                     />
-                    <Bar dataKey="revenue" fill="#3b82f6" radius={[4, 4, 0, 0]} />
+                    <Bar dataKey="revenue" fill="hsl(190, 53%, 35%)" radius={[4, 4, 0, 0]} />
                   </BarChart>
                 </ResponsiveContainer>
               </div>
@@ -261,7 +261,7 @@ export default function DashboardPage() {
             <CardHeader>
               <CardTitle className="flex items-center justify-between">
                 <span>Invoice Aging</span>
-                <span className="text-sm font-normal text-gray-500">
+                <span className="text-sm font-normal text-muted-foreground">
                   {aging?.summary.total_invoices || 0} unpaid invoices
                 </span>
               </CardTitle>
@@ -269,17 +269,17 @@ export default function DashboardPage() {
             <CardContent>
               <div className="space-y-4">
                 {[
-                  { label: "Current (not due)", data: aging?.current, color: "bg-green-500" },
-                  { label: "1-30 days overdue", data: aging?.["1_30_days"], color: "bg-yellow-500" },
-                  { label: "31-60 days overdue", data: aging?.["31_60_days"], color: "bg-orange-500" },
-                  { label: "61-90 days overdue", data: aging?.["61_90_days"], color: "bg-red-400" },
-                  { label: "90+ days overdue", data: aging?.["90_plus_days"], color: "bg-red-600" },
+                  { label: "Current (not due)", data: aging?.current, color: "bg-success" },
+                  { label: "1-30 days overdue", data: aging?.["1_30_days"], color: "bg-warning" },
+                  { label: "31-60 days overdue", data: aging?.["31_60_days"], color: "bg-warning/80" },
+                  { label: "61-90 days overdue", data: aging?.["61_90_days"], color: "bg-destructive/70" },
+                  { label: "90+ days overdue", data: aging?.["90_plus_days"], color: "bg-destructive" },
                 ].map((bucket) => (
                   <div key={bucket.label} className="flex items-center justify-between">
                     <div className="flex items-center gap-3">
                       <div className={`w-3 h-3 rounded-full ${bucket.color}`} />
                       <span className="text-sm">{bucket.label}</span>
-                      <span className="text-xs text-gray-400">({bucket.data?.count || 0})</span>
+                      <span className="text-xs text-muted-foreground">({bucket.data?.count || 0})</span>
                     </div>
                     <span className="font-medium">
                       {formatCurrency(bucket.data?.total || 0)}
@@ -307,15 +307,15 @@ export default function DashboardPage() {
                 <Link
                   key={stat.label}
                   href={stat.href}
-                  className="flex items-center justify-between hover:bg-gray-50 -mx-2 px-2 py-1 rounded"
+                  className="flex items-center justify-between hover:bg-muted -mx-2 px-2 py-1 rounded cursor-pointer"
                 >
                   <div className="flex items-center gap-3">
-                    <stat.icon className="h-4 w-4 text-gray-400" />
+                    <stat.icon className="h-4 w-4 text-muted-foreground" />
                     <span className="text-sm">{stat.label}</span>
                   </div>
                   <div className="flex items-center gap-2">
                     <span className="font-medium">{stat.value}</span>
-                    <ArrowUpRight className="h-3 w-3 text-gray-400" />
+                    <ArrowUpRight className="h-3 w-3 text-muted-foreground" />
                   </div>
                 </Link>
               ))}
@@ -334,25 +334,25 @@ export default function DashboardPage() {
             </CardHeader>
             <CardContent>
               {topContacts.length === 0 ? (
-                <p className="text-gray-500 text-sm">No client data yet.</p>
+                <p className="text-muted-foreground text-sm">No client data yet.</p>
               ) : (
                 <div className="space-y-4">
                   {topContacts.map((contact, index) => (
                     <Link
                       key={contact.id}
                       href={`/contacts/${contact.id}`}
-                      className="flex items-center justify-between hover:bg-gray-50 -mx-2 px-2 py-2 rounded"
+                      className="flex items-center justify-between hover:bg-muted -mx-2 px-2 py-2 rounded cursor-pointer"
                     >
                       <div className="flex items-center gap-3">
-                        <div className="w-8 h-8 rounded-full bg-gray-200 flex items-center justify-center text-sm font-medium">
+                        <div className="w-8 h-8 rounded-full bg-muted flex items-center justify-center text-sm font-medium">
                           {index + 1}
                         </div>
                         <div>
                           <p className="font-medium">{contact.name}</p>
-                          <p className="text-xs text-gray-500">{contact.invoice_count} invoices</p>
+                          <p className="text-sm text-muted-foreground">{contact.invoice_count} invoices</p>
                         </div>
                       </div>
-                      <span className="font-semibold text-green-600">
+                      <span className="font-semibold text-success">
                         {formatCurrency(contact.total_revenue)}
                       </span>
                     </Link>

@@ -19,6 +19,7 @@ import {
   X,
 } from "lucide-react";
 import Link from "next/link";
+import { Skeleton } from "@/components/ui/skeleton";
 
 interface LineItem {
   description: string;
@@ -73,13 +74,13 @@ interface Contact {
 }
 
 const STATUS_COLORS: Record<string, string> = {
-  draft: "bg-gray-100 text-gray-800",
-  sent: "bg-blue-100 text-blue-800",
-  viewed: "bg-purple-100 text-purple-800",
-  partial: "bg-yellow-100 text-yellow-800",
-  paid: "bg-green-100 text-green-800",
-  overdue: "bg-red-100 text-red-800",
-  cancelled: "bg-gray-100 text-gray-500",
+  draft: "bg-muted text-foreground",
+  sent: "bg-primary/10 text-primary",
+  viewed: "bg-accent/10 text-accent",
+  partial: "bg-warning/10 text-warning",
+  paid: "bg-success/10 text-success",
+  overdue: "bg-destructive/10 text-destructive",
+  cancelled: "bg-muted text-muted-foreground",
 };
 
 const PAYMENT_TERMS_LABELS: Record<string, string> = {
@@ -270,8 +271,18 @@ export default function InvoiceDetailPage() {
   if (loading) {
     return (
       <Shell>
-        <div className="flex items-center justify-center h-64">
-          <div className="text-gray-500">Loading...</div>
+        <div className="space-y-6 py-8">
+          <Skeleton className="h-10 w-64" />
+          <div className="grid grid-cols-3 gap-6">
+            <div className="col-span-2 space-y-6">
+              <Skeleton className="h-24 w-full rounded-lg" />
+              <Skeleton className="h-64 w-full rounded-lg" />
+            </div>
+            <div className="space-y-6">
+              <Skeleton className="h-48 w-full rounded-lg" />
+              <Skeleton className="h-32 w-full rounded-lg" />
+            </div>
+          </div>
         </div>
       </Shell>
     );
@@ -281,7 +292,7 @@ export default function InvoiceDetailPage() {
     return (
       <Shell>
         <div className="flex items-center justify-center h-64">
-          <div className="text-gray-500">Invoice not found</div>
+          <div className="text-muted-foreground">Invoice not found</div>
         </div>
       </Shell>
     );
@@ -301,10 +312,10 @@ export default function InvoiceDetailPage() {
             </Link>
             <div>
               <div className="flex items-center gap-3">
-                <h1 className="text-2xl font-bold text-gray-900">{invoice.invoice_number}</h1>
+                <h1 className="text-2xl font-bold text-foreground">{invoice.invoice_number}</h1>
                 <Badge className={STATUS_COLORS[invoice.status]}>{invoice.status}</Badge>
               </div>
-              <p className="text-gray-600">
+              <p className="text-muted-foreground">
                 Created {formatDate(invoice.created_at)}
               </p>
             </div>
@@ -316,7 +327,7 @@ export default function InvoiceDetailPage() {
                   <Send className="h-4 w-4 mr-2" />
                   Send
                 </Button>
-                <Button variant="outline" onClick={handleDelete} className="text-red-600">
+                <Button variant="outline" onClick={handleDelete} className="text-destructive">
                   <Trash2 className="h-4 w-4 mr-2" />
                   Delete
                 </Button>
@@ -361,10 +372,10 @@ export default function InvoiceDetailPage() {
               <CardContent>
                 {contact && (
                   <div>
-                    <p className="font-medium text-gray-900">
+                    <p className="font-medium text-foreground">
                       {contact.first_name} {contact.last_name || ""}
                     </p>
-                    {contact.email && <p className="text-gray-500">{contact.email}</p>}
+                    {contact.email && <p className="text-muted-foreground">{contact.email}</p>}
                   </div>
                 )}
               </CardContent>
@@ -378,7 +389,7 @@ export default function InvoiceDetailPage() {
               <CardContent>
                 <table className="w-full">
                   <thead className="border-b">
-                    <tr className="text-left text-xs font-medium text-gray-500 uppercase">
+                    <tr className="text-left text-xs font-medium text-muted-foreground uppercase">
                       <th className="pb-2">Description</th>
                       <th className="pb-2 text-center">Qty</th>
                       <th className="pb-2 text-right">Unit Price</th>
@@ -389,13 +400,13 @@ export default function InvoiceDetailPage() {
                     {invoice.line_items.map((item, index) => (
                       <tr key={index}>
                         <td className="py-3">
-                          <div className="font-medium text-gray-900">{item.description}</div>
+                          <div className="font-medium text-foreground">{item.description}</div>
                           {item.service_type && (
-                            <div className="text-sm text-gray-500 capitalize">{item.service_type}</div>
+                            <div className="text-sm text-muted-foreground capitalize">{item.service_type}</div>
                           )}
                         </td>
-                        <td className="py-3 text-center text-gray-600">{item.quantity}</td>
-                        <td className="py-3 text-right text-gray-600">{formatCurrency(item.unit_price)}</td>
+                        <td className="py-3 text-center text-muted-foreground">{item.quantity}</td>
+                        <td className="py-3 text-right text-muted-foreground">{formatCurrency(item.unit_price)}</td>
                         <td className="py-3 text-right font-medium">{formatCurrency(item.amount)}</td>
                       </tr>
                     ))}
@@ -407,19 +418,19 @@ export default function InvoiceDetailPage() {
                   <div className="flex justify-end">
                     <div className="w-64 space-y-2">
                       <div className="flex justify-between text-sm">
-                        <span className="text-gray-500">Subtotal</span>
+                        <span className="text-muted-foreground">Subtotal</span>
                         <span>{formatCurrency(invoice.subtotal)}</span>
                       </div>
                       {invoice.tax_rate && (
                         <div className="flex justify-between text-sm">
-                          <span className="text-gray-500">Tax ({invoice.tax_rate}%)</span>
+                          <span className="text-muted-foreground">Tax ({invoice.tax_rate}%)</span>
                           <span>{formatCurrency(invoice.tax_amount)}</span>
                         </div>
                       )}
                       {invoice.discount_amount > 0 && (
                         <div className="flex justify-between text-sm">
-                          <span className="text-gray-500">Discount</span>
-                          <span className="text-red-500">-{formatCurrency(invoice.discount_amount)}</span>
+                          <span className="text-muted-foreground">Discount</span>
+                          <span className="text-destructive">-{formatCurrency(invoice.discount_amount)}</span>
                         </div>
                       )}
                       <div className="border-t pt-2 flex justify-between font-bold text-lg">
@@ -428,7 +439,7 @@ export default function InvoiceDetailPage() {
                       </div>
                       {invoice.amount_paid > 0 && (
                         <>
-                          <div className="flex justify-between text-sm text-green-600">
+                          <div className="flex justify-between text-sm text-success">
                             <span>Paid</span>
                             <span>-{formatCurrency(invoice.amount_paid)}</span>
                           </div>
@@ -453,17 +464,17 @@ export default function InvoiceDetailPage() {
                 <CardContent>
                   <div className="space-y-3">
                     {payments.map((payment) => (
-                      <div key={payment.id} className="flex items-center justify-between p-3 bg-gray-50 rounded-lg">
+                      <div key={payment.id} className="flex items-center justify-between p-3 bg-muted rounded-lg">
                         <div>
                           <div className="flex items-center gap-2">
-                            <span className="font-medium text-green-600">
+                            <span className="font-medium text-success">
                               {formatCurrency(payment.amount)}
                             </span>
                             <Badge variant="outline" className="text-xs">
                               {PAYMENT_METHODS.find(m => m.value === payment.payment_method)?.label || payment.payment_method}
                             </Badge>
                           </div>
-                          <div className="text-sm text-gray-500">
+                          <div className="text-sm text-muted-foreground">
                             {formatDate(payment.payment_date)}
                             {payment.reference && ` • Ref: ${payment.reference}`}
                           </div>
@@ -472,7 +483,7 @@ export default function InvoiceDetailPage() {
                           size="sm"
                           variant="ghost"
                           onClick={() => handleDeletePayment(payment.id)}
-                          className="text-red-500 hover:text-red-700"
+                          className="text-destructive hover:text-destructive"
                         >
                           <Trash2 className="h-4 w-4" />
                         </Button>
@@ -492,14 +503,14 @@ export default function InvoiceDetailPage() {
                 <CardContent>
                   {invoice.memo && (
                     <div className="mb-4">
-                      <h4 className="text-sm font-medium text-gray-500 mb-1">Client Memo</h4>
-                      <p className="text-gray-900">{invoice.memo}</p>
+                      <h4 className="text-sm font-medium text-muted-foreground mb-1">Client Memo</h4>
+                      <p className="text-foreground">{invoice.memo}</p>
                     </div>
                   )}
                   {invoice.notes && (
                     <div>
-                      <h4 className="text-sm font-medium text-gray-500 mb-1">Internal Notes</h4>
-                      <p className="text-gray-900">{invoice.notes}</p>
+                      <h4 className="text-sm font-medium text-muted-foreground mb-1">Internal Notes</h4>
+                      <p className="text-foreground">{invoice.notes}</p>
                     </div>
                   )}
                 </CardContent>
@@ -515,34 +526,34 @@ export default function InvoiceDetailPage() {
               </CardHeader>
               <CardContent className="space-y-4">
                 <div>
-                  <span className="text-sm text-gray-500">Status</span>
+                  <span className="text-sm text-muted-foreground">Status</span>
                   <div className="mt-1">
                     <Badge className={STATUS_COLORS[invoice.status]}>{invoice.status}</Badge>
                   </div>
                 </div>
                 <div>
-                  <span className="text-sm text-gray-500">Payment Terms</span>
+                  <span className="text-sm text-muted-foreground">Payment Terms</span>
                   <p className="font-medium">{PAYMENT_TERMS_LABELS[invoice.payment_terms] || invoice.payment_terms}</p>
                 </div>
                 <div>
-                  <span className="text-sm text-gray-500">Due Date</span>
+                  <span className="text-sm text-muted-foreground">Due Date</span>
                   <p className="font-medium">{formatDate(invoice.due_date)}</p>
                 </div>
                 {invoice.sent_at && (
                   <div>
-                    <span className="text-sm text-gray-500">Sent</span>
+                    <span className="text-sm text-muted-foreground">Sent</span>
                     <p className="font-medium">{formatDate(invoice.sent_at)}</p>
                   </div>
                 )}
                 {invoice.viewed_at && (
                   <div>
-                    <span className="text-sm text-gray-500">Viewed</span>
+                    <span className="text-sm text-muted-foreground">Viewed</span>
                     <p className="font-medium">{formatDate(invoice.viewed_at)}</p>
                   </div>
                 )}
                 {invoice.paid_at && (
                   <div>
-                    <span className="text-sm text-gray-500">Paid</span>
+                    <span className="text-sm text-muted-foreground">Paid</span>
                     <p className="font-medium">{formatDate(invoice.paid_at)}</p>
                   </div>
                 )}
@@ -555,12 +566,12 @@ export default function InvoiceDetailPage() {
               </CardHeader>
               <CardContent className="space-y-3">
                 <div className="flex justify-between">
-                  <span className="text-gray-500">Total</span>
+                  <span className="text-muted-foreground">Total</span>
                   <span className="font-medium">{formatCurrency(invoice.total)}</span>
                 </div>
                 <div className="flex justify-between">
-                  <span className="text-gray-500">Paid</span>
-                  <span className="font-medium text-green-600">{formatCurrency(invoice.amount_paid)}</span>
+                  <span className="text-muted-foreground">Paid</span>
+                  <span className="font-medium text-success">{formatCurrency(invoice.amount_paid)}</span>
                 </div>
                 <div className="border-t pt-3 flex justify-between">
                   <span className="font-medium">Balance Due</span>
@@ -579,14 +590,14 @@ export default function InvoiceDetailPage() {
             <h2 className="text-xl font-bold mb-4">Record Payment</h2>
             <div className="space-y-4">
               <div>
-                <label className="block text-sm font-medium text-gray-700 mb-1">
+                <label className="block text-sm font-medium text-foreground mb-1">
                   Amount *
                 </label>
                 <div className="relative">
-                  <span className="absolute left-3 top-1/2 -translate-y-1/2 text-gray-500">$</span>
+                  <span className="absolute left-3 top-1/2 -translate-y-1/2 text-muted-foreground">$</span>
                   <input
                     type="number"
-                    className="w-full rounded-md border border-gray-300 pl-7 pr-3 py-2"
+                    className="w-full rounded-md border border-border pl-7 pr-3 py-2"
                     step="0.01"
                     min="0.01"
                     max={invoice.balance_due}
@@ -594,16 +605,16 @@ export default function InvoiceDetailPage() {
                     onChange={(e) => setPaymentAmount(e.target.value)}
                   />
                 </div>
-                <p className="text-xs text-gray-500 mt-1">
+                <p className="text-xs text-muted-foreground mt-1">
                   Balance due: {formatCurrency(invoice.balance_due)}
                 </p>
               </div>
               <div>
-                <label className="block text-sm font-medium text-gray-700 mb-1">
+                <label className="block text-sm font-medium text-foreground mb-1">
                   Payment Method
                 </label>
                 <select
-                  className="w-full rounded-md border border-gray-300 px-3 py-2"
+                  className="w-full rounded-md border border-border px-3 py-2"
                   value={paymentMethod}
                   onChange={(e) => setPaymentMethod(e.target.value)}
                 >
@@ -615,34 +626,34 @@ export default function InvoiceDetailPage() {
                 </select>
               </div>
               <div>
-                <label className="block text-sm font-medium text-gray-700 mb-1">
+                <label className="block text-sm font-medium text-foreground mb-1">
                   Payment Date
                 </label>
                 <input
                   type="date"
-                  className="w-full rounded-md border border-gray-300 px-3 py-2"
+                  className="w-full rounded-md border border-border px-3 py-2"
                   value={paymentDate}
                   onChange={(e) => setPaymentDate(e.target.value)}
                 />
               </div>
               <div>
-                <label className="block text-sm font-medium text-gray-700 mb-1">
+                <label className="block text-sm font-medium text-foreground mb-1">
                   Reference (optional)
                 </label>
                 <input
                   type="text"
-                  className="w-full rounded-md border border-gray-300 px-3 py-2"
+                  className="w-full rounded-md border border-border px-3 py-2"
                   placeholder="Check number, transaction ID, etc."
                   value={paymentReference}
                   onChange={(e) => setPaymentReference(e.target.value)}
                 />
               </div>
               <div>
-                <label className="block text-sm font-medium text-gray-700 mb-1">
+                <label className="block text-sm font-medium text-foreground mb-1">
                   Notes (optional)
                 </label>
                 <textarea
-                  className="w-full rounded-md border border-gray-300 px-3 py-2"
+                  className="w-full rounded-md border border-border px-3 py-2"
                   rows={2}
                   value={paymentNotes}
                   onChange={(e) => setPaymentNotes(e.target.value)}

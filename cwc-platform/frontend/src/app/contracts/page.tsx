@@ -21,6 +21,7 @@ import {
   FileSignature,
 } from "lucide-react";
 import Link from "next/link";
+import { Skeleton, SkeletonStats, SkeletonTable } from "@/components/ui/skeleton";
 
 interface Contract {
   id: string;
@@ -48,13 +49,13 @@ interface ContractStats {
 }
 
 const STATUS_COLORS: Record<string, string> = {
-  draft: "bg-gray-100 text-gray-800",
-  sent: "bg-blue-100 text-blue-800",
-  viewed: "bg-purple-100 text-purple-800",
-  signed: "bg-green-100 text-green-800",
-  expired: "bg-orange-100 text-orange-800",
-  declined: "bg-red-100 text-red-800",
-  void: "bg-gray-100 text-gray-500",
+  draft: "bg-muted text-foreground",
+  sent: "bg-primary/10 text-primary",
+  viewed: "bg-accent/10 text-accent",
+  signed: "bg-success/10 text-success",
+  expired: "bg-warning/10 text-warning",
+  declined: "bg-destructive/10 text-destructive",
+  void: "bg-muted text-muted-foreground",
 };
 
 const STATUS_ICONS: Record<string, React.ReactNode> = {
@@ -142,8 +143,13 @@ export default function ContractsPage() {
   if (loading) {
     return (
       <Shell>
-        <div className="flex items-center justify-center h-64">
-          <div className="text-gray-500">Loading...</div>
+        <div className="space-y-6">
+          <div className="flex items-center justify-between">
+            <Skeleton className="h-8 w-32" />
+            <Skeleton className="h-10 w-36" />
+          </div>
+          <SkeletonStats count={4} />
+          <SkeletonTable rows={5} />
         </div>
       </Shell>
     );
@@ -156,7 +162,7 @@ export default function ContractsPage() {
         <div className="flex items-center justify-between">
           <div>
             <h1 className="text-2xl font-bold">Contracts</h1>
-            <p className="text-gray-500">Manage contracts and e-signatures</p>
+            <p className="text-muted-foreground">Manage contracts and e-signatures</p>
           </div>
           <div className="flex gap-2">
             <Link href="/contracts/templates">
@@ -178,13 +184,13 @@ export default function ContractsPage() {
         <div className="grid grid-cols-1 md:grid-cols-4 gap-4">
           <Card>
             <CardHeader className="pb-2">
-              <CardTitle className="text-sm font-medium text-gray-500">
+              <CardTitle className="text-sm font-medium text-muted-foreground">
                 Total Contracts
               </CardTitle>
             </CardHeader>
             <CardContent>
               <div className="flex items-center gap-2">
-                <FileSignature className="h-5 w-5 text-gray-400" />
+                <FileSignature className="h-5 w-5 text-muted-foreground" />
                 <span className="text-2xl font-bold">{stats?.total_contracts || 0}</span>
               </div>
             </CardContent>
@@ -192,14 +198,14 @@ export default function ContractsPage() {
 
           <Card>
             <CardHeader className="pb-2">
-              <CardTitle className="text-sm font-medium text-gray-500">
+              <CardTitle className="text-sm font-medium text-muted-foreground">
                 Pending Signature
               </CardTitle>
             </CardHeader>
             <CardContent>
               <div className="flex items-center gap-2">
                 <Clock className="h-5 w-5 text-blue-500" />
-                <span className="text-2xl font-bold text-blue-600">
+                <span className="text-2xl font-bold text-primary">
                   {stats?.pending_signature_count || 0}
                 </span>
               </div>
@@ -208,14 +214,14 @@ export default function ContractsPage() {
 
           <Card>
             <CardHeader className="pb-2">
-              <CardTitle className="text-sm font-medium text-gray-500">
+              <CardTitle className="text-sm font-medium text-muted-foreground">
                 Signed
               </CardTitle>
             </CardHeader>
             <CardContent>
               <div className="flex items-center gap-2">
                 <CheckCircle className="h-5 w-5 text-green-500" />
-                <span className="text-2xl font-bold text-green-600">
+                <span className="text-2xl font-bold text-success">
                   {stats?.signed_count || 0}
                 </span>
               </div>
@@ -224,14 +230,14 @@ export default function ContractsPage() {
 
           <Card>
             <CardHeader className="pb-2">
-              <CardTitle className="text-sm font-medium text-gray-500">
+              <CardTitle className="text-sm font-medium text-muted-foreground">
                 Signed This Month
               </CardTitle>
             </CardHeader>
             <CardContent>
               <div className="flex items-center gap-2">
                 <FileSignature className="h-5 w-5 text-purple-500" />
-                <span className="text-2xl font-bold text-purple-600">
+                <span className="text-2xl font-bold text-accent">
                   {stats?.signed_this_month || 0}
                 </span>
               </div>
@@ -291,9 +297,9 @@ export default function ContractsPage() {
           <CardContent className="p-0">
             {contracts.length === 0 ? (
               <div className="flex flex-col items-center justify-center py-12 text-center">
-                <FileText className="h-12 w-12 text-gray-300 mb-4" />
-                <h3 className="text-lg font-medium text-gray-900">No contracts yet</h3>
-                <p className="text-gray-500 mt-1">
+                <FileText className="h-12 w-12 text-muted-foreground mb-4" />
+                <h3 className="text-lg font-medium text-foreground">No contracts yet</h3>
+                <p className="text-muted-foreground mt-1">
                   Create your first contract to get started
                 </p>
                 <Link href="/contracts/new">
@@ -308,19 +314,19 @@ export default function ContractsPage() {
                 {contracts.map((contract) => (
                   <div
                     key={contract.id}
-                    className="flex items-center justify-between p-4 hover:bg-gray-50"
+                    className="flex items-center justify-between p-4 hover:bg-muted cursor-pointer"
                   >
                     <div className="flex items-center gap-4">
-                      <div className="flex items-center justify-center w-10 h-10 rounded-full bg-gray-100">
+                      <div className="flex items-center justify-center w-10 h-10 rounded-full bg-muted">
                         {STATUS_ICONS[contract.status] || <FileText className="h-4 w-4" />}
                       </div>
                       <div>
                         <Link href={`/contracts/${contract.id}`}>
-                          <h3 className="font-medium text-gray-900 hover:text-blue-600">
+                          <h3 className="font-medium text-foreground hover:text-primary/80">
                             {contract.title}
                           </h3>
                         </Link>
-                        <div className="flex items-center gap-2 text-sm text-gray-500">
+                        <div className="flex items-center gap-2 text-sm text-muted-foreground">
                           <span>{contract.contract_number}</span>
                           <span>•</span>
                           <span>
@@ -337,7 +343,7 @@ export default function ContractsPage() {
                           {contract.status}
                         </Badge>
                         {formatExpiryDate(contract.expires_at, contract.status) && (
-                          <p className="text-xs text-gray-500 mt-1">
+                          <p className="text-xs text-muted-foreground mt-1">
                             {formatExpiryDate(contract.expires_at, contract.status)}
                           </p>
                         )}

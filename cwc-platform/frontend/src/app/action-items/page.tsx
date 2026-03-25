@@ -46,6 +46,7 @@ import {
   Circle,
   XCircle,
 } from "lucide-react";
+import { Skeleton } from "@/components/ui/skeleton";
 import { toast } from "sonner";
 import { format, formatDistanceToNow, isAfter, isBefore, isToday } from "date-fns";
 
@@ -56,9 +57,9 @@ interface Contact {
 }
 
 const priorityColors = {
-  low: "bg-gray-100 text-gray-700",
-  medium: "bg-yellow-100 text-yellow-700",
-  high: "bg-red-100 text-red-700",
+  low: "bg-muted text-foreground",
+  medium: "bg-warning/10 text-warning",
+  high: "bg-destructive/10 text-destructive",
 };
 
 const statusIcons = {
@@ -69,10 +70,10 @@ const statusIcons = {
 };
 
 const statusColors = {
-  pending: "text-gray-500",
-  in_progress: "text-blue-500",
-  completed: "text-green-500",
-  skipped: "text-gray-400",
+  pending: "text-muted-foreground",
+  in_progress: "text-primary",
+  completed: "text-success",
+  skipped: "text-muted-foreground",
 };
 
 export default function ActionItemsPage() {
@@ -242,7 +243,7 @@ export default function ActionItemsPage() {
           <h1 className="text-2xl font-bold flex items-center gap-2">
             Action Items
           </h1>
-          <p className="text-gray-500">Tasks assigned to your clients</p>
+          <p className="text-muted-foreground">Tasks assigned to your clients</p>
         </div>
         <Button onClick={openNewDialog}>
           <Plus className="h-4 w-4 mr-2" />
@@ -316,12 +317,24 @@ export default function ActionItemsPage() {
       <Card>
         <CardContent className="p-0">
           {loading ? (
-            <div className="p-8 text-center text-gray-500">Loading...</div>
+            <div className="p-4 space-y-4">
+              {[...Array(5)].map((_, i) => (
+                <div key={i} className="flex items-start gap-4 p-4">
+                  <Skeleton className="h-5 w-5 rounded-full" />
+                  <div className="flex-1 space-y-2">
+                    <Skeleton className="h-4 w-48" />
+                    <Skeleton className="h-3 w-full" />
+                    <Skeleton className="h-3 w-32" />
+                  </div>
+                  <Skeleton className="h-8 w-32" />
+                </div>
+              ))}
+            </div>
           ) : items.length === 0 ? (
             <div className="p-8 text-center">
-              <ListTodo className="h-12 w-12 text-gray-300 mx-auto mb-4" />
-              <h3 className="text-lg font-medium text-gray-900">No action items</h3>
-              <p className="text-gray-500 mt-1">
+              <ListTodo className="h-12 w-12 text-muted-foreground/50 mx-auto mb-4" />
+              <h3 className="text-lg font-medium text-foreground">No action items</h3>
+              <p className="text-muted-foreground mt-1">
                 Create action items to assign tasks to your clients
               </p>
             </div>
@@ -334,7 +347,7 @@ export default function ActionItemsPage() {
                 return (
                   <div
                     key={item.id}
-                    className="p-4 hover:bg-gray-50 transition-colors"
+                    className="p-4 hover:bg-muted cursor-pointer transition-colors"
                   >
                     <div className="flex items-start gap-4">
                       <div className="flex-shrink-0 pt-1">
@@ -342,34 +355,34 @@ export default function ActionItemsPage() {
                       </div>
                       <div className="flex-1 min-w-0">
                         <div className="flex items-center gap-2 flex-wrap">
-                          <span className="font-medium text-gray-900">
+                          <span className="font-medium text-foreground">
                             {item.title}
                           </span>
                           <Badge className={priorityColors[item.priority]}>
                             {item.priority}
                           </Badge>
                           {item.status === "completed" && (
-                            <Badge className="bg-green-100 text-green-700">completed</Badge>
+                            <Badge className="bg-success/10 text-success">completed</Badge>
                           )}
                           {item.status === "skipped" && (
-                            <Badge className="bg-gray-100 text-gray-500">skipped</Badge>
+                            <Badge className="bg-muted text-muted-foreground">skipped</Badge>
                           )}
                         </div>
                         {item.description && (
-                          <p className="text-sm text-gray-600 mt-1 line-clamp-2">
+                          <p className="text-sm text-muted-foreground mt-1 line-clamp-2">
                             {item.description}
                           </p>
                         )}
-                        <div className="flex items-center gap-3 mt-2 text-xs text-gray-400 flex-wrap">
+                        <div className="flex items-center gap-3 mt-2 text-xs text-muted-foreground flex-wrap">
                           <span className="flex items-center gap-1">
                             <User className="h-3 w-3" />
                             {item.contact_name}
                           </span>
                           {item.due_date && (
                             <span className={`flex items-center gap-1 ${
-                              dueDateStatus === "overdue" ? "text-red-500" :
-                              dueDateStatus === "today" ? "text-orange-500" :
-                              "text-gray-400"
+                              dueDateStatus === "overdue" ? "text-destructive" :
+                              dueDateStatus === "today" ? "text-warning" :
+                              "text-muted-foreground"
                             }`}>
                               <Calendar className="h-3 w-3" />
                               {dueDateStatus === "overdue" && "Overdue: "}
@@ -413,7 +426,7 @@ export default function ActionItemsPage() {
                               Edit
                             </DropdownMenuItem>
                             <DropdownMenuItem
-                              className="text-red-600"
+                              className="text-destructive"
                               onClick={() => setDeletingId(item.id)}
                             >
                               <Trash2 className="h-4 w-4 mr-2" />
@@ -434,7 +447,7 @@ export default function ActionItemsPage() {
       {/* Pagination */}
       {totalPages > 1 && (
         <div className="flex items-center justify-between">
-          <p className="text-sm text-gray-500">
+          <p className="text-sm text-muted-foreground">
             Showing {(page - 1) * 20 + 1} to {Math.min(page * 20, total)} of {total}
           </p>
           <div className="flex gap-2">
@@ -553,7 +566,7 @@ export default function ActionItemsPage() {
             <DialogTitle>Delete Action Item</DialogTitle>
           </DialogHeader>
           <div className="py-4">
-            <p className="text-gray-600">
+            <p className="text-muted-foreground">
               Are you sure you want to delete this action item? This cannot be undone.
             </p>
           </div>

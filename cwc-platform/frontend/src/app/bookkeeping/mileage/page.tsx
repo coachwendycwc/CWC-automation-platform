@@ -392,7 +392,7 @@ export default function MileagePage() {
             <MapPin className="h-4 w-4 text-muted-foreground" />
           </CardHeader>
           <CardContent>
-            <div className="text-2xl font-bold text-green-600">
+            <div className="text-2xl font-bold text-success">
               {formatCurrency(summary.total_deduction)}
             </div>
             <p className="text-xs text-muted-foreground">At IRS standard rate</p>
@@ -465,7 +465,7 @@ export default function MileagePage() {
                       )}
                     </TableCell>
                     <TableCell className="text-right">{log.miles}</TableCell>
-                    <TableCell className="text-right font-medium text-green-600">
+                    <TableCell className="text-right font-medium text-success">
                       {formatCurrency(log.total_deduction)}
                     </TableCell>
                     <TableCell>

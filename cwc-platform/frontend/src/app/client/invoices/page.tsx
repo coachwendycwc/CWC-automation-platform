@@ -6,6 +6,7 @@ import { clientPortalApi } from "@/lib/api";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
+import { Skeleton } from "@/components/ui/skeleton";
 import Link from "next/link";
 import { FileText, ExternalLink, User } from "lucide-react";
 
@@ -21,12 +22,12 @@ interface Invoice {
 }
 
 const STATUS_COLORS: Record<string, string> = {
-  draft: "bg-gray-100 text-gray-800",
-  sent: "bg-blue-100 text-blue-800",
-  viewed: "bg-purple-100 text-purple-800",
-  partial: "bg-yellow-100 text-yellow-800",
-  paid: "bg-green-100 text-green-800",
-  overdue: "bg-red-100 text-red-800",
+  draft: "bg-muted text-foreground",
+  sent: "bg-primary/10 text-primary",
+  viewed: "bg-accent/10 text-accent",
+  partial: "bg-warning/10 text-warning",
+  paid: "bg-success/10 text-success",
+  overdue: "bg-destructive/10 text-destructive",
 };
 
 export default function ClientInvoicesPage() {
@@ -72,8 +73,16 @@ export default function ClientInvoicesPage() {
 
   if (loading) {
     return (
-      <div className="flex items-center justify-center h-64">
-        <div className="text-gray-500">Loading invoices...</div>
+      <div className="space-y-6">
+        <div className="space-y-2">
+          <Skeleton className="h-8 w-48" />
+          <Skeleton className="h-4 w-72" />
+        </div>
+        <div className="space-y-3">
+          {[1, 2, 3].map((i) => (
+            <Skeleton key={i} className="h-20 w-full rounded-xl" />
+          ))}
+        </div>
       </div>
     );
   }
@@ -82,8 +91,8 @@ export default function ClientInvoicesPage() {
     <div className="space-y-6">
       <div className="flex items-center justify-between">
         <div>
-          <h1 className="text-2xl font-bold text-gray-900">Invoices</h1>
-          <p className="text-gray-500">View and pay your invoices</p>
+          <h1 className="text-2xl font-bold text-foreground">Invoices</h1>
+          <p className="text-muted-foreground">View and pay your invoices</p>
         </div>
       </div>
 
@@ -116,9 +125,9 @@ export default function ClientInvoicesPage() {
       {invoices.length === 0 ? (
         <Card>
           <CardContent className="py-12 text-center">
-            <FileText className="h-12 w-12 text-gray-300 mx-auto mb-4" />
-            <h3 className="text-lg font-medium text-gray-900">No invoices</h3>
-            <p className="text-gray-500">
+            <FileText className="h-12 w-12 text-muted-foreground/40 mx-auto mb-4" />
+            <h3 className="text-lg font-medium text-foreground">No invoices</h3>
+            <p className="text-muted-foreground">
               {filter ? "No invoices match this filter" : "You don't have any invoices yet"}
             </p>
           </CardContent>
@@ -126,16 +135,16 @@ export default function ClientInvoicesPage() {
       ) : (
         <div className="space-y-3">
           {invoices.map((invoice) => (
-            <Card key={invoice.id} className="hover:shadow-md transition-shadow">
+            <Card key={invoice.id} className="hover:shadow-md transition-shadow cursor-pointer">
               <CardContent className="py-4">
                 <div className="flex items-center justify-between">
                   <div className="flex items-center gap-4">
-                    <div className="p-2 bg-purple-100 rounded-lg">
-                      <FileText className="h-5 w-5 text-purple-600" />
+                    <div className="p-2 bg-accent/10 rounded-lg">
+                      <FileText className="h-5 w-5 text-accent" />
                     </div>
                     <div>
                       <p className="font-medium">{invoice.invoice_number}</p>
-                      <p className="text-sm text-gray-500">
+                      <p className="text-sm text-muted-foreground">
                         Issued {formatDate(invoice.created_at)} &middot; Due{" "}
                         {formatDate(invoice.due_date)}
                         {invoice.contact_name && (
@@ -153,12 +162,12 @@ export default function ClientInvoicesPage() {
 
                   <div className="flex items-center gap-4">
                     <div className="text-right">
-                      <p className="text-sm text-gray-500">Balance Due</p>
+                      <p className="text-sm text-muted-foreground">Balance Due</p>
                       <p className="text-lg font-semibold">
                         {formatCurrency(invoice.balance_due)}
                       </p>
                     </div>
-                    <Badge className={STATUS_COLORS[invoice.status] || "bg-gray-100"}>
+                    <Badge className={STATUS_COLORS[invoice.status] || "bg-muted"}>
                       {invoice.status}
                     </Badge>
                     <Link href={`/client/invoices/${invoice.id}`}>

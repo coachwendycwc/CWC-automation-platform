@@ -44,7 +44,7 @@ export default function RegisterPage() {
   };
 
   return (
-    <div className="min-h-screen flex items-center justify-center bg-gray-50 py-12 px-4 sm:px-6 lg:px-8">
+    <div className="min-h-screen flex items-center justify-center bg-muted py-12 px-4 sm:px-6 lg:px-8">
       <div className="w-full max-w-md">
         {/* Logo */}
         <div className="flex justify-center mb-8">
@@ -66,7 +66,7 @@ export default function RegisterPage() {
         <CardContent>
           <form onSubmit={handleSubmit} className="space-y-4">
             {error && (
-              <div className="bg-red-50 border border-red-200 text-red-700 px-4 py-3 rounded">
+              <div className="bg-destructive/10 border border-destructive/20 text-destructive px-4 py-3 rounded">
                 {error}
               </div>
             )}
@@ -129,8 +129,8 @@ export default function RegisterPage() {
           </form>
 
           <div className="mt-6 text-center text-sm">
-            <span className="text-gray-600">Already have an account? </span>
-            <Link href="/login" className="text-blue-600 hover:text-blue-500 font-medium">
+            <span className="text-muted-foreground">Already have an account? </span>
+            <Link href="/login" className="text-primary hover:text-primary/80 font-medium">
               Sign in
             </Link>
           </div>

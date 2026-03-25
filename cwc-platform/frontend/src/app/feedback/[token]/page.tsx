@@ -10,6 +10,7 @@ import { Label } from "@/components/ui/label";
 import { Input } from "@/components/ui/input";
 import { Checkbox } from "@/components/ui/checkbox";
 import { RadioGroup, RadioGroupItem } from "@/components/ui/radio-group";
+import { Skeleton } from "@/components/ui/skeleton";
 import { publicFeedbackApi, publicTestimonialsApi } from "@/lib/api";
 import { CheckCircle, AlertCircle, ChevronRight, Video, Quote } from "lucide-react";
 import VideoRecorder from "@/components/VideoRecorder";
@@ -215,20 +216,28 @@ export default function FeedbackSurveyPage() {
 
   if (loading) {
     return (
-      <div className="min-h-screen bg-gray-50 flex items-center justify-center">
-        <div className="text-gray-500">Loading...</div>
+      <div className="min-h-screen bg-muted flex items-center justify-center">
+        <div className="max-w-2xl w-full mx-auto px-4 space-y-6">
+          <div className="text-center space-y-3">
+            <Skeleton className="h-16 w-32 mx-auto" />
+            <Skeleton className="h-8 w-64 mx-auto" />
+            <Skeleton className="h-4 w-96 mx-auto" />
+          </div>
+          <Skeleton className="h-4 w-full rounded-full" />
+          <Skeleton className="h-96 rounded-lg" />
+        </div>
       </div>
     );
   }
 
   if (error) {
     return (
-      <div className="min-h-screen bg-gray-50 flex items-center justify-center p-4">
+      <div className="min-h-screen bg-muted flex items-center justify-center p-4">
         <Card className="max-w-md w-full">
           <CardContent className="pt-6 text-center">
-            <AlertCircle className="h-12 w-12 text-red-500 mx-auto mb-4" />
+            <AlertCircle className="h-12 w-12 text-destructive mx-auto mb-4" />
             <h2 className="text-xl font-bold mb-2">Survey Not Available</h2>
-            <p className="text-gray-500">{error}</p>
+            <p className="text-muted-foreground">{error}</p>
           </CardContent>
         </Card>
       </div>
@@ -237,12 +246,12 @@ export default function FeedbackSurveyPage() {
 
   if (submitted) {
     return (
-      <div className="min-h-screen bg-gray-50 flex items-center justify-center p-4">
+      <div className="min-h-screen bg-muted flex items-center justify-center p-4">
         <Card className="max-w-md w-full">
           <CardContent className="pt-6 text-center">
-            <CheckCircle className="h-12 w-12 text-green-500 mx-auto mb-4" />
+            <CheckCircle className="h-12 w-12 text-success mx-auto mb-4" />
             <h2 className="text-xl font-bold mb-2">Thank You!</h2>
-            <p className="text-gray-500">
+            <p className="text-muted-foreground">
               Your feedback has been submitted. We truly appreciate you taking the time to share your experience. Your reflections help serve women of color leaders with even more clarity and care.
             </p>
           </CardContent>
@@ -254,7 +263,7 @@ export default function FeedbackSurveyPage() {
   const totalSections = 6;
 
   return (
-    <div className="min-h-screen bg-gray-50 py-8 px-4">
+    <div className="min-h-screen bg-muted py-8 px-4">
       <div className="max-w-2xl mx-auto">
         {/* Header */}
         <div className="text-center mb-8">
@@ -266,20 +275,20 @@ export default function FeedbackSurveyPage() {
             className="mx-auto mb-4"
           />
           <h1 className="text-2xl font-bold mb-2">End-of-Engagement Feedback</h1>
-          <p className="text-gray-500">
+          <p className="text-muted-foreground">
             Congratulations on completing your coaching engagement, {surveyData?.contact_name}!
             Your feedback helps measure impact and keep improving.
           </p>
-          <p className="text-sm text-gray-400 mt-2">This should take about 5-7 minutes.</p>
+          <p className="text-sm text-muted-foreground mt-2">This should take about 5-7 minutes.</p>
         </div>
 
         {/* Progress indicator */}
         <div className="mb-6">
-          <div className="flex justify-between text-sm text-gray-500 mb-2">
+          <div className="flex justify-between text-sm text-muted-foreground mb-2">
             <span>Section {currentSection} of {totalSections}</span>
             <span>{Math.round((currentSection / totalSections) * 100)}% complete</span>
           </div>
-          <div className="h-2 bg-gray-200 rounded-full overflow-hidden">
+          <div className="h-2 bg-muted rounded-full overflow-hidden">
             <div
               className="h-full bg-violet-600 transition-all duration-300"
               style={{ width: `${(currentSection / totalSections) * 100}%` }}
@@ -302,17 +311,17 @@ export default function FeedbackSurveyPage() {
                   <Label className="text-base font-medium">
                     Overall, how satisfied are you with your coaching experience? *
                   </Label>
-                  <p className="text-sm text-gray-500 mb-3">1 = Very Dissatisfied, 10 = Extremely Satisfied</p>
+                  <p className="text-sm text-muted-foreground mb-3">1 = Very Dissatisfied, 10 = Extremely Satisfied</p>
                   <div className="flex flex-wrap gap-2">
                     {[1, 2, 3, 4, 5, 6, 7, 8, 9, 10].map((rating) => (
                       <button
                         key={rating}
                         type="button"
                         onClick={() => setSatisfactionRating(rating)}
-                        className={`w-10 h-10 rounded-lg border-2 font-medium transition-all ${
+                        className={`w-10 h-10 rounded-lg border-2 font-medium transition-all cursor-pointer ${
                           satisfactionRating === rating
                             ? "border-violet-500 bg-violet-50 text-violet-600"
-                            : "border-gray-200 hover:border-gray-300"
+                            : "border-border hover:border-muted-foreground"
                         }`}
                       >
                         {rating}
@@ -326,24 +335,24 @@ export default function FeedbackSurveyPage() {
                   <Label className="text-base font-medium">
                     How likely are you to recommend coaching with Wendy to a colleague/friend? *
                   </Label>
-                  <p className="text-sm text-gray-500 mb-3">0 = Not at all likely, 10 = Extremely likely</p>
+                  <p className="text-sm text-muted-foreground mb-3">0 = Not at all likely, 10 = Extremely likely</p>
                   <div className="flex flex-wrap gap-2">
                     {[0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10].map((score) => (
                       <button
                         key={score}
                         type="button"
                         onClick={() => setNpsScore(score)}
-                        className={`w-10 h-10 rounded-lg border-2 font-medium transition-all ${
+                        className={`w-10 h-10 rounded-lg border-2 font-medium transition-all cursor-pointer ${
                           npsScore === score
                             ? "border-violet-500 bg-violet-50 text-violet-600"
-                            : "border-gray-200 hover:border-gray-300"
+                            : "border-border hover:border-muted-foreground"
                         }`}
                       >
                         {score}
                       </button>
                     ))}
                   </div>
-                  <div className="flex justify-between text-xs text-gray-400 mt-1 px-1">
+                  <div className="flex justify-between text-sm text-muted-foreground mt-1 px-1">
                     <span>Not likely</span>
                     <span>Extremely likely</span>
                   </div>
@@ -431,10 +440,10 @@ export default function FeedbackSurveyPage() {
                         key={rating}
                         type="button"
                         onClick={() => setProgressRating(rating)}
-                        className={`w-10 h-10 rounded-lg border-2 font-medium transition-all ${
+                        className={`w-10 h-10 rounded-lg border-2 font-medium transition-all cursor-pointer ${
                           progressRating === rating
                             ? "border-violet-500 bg-violet-50 text-violet-600"
-                            : "border-gray-200 hover:border-gray-300"
+                            : "border-border hover:border-muted-foreground"
                         }`}
                       >
                         {rating}
@@ -571,17 +580,17 @@ export default function FeedbackSurveyPage() {
                         key={rating}
                         type="button"
                         onClick={() => setWocSupportRating(rating)}
-                        className={`w-10 h-10 rounded-lg border-2 font-medium transition-all ${
+                        className={`w-10 h-10 rounded-lg border-2 font-medium transition-all cursor-pointer ${
                           wocSupportRating === rating
                             ? "border-violet-500 bg-violet-50 text-violet-600"
-                            : "border-gray-200 hover:border-gray-300"
+                            : "border-border hover:border-muted-foreground"
                         }`}
                       >
                         {rating}
                       </button>
                     ))}
                   </div>
-                  <div className="flex justify-between text-xs text-gray-400 mt-1 px-1">
+                  <div className="flex justify-between text-sm text-muted-foreground mt-1 px-1">
                     <span>Not well</span>
                     <span>Extremely well</span>
                   </div>
@@ -662,10 +671,10 @@ export default function FeedbackSurveyPage() {
                   <Label htmlFor="writtenTestimonial" className="text-base font-medium">
                     Written testimonial (3-6 sentences)
                   </Label>
-                  <p className="text-sm text-gray-500 mt-1 mb-2">
+                  <p className="text-sm text-muted-foreground mt-1 mb-2">
                     If helpful, you can use any of these starters:
                   </p>
-                  <ul className="text-sm text-gray-500 mb-3 space-y-1 list-disc list-inside">
+                  <ul className="text-sm text-muted-foreground mb-3 space-y-1 list-disc list-inside">
                     <li>Before coaching, I was struggling with ___.</li>
                     <li>The biggest shift for me was ___.</li>
                     <li>A specific win I'm proud of is ___.</li>
@@ -729,18 +738,18 @@ export default function FeedbackSurveyPage() {
 
                   {videoData && (
                     <div className="mt-4 bg-white rounded-lg p-4">
-                      <div className="flex items-center gap-3 text-green-700">
+                      <div className="flex items-center gap-3 text-success">
                         <CheckCircle className="h-5 w-5" />
                         <span className="font-medium">Video recorded successfully!</span>
                       </div>
-                      <p className="text-sm text-gray-500 mt-2">
+                      <p className="text-sm text-muted-foreground mt-2">
                         Your video testimonial has been uploaded and will be included with your feedback.
                       </p>
                       <Button
                         type="button"
                         variant="outline"
                         size="sm"
-                        className="mt-3"
+                        className="mt-3 cursor-pointer"
                         onClick={() => {
                           setVideoData(null);
                           setWillingToRecordVideo(true);
@@ -776,8 +785,8 @@ export default function FeedbackSurveyPage() {
                   />
                 </div>
 
-                <div className="p-4 bg-green-50 rounded-lg border border-green-100">
-                  <p className="text-sm text-green-800">
+                <div className="p-4 bg-success/10 rounded-lg border border-success/20">
+                  <p className="text-sm text-success">
                     Thank you for taking the time to complete this feedback form. Your reflections help serve women of color leaders with even more clarity and care.
                   </p>
                 </div>
@@ -790,6 +799,7 @@ export default function FeedbackSurveyPage() {
                 <Button
                   variant="outline"
                   onClick={() => setCurrentSection(currentSection - 1)}
+                  className="cursor-pointer"
                 >
                   Previous
                 </Button>
@@ -801,6 +811,7 @@ export default function FeedbackSurveyPage() {
                 <Button
                   onClick={() => setCurrentSection(currentSection + 1)}
                   disabled={!canProceed()}
+                  className="cursor-pointer"
                 >
                   Next
                   <ChevronRight className="h-4 w-4 ml-1" />
@@ -809,7 +820,7 @@ export default function FeedbackSurveyPage() {
                 <Button
                   onClick={handleSubmit}
                   disabled={submitting || !canProceed()}
-                  className="bg-green-600 hover:bg-green-700"
+                  className="bg-success hover:bg-success/90 cursor-pointer"
                 >
                   {submitting ? "Submitting..." : "Submit Feedback"}
                 </Button>
@@ -818,7 +829,7 @@ export default function FeedbackSurveyPage() {
           </CardContent>
         </Card>
 
-        <p className="text-center text-sm text-gray-500 mt-4">
+        <p className="text-center text-sm text-muted-foreground mt-4">
           Your feedback is confidential and helps improve our services.
         </p>
       </div>

@@ -6,6 +6,7 @@ import { clientPortalApi } from "@/lib/api";
 import { Card, CardContent } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
+import { Skeleton } from "@/components/ui/skeleton";
 import Link from "next/link";
 import {
   FileText,
@@ -40,10 +41,10 @@ const CONTENT_TYPE_ICONS: Record<string, any> = {
 };
 
 const CONTENT_TYPE_COLORS: Record<string, string> = {
-  file: "bg-blue-100 text-blue-600",
-  document: "bg-purple-100 text-purple-600",
-  video: "bg-red-100 text-red-600",
-  link: "bg-green-100 text-green-600",
+  file: "bg-primary/10 text-primary",
+  document: "bg-accent/10 text-accent",
+  video: "bg-destructive/10 text-destructive",
+  link: "bg-success/10 text-success",
 };
 
 export default function ClientResourcesPage() {
@@ -96,8 +97,16 @@ export default function ClientResourcesPage() {
 
   if (loading) {
     return (
-      <div className="flex items-center justify-center h-64">
-        <div className="text-gray-500">Loading resources...</div>
+      <div className="space-y-6">
+        <div className="space-y-2">
+          <Skeleton className="h-8 w-48" />
+          <Skeleton className="h-4 w-72" />
+        </div>
+        <div className="space-y-3">
+          {[1, 2, 3].map((i) => (
+            <Skeleton key={i} className="h-20 w-full rounded-xl" />
+          ))}
+        </div>
       </div>
     );
   }
@@ -113,8 +122,8 @@ export default function ClientResourcesPage() {
   return (
     <div className="space-y-6">
       <div>
-        <h1 className="text-2xl font-bold text-gray-900">Resources</h1>
-        <p className="text-gray-500">
+        <h1 className="text-2xl font-bold text-foreground">Resources</h1>
+        <p className="text-muted-foreground">
           Downloads, worksheets, and materials for your coaching journey
         </p>
       </div>
@@ -146,9 +155,9 @@ export default function ClientResourcesPage() {
       {resources.length === 0 ? (
         <Card>
           <CardContent className="py-12 text-center">
-            <FolderOpen className="h-12 w-12 text-gray-300 mx-auto mb-4" />
-            <h3 className="text-lg font-medium text-gray-900">No resources</h3>
-            <p className="text-gray-500">
+            <FolderOpen className="h-12 w-12 text-muted-foreground/40 mx-auto mb-4" />
+            <h3 className="text-lg font-medium text-foreground">No resources</h3>
+            <p className="text-muted-foreground">
               {selectedCategory
                 ? "No resources in this category"
                 : "No resources available yet"}
@@ -167,8 +176,8 @@ export default function ClientResourcesPage() {
         <div className="space-y-8">
           {Object.entries(groupedResources).map(([category, items]) => (
             <div key={category}>
-              <h2 className="text-lg font-semibold text-gray-900 mb-3 flex items-center gap-2">
-                <FolderOpen className="h-5 w-5 text-gray-400" />
+              <h2 className="text-lg font-semibold text-foreground mb-3 flex items-center gap-2">
+                <FolderOpen className="h-5 w-5 text-muted-foreground" />
                 {category}
               </h2>
               <div className="space-y-3">
@@ -186,7 +195,7 @@ export default function ClientResourcesPage() {
 
 function ResourceCard({ resource }: { resource: Resource }) {
   const Icon = CONTENT_TYPE_ICONS[resource.content_type] || File;
-  const colorClass = CONTENT_TYPE_COLORS[resource.content_type] || "bg-gray-100 text-gray-600";
+  const colorClass = CONTENT_TYPE_COLORS[resource.content_type] || "bg-muted text-muted-foreground";
 
   const formatFileSize = (bytes: number | null) => {
     if (!bytes) return "";
@@ -204,7 +213,7 @@ function ResourceCard({ resource }: { resource: Resource }) {
   };
 
   return (
-    <Card className="hover:shadow-md transition-shadow">
+    <Card className="hover:shadow-md transition-shadow cursor-pointer">
       <CardContent className="py-4">
         <div className="flex items-center justify-between">
           <div className="flex items-center gap-4">
@@ -212,8 +221,8 @@ function ResourceCard({ resource }: { resource: Resource }) {
               <Icon className="h-5 w-5" />
             </div>
             <div>
-              <p className="font-medium text-gray-900">{resource.title}</p>
-              <div className="flex items-center gap-2 text-sm text-gray-500">
+              <p className="font-medium text-foreground">{resource.title}</p>
+              <div className="flex items-center gap-2 text-sm text-muted-foreground">
                 {resource.description && (
                   <span className="line-clamp-1 max-w-md">
                     {resource.description}
@@ -224,7 +233,7 @@ function ResourceCard({ resource }: { resource: Resource }) {
                 )}
                 {resource.file_size && (
                   <>
-                    <span className="text-gray-300">·</span>
+                    <span className="text-muted-foreground/40">·</span>
                     <span>{formatFileSize(resource.file_size)}</span>
                   </>
                 )}

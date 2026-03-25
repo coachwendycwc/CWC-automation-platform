@@ -93,7 +93,7 @@ export default function CalendarPage() {
   if (authLoading || !isAuthenticated) {
     return (
       <div className="flex min-h-screen items-center justify-center">
-        <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-gray-900"></div>
+        <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-foreground"></div>
       </div>
     );
   }
@@ -102,8 +102,8 @@ export default function CalendarPage() {
     <Shell>
       <div className="p-6">
         <div className="mb-6">
-          <h1 className="text-2xl font-bold text-gray-900">Calendar</h1>
-          <p className="text-gray-600">View and manage your bookings</p>
+          <h1 className="text-2xl font-bold text-foreground">Calendar</h1>
+          <p className="text-muted-foreground">View and manage your bookings</p>
         </div>
 
         {/* Legend */}
@@ -114,16 +114,16 @@ export default function CalendarPage() {
                 className="w-3 h-3 rounded-full"
                 style={{ backgroundColor: colors.bg }}
               />
-              <span className="text-sm text-gray-600 capitalize">{status.replace("_", " ")}</span>
+              <span className="text-sm text-muted-foreground capitalize">{status.replace("_", " ")}</span>
             </div>
           ))}
         </div>
 
         {/* Calendar */}
-        <div className="bg-white rounded-lg shadow p-4">
+        <div className="bg-card rounded-lg shadow p-4">
           {isLoading ? (
             <div className="flex items-center justify-center h-96">
-              <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-gray-900"></div>
+              <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-foreground"></div>
             </div>
           ) : (
             <FullCalendar

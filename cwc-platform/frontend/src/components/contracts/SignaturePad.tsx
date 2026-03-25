@@ -157,7 +157,7 @@ export function SignaturePad({ onSignatureChange, disabled = false }: SignatureP
         </TabsList>
 
         <TabsContent value="draw" className="space-y-2">
-          <div className="text-sm text-gray-500">
+          <div className="text-sm text-muted-foreground">
             Use your mouse or finger to draw your signature below
           </div>
           <div
@@ -183,6 +183,7 @@ export function SignaturePad({ onSignatureChange, disabled = false }: SignatureP
               size="sm"
               onClick={clearCanvas}
               disabled={disabled || !hasDrawn}
+              className="cursor-pointer"
             >
               Clear
             </Button>
@@ -190,7 +191,7 @@ export function SignaturePad({ onSignatureChange, disabled = false }: SignatureP
         </TabsContent>
 
         <TabsContent value="type" className="space-y-2">
-          <div className="text-sm text-gray-500">
+          <div className="text-sm text-muted-foreground">
             Type your full legal name to create a signature
           </div>
           <Input
@@ -202,7 +203,7 @@ export function SignaturePad({ onSignatureChange, disabled = false }: SignatureP
           {typedName && (
             <div className="border rounded-lg p-4 bg-white">
               <p
-                className="text-3xl text-center text-gray-800"
+                className="text-3xl text-center text-foreground"
                 style={{ fontFamily: "'Brush Script MT', cursive", fontStyle: "italic" }}
               >
                 {typedName}

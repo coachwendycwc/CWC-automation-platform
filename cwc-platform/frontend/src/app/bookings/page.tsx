@@ -11,13 +11,14 @@ import { BookingWithDetails, BookingType } from "@/types";
 import { formatDate } from "@/lib/utils";
 import { Calendar, Clock, User, Check, X, ChevronLeft, ChevronRight } from "lucide-react";
 import Link from "next/link";
+import { Skeleton } from "@/components/ui/skeleton";
 
 const STATUS_COLORS: Record<string, string> = {
-  pending: "bg-yellow-100 text-yellow-800",
-  confirmed: "bg-green-100 text-green-800",
-  completed: "bg-blue-100 text-blue-800",
-  cancelled: "bg-red-100 text-red-800",
-  no_show: "bg-gray-100 text-gray-800",
+  pending: "bg-warning/10 text-warning",
+  confirmed: "bg-success/10 text-success",
+  completed: "bg-primary/10 text-primary",
+  cancelled: "bg-destructive/10 text-destructive",
+  no_show: "bg-muted text-foreground",
 };
 
 export default function BookingsPage() {
@@ -109,8 +110,18 @@ export default function BookingsPage() {
   if (loading) {
     return (
       <Shell>
-        <div className="flex items-center justify-center h-64">
-          <div className="text-gray-500">Loading...</div>
+        <div className="space-y-6">
+          <div className="flex items-center justify-between">
+            <Skeleton className="h-8 w-32" />
+            <Skeleton className="h-10 w-44" />
+          </div>
+          <Skeleton className="h-20 w-full" />
+          <div className="space-y-4">
+            <Skeleton className="h-5 w-24" />
+            {[...Array(3)].map((_, i) => (
+              <Skeleton key={i} className="h-24 w-full" />
+            ))}
+          </div>
         </div>
       </Shell>
     );
@@ -122,8 +133,8 @@ export default function BookingsPage() {
         {/* Header */}
         <div className="flex items-center justify-between">
           <div>
-            <h1 className="text-2xl font-bold text-gray-900">Bookings</h1>
-            <p className="text-gray-600">View and manage your appointments</p>
+            <h1 className="text-2xl font-bold text-foreground">Bookings</h1>
+            <p className="text-muted-foreground">View and manage your appointments</p>
           </div>
           <Link href="/settings/booking-types">
             <Button variant="outline">Manage Booking Types</Button>
@@ -135,9 +146,9 @@ export default function BookingsPage() {
           <CardContent className="py-4">
             <div className="flex flex-wrap gap-4">
               <div>
-                <label className="block text-sm font-medium text-gray-700 mb-1">Status</label>
+                <label className="block text-sm font-medium text-foreground mb-1">Status</label>
                 <select
-                  className="rounded-md border border-gray-300 px-3 py-2 text-sm"
+                  className="rounded-md border border-border px-3 py-2 text-sm"
                   value={filter}
                   onChange={(e) => setFilter(e.target.value)}
                 >
@@ -150,19 +161,19 @@ export default function BookingsPage() {
                 </select>
               </div>
               <div>
-                <label className="block text-sm font-medium text-gray-700 mb-1">From</label>
+                <label className="block text-sm font-medium text-foreground mb-1">From</label>
                 <input
                   type="date"
-                  className="rounded-md border border-gray-300 px-3 py-2 text-sm"
+                  className="rounded-md border border-border px-3 py-2 text-sm"
                   value={startDate}
                   onChange={(e) => setStartDate(e.target.value)}
                 />
               </div>
               <div>
-                <label className="block text-sm font-medium text-gray-700 mb-1">To</label>
+                <label className="block text-sm font-medium text-foreground mb-1">To</label>
                 <input
                   type="date"
-                  className="rounded-md border border-gray-300 px-3 py-2 text-sm"
+                  className="rounded-md border border-border px-3 py-2 text-sm"
                   value={endDate}
                   onChange={(e) => setEndDate(e.target.value)}
                 />
@@ -190,9 +201,9 @@ export default function BookingsPage() {
         {bookings.length === 0 ? (
           <Card>
             <CardContent className="py-12 text-center">
-              <Calendar className="h-12 w-12 mx-auto text-gray-400 mb-4" />
-              <h3 className="text-lg font-medium text-gray-900 mb-2">No bookings found</h3>
-              <p className="text-gray-500">
+              <Calendar className="h-12 w-12 mx-auto text-muted-foreground mb-4" />
+              <h3 className="text-lg font-medium text-foreground mb-2">No bookings found</h3>
+              <p className="text-muted-foreground">
                 {filter || startDate || endDate
                   ? "Try adjusting your filters"
                   : "Share your booking links to start receiving appointments"}
@@ -205,7 +216,7 @@ export default function BookingsPage() {
               .sort(([a], [b]) => new Date(b).getTime() - new Date(a).getTime())
               .map(([date, dateBookings]) => (
                 <div key={date}>
-                  <h3 className="text-sm font-semibold text-gray-500 uppercase tracking-wide mb-3">
+                  <h3 className="text-sm font-semibold text-muted-foreground uppercase tracking-wide mb-3">
                     {formatDateDisplay(date + "T00:00:00")}
                   </h3>
                   <div className="space-y-3">
@@ -222,32 +233,32 @@ export default function BookingsPage() {
                               <div className="flex items-start justify-between">
                                 <div className="flex items-start gap-4">
                                   <div className="text-center min-w-[60px]">
-                                    <div className="text-lg font-semibold text-gray-900">
+                                    <div className="text-lg font-semibold text-foreground">
                                       {formatTime(booking.start_time)}
                                     </div>
-                                    <div className="text-xs text-gray-500">
+                                    <div className="text-xs text-muted-foreground">
                                       {booking.booking_type.duration_minutes}min
                                     </div>
                                   </div>
                                   <div>
                                     <div className="flex items-center gap-2">
-                                      <span className="font-medium text-gray-900">
+                                      <span className="font-medium text-foreground">
                                         {booking.contact.first_name} {booking.contact.last_name || ""}
                                       </span>
                                       <Badge className={STATUS_COLORS[booking.status]}>
                                         {booking.status}
                                       </Badge>
                                     </div>
-                                    <div className="text-sm text-gray-500 mt-1">
+                                    <div className="text-sm text-muted-foreground mt-1">
                                       {booking.booking_type.name}
                                     </div>
                                     {booking.contact.email && (
-                                      <div className="text-sm text-gray-500">
+                                      <div className="text-sm text-muted-foreground">
                                         {booking.contact.email}
                                       </div>
                                     )}
                                     {booking.notes && (
-                                      <div className="text-sm text-gray-600 mt-2 italic">
+                                      <div className="text-sm text-muted-foreground mt-2 italic">
                                         "{booking.notes}"
                                       </div>
                                     )}
@@ -260,7 +271,7 @@ export default function BookingsPage() {
                                         size="sm"
                                         variant="outline"
                                         onClick={() => handleConfirm(booking.id)}
-                                        className="text-green-600 border-green-600 hover:bg-green-50"
+                                        className="text-success border-success hover:bg-success/10"
                                       >
                                         <Check className="h-4 w-4 mr-1" />
                                         Confirm
@@ -269,7 +280,7 @@ export default function BookingsPage() {
                                         size="sm"
                                         variant="outline"
                                         onClick={() => handleCancel(booking.id)}
-                                        className="text-red-600 border-red-600 hover:bg-red-50"
+                                        className="text-destructive border-destructive hover:bg-destructive/10"
                                       >
                                         <X className="h-4 w-4 mr-1" />
                                         Decline
@@ -281,7 +292,7 @@ export default function BookingsPage() {
                                       size="sm"
                                       variant="outline"
                                       onClick={() => handleCancel(booking.id)}
-                                      className="text-red-600 border-red-600 hover:bg-red-50"
+                                      className="text-destructive border-destructive hover:bg-destructive/10"
                                     >
                                       Cancel
                                     </Button>

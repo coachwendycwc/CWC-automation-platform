@@ -39,8 +39,8 @@ export default function SettingsPage() {
     <Shell>
       <div className="space-y-6">
         <div>
-          <h1 className="text-2xl font-bold text-gray-900">Settings</h1>
-          <p className="text-gray-600">Manage your platform settings and preferences</p>
+          <h1 className="text-2xl font-bold text-foreground">Settings</h1>
+          <p className="text-muted-foreground">Manage your platform settings and preferences</p>
         </div>
 
         <div className="grid gap-4 md:grid-cols-2">
@@ -48,18 +48,18 @@ export default function SettingsPage() {
             <Link
               key={link.name}
               href={link.disabled ? "#" : link.href}
-              className={link.disabled ? "cursor-not-allowed" : ""}
+              className={link.disabled ? "cursor-not-allowed" : "cursor-pointer"}
               onClick={(e) => link.disabled && e.preventDefault()}
             >
               <Card className={`h-full transition-shadow hover:shadow-md ${link.disabled ? "opacity-50" : ""}`}>
                 <CardHeader className="flex flex-row items-center gap-4">
-                  <div className="rounded-lg bg-blue-100 p-2">
-                    <link.icon className="h-6 w-6 text-blue-600" />
+                  <div className="rounded-lg bg-primary/10 p-2">
+                    <link.icon className="h-6 w-6 text-primary" />
                   </div>
                   <div>
                     <CardTitle className="text-lg">
                       {link.name}
-                      {link.disabled && <span className="ml-2 text-xs text-gray-400">(Coming soon)</span>}
+                      {link.disabled && <span className="ml-2 text-sm text-muted-foreground">(Coming soon)</span>}
                     </CardTitle>
                     <CardDescription>{link.description}</CardDescription>
                   </div>

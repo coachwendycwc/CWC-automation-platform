@@ -5,6 +5,7 @@ import { useClientAuth } from "@/contexts/ClientAuthContext";
 import { clientPortalApi } from "@/lib/api";
 import { Card, CardContent } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
+import { Skeleton } from "@/components/ui/skeleton";
 import { Users, Calendar, Clock, ArrowLeft } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import Link from "next/link";
@@ -59,8 +60,17 @@ export default function OrganizationTeamPage() {
 
   if (loading) {
     return (
-      <div className="flex items-center justify-center h-64">
-        <div className="text-gray-400">Loading...</div>
+      <div className="space-y-6">
+        <div className="space-y-2">
+          <Skeleton className="h-8 w-48" />
+          <Skeleton className="h-4 w-72" />
+        </div>
+        <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
+          {[1, 2, 3].map((i) => (
+            <Skeleton key={i} className="h-24 rounded-xl" />
+          ))}
+        </div>
+        <Skeleton className="h-64 w-full rounded-xl" />
       </div>
     );
   }
@@ -78,8 +88,8 @@ export default function OrganizationTeamPage() {
       </div>
 
       <div>
-        <h1 className="text-2xl font-semibold text-gray-900">Team Members</h1>
-        <p className="text-gray-500 mt-1">
+        <h1 className="text-2xl font-semibold text-foreground">Team Members</h1>
+        <p className="text-muted-foreground mt-1">
           {employees.length} team member{employees.length !== 1 ? "s" : ""} enrolled in coaching
         </p>
       </div>
@@ -88,9 +98,9 @@ export default function OrganizationTeamPage() {
       {employees.length === 0 ? (
         <Card className="border-dashed">
           <CardContent className="py-12 text-center">
-            <Users className="h-12 w-12 text-gray-300 mx-auto mb-4" />
-            <h3 className="text-lg font-medium text-gray-900">No team members</h3>
-            <p className="text-gray-500">
+            <Users className="h-12 w-12 text-muted-foreground/40 mx-auto mb-4" />
+            <h3 className="text-lg font-medium text-foreground">No team members</h3>
+            <p className="text-muted-foreground">
               No employees are currently enrolled in coaching
             </p>
           </CardContent>
@@ -98,22 +108,22 @@ export default function OrganizationTeamPage() {
       ) : (
         <div className="space-y-3">
           {employees.map((employee) => (
-            <Card key={employee.id} className="hover:shadow-md transition-shadow">
+            <Card key={employee.id} className="hover:shadow-md transition-shadow cursor-pointer">
               <CardContent className="py-5">
                 <div className="flex items-center justify-between">
                   <div className="flex items-center gap-4">
-                    <div className="w-12 h-12 bg-purple-100 rounded-full flex items-center justify-center">
-                      <span className="text-lg font-semibold text-purple-600">
+                    <div className="w-12 h-12 bg-accent/10 rounded-full flex items-center justify-center">
+                      <span className="text-lg font-semibold text-accent">
                         {employee.first_name[0]}
                         {employee.last_name?.[0] || ""}
                       </span>
                     </div>
                     <div>
-                      <p className="font-medium text-gray-900">
+                      <p className="font-medium text-foreground">
                         {employee.first_name} {employee.last_name}
                       </p>
                       {employee.email && (
-                        <p className="text-sm text-gray-500">{employee.email}</p>
+                        <p className="text-sm text-muted-foreground">{employee.email}</p>
                       )}
                     </div>
                   </div>
@@ -121,34 +131,34 @@ export default function OrganizationTeamPage() {
                   <div className="flex items-center gap-6">
                     {/* Sessions Completed */}
                     <div className="text-center">
-                      <div className="flex items-center gap-1.5 text-gray-600">
+                      <div className="flex items-center gap-1.5 text-muted-foreground">
                         <Calendar className="h-4 w-4" />
                         <span className="text-lg font-semibold">
                           {employee.sessions_completed}
                         </span>
                       </div>
-                      <p className="text-xs text-gray-500">Completed</p>
+                      <p className="text-xs text-muted-foreground">Completed</p>
                     </div>
 
                     {/* Upcoming */}
                     <div className="text-center">
-                      <div className="flex items-center gap-1.5 text-gray-600">
+                      <div className="flex items-center gap-1.5 text-muted-foreground">
                         <Clock className="h-4 w-4" />
                         <span className="text-lg font-semibold">
                           {employee.sessions_upcoming}
                         </span>
                       </div>
-                      <p className="text-xs text-gray-500">Upcoming</p>
+                      <p className="text-xs text-muted-foreground">Upcoming</p>
                     </div>
 
                     {/* Status Badge */}
                     <Badge
                       className={
                         employee.sessions_upcoming > 0
-                          ? "bg-green-100 text-green-800"
+                          ? "bg-success/10 text-success"
                           : employee.sessions_completed > 0
-                          ? "bg-blue-100 text-blue-800"
-                          : "bg-gray-100 text-gray-600"
+                          ? "bg-primary/10 text-primary"
+                          : "bg-muted text-muted-foreground"
                       }
                     >
                       {employee.sessions_upcoming > 0
@@ -162,8 +172,8 @@ export default function OrganizationTeamPage() {
 
                 {/* Last Session Info */}
                 {employee.last_session_date && (
-                  <div className="mt-3 pt-3 border-t border-gray-100">
-                    <p className="text-xs text-gray-500">
+                  <div className="mt-3 pt-3 border-t border-border">
+                    <p className="text-xs text-muted-foreground">
                       Last session: {formatDate(employee.last_session_date)}
                     </p>
                   </div>
@@ -175,9 +185,9 @@ export default function OrganizationTeamPage() {
       )}
 
       {/* Privacy Notice */}
-      <div className="bg-gray-50 rounded-xl p-4">
-        <p className="text-sm text-gray-500">
-          <span className="font-medium text-gray-700">Privacy Note:</span> Session content,
+      <div className="bg-muted rounded-xl p-4">
+        <p className="text-sm text-muted-foreground">
+          <span className="font-medium text-foreground">Privacy Note:</span> Session content,
           transcripts, and homework are confidential between the coach and coachee. Only
           session counts and dates are visible to organization administrators.
         </p>

@@ -6,7 +6,7 @@ function Skeleton({
 }: React.HTMLAttributes<HTMLDivElement>) {
   return (
     <div
-      className={cn("animate-pulse rounded-md bg-gray-200", className)}
+      className={cn("animate-pulse rounded-md bg-muted", className)}
       {...props}
     />
   )
@@ -15,7 +15,7 @@ function Skeleton({
 // Pre-built skeleton patterns for common UI elements
 function SkeletonCard() {
   return (
-    <div className="rounded-lg border bg-white p-4 space-y-3">
+    <div className="rounded-lg border bg-card p-4 space-y-3">
       <Skeleton className="h-4 w-3/4" />
       <Skeleton className="h-4 w-1/2" />
       <Skeleton className="h-4 w-full" />
@@ -48,7 +48,7 @@ function SkeletonStats({ count = 4 }: { count?: number }) {
   return (
     <div className={`grid gap-4 md:grid-cols-${count}`}>
       {Array.from({ length: count }).map((_, i) => (
-        <div key={i} className="rounded-lg border bg-white p-4 space-y-2">
+        <div key={i} className="rounded-lg border bg-card p-4 space-y-2">
           <Skeleton className="h-4 w-20" />
           <Skeleton className="h-8 w-24" />
         </div>

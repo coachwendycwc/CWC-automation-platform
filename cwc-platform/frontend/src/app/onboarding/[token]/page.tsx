@@ -10,6 +10,7 @@ import { Label } from "@/components/ui/label";
 import { Input } from "@/components/ui/input";
 import { Checkbox } from "@/components/ui/checkbox";
 import { RadioGroup, RadioGroupItem } from "@/components/ui/radio-group";
+import { Skeleton } from "@/components/ui/skeleton";
 import { publicOnboardingApi, OnboardingAssessmentSubmission } from "@/lib/api";
 import { CheckCircle, AlertCircle, ChevronRight, ChevronLeft, User, BarChart, MessageSquare, Target, Heart, Calendar } from "lucide-react";
 
@@ -214,17 +215,17 @@ export default function OnboardingAssessmentPage() {
             key={rating}
             type="button"
             onClick={() => onChange(rating)}
-            className={`w-10 h-10 rounded-lg border-2 font-medium transition-all ${
+            className={`w-10 h-10 rounded-lg border-2 font-medium transition-all cursor-pointer ${
               value === rating
                 ? "border-violet-500 bg-violet-50 text-violet-600"
-                : "border-gray-200 hover:border-gray-300"
+                : "border-border hover:border-muted-foreground"
             }`}
           >
             {rating}
           </button>
         ))}
       </div>
-      <div className="flex justify-between text-xs text-gray-400 mt-1 px-1">
+      <div className="flex justify-between text-sm text-muted-foreground mt-1 px-1">
         <span>{lowLabel}</span>
         <span>{highLabel}</span>
       </div>
@@ -233,20 +234,28 @@ export default function OnboardingAssessmentPage() {
 
   if (loading) {
     return (
-      <div className="min-h-screen bg-gray-50 flex items-center justify-center">
-        <div className="text-gray-500">Loading...</div>
+      <div className="min-h-screen bg-muted flex items-center justify-center">
+        <div className="max-w-2xl w-full mx-auto px-4 space-y-6">
+          <div className="text-center space-y-3">
+            <Skeleton className="h-16 w-32 mx-auto" />
+            <Skeleton className="h-8 w-56 mx-auto" />
+            <Skeleton className="h-4 w-80 mx-auto" />
+          </div>
+          <Skeleton className="h-4 w-full rounded-full" />
+          <Skeleton className="h-96 rounded-lg" />
+        </div>
       </div>
     );
   }
 
   if (error) {
     return (
-      <div className="min-h-screen bg-gray-50 flex items-center justify-center p-4">
+      <div className="min-h-screen bg-muted flex items-center justify-center p-4">
         <Card className="max-w-md w-full">
           <CardContent className="pt-6 text-center">
-            <AlertCircle className="h-12 w-12 text-red-500 mx-auto mb-4" />
+            <AlertCircle className="h-12 w-12 text-destructive mx-auto mb-4" />
             <h2 className="text-xl font-bold mb-2">Assessment Not Available</h2>
-            <p className="text-gray-500">{error}</p>
+            <p className="text-muted-foreground">{error}</p>
           </CardContent>
         </Card>
       </div>
@@ -255,12 +264,12 @@ export default function OnboardingAssessmentPage() {
 
   if (submitted) {
     return (
-      <div className="min-h-screen bg-gray-50 flex items-center justify-center p-4">
+      <div className="min-h-screen bg-muted flex items-center justify-center p-4">
         <Card className="max-w-md w-full">
           <CardContent className="pt-6 text-center">
-            <CheckCircle className="h-12 w-12 text-green-500 mx-auto mb-4" />
+            <CheckCircle className="h-12 w-12 text-success mx-auto mb-4" />
             <h2 className="text-xl font-bold mb-2">Thank You!</h2>
-            <p className="text-gray-500">
+            <p className="text-muted-foreground">
               Your onboarding assessment has been submitted. This helps us tailor your coaching experience to your unique needs and goals. Looking forward to our work together!
             </p>
           </CardContent>
@@ -281,7 +290,7 @@ export default function OnboardingAssessmentPage() {
   ];
 
   return (
-    <div className="min-h-screen bg-gray-50 py-8 px-4">
+    <div className="min-h-screen bg-muted py-8 px-4">
       <div className="max-w-2xl mx-auto">
         {/* Header */}
         <div className="text-center mb-8">
@@ -293,19 +302,19 @@ export default function OnboardingAssessmentPage() {
             className="mx-auto mb-4"
           />
           <h1 className="text-2xl font-bold mb-2">Onboarding Assessment</h1>
-          <p className="text-gray-500">
+          <p className="text-muted-foreground">
             Welcome, {assessmentData?.contact_name}! Please complete this assessment to help us prepare for our coaching engagement.
           </p>
-          <p className="text-sm text-gray-400 mt-2">This should take about 10-15 minutes.</p>
+          <p className="text-sm text-muted-foreground mt-2">This should take about 10-15 minutes.</p>
         </div>
 
         {/* Progress indicator */}
         <div className="mb-6">
-          <div className="flex justify-between text-sm text-gray-500 mb-2">
+          <div className="flex justify-between text-sm text-muted-foreground mb-2">
             <span>Section {currentSection} of {totalSections}: {sectionTitles[currentSection - 1]}</span>
             <span>{Math.round((currentSection / totalSections) * 100)}% complete</span>
           </div>
-          <div className="h-2 bg-gray-200 rounded-full overflow-hidden">
+          <div className="h-2 bg-muted rounded-full overflow-hidden">
             <div
               className="h-full bg-violet-600 transition-all duration-300"
               style={{ width: `${(currentSection / totalSections) * 100}%` }}
@@ -317,20 +326,20 @@ export default function OnboardingAssessmentPage() {
               <button
                 key={index}
                 onClick={() => setCurrentSection(index + 1)}
-                className={`flex flex-col items-center gap-1 ${
+                className={`flex flex-col items-center gap-1 cursor-pointer ${
                   currentSection === index + 1
                     ? "text-violet-600"
                     : currentSection > index + 1
-                      ? "text-green-500"
-                      : "text-gray-300"
+                      ? "text-success"
+                      : "text-muted-foreground/40"
                 }`}
               >
                 <div className={`w-8 h-8 rounded-full flex items-center justify-center ${
                   currentSection === index + 1
                     ? "bg-violet-100 border-2 border-violet-600"
                     : currentSection > index + 1
-                      ? "bg-green-100 border-2 border-green-500"
-                      : "bg-gray-100 border-2 border-gray-200"
+                      ? "bg-success/10 border-2 border-success"
+                      : "bg-muted border-2 border-border"
                 }`}>
                   <Icon className="h-4 w-4" />
                 </div>
@@ -819,8 +828,8 @@ export default function OnboardingAssessmentPage() {
                   />
                 </div>
 
-                <div className="p-4 bg-green-50 rounded-lg border border-green-100">
-                  <p className="text-sm text-green-800">
+                <div className="p-4 bg-success/10 rounded-lg border border-success/20">
+                  <p className="text-sm text-success">
                     Thank you for taking the time to complete this assessment. Your thoughtful responses help ensure our coaching engagement is tailored specifically to your needs and goals.
                   </p>
                 </div>
@@ -833,6 +842,7 @@ export default function OnboardingAssessmentPage() {
                 <Button
                   variant="outline"
                   onClick={() => setCurrentSection(currentSection - 1)}
+                  className="cursor-pointer"
                 >
                   <ChevronLeft className="h-4 w-4 mr-1" />
                   Previous
@@ -845,6 +855,7 @@ export default function OnboardingAssessmentPage() {
                 <Button
                   onClick={() => setCurrentSection(currentSection + 1)}
                   disabled={!canProceed()}
+                  className="cursor-pointer"
                 >
                   Next
                   <ChevronRight className="h-4 w-4 ml-1" />
@@ -853,7 +864,7 @@ export default function OnboardingAssessmentPage() {
                 <Button
                   onClick={handleSubmit}
                   disabled={submitting || !canProceed()}
-                  className="bg-green-600 hover:bg-green-700"
+                  className="bg-success hover:bg-success/90 cursor-pointer"
                 >
                   {submitting ? "Submitting..." : "Submit Assessment"}
                 </Button>
@@ -862,7 +873,7 @@ export default function OnboardingAssessmentPage() {
           </CardContent>
         </Card>
 
-        <p className="text-center text-sm text-gray-500 mt-4">
+        <p className="text-center text-sm text-muted-foreground mt-4">
           Your responses are confidential and will only be used to support your coaching journey.
         </p>
       </div>

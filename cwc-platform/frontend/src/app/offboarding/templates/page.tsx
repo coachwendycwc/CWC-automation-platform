@@ -35,6 +35,7 @@ import {
   X,
   Check,
 } from "lucide-react";
+import { Skeleton } from "@/components/ui/skeleton";
 import Link from "next/link";
 
 interface OffboardingTemplate {
@@ -212,8 +213,16 @@ export default function OffboardingTemplatesPage() {
   if (loading) {
     return (
       <Shell>
-        <div className="flex items-center justify-center h-64">
-          <div className="text-gray-500">Loading...</div>
+        <div className="space-y-6">
+          <div className="flex items-center justify-between">
+            <Skeleton className="h-8 w-64" />
+            <Skeleton className="h-10 w-36" />
+          </div>
+          <div className="grid gap-4">
+            <Skeleton className="h-[80px] w-full" />
+            <Skeleton className="h-[80px] w-full" />
+            <Skeleton className="h-[80px] w-full" />
+          </div>
         </div>
       </Shell>
     );
@@ -233,7 +242,7 @@ export default function OffboardingTemplatesPage() {
             </Link>
             <div>
               <h1 className="text-2xl font-bold">Offboarding Templates</h1>
-              <p className="text-gray-500">Configure default checklists and email templates</p>
+              <p className="text-muted-foreground">Configure default checklists and email templates</p>
             </div>
           </div>
           <Button onClick={openNewDialog}>
@@ -247,9 +256,9 @@ export default function OffboardingTemplatesPage() {
           {templates.length === 0 ? (
             <Card>
               <CardContent className="py-12 text-center">
-                <FileText className="h-12 w-12 text-gray-300 mx-auto mb-4" />
-                <h3 className="text-lg font-medium text-gray-900">No templates yet</h3>
-                <p className="text-gray-500 mt-1">
+                <FileText className="h-12 w-12 text-muted-foreground mx-auto mb-4" />
+                <h3 className="text-lg font-medium text-foreground">No templates yet</h3>
+                <p className="text-muted-foreground mt-1">
                   Create a template to streamline your offboarding process
                 </p>
                 <Button className="mt-4" onClick={openNewDialog}>
@@ -264,12 +273,12 @@ export default function OffboardingTemplatesPage() {
                 <CardContent className="p-4">
                   <div className="flex items-center justify-between">
                     <div className="flex items-center gap-4">
-                      <div className="flex items-center justify-center w-10 h-10 rounded-full bg-gray-100">
+                      <div className="flex items-center justify-center w-10 h-10 rounded-full bg-muted">
                         {WORKFLOW_TYPE_ICONS[template.workflow_type]}
                       </div>
                       <div>
                         <h3 className="font-medium">{template.name}</h3>
-                        <div className="flex items-center gap-2 text-sm text-gray-500">
+                        <div className="flex items-center gap-2 text-sm text-muted-foreground">
                           <span>{WORKFLOW_TYPE_LABELS[template.workflow_type]}</span>
                           <span>•</span>
                           <span>{template.checklist_items.length} checklist items</span>
@@ -278,14 +287,14 @@ export default function OffboardingTemplatesPage() {
                     </div>
 
                     <div className="flex items-center gap-3">
-                      <Badge className={template.is_active ? "bg-green-100 text-green-800" : "bg-gray-100 text-gray-800"}>
+                      <Badge className={template.is_active ? "bg-success/10 text-success" : "bg-muted text-muted-foreground"}>
                         {template.is_active ? "Active" : "Inactive"}
                       </Badge>
                       <Button variant="ghost" size="sm" onClick={() => openEditDialog(template)}>
                         <Edit className="h-4 w-4" />
                       </Button>
                       <Button variant="ghost" size="sm" onClick={() => handleDelete(template.id)}>
-                        <Trash2 className="h-4 w-4 text-red-500" />
+                        <Trash2 className="h-4 w-4 text-destructive" />
                       </Button>
                     </div>
                   </div>
@@ -379,7 +388,7 @@ export default function OffboardingTemplatesPage() {
                   onChange={(e) => setFormData({ ...formData, survey_delay_days: parseInt(e.target.value) || 0 })}
                   className="mt-1"
                 />
-                <p className="text-xs text-gray-500 mt-1">Days after initiation to send survey</p>
+                <p className="text-sm text-muted-foreground mt-1">Days after initiation to send survey</p>
               </div>
               <div>
                 <Label htmlFor="testimonial_delay">Testimonial Delay (days)</Label>
@@ -391,7 +400,7 @@ export default function OffboardingTemplatesPage() {
                   onChange={(e) => setFormData({ ...formData, testimonial_delay_days: parseInt(e.target.value) || 0 })}
                   className="mt-1"
                 />
-                <p className="text-xs text-gray-500 mt-1">Days after initiation to request testimonial</p>
+                <p className="text-sm text-muted-foreground mt-1">Days after initiation to request testimonial</p>
               </div>
             </div>
 
@@ -399,7 +408,7 @@ export default function OffboardingTemplatesPage() {
             <div className="flex items-center justify-between">
               <div>
                 <Label>Active</Label>
-                <p className="text-sm text-gray-500">Allow this template to be used for new workflows</p>
+                <p className="text-sm text-muted-foreground">Allow this template to be used for new workflows</p>
               </div>
               <Switch
                 checked={formData.is_active}
@@ -410,7 +419,7 @@ export default function OffboardingTemplatesPage() {
             {/* Email Templates (Collapsible) */}
             <div className="border-t pt-4">
               <h4 className="font-medium mb-4">Email Templates</h4>
-              <p className="text-sm text-gray-500 mb-4">
+              <p className="text-sm text-muted-foreground mb-4">
                 Use {"{{client_name}}"}, {"{{survey_url}}"}, {"{{testimonial_url}}"} as placeholders
               </p>
 

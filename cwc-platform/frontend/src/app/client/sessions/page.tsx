@@ -6,6 +6,7 @@ import { clientPortalApi } from "@/lib/api";
 import { Card, CardContent } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
+import { Skeleton } from "@/components/ui/skeleton";
 import Link from "next/link";
 import { Video, FileText, CheckSquare, Clock, ExternalLink, Calendar, ArrowRight, User } from "lucide-react";
 
@@ -90,8 +91,16 @@ export default function ClientSessionsPage() {
 
   if (loading) {
     return (
-      <div className="flex items-center justify-center h-64">
-        <div className="text-gray-400">Loading...</div>
+      <div className="space-y-6">
+        <div className="space-y-2">
+          <Skeleton className="h-8 w-48" />
+          <Skeleton className="h-4 w-72" />
+        </div>
+        <div className="space-y-3">
+          {[1, 2, 3].map((i) => (
+            <Skeleton key={i} className="h-20 w-full rounded-xl" />
+          ))}
+        </div>
       </div>
     );
   }
@@ -100,8 +109,8 @@ export default function ClientSessionsPage() {
     <div className="space-y-8">
       {/* Header */}
       <div>
-        <h1 className="text-2xl font-semibold text-gray-900">Sessions</h1>
-        <p className="text-gray-500 mt-1">Upcoming sessions, recordings, transcripts, and homework</p>
+        <h1 className="text-2xl font-semibold text-foreground">Sessions</h1>
+        <p className="text-muted-foreground mt-1">Upcoming sessions, recordings, transcripts, and homework</p>
       </div>
 
       {/* Tab Switcher */}
@@ -110,8 +119,8 @@ export default function ClientSessionsPage() {
           onClick={() => setActiveTab("upcoming")}
           className={`px-4 py-2 text-sm font-medium rounded-full transition-all ${
             activeTab === "upcoming"
-              ? "bg-gray-900 text-white"
-              : "text-gray-500 hover:text-gray-900 hover:bg-gray-100"
+              ? "bg-primary text-primary-foreground"
+              : "text-muted-foreground hover:text-foreground hover:bg-muted"
           }`}
         >
           Upcoming
@@ -125,8 +134,8 @@ export default function ClientSessionsPage() {
           onClick={() => setActiveTab("past")}
           className={`px-4 py-2 text-sm font-medium rounded-full transition-all ${
             activeTab === "past"
-              ? "bg-gray-900 text-white"
-              : "text-gray-500 hover:text-gray-900 hover:bg-gray-100"
+              ? "bg-primary text-primary-foreground"
+              : "text-muted-foreground hover:text-foreground hover:bg-muted"
           }`}
         >
           Past
@@ -144,28 +153,28 @@ export default function ClientSessionsPage() {
           {upcomingBookings.length === 0 ? (
             <Card className="border-dashed">
               <CardContent className="py-12 text-center">
-                <Calendar className="h-10 w-10 text-gray-300 mx-auto mb-3" />
-                <p className="text-gray-500">No upcoming sessions</p>
+                <Calendar className="h-10 w-10 text-muted-foreground/40 mx-auto mb-3" />
+                <p className="text-muted-foreground">No upcoming sessions</p>
               </CardContent>
             </Card>
           ) : (
             upcomingBookings.map((booking) => (
-              <Card key={booking.id} className="hover:shadow-md transition-shadow">
+              <Card key={booking.id} className="hover:shadow-md transition-shadow cursor-pointer">
                 <CardContent className="py-5">
                   <div className="flex items-center justify-between">
                     <div className="flex items-center gap-4">
                       <div className="text-center min-w-[60px]">
-                        <p className="text-2xl font-semibold text-gray-900">
+                        <p className="text-2xl font-semibold text-foreground">
                           {new Date(booking.start_time).getDate()}
                         </p>
-                        <p className="text-xs text-gray-500 uppercase">
+                        <p className="text-xs text-muted-foreground uppercase">
                           {new Date(booking.start_time).toLocaleDateString("en-US", { month: "short" })}
                         </p>
                       </div>
-                      <div className="h-12 w-px bg-gray-200" />
+                      <div className="h-12 w-px bg-border" />
                       <div>
-                        <p className="font-medium text-gray-900">{booking.booking_type_name}</p>
-                        <p className="text-sm text-gray-500">
+                        <p className="font-medium text-foreground">{booking.booking_type_name}</p>
+                        <p className="text-sm text-muted-foreground">
                           {formatTime(booking.start_time)} - {formatTime(booking.end_time)}
                         </p>
                       </div>
@@ -196,34 +205,34 @@ export default function ClientSessionsPage() {
           {recordings.length === 0 ? (
             <Card className="border-dashed">
               <CardContent className="py-12 text-center">
-                <Video className="h-10 w-10 text-gray-300 mx-auto mb-3" />
-                <p className="text-gray-500">No session recordings yet</p>
+                <Video className="h-10 w-10 text-muted-foreground/40 mx-auto mb-3" />
+                <p className="text-muted-foreground">No session recordings yet</p>
               </CardContent>
             </Card>
           ) : (
             recordings.map((session) => (
-              <Card key={session.id} className="hover:shadow-md transition-shadow">
+              <Card key={session.id} className="hover:shadow-md transition-shadow cursor-pointer">
                 <CardContent className="py-5">
                   <div className="flex items-center justify-between">
                     <div className="flex items-center gap-4">
-                      <div className="p-2.5 bg-gray-100 rounded-xl">
-                        <Video className="h-5 w-5 text-gray-600" />
+                      <div className="p-2.5 bg-muted rounded-xl">
+                        <Video className="h-5 w-5 text-muted-foreground" />
                       </div>
                       <div>
-                        <p className="font-medium text-gray-900">
+                        <p className="font-medium text-foreground">
                           {session.meeting_title || "Coaching Session"}
                         </p>
-                        <div className="flex items-center gap-3 text-sm text-gray-500">
+                        <div className="flex items-center gap-3 text-sm text-muted-foreground">
                           <span>{formatDate(session.recorded_at)}</span>
                           {session.duration_seconds && (
                             <>
-                              <span className="text-gray-300">·</span>
+                              <span className="text-muted-foreground/40">·</span>
                               <span>{formatDuration(session.duration_seconds)}</span>
                             </>
                           )}
                           {session.contact_name && (
                             <>
-                              <span className="text-gray-300">·</span>
+                              <span className="text-muted-foreground/40">·</span>
                               <span className="flex items-center gap-1">
                                 <User className="h-3 w-3" />
                                 {session.contact_name}
@@ -237,12 +246,12 @@ export default function ClientSessionsPage() {
                     <div className="flex items-center gap-3">
                       <div className="flex gap-1.5">
                         {session.has_transcript && (
-                          <div className="p-1.5 bg-blue-50 rounded-lg" title="Transcript available">
+                          <div className="p-1.5 bg-primary/5 rounded-lg" title="Transcript available">
                             <FileText className="h-4 w-4 text-blue-500" />
                           </div>
                         )}
                         {session.has_homework && (
-                          <div className="p-1.5 bg-green-50 rounded-lg" title="Homework assigned">
+                          <div className="p-1.5 bg-success/5 rounded-lg" title="Homework assigned">
                             <CheckSquare className="h-4 w-4 text-green-500" />
                           </div>
                         )}
