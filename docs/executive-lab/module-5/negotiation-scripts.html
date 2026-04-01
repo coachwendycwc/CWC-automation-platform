@@ -1,0 +1,243 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Negotiation Scripts by Scenario | Module 5</title>
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Source+Serif+4:wght@400;600;700&family=Inter:wght@400;500;600&display=swap');
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        body { font-family: 'Inter', sans-serif; background: #FAF8F5; color: #1A1A1A; padding: 40px; max-width: 860px; margin: 0 auto; line-height: 1.6; }
+        @media print { body { padding: 20px; background: #fff; font-size: 10pt; } .no-print { display: none; } }
+        @media screen and (max-width: 640px) { body { padding: 16px; } .spacer { height: 80px; } }
+
+        .download-bar { position: fixed; top: 0; left: 0; right: 0; background: #1A1A1A; color: #fff; padding: 14px 40px; display: flex; justify-content: space-between; align-items: center; z-index: 1000; }
+        .download-bar span { font-size: 14px; font-weight: 600; }
+        .download-btn { background: #D4A574; color: #fff; border: none; padding: 8px 20px; border-radius: 6px; font-weight: 600; cursor: pointer; font-size: 13px; }
+        .spacer { height: 70px; }
+
+        .header-card { background: #1A1A1A; color: #fff; border-radius: 12px; padding: 32px 40px; margin-bottom: 28px; }
+        .header-card .module-label { font-size: 12px; font-weight: 600; text-transform: uppercase; letter-spacing: 2px; color: #D4A574; margin-bottom: 8px; }
+        .header-card h1 { font-family: 'Source Serif 4', Georgia, serif; font-size: 28px; margin-bottom: 8px; }
+        .header-card p { color: #A3A3A3; font-size: 14px; }
+
+        .how-to-use { background: #fff; border-radius: 10px; padding: 20px 24px; margin-bottom: 28px; border-left: 4px solid #D4A574; font-size: 14px; color: #444; line-height: 1.8; }
+
+        .scenario-block { background: #fff; border-radius: 10px; margin-bottom: 24px; overflow: hidden; border: 1px solid #E5E0D8; }
+
+        .scenario-header { padding: 20px 28px; display: flex; align-items: center; gap: 16px; border-bottom: 1px solid #E5E0D8; }
+
+        .scenario-num { width: 36px; height: 36px; border-radius: 50%; display: flex; align-items: center; justify-content: center; font-weight: 700; font-size: 14px; flex-shrink: 0; color: #fff; }
+        .num-blue { background: #2A7B8C; }
+        .num-warm { background: #D4A574; }
+        .num-dark { background: #1A1A1A; }
+
+        .scenario-title { flex: 1; }
+        .scenario-title h3 { font-family: 'Source Serif 4', Georgia, serif; font-size: 18px; color: #1A1A1A; margin-bottom: 2px; }
+        .scenario-title p { font-size: 13px; color: #737373; }
+
+        .context-tag { font-size: 11px; font-weight: 700; padding: 4px 12px; border-radius: 20px; text-transform: uppercase; letter-spacing: 0.5px; white-space: nowrap; }
+        .tag-review { background: #E8F4F6; color: #1A5A6A; }
+        .tag-offer { background: #E8F5E9; color: #1B5E20; }
+        .tag-promo { background: #FFF9E6; color: #795500; }
+        .tag-scope { background: #F3E5F5; color: #4A148C; }
+
+        .scenario-body { padding: 24px 28px; }
+
+        .script-label { font-size: 11px; font-weight: 700; text-transform: uppercase; letter-spacing: 1.5px; color: #737373; margin-bottom: 10px; }
+
+        .script-block { background: #FAF8F5; border-left: 3px solid #2A7B8C; padding: 16px 20px; margin-bottom: 16px; font-size: 14px; line-height: 1.8; color: #333; border-radius: 0 6px 6px 0; }
+        .script-block strong { color: #1A1A1A; }
+        .script-block em { color: #737373; font-style: italic; font-size: 13px; }
+
+        .script-block.warm { border-left-color: #D4A574; }
+        .script-block.dark { border-left-color: #1A1A1A; background: #F5F5F5; }
+
+        .fill-in { display: inline-block; background: #FFFDE7; border-bottom: 2px solid #F9A825; padding: 0 6px; min-width: 80px; border-radius: 2px; color: #795500; font-style: italic; }
+
+        .variation-label { font-size: 12px; font-weight: 600; color: #2A7B8C; text-transform: uppercase; letter-spacing: 0.5px; margin: 16px 0 8px; }
+
+        .note-box { background: #E8F4F6; border-radius: 6px; padding: 12px 16px; margin-top: 12px; font-size: 13px; color: #1A4A55; }
+        .note-box strong { color: #0D3540; }
+
+        .woc-note { background: #F3E5F5; border-left: 3px solid #9C27B0; border-radius: 0 6px 6px 0; padding: 12px 16px; margin-top: 12px; font-size: 13px; color: #4A1577; }
+        .woc-note strong { color: #6A1B9A; }
+
+        .practice-box { background: #1A1A1A; color: #fff; border-radius: 8px; padding: 16px 20px; margin-top: 16px; font-size: 13px; }
+        .practice-box strong { color: #D4A574; }
+
+        .footer { text-align: center; padding: 24px 0 40px; color: #999; font-size: 12px; }
+    </style>
+</head>
+<body>
+    <div class="download-bar no-print">
+        <span>Negotiation Scripts — Module 5</span>
+        <button class="download-btn" onclick="window.print()">Download / Print</button>
+    </div>
+    <div class="spacer no-print"></div>
+
+    <div class="header-card">
+        <div class="module-label">Module 5 · Executive Leadership Lab</div>
+        <h1>Negotiation Scripts by Scenario</h1>
+        <p>Four complete scripts for four common negotiation situations. Adapt to your voice — the structure is non-negotiable.</p>
+    </div>
+
+    <div class="how-to-use">
+        <strong>How to use these scripts:</strong> Yellow <span class="fill-in">brackets</span> are your fill-in fields — replace them with your specific numbers, titles, and wins. Read each script aloud at least twice before your conversation. The goal is not memorization — it is muscle memory. When you know the structure, the words come naturally.
+    </div>
+
+    <!-- SCENARIO 1: ANNUAL REVIEW / RAISE REQUEST -->
+    <div class="scenario-block">
+        <div class="scenario-header">
+            <div class="scenario-num num-blue">1</div>
+            <div class="scenario-title">
+                <h3>Annual Review — Salary Increase Request</h3>
+                <p>You're in your current role and it's review time (or you're requesting a review)</p>
+            </div>
+            <span class="context-tag tag-review">Annual Review</span>
+        </div>
+        <div class="scenario-body">
+            <div class="script-label">Opening the Conversation</div>
+            <div class="script-block">
+                "I appreciate you making time for this, <span class="fill-in">[Name]</span>. I've been thoughtful about this conversation, and I want to be direct: I'd like to discuss my compensation and make sure it reflects my contributions and aligns with the market."
+                <br><em>— Pause. Let them respond. If they invite you to continue, move to the case.</em>
+            </div>
+
+            <div class="script-label">Building the Case</div>
+            <div class="script-block">
+                "I've done some market research. Based on my role, my <span class="fill-in">[X years]</span> of experience, and the scope of my work in <span class="fill-in">[location/industry]</span>, the market range for someone in my position is <span class="fill-in">[$X to $Y]</span>. My current compensation is <span class="fill-in">[$Z]</span>, which is below that range."
+                <br><br>
+                "Beyond the market data, I want to name some specific contributions from this past year. I <span class="fill-in">[Win #1 — with impact]</span>. I also <span class="fill-in">[Win #2 — with impact]</span>. Those two things alone represent significant value to the organization."
+            </div>
+
+            <div class="script-label">Making the Ask</div>
+            <div class="script-block warm">
+                "Based on that, I'm asking for a base salary of <span class="fill-in">[$specific number]</span>. That would bring me to market and reflect the level I'm delivering at."
+                <br><br>
+                <em>— Say the number. Stop talking. Wait.</em>
+            </div>
+
+            <div class="script-label">Closing the Conversation</div>
+            <div class="script-block">
+                "I'd love to hear your thoughts. I'm committed to continuing to deliver at this level — I want to make sure my compensation reflects that commitment."
+            </div>
+
+            <div class="note-box">
+                <strong>After they respond:</strong> If they need to check with someone or come back to you — ask for a specific timeline. "I appreciate that. Can we plan to reconnect by <span class="fill-in">[specific date]</span> with an answer?"
+            </div>
+        </div>
+    </div>
+
+    <!-- SCENARIO 2: JOB OFFER NEGOTIATION -->
+    <div class="scenario-block">
+        <div class="scenario-header">
+            <div class="scenario-num num-blue">2</div>
+            <div class="scenario-title">
+                <h3>New Job Offer — Counteroffer Script</h3>
+                <p>You have received an offer and you want to negotiate before accepting</p>
+            </div>
+            <span class="context-tag tag-offer">New Offer</span>
+        </div>
+        <div class="scenario-body">
+            <div class="script-label">Initial Response to the Offer (Phone / Email)</div>
+            <div class="script-block">
+                "Thank you so much — I'm genuinely excited about this opportunity and <span class="fill-in">[something specific about the role/team/mission]</span>. I've received the offer and I'd like to take a day to review it fully. Is it okay if I follow up with you by <span class="fill-in">[specific date]</span>?"
+                <br><em>— Always buy time. Never accept or counter on the spot.</em>
+            </div>
+
+            <div class="script-label">Counteroffer Script (Call or Email)</div>
+            <div class="script-block">
+                "I've reviewed the offer carefully, and I want to reiterate how excited I am about this role. I'd like to share some context and make a counteroffer."
+                <br><br>
+                "Based on my research into market compensation for <span class="fill-in">[title]</span> in <span class="fill-in">[location/industry]</span>, as well as my <span class="fill-in">[X years]</span> of experience and <span class="fill-in">[specific expertise]</span>, I was expecting a base in the range of <span class="fill-in">[$X to $Y]</span>. The current offer of <span class="fill-in">[$Z]</span> is a bit below that."
+                <br><br>
+                "I'm asking for a base salary of <span class="fill-in">[$specific number]</span>. I'm confident that I'll bring that value and more from day one."
+            </div>
+
+            <div class="variation-label">If They Say the Offer is Firm on Base</div>
+            <div class="script-block dark">
+                "I appreciate you being direct about the base. Can we talk about other elements of the package? I'm also interested in discussing <span class="fill-in">[signing bonus / equity refresh / additional PTO / remote flexibility]</span>. Is there flexibility there?"
+            </div>
+
+            <div class="woc-note">
+                <strong>WOC Note:</strong> Research shows women of color receive less initial offers than white counterparts for the same role. Your instinct may be to accept quickly to seem grateful. Resist. A well-delivered counteroffer signals confidence and market awareness — not ingratitude.
+            </div>
+        </div>
+    </div>
+
+    <!-- SCENARIO 3: PROMOTION REQUEST -->
+    <div class="scenario-block">
+        <div class="scenario-header">
+            <div class="scenario-num num-warm">3</div>
+            <div class="scenario-title">
+                <h3>Requesting a Promotion</h3>
+                <p>You want a title change — with or without an immediate compensation increase</p>
+            </div>
+            <span class="context-tag tag-promo">Promotion</span>
+        </div>
+        <div class="scenario-body">
+            <div class="script-label">Opening the Conversation</div>
+            <div class="script-block">
+                "I want to have a direct conversation about my career path here and, specifically, about a promotion to <span class="fill-in">[target title]</span>. I've been thinking about the right time to bring this up, and I believe I've built a strong case."
+            </div>
+
+            <div class="script-label">The Case</div>
+            <div class="script-block">
+                "Here's what I've been doing at that level already: <span class="fill-in">[2–3 specific examples of work beyond your current title]</span>. I've also taken on <span class="fill-in">[scope or leadership examples]</span>, which is typically associated with <span class="fill-in">[target title]</span> responsibilities."
+                <br><br>
+                "From a market standpoint, someone in a <span class="fill-in">[target title]</span> role with my scope of work typically earns between <span class="fill-in">[$X and $Y]</span>. My current compensation doesn't reflect the level I'm already operating at."
+            </div>
+
+            <div class="script-label">The Ask</div>
+            <div class="script-block warm">
+                "I'm asking to be formally promoted to <span class="fill-in">[target title]</span>, with a corresponding compensation adjustment to <span class="fill-in">[$specific number]</span>. I believe that reflects the work I'm already delivering."
+            </div>
+
+            <div class="variation-label">If They Say "Not Yet"</div>
+            <div class="script-block dark">
+                "I appreciate you being honest. Can you help me understand exactly what 'ready' looks like in your view? I'd like to have specific milestones so I can demonstrate that clearly — and can we agree on a 90-day check-in to revisit this?"
+            </div>
+
+            <div class="practice-box">
+                <strong>Practice prompt:</strong> Say your promotion ask out loud right now. Include your target title and specific number. Notice how it feels. That feeling is the exact discomfort you are building capacity to move through.
+            </div>
+        </div>
+    </div>
+
+    <!-- SCENARIO 4: SCOPE / FLEXIBILITY / DEVELOPMENT -->
+    <div class="scenario-block">
+        <div class="scenario-header">
+            <div class="scenario-num num-dark">4</div>
+            <div class="scenario-title">
+                <h3>Negotiating Beyond Salary — Scope, Flexibility & Development</h3>
+                <p>You want to negotiate non-cash elements of your package</p>
+            </div>
+            <span class="context-tag tag-scope">Total Package</span>
+        </div>
+        <div class="scenario-body">
+            <div class="script-label">Scope Expansion Ask</div>
+            <div class="script-block">
+                "I want to talk about the scope of my role. I've been leading <span class="fill-in">[project/function]</span>, which is <span class="fill-in">[description of expanded scope]</span>. I'd like to formally expand my responsibilities to include <span class="fill-in">[specific area]</span>, and I'd like that to be reflected in my title and compensation."
+            </div>
+
+            <div class="script-label">Remote / Schedule Flexibility Ask</div>
+            <div class="script-block">
+                "I'd like to discuss the possibility of a <span class="fill-in">[fully remote / hybrid / compressed schedule]</span> arrangement. I've been delivering strong results — <span class="fill-in">[specific example]</span> — and I believe this flexibility would actually increase my productivity and long-term sustainability in this role. Here's what I'm proposing: <span class="fill-in">[specific arrangement]</span>."
+            </div>
+
+            <div class="script-label">Professional Development Budget Ask</div>
+            <div class="script-block warm">
+                "I'd like to invest in <span class="fill-in">[specific certification / coaching / conference]</span> this year, and I'm requesting <span class="fill-in">[$specific amount]</span> in professional development support from the organization. Here's how it connects to my work: <span class="fill-in">[specific connection to role impact]</span>. I see this as a return on investment for the team, not just for me personally."
+            </div>
+
+            <div class="note-box">
+                <strong>Key principle:</strong> Non-cash asks should always be tied to organizational value — not just personal preference. Frame every ask as "here is how this benefits the team or the mission." It reframes the conversation from a favor to an investment.
+            </div>
+        </div>
+    </div>
+
+    <div class="footer">
+        Module 5: Advocacy &amp; Negotiation · Executive Leadership Lab · Coaching Women of Color®
+    </div>
+</body>
+</html>

@@ -1,0 +1,291 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Objection Response Cards | Module 5</title>
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Source+Serif+4:wght@400;600;700&family=Inter:wght@400;500;600&display=swap');
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        body { font-family: 'Inter', sans-serif; background: #FAF8F5; color: #1A1A1A; padding: 40px; max-width: 900px; margin: 0 auto; line-height: 1.6; }
+        @media print { body { padding: 16px; background: #fff; font-size: 10pt; } .no-print { display: none; } .card-grid { grid-template-columns: 1fr 1fr !important; } }
+        @media screen and (max-width: 640px) { body { padding: 16px; } .spacer { height: 80px; } .card-grid { grid-template-columns: 1fr !important; } }
+
+        .download-bar { position: fixed; top: 0; left: 0; right: 0; background: #1A1A1A; color: #fff; padding: 14px 40px; display: flex; justify-content: space-between; align-items: center; z-index: 1000; }
+        .download-bar span { font-size: 14px; font-weight: 600; }
+        .download-btn { background: #D4A574; color: #fff; border: none; padding: 8px 20px; border-radius: 6px; font-weight: 600; cursor: pointer; font-size: 13px; }
+        .spacer { height: 70px; }
+
+        .header-card { background: linear-gradient(135deg, #D4A574 0%, #B8864A 100%); color: #fff; border-radius: 12px; padding: 32px 40px; margin-bottom: 28px; }
+        .header-card .module-label { font-size: 12px; font-weight: 600; text-transform: uppercase; letter-spacing: 2px; color: rgba(255,255,255,0.7); margin-bottom: 8px; }
+        .header-card h1 { font-family: 'Source Serif 4', Georgia, serif; font-size: 28px; margin-bottom: 8px; }
+        .header-card p { color: rgba(255,255,255,0.8); font-size: 14px; }
+
+        .intro { background: #fff; border-radius: 10px; padding: 20px 24px; margin-bottom: 28px; border-left: 4px solid #2A7B8C; font-size: 14px; color: #444; line-height: 1.8; }
+
+        .card-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 20px; margin-bottom: 32px; }
+
+        .objection-card { background: #fff; border-radius: 12px; overflow: hidden; border: 1px solid #E5E0D8; display: flex; flex-direction: column; }
+
+        .card-top { padding: 20px 24px; }
+        .objection-label { font-size: 11px; font-weight: 700; text-transform: uppercase; letter-spacing: 1.5px; margin-bottom: 8px; }
+        .objection-text { font-family: 'Source Serif 4', Georgia, serif; font-size: 16px; line-height: 1.5; color: #1A1A1A; }
+        .objection-subtext { font-size: 13px; color: #737373; margin-top: 6px; }
+
+        .card-bottom { flex: 1; padding: 20px 24px; border-top: 1px solid #E5E0D8; }
+        .response-label { font-size: 11px; font-weight: 700; text-transform: uppercase; letter-spacing: 1px; color: #2A7B8C; margin-bottom: 10px; }
+        .response-text { font-size: 14px; line-height: 1.7; color: #333; }
+        .response-text .fill { display: inline-block; background: #FFFDE7; border-bottom: 1px solid #F9A825; padding: 0 4px; color: #795500; font-style: italic; border-radius: 2px; }
+
+        .principle { margin-top: 12px; padding: 10px 14px; border-radius: 6px; font-size: 13px; }
+        .p-blue { background: #E8F4F6; color: #1A4A55; }
+        .p-warm { background: #FFF9F5; color: #7A4A20; border-left: 2px solid #D4A574; }
+        .p-dark { background: #F5F5F5; color: #444; }
+        .p-purple { background: #F3E5F5; color: #4A1577; }
+
+        .section-title { font-family: 'Source Serif 4', Georgia, serif; font-size: 20px; color: #1A1A1A; margin-bottom: 16px; }
+
+        .advanced-table { background: #fff; border-radius: 10px; padding: 28px 32px; margin-bottom: 28px; border: 1px solid #E5E0D8; }
+        .adv-table { width: 100%; border-collapse: collapse; }
+        .adv-table th { background: #1A1A1A; color: #fff; padding: 12px 16px; text-align: left; font-size: 12px; font-weight: 600; text-transform: uppercase; letter-spacing: 0.5px; }
+        .adv-table td { padding: 14px 16px; border-bottom: 1px solid #E5E0D8; font-size: 13px; vertical-align: top; }
+        .adv-table tr:last-child td { border-bottom: none; }
+        .adv-table td:first-child { font-weight: 600; color: #1A1A1A; width: 28%; }
+        .adv-table td:nth-child(2) { color: #555; }
+        .adv-table td:last-child { color: #2A7B8C; }
+
+        .power-section { background: #1A1A1A; color: #fff; border-radius: 10px; padding: 28px 32px; margin-bottom: 28px; }
+        .power-section h2 { font-family: 'Source Serif 4', Georgia, serif; font-size: 20px; color: #D4A574; margin-bottom: 20px; }
+        .power-rule { display: flex; gap: 16px; margin-bottom: 16px; align-items: flex-start; }
+        .rule-num { background: #D4A574; color: #1A1A1A; width: 26px; height: 26px; border-radius: 50%; display: flex; align-items: center; justify-content: center; font-weight: 700; font-size: 12px; flex-shrink: 0; }
+        .rule-content h4 { font-size: 14px; font-weight: 600; color: #fff; margin-bottom: 4px; }
+        .rule-content p { font-size: 13px; color: #A3A3A3; line-height: 1.6; }
+
+        .footer { text-align: center; padding: 24px 0 40px; color: #999; font-size: 12px; }
+    </style>
+</head>
+<body>
+    <div class="download-bar no-print">
+        <span>Objection Response Cards — Module 5</span>
+        <button class="download-btn" onclick="window.print()">Download / Print</button>
+    </div>
+    <div class="spacer no-print"></div>
+
+    <div class="header-card">
+        <div class="module-label">Module 5 · Executive Leadership Lab</div>
+        <h1>Objection Response Cards</h1>
+        <p>Every objection has a response. Know yours before you're in the room.</p>
+    </div>
+
+    <div class="intro">
+        The ask you can't respond to is the ask you haven't prepared for. Most people crumble not because their case is weak — but because the pushback feels personal and they haven't rehearsed their response. These cards give you the language. Your job is to make it yours.
+    </div>
+
+    <div class="card-grid">
+
+        <!-- CARD 1 -->
+        <div class="objection-card">
+            <div class="card-top" style="background: #F5F5F5;">
+                <div class="objection-label" style="color: #737373;">Objection 1</div>
+                <div class="objection-text">"The budget is frozen."</div>
+                <div class="objection-subtext">Or: "There's no budget right now." / "We're in a hiring freeze."</div>
+            </div>
+            <div class="card-bottom">
+                <div class="response-label">Your Response</div>
+                <div class="response-text">
+                    "I understand the budget constraints, and I appreciate you being direct. Can we do two things? First, can we document this conversation and agree on a timeline to revisit it — I'm thinking <span class="fill">90 days</span>. Second, I'd like to explore whether there are non-cash elements we can address now — title, expanded scope, additional PTO, or a professional development budget."
+                </div>
+                <div class="principle p-blue" style="margin-top: 12px;">
+                    <strong>The principle:</strong> You are not accepting no. You are managing the timeline and expanding the table. A budget freeze on salary does not mean a freeze on everything.
+                </div>
+            </div>
+        </div>
+
+        <!-- CARD 2 -->
+        <div class="objection-card">
+            <div class="card-top" style="background: #FFF9F5;">
+                <div class="objection-label" style="color: #D4A574;">Objection 2</div>
+                <div class="objection-text">"You're not quite ready yet."</div>
+                <div class="objection-subtext">Or: "Let's give it more time." / "You're almost there."</div>
+            </div>
+            <div class="card-bottom">
+                <div class="response-label">Your Response</div>
+                <div class="response-text">
+                    "I appreciate you being honest with me. I'd like to understand that more specifically — can you help me define what 'ready' looks like in your view? I want to be clear on the milestones so I can demonstrate them. And can we schedule a 90-day check-in so I can show you where I am?"
+                </div>
+                <div class="principle p-warm" style="margin-top: 12px;">
+                    <strong>The principle:</strong> "Not ready" must never stay vague. You are converting vague feedback into a concrete roadmap — for both of you. Vagueness is how "not yet" becomes never.
+                </div>
+            </div>
+        </div>
+
+        <!-- CARD 3 -->
+        <div class="objection-card">
+            <div class="card-top" style="background: #F5F5F5;">
+                <div class="objection-label" style="color: #737373;">Objection 3</div>
+                <div class="objection-text">"You're at the top of the band."</div>
+                <div class="objection-subtext">Or: "The pay band doesn't allow for that." / "You've maxed out this level."</div>
+            </div>
+            <div class="card-bottom">
+                <div class="response-label">Your Response</div>
+                <div class="response-text">
+                    "I understand. If I'm at the top of the current band, I'd like to understand what the next band looks like and what the path to that level requires. Is a title change part of that conversation? I want to understand the full picture so I know where to invest my energy."
+                </div>
+                <div class="principle p-dark" style="margin-top: 12px;">
+                    <strong>The principle:</strong> The ceiling of one band is the floor of the next. You are not accepting the ceiling — you are asking what is above it.
+                </div>
+            </div>
+        </div>
+
+        <!-- CARD 4 -->
+        <div class="objection-card">
+            <div class="card-top" style="background: #FFF9F5;">
+                <div class="objection-label" style="color: #D4A574;">Objection 4</div>
+                <div class="objection-text">"We can only do the standard increase."</div>
+                <div class="objection-subtext">Or: "The process is set." / "Everyone gets the same percentage."</div>
+            </div>
+            <div class="card-bottom">
+                <div class="response-label">Your Response</div>
+                <div class="response-text">
+                    "I appreciate the standard process — I'm not asking to skip it. I'm asking to make sure the process accounts for impact. Over the past year I <span class="fill">[name your top win]</span> and <span class="fill">[name your second win]</span>. I believe that warrants a conversation outside the standard cycle. Is there a way to flag this for a separate review?"
+                </div>
+                <div class="principle p-blue" style="margin-top: 12px;">
+                    <strong>The principle:</strong> You are not asking to break the rules — you are asking to be seen within them. Standard processes are not designed for above-standard performance.
+                </div>
+            </div>
+        </div>
+
+        <!-- CARD 5 -->
+        <div class="objection-card">
+            <div class="card-top" style="background: #F3E5F5;">
+                <div class="objection-label" style="color: #7B1FA2;">Objection 5</div>
+                <div class="objection-text">"I'll need to think about it."</div>
+                <div class="objection-subtext">Or: "Let me check with [someone]." / "I need to loop in HR."</div>
+            </div>
+            <div class="card-bottom">
+                <div class="response-label">Your Response</div>
+                <div class="response-text">
+                    "Of course — I appreciate you taking this seriously. Can we set a specific date to reconnect? I want to make sure this conversation doesn't lose momentum. Would <span class="fill">[specific date]</span> work for a follow-up?"
+                </div>
+                <div class="principle p-purple" style="margin-top: 12px;">
+                    <strong>The principle:</strong> "I'll think about it" without a timeline is a soft no. You are anchoring the next conversation before you leave this one.
+                </div>
+            </div>
+        </div>
+
+        <!-- CARD 6 -->
+        <div class="objection-card">
+            <div class="card-top" style="background: #F5F5F5;">
+                <div class="objection-label" style="color: #737373;">Objection 6</div>
+                <div class="objection-text">"Other people here make less than you."</div>
+                <div class="objection-subtext">Or: "Your colleagues in similar roles aren't asking for this."</div>
+            </div>
+            <div class="card-bottom">
+                <div class="response-label">Your Response</div>
+                <div class="response-text">
+                    "I can only speak to my own experience and my own contributions. My ask is based on market data for this role and the impact I've delivered. I'd rather keep this conversation focused on what I've contributed and what the market supports. Does that work?"
+                </div>
+                <div class="principle p-dark" style="margin-top: 12px;">
+                    <strong>The principle:</strong> Never let them redirect to peers. Your ask is about you. Comparisons to others are designed to undermine your confidence. Return to your evidence.
+                </div>
+            </div>
+        </div>
+
+    </div>
+
+    <!-- ADVANCED OBJECTION TABLE -->
+    <div class="advanced-table">
+        <div class="section-title">Quick-Reference: Objection → Reframe</div>
+        <table class="adv-table">
+            <thead>
+                <tr>
+                    <th>What They Say</th>
+                    <th>What It Usually Means</th>
+                    <th>Your Strategic Move</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr>
+                    <td>"Budget is frozen"</td>
+                    <td>They may genuinely have constraints, or they're testing your resolve</td>
+                    <td>Expand the table — non-cash + timeline</td>
+                </tr>
+                <tr>
+                    <td>"Not ready yet"</td>
+                    <td>No clear definition of ready — or actual gaps they haven't named</td>
+                    <td>Make the vague specific — milestones + check-in date</td>
+                </tr>
+                <tr>
+                    <td>"Top of the band"</td>
+                    <td>The current structure limits the ask</td>
+                    <td>Ask about the next band — and the path to it</td>
+                </tr>
+                <tr>
+                    <td>"Standard process"</td>
+                    <td>Easier to say no to you than to change the process</td>
+                    <td>Name your specific impact — above-standard work deserves above-standard consideration</td>
+                </tr>
+                <tr>
+                    <td>"I'll think about it"</td>
+                    <td>Buying time — possibly to avoid the decision</td>
+                    <td>Lock in a specific follow-up date before you leave</td>
+                </tr>
+                <tr>
+                    <td>Silence / no response</td>
+                    <td>They are processing — or they're waiting for you to fill the space</td>
+                    <td>Do NOT fill the silence. Wait. Your patience is power.</td>
+                </tr>
+            </tbody>
+        </table>
+    </div>
+
+    <!-- POWER RULES -->
+    <div class="power-section">
+        <h2>5 Rules for Handling Objections</h2>
+
+        <div class="power-rule">
+            <div class="rule-num">1</div>
+            <div class="rule-content">
+                <h4>Do not apologize for asking</h4>
+                <p>Starting your response with "I'm sorry, I just thought..." undermines everything that follows. You made a well-researched ask. You have nothing to apologize for.</p>
+            </div>
+        </div>
+
+        <div class="power-rule">
+            <div class="rule-num">2</div>
+            <div class="rule-content">
+                <h4>Do not accept vague on any objection</h4>
+                <p>"Not ready yet" without milestones is a slow no. "Budget frozen" without a timeline is a permanent no. Convert every vague objection into something specific before the conversation ends.</p>
+            </div>
+        </div>
+
+        <div class="power-rule">
+            <div class="rule-num">3</div>
+            <div class="rule-content">
+                <h4>Do not accept on the spot</h4>
+                <p>You are allowed to say "I appreciate that — let me think about it and follow up." Taking time to consider a counter is professional, not weak.</p>
+            </div>
+        </div>
+
+        <div class="power-rule">
+            <div class="rule-num">4</div>
+            <div class="rule-content">
+                <h4>Follow up in writing</h4>
+                <p>After every negotiation conversation — regardless of outcome — send a brief email summarizing what was discussed and what was agreed. This protects you and creates accountability.</p>
+            </div>
+        </div>
+
+        <div class="power-rule">
+            <div class="rule-num">5</div>
+            <div class="rule-content">
+                <h4>A flat "no" with no path forward is information</h4>
+                <p>An organization that cannot provide a clear reason for declining a well-prepared, evidence-based ask — and offers no alternative path — is telling you something about the ceiling in that space. That information is valuable.</p>
+            </div>
+        </div>
+    </div>
+
+    <div class="footer">
+        Module 5: Advocacy &amp; Negotiation · Executive Leadership Lab · Coaching Women of Color®
+    </div>
+</body>
+</html>

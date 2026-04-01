@@ -1,0 +1,349 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Post-Negotiation Follow-Up Template | Module 5</title>
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Source+Serif+4:wght@400;600;700&family=Inter:wght@400;500;600&display=swap');
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        body { font-family: 'Inter', sans-serif; background: #FAF8F5; color: #1A1A1A; padding: 40px; max-width: 860px; margin: 0 auto; line-height: 1.6; }
+        @media print { body { padding: 20px; background: #fff; font-size: 10pt; } .no-print { display: none; } }
+        @media screen and (max-width: 640px) { body { padding: 16px; } .spacer { height: 80px; } }
+
+        .download-bar { position: fixed; top: 0; left: 0; right: 0; background: #1A1A1A; color: #fff; padding: 14px 40px; display: flex; justify-content: space-between; align-items: center; z-index: 1000; }
+        .download-bar span { font-size: 14px; font-weight: 600; }
+        .download-btn { background: #D4A574; color: #fff; border: none; padding: 8px 20px; border-radius: 6px; font-weight: 600; cursor: pointer; font-size: 13px; }
+        .spacer { height: 70px; }
+
+        .header-card { background: #1A1A1A; color: #fff; border-radius: 12px; padding: 32px 40px; margin-bottom: 28px; }
+        .header-card .module-label { font-size: 12px; font-weight: 600; text-transform: uppercase; letter-spacing: 2px; color: #D4A574; margin-bottom: 8px; }
+        .header-card h1 { font-family: 'Source Serif 4', Georgia, serif; font-size: 28px; margin-bottom: 8px; }
+        .header-card p { color: #A3A3A3; font-size: 14px; }
+
+        .outcome-selector { background: #fff; border-radius: 10px; padding: 24px 28px; margin-bottom: 24px; border: 1px solid #E5E0D8; }
+        .outcome-selector h2 { font-family: 'Source Serif 4', Georgia, serif; font-size: 18px; color: #1A1A1A; margin-bottom: 16px; }
+
+        .outcome-btns { display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 12px; }
+
+        .outcome-btn {
+            padding: 16px 12px;
+            border-radius: 8px;
+            border: 2px solid #E5E0D8;
+            background: #FAF8F5;
+            cursor: pointer;
+            text-align: center;
+            transition: all 0.2s;
+        }
+
+        .outcome-btn .emoji { font-size: 24px; display: block; margin-bottom: 6px; }
+        .outcome-btn .label { font-size: 14px; font-weight: 700; display: block; margin-bottom: 4px; }
+        .outcome-btn .desc { font-size: 12px; color: #737373; }
+
+        .outcome-btn.yes { border-color: #2A7B8C; background: #E8F4F6; }
+        .outcome-btn.yes .label { color: #2A7B8C; }
+        .outcome-btn.notyet { border-color: #D4A574; background: #FFF9F5; }
+        .outcome-btn.notyet .label { color: #B8864A; }
+        .outcome-btn.no { border-color: #9C27B0; background: #F3E5F5; }
+        .outcome-btn.no .label { color: #6A1B9A; }
+
+        .outcome-section { display: none; background: #fff; border-radius: 10px; padding: 28px 32px; margin-bottom: 20px; border: 1px solid #E5E0D8; }
+        .outcome-section.active { display: block; }
+
+        .section-title { font-family: 'Source Serif 4', Georgia, serif; font-size: 18px; margin-bottom: 6px; }
+        .section-sub { font-size: 13px; color: #737373; margin-bottom: 20px; }
+
+        label { display: block; font-size: 12px; font-weight: 600; text-transform: uppercase; letter-spacing: 0.5px; color: #737373; margin-bottom: 6px; }
+        input[type="text"], textarea { width: 100%; border: 1px solid #D1CCBF; border-radius: 6px; padding: 10px 14px; font-size: 14px; font-family: 'Inter', sans-serif; background: #FAF8F5; }
+        textarea { resize: vertical; min-height: 80px; }
+        input:focus, textarea:focus { outline: none; border-color: #2A7B8C; background: #fff; }
+        .field-group { margin-bottom: 16px; }
+        .field-row { display: grid; grid-template-columns: 1fr 1fr; gap: 16px; margin-bottom: 16px; }
+
+        .email-template { background: #FAF8F5; border: 1px solid #E5E0D8; border-radius: 8px; padding: 20px 24px; margin: 12px 0; }
+        .email-template .email-label { font-size: 11px; font-weight: 700; text-transform: uppercase; letter-spacing: 1.5px; color: #2A7B8C; margin-bottom: 12px; }
+        .email-template .email-body { font-size: 14px; line-height: 1.8; color: #333; }
+        .fill { display: inline-block; background: #FFFDE7; border-bottom: 1px solid #F9A825; padding: 0 4px; border-radius: 2px; color: #795500; font-style: italic; }
+
+        .milestone-row { display: flex; align-items: flex-start; gap: 12px; margin-bottom: 12px; }
+        .milestone-num { background: #D4A574; color: #1A1A1A; width: 24px; height: 24px; border-radius: 50%; display: flex; align-items: center; justify-content: center; font-weight: 700; font-size: 11px; flex-shrink: 0; margin-top: 2px; }
+
+        .warning-box { background: #FFF3E0; border-left: 4px solid #FF9800; border-radius: 0 8px 8px 0; padding: 14px 18px; font-size: 13px; color: #5D3900; margin: 12px 0; }
+        .warning-box strong { color: #E65100; }
+
+        .action-box { background: #F3E5F5; border-left: 4px solid #9C27B0; border-radius: 0 8px 8px 0; padding: 14px 18px; font-size: 14px; color: #4A1577; margin: 12px 0; }
+        .action-box strong { color: #6A1B9A; }
+        .action-box ul { margin-left: 20px; margin-top: 8px; }
+        .action-box li { margin-bottom: 6px; }
+
+        .reflection-card { background: #fff; border-radius: 10px; padding: 28px 32px; margin-bottom: 20px; border: 1px solid #E5E0D8; }
+
+        .footer { text-align: center; padding: 24px 0 40px; color: #999; font-size: 12px; }
+    </style>
+</head>
+<body>
+    <div class="download-bar no-print">
+        <span>Post-Negotiation Follow-Up — Module 5</span>
+        <button class="download-btn" onclick="window.print()">Download / Print</button>
+    </div>
+    <div class="spacer no-print"></div>
+
+    <div class="header-card">
+        <div class="module-label">Module 5 · Executive Leadership Lab</div>
+        <h1>Post-Negotiation Follow-Up Template</h1>
+        <p>What you do after the ask matters as much as the ask itself. Every outcome has a next step.</p>
+    </div>
+
+    <!-- OUTCOME SELECTOR -->
+    <div class="outcome-selector">
+        <h2>What was the outcome of your negotiation?</h2>
+        <div class="outcome-btns">
+            <div class="outcome-btn yes" onclick="showOutcome('yes')">
+                <span class="emoji">✅</span>
+                <span class="label">Yes</span>
+                <span class="desc">They agreed (fully or partially)</span>
+            </div>
+            <div class="outcome-btn notyet" onclick="showOutcome('notyet')">
+                <span class="emoji">⏳</span>
+                <span class="label">Not Yet</span>
+                <span class="desc">Delayed, conditional, or pending</span>
+            </div>
+            <div class="outcome-btn no" onclick="showOutcome('no')">
+                <span class="emoji">🚧</span>
+                <span class="label">No</span>
+                <span class="desc">Declined — no path offered</span>
+            </div>
+        </div>
+    </div>
+
+    <!-- YES OUTCOME -->
+    <div class="outcome-section active" id="outcome-yes">
+        <div class="section-title" style="color: #2A7B8C;">Outcome: Yes — Get It in Writing</div>
+        <div class="section-sub">Congratulations. Now protect it. The follow-up email is not optional.</div>
+
+        <div class="field-row">
+            <div class="field-group">
+                <label>What Was Agreed (compensation / title / other)</label>
+                <input type="text" placeholder="e.g., Base salary of $125,000, effective [date]">
+            </div>
+            <div class="field-group">
+                <label>Effective Date</label>
+                <input type="text" placeholder="e.g., January 1, 2026 / Next pay cycle">
+            </div>
+        </div>
+
+        <div class="field-group">
+            <label>How it will be confirmed (letter / email / updated contract)</label>
+            <input type="text" placeholder="e.g., Updated offer letter from HR by [date]">
+        </div>
+
+        <div class="email-template">
+            <div class="email-label">Follow-Up Email Template — Send Within 24 Hours</div>
+            <div class="email-body">
+                Subject: Re: Our Conversation — Thank You
+                <br><br>
+                Hi <span class="fill">[Name]</span>,
+                <br><br>
+                Thank you for meeting with me and for the conversation today. I wanted to confirm what we discussed: <span class="fill">[summary of what was agreed — be specific: title, salary, scope, effective date]</span>.
+                <br><br>
+                I'm excited to continue delivering at this level, and I appreciate your confidence in my contributions. I look forward to receiving the updated <span class="fill">[offer letter / compensation confirmation]</span> by <span class="fill">[specific date]</span>.
+                <br><br>
+                Thank you again.
+                <br><br>
+                <span class="fill">[Your Name]</span>
+            </div>
+        </div>
+
+        <div class="field-group">
+            <label>Write Your Customized Follow-Up Email Below</label>
+            <textarea rows="8" placeholder="Customize the template above with your specific details..."></textarea>
+        </div>
+
+        <div class="warning-box">
+            <strong>Important:</strong> Do not consider the negotiation complete until it is confirmed in writing. Verbal agreements change. Managers leave. HR loses notes. Your email creates the paper trail that protects you.
+        </div>
+
+        <div class="field-group">
+            <label>What I'll Track Over the Next 90 Days to Ensure Follow-Through</label>
+            <textarea placeholder="e.g., Confirm letter received by [date], check first paycheck for updated amount, confirm title updated in HR system..."></textarea>
+        </div>
+    </div>
+
+    <!-- NOT YET OUTCOME -->
+    <div class="outcome-section" id="outcome-notyet">
+        <div class="section-title" style="color: #B8864A;">Outcome: Not Yet — Make Vague Into Specific</div>
+        <div class="section-sub">A "not yet" without milestones is a slow no. Your job now is to convert vague into accountable.</div>
+
+        <div class="field-group">
+            <label>What exactly did they say?</label>
+            <textarea rows="2" placeholder="Write their exact words, or as close as you remember them..."></textarea>
+        </div>
+
+        <div class="field-row">
+            <div class="field-group">
+                <label>Did they give a reason?</label>
+                <input type="text" placeholder="e.g., Budget cycle, timing, 'not ready'">
+            </div>
+            <div class="field-group">
+                <label>Did they give a timeline?</label>
+                <input type="text" placeholder="e.g., Q2 review, 6 months, or no specific date?">
+            </div>
+        </div>
+
+        <div class="field-group">
+            <label>Milestones they named (if any)</label>
+            <textarea rows="2" placeholder="What did they say 'ready' or 'approved' would look like? If vague, write 'None given'..."></textarea>
+        </div>
+
+        <div class="email-template">
+            <div class="email-label">Follow-Up Email Template — Send Within 24 Hours</div>
+            <div class="email-body">
+                Subject: Follow-Up — Our Conversation on <span class="fill">[Date]</span>
+                <br><br>
+                Hi <span class="fill">[Name]</span>,
+                <br><br>
+                Thank you for your time and for being direct with me. I appreciate your transparency.
+                <br><br>
+                I wanted to follow up and confirm: based on our conversation, we agreed to revisit my <span class="fill">[compensation / title / scope]</span> in <span class="fill">[timeline — be specific: "Q2 review" / "90 days" / "by April 15"]</span>.
+                <br><br>
+                To make sure I'm on the right path, I'd like to confirm the specific milestones or criteria: <span class="fill">[list what they said OR write "I want to make sure I understand what 'ready' looks like — can you share 2–3 specific indicators?"]</span>.
+                <br><br>
+                Can we schedule a brief check-in for <span class="fill">[specific date]</span> to review progress?
+                <br><br>
+                <span class="fill">[Your Name]</span>
+            </div>
+        </div>
+
+        <div class="field-group">
+            <label>Write Your Customized Follow-Up Email</label>
+            <textarea rows="8" placeholder="Customize the template above..."></textarea>
+        </div>
+
+        <div class="field-group">
+            <label>My 90-Day Milestone Plan</label>
+            <div class="milestone-row">
+                <div class="milestone-num">1</div>
+                <input type="text" placeholder="Milestone 1 — what I will demonstrate and by when">
+            </div>
+            <div class="milestone-row">
+                <div class="milestone-num">2</div>
+                <input type="text" placeholder="Milestone 2">
+            </div>
+            <div class="milestone-row">
+                <div class="milestone-num">3</div>
+                <input type="text" placeholder="Milestone 3">
+            </div>
+            <div class="milestone-row">
+                <div class="milestone-num">4</div>
+                <input type="text" placeholder="Check-in date: ___">
+            </div>
+        </div>
+
+        <div class="field-group">
+            <label>Calendar Date for Follow-Up Conversation</label>
+            <input type="text" placeholder="Put it on the calendar before you close this document">
+        </div>
+    </div>
+
+    <!-- NO OUTCOME -->
+    <div class="outcome-section" id="outcome-no">
+        <div class="section-title" style="color: #6A1B9A;">Outcome: No — This Is Information</div>
+        <div class="section-sub">A flat no — with no explanation and no path — tells you something about this organization. Use it wisely.</div>
+
+        <div class="field-group">
+            <label>What exactly did they say?</label>
+            <textarea rows="2" placeholder="Write their exact words..."></textarea>
+        </div>
+
+        <div class="field-row">
+            <div class="field-group">
+                <label>Did they offer a reason?</label>
+                <input type="text" placeholder="e.g., No budget / Role doesn't support it / Policy">
+            </div>
+            <div class="field-group">
+                <label>Did they offer an alternative path?</label>
+                <input type="text" placeholder="e.g., Yes / No / Vague">
+            </div>
+        </div>
+
+        <div class="action-box">
+            <strong>Three questions to ask yourself about a flat no:</strong>
+            <ul>
+                <li>Was this decision-maker the actual decision-maker — or do I need to escalate?</li>
+                <li>Is the ceiling structural (the org genuinely can't support this) or is it person-specific?</li>
+                <li>What does this tell me about my long-term trajectory here?</li>
+            </ul>
+        </div>
+
+        <div class="email-template">
+            <div class="email-label">Follow-Up Email Template — Send Within 24 Hours</div>
+            <div class="email-body">
+                Subject: Follow-Up — Our Conversation
+                <br><br>
+                Hi <span class="fill">[Name]</span>,
+                <br><br>
+                Thank you for your candor during our conversation. I appreciate you taking the time.
+                <br><br>
+                While I'm disappointed by the outcome, I want to make sure I'm using this as a learning opportunity. To help me understand the decision fully: <span class="fill">[Is there a specific path that would change the answer? / Can you help me understand what would need to be true for this to be reconsidered?]</span>.
+                <br><br>
+                I remain committed to my work here, and I'd value any guidance you can offer on how to position myself going forward.
+                <br><br>
+                <span class="fill">[Your Name]</span>
+            </div>
+        </div>
+
+        <div class="field-group">
+            <label>My Honest Assessment: What Does This "No" Tell Me?</label>
+            <textarea placeholder="Be direct with yourself here. Is this a 'not right now' or a 'not here'? What is the ceiling in this space?"></textarea>
+        </div>
+
+        <div class="field-row">
+            <div class="field-group">
+                <label>My Next Action</label>
+                <input type="text" placeholder="e.g., Request a path forward / Begin external search / Escalate / Accept and reassess in 6 months">
+            </div>
+            <div class="field-group">
+                <label>Date I Will Revisit This Decision</label>
+                <input type="text" placeholder="Set a date to reassess — don't leave it open-ended">
+            </div>
+        </div>
+    </div>
+
+    <!-- UNIVERSAL REFLECTION -->
+    <div class="reflection-card">
+        <div class="section-title">Reflection: Every Outcome Has a Lesson</div>
+        <div class="section-sub">Complete this section regardless of the outcome.</div>
+
+        <div class="field-group">
+            <label>What I'm most proud of about how I handled this conversation</label>
+            <textarea rows="2" placeholder="Don't skip this. What went well?"></textarea>
+        </div>
+
+        <div class="field-group">
+            <label>What I would do differently next time</label>
+            <textarea rows="2" placeholder="There will be a next negotiation. What would make it stronger?"></textarea>
+        </div>
+
+        <div class="field-group">
+            <label>What I learned about my own advocacy that I didn't know before</label>
+            <textarea rows="2" placeholder="What surprised you? About yourself, about the process, about the response?"></textarea>
+        </div>
+
+        <div class="field-group">
+            <label>My next negotiation will be about</label>
+            <input type="text" placeholder="Because there is always a next one — and now you know how to prepare for it.">
+        </div>
+    </div>
+
+    <div class="footer">
+        Module 5: Advocacy &amp; Negotiation · Executive Leadership Lab · Coaching Women of Color®
+    </div>
+
+    <script>
+        function showOutcome(type) {
+            document.querySelectorAll('.outcome-section').forEach(s => s.classList.remove('active'));
+            document.getElementById('outcome-' + type).classList.add('active');
+        }
+    </script>
+</body>
+</html>
