@@ -3,513 +3,520 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Negotiation Preparation Worksheet | Module 5</title>
+    <title>Negotiation Preparation Worksheet | Executive Leadership Lab</title>
+    <link href="https://fonts.googleapis.com/css2?family=Source+Serif+4:wght@400;600;700&family=Inter:wght@400;500;600&display=swap" rel="stylesheet">
     <style>
-        @import url('https://fonts.googleapis.com/css2?family=Source+Serif+4:wght@400;600;700&family=Inter:wght@400;500;600&display=swap');
+        :root {
+            --primary: #1A1A1A;
+            --accent: #2A7B8C;
+            --accent-warm: #D4A574;
+            --text: #333333;
+            --text-light: #666666;
+            --text-muted: #999999;
+            --bg: #FAF8F5;
+            --bg-warm: #F5F2ED;
+            --border: #E5E0D8;
+            --success: #4A9B7F;
+        }
 
         * { margin: 0; padding: 0; box-sizing: border-box; }
 
         body {
-            font-family: 'Inter', -apple-system, sans-serif;
-            background: #FAF8F5;
-            color: #1A1A1A;
-            padding: 40px;
-            max-width: 860px;
-            margin: 0 auto;
+            font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
+            background: var(--bg);
+            color: var(--text);
             line-height: 1.6;
+            min-height: 100vh;
         }
 
-        @media print {
-            body { padding: 20px; background: #fff; font-size: 10pt; }
-            .no-print { display: none; }
-            .section { page-break-inside: avoid; }
+        .container { max-width: 900px; margin: 0 auto; padding: 40px 24px; }
+
+        header {
+            text-align: center;
+            margin-bottom: 48px;
+            padding-bottom: 32px;
+            border-bottom: 1px solid var(--border);
         }
 
-        @media screen and (max-width: 640px) {
-            body { padding: 16px; }
-            .download-bar { padding: 12px 16px; flex-direction: column; gap: 8px; }
-            .spacer { height: 90px; }
-            .header-card { padding: 24px 16px; }
-            .header-card h1 { font-size: 22px; }
-            .section { padding: 20px 16px; }
-            .field-row { grid-template-columns: 1fr; }
-        }
+        .logo { height: 80px; margin-bottom: 24px; }
+        .module-label { font-size: 11px; font-weight: 600; color: var(--accent); text-transform: uppercase; letter-spacing: 2.5px; margin-bottom: 12px; display: block; }
+        h1 { font-family: 'Source Serif 4', Georgia, serif; font-size: 36px; font-weight: 700; color: var(--primary); margin-bottom: 12px; }
+        .subtitle { font-size: 18px; color: var(--text-light); max-width: 600px; margin: 0 auto; }
 
-        .download-bar {
-            position: fixed;
-            top: 0; left: 0; right: 0;
-            background: #1A1A1A;
-            color: #fff;
-            padding: 14px 40px;
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            z-index: 1000;
-        }
-
-        .download-bar span { font-size: 14px; font-weight: 600; }
-
-        .download-btn {
-            background: #D4A574;
-            color: #fff;
-            border: none;
-            padding: 8px 20px;
-            border-radius: 6px;
-            font-weight: 600;
-            cursor: pointer;
-            font-size: 13px;
-        }
-
-        .spacer { height: 70px; }
-
-        .header-card {
-            background: #1A1A1A;
-            color: #fff;
-            border-radius: 12px;
-            padding: 32px 40px;
+        .advocacy-equation {
+            background: var(--primary);
+            color: white;
+            padding: 24px 32px;
+            border-radius: 8px;
             margin-bottom: 32px;
+            display: grid;
+            grid-template-columns: 1fr auto 1fr auto 1fr auto 1fr;
+            gap: 12px;
+            align-items: center;
+            text-align: center;
         }
 
-        .header-card .module-label {
-            font-size: 12px;
-            font-weight: 600;
-            text-transform: uppercase;
-            letter-spacing: 2px;
-            color: #D4A574;
-            margin-bottom: 8px;
-        }
-
-        .header-card h1 {
+        .eq-item h3 {
             font-family: 'Source Serif 4', Georgia, serif;
-            font-size: 28px;
-            font-weight: 700;
-            margin-bottom: 8px;
+            font-size: 16px;
+            font-weight: 600;
+            color: var(--accent-warm);
+            margin-bottom: 4px;
         }
 
-        .header-card p {
-            color: #A3A3A3;
-            font-size: 14px;
+        .eq-item p { font-size: 12px; color: rgba(255,255,255,0.65); margin: 0; }
+        .eq-operator { font-size: 24px; color: var(--accent-warm); font-weight: 700; }
+
+        .instructions {
+            background: var(--bg-warm);
+            border-left: 3px solid var(--accent-warm);
+            padding: 20px 24px;
+            margin-bottom: 40px;
+            border-radius: 0 4px 4px 0;
         }
+        .instructions h3 { font-family: 'Source Serif 4', Georgia, serif; font-size: 16px; font-weight: 600; color: var(--primary); margin-bottom: 8px; }
+        .instructions p { font-size: 14px; color: var(--text-light); margin: 0; }
 
         .section {
-            background: #fff;
-            border-radius: 10px;
-            padding: 28px 32px;
-            margin-bottom: 20px;
-            border: 1px solid #E5E0D8;
+            background: white;
+            border: 1px solid var(--border);
+            border-radius: 8px;
+            padding: 32px;
+            margin-bottom: 24px;
         }
 
-        .section-title {
-            font-family: 'Source Serif 4', Georgia, serif;
-            font-size: 18px;
-            font-weight: 600;
-            color: #2A7B8C;
-            margin-bottom: 6px;
+        .section-header { display: flex; align-items: center; gap: 16px; margin-bottom: 8px; }
+
+        .step-number {
+            width: 40px; height: 40px;
+            background: var(--accent);
+            border-radius: 50%;
+            display: flex; align-items: center; justify-content: center;
+            font-size: 18px; font-weight: 700; color: white; flex-shrink: 0;
         }
 
-        .section-subtitle {
-            font-size: 13px;
-            color: #737373;
-            margin-bottom: 20px;
+        .section-title { font-family: 'Source Serif 4', Georgia, serif; font-size: 20px; font-weight: 600; color: var(--primary); }
+        .section-description { font-size: 14px; color: var(--text-light); margin-bottom: 24px; padding-left: 56px; }
+
+        label { display: block; font-size: 14px; font-weight: 500; color: var(--primary); margin-bottom: 8px; }
+
+        textarea, input[type="text"] {
+            width: 100%; padding: 12px 16px;
+            border: 1px solid var(--border); border-radius: 4px;
+            font-family: inherit; font-size: 15px; color: var(--text);
+            background: var(--bg); transition: border-color 0.2s, box-shadow 0.2s; resize: vertical;
         }
+        textarea:focus, input[type="text"]:focus { outline: none; border-color: var(--accent); box-shadow: 0 0 0 3px rgba(42, 123, 140, 0.1); }
+        textarea { min-height: 100px; }
+        textarea.short { min-height: 60px; }
 
-        label {
-            display: block;
-            font-size: 13px;
-            font-weight: 600;
-            color: #1A1A1A;
-            margin-bottom: 6px;
-            text-transform: uppercase;
-            letter-spacing: 0.5px;
-        }
+        .field-group { margin-bottom: 20px; }
+        .field-group:last-child { margin-bottom: 0; }
 
-        .field-row {
-            display: grid;
-            grid-template-columns: 1fr 1fr;
-            gap: 16px;
-            margin-bottom: 16px;
-        }
+        .two-col { display: grid; grid-template-columns: 1fr 1fr; gap: 16px; }
+        .three-col { display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 16px; }
 
-        .field-group { margin-bottom: 16px; }
-
-        input[type="text"], textarea, select {
-            width: 100%;
-            border: 1px solid #D1CCBF;
-            border-radius: 6px;
-            padding: 10px 14px;
-            font-size: 14px;
-            font-family: 'Inter', sans-serif;
-            background: #FAF8F5;
-            color: #1A1A1A;
-        }
-
-        textarea { resize: vertical; min-height: 80px; }
-
-        input[type="text"]:focus, textarea:focus {
-            outline: none;
-            border-color: #2A7B8C;
-            background: #fff;
-        }
-
-        .write-line {
-            border: none;
-            border-bottom: 1px solid #D1CCBF;
-            padding: 8px 0;
-            margin-bottom: 8px;
-            font-size: 14px;
-            font-family: 'Inter', sans-serif;
-            width: 100%;
-            background: transparent;
-        }
-
-        .write-line:focus { outline: none; border-bottom-color: #2A7B8C; }
-
-        .data-table {
-            width: 100%;
-            border-collapse: collapse;
-            margin-top: 12px;
-        }
-
-        .data-table th {
-            background: #2A7B8C;
-            color: #fff;
-            padding: 10px 14px;
-            text-align: left;
-            font-size: 12px;
-            font-weight: 600;
-            text-transform: uppercase;
-            letter-spacing: 0.5px;
-        }
-
-        .data-table td {
-            padding: 10px 14px;
-            border-bottom: 1px solid #E5E0D8;
-            font-size: 14px;
-        }
-
-        .data-table td input { border: none; background: transparent; padding: 0; width: 100%; }
-        .data-table td input:focus { outline: none; border-bottom: 1px solid #2A7B8C; }
+        .data-table { width: 100%; border-collapse: collapse; margin: 8px 0; }
+        .data-table th { background: var(--primary); color: white; padding: 10px 14px; text-align: left; font-size: 12px; font-weight: 600; text-transform: uppercase; letter-spacing: 0.5px; }
+        .data-table td { padding: 0; border-bottom: 1px solid var(--border); }
+        .data-table td input { width: 100%; padding: 10px 14px; border: none; background: transparent; font-family: inherit; font-size: 14px; color: var(--text); }
+        .data-table td input:focus { outline: none; background: rgba(42,123,140,0.04); }
         .data-table tr:last-child td { border-bottom: none; }
 
-        .tip-box {
-            background: #E8F4F6;
-            border-left: 3px solid #2A7B8C;
-            padding: 12px 16px;
-            margin: 16px 0;
-            font-size: 13px;
-            color: #2A5A66;
-            border-radius: 0 6px 6px 0;
-        }
-
-        .tip-box strong { color: #1A4A55; }
-
-        .script-prompt {
-            background: #FFF9F5;
-            border: 1px solid #D4A574;
+        .ask-box {
+            background: var(--primary);
             border-radius: 8px;
-            padding: 16px 20px;
-            margin-top: 12px;
-        }
-
-        .script-prompt .prompt-label {
-            font-size: 11px;
-            font-weight: 700;
-            text-transform: uppercase;
-            letter-spacing: 1px;
-            color: #D4A574;
-            margin-bottom: 8px;
-        }
-
-        .ask-number-box {
-            background: #1A1A1A;
-            color: #fff;
-            border-radius: 10px;
-            padding: 20px 24px;
-            margin-top: 16px;
+            padding: 24px;
             text-align: center;
+            margin-top: 20px;
         }
-
-        .ask-number-box .label { font-size: 12px; color: #A3A3A3; text-transform: uppercase; letter-spacing: 1px; margin-bottom: 8px; }
-        .ask-number-box input {
-            background: transparent;
-            border: none;
-            border-bottom: 2px solid #D4A574;
-            color: #fff;
-            font-size: 28px;
-            font-weight: 700;
-            text-align: center;
-            width: 200px;
+        .ask-box .ask-label { font-size: 12px; font-weight: 600; text-transform: uppercase; letter-spacing: 2px; color: rgba(255,255,255,0.6); margin-bottom: 8px; }
+        .ask-box input {
+            background: transparent; border: none;
+            border-bottom: 2px solid var(--accent-warm);
+            color: white; font-size: 32px; font-weight: 700;
+            text-align: center; width: 200px;
             font-family: 'Source Serif 4', Georgia, serif;
         }
-        .ask-number-box input:focus { outline: none; }
+        .ask-box input:focus { outline: none; }
+        .ask-box input::placeholder { color: rgba(255,255,255,0.3); }
 
-        .confidence-bar {
-            display: flex;
-            gap: 8px;
-            margin-top: 12px;
+        .script-block {
+            background: var(--bg-warm);
+            border-left: 3px solid var(--accent);
+            padding: 16px 20px;
+            margin-bottom: 16px;
+            border-radius: 0 4px 4px 0;
         }
+        .script-block-label { font-size: 11px; font-weight: 700; text-transform: uppercase; letter-spacing: 1.5px; color: var(--accent); margin-bottom: 10px; }
 
-        .conf-btn {
-            flex: 1;
-            padding: 10px;
-            border: 2px solid #E5E0D8;
-            border-radius: 6px;
-            background: #FAF8F5;
+        .checklist-items { list-style: none; }
+        .checklist-items li {
+            padding: 10px 0 10px 32px;
+            position: relative;
+            border-bottom: 1px solid var(--border);
+            font-size: 14px;
             cursor: pointer;
-            font-size: 13px;
-            font-weight: 600;
-            text-align: center;
-            transition: all 0.2s;
+        }
+        .checklist-items li:last-child { border-bottom: none; }
+        .checklist-items li::before { content: '☐'; position: absolute; left: 0; color: var(--accent-warm); font-size: 16px; }
+        .checklist-items li.checked { text-decoration: line-through; color: var(--text-muted); }
+        .checklist-items li.checked::before { content: '☑'; color: var(--success); }
+
+        .save-status { font-size: 13px; color: var(--success); display: flex; align-items: center; gap: 6px; }
+        .save-status.hidden { visibility: hidden; }
+
+        .button-row {
+            display: flex; justify-content: space-between; align-items: center;
+            margin-top: 40px; padding-top: 24px; border-top: 1px solid var(--border);
         }
 
-        .conf-btn:hover { border-color: #2A7B8C; background: #E8F4F6; color: #2A7B8C; }
-        .conf-btn.selected { border-color: #2A7B8C; background: #2A7B8C; color: #fff; }
+        .btn { padding: 12px 24px; border-radius: 4px; font-family: inherit; font-size: 14px; font-weight: 500; cursor: pointer; transition: all 0.2s; }
+        .btn-primary { background: var(--accent); color: white; border: none; }
+        .btn-primary:hover { background: #236a79; }
+        .btn-secondary { background: transparent; color: var(--text-light); border: 1px solid var(--border); }
+        .btn-secondary:hover { border-color: var(--text-light); }
 
-        .footer {
-            text-align: center;
-            padding-top: 24px;
-            padding-bottom: 40px;
-            color: #999;
-            font-size: 12px;
+        footer { text-align: center; padding: 40px 24px; color: var(--text-muted); font-size: 13px; }
+        footer a { color: var(--accent); text-decoration: none; }
+
+        @media print {
+            body { background: white; }
+            .container { max-width: 100%; padding: 20px; }
+            .button-row { display: none; }
+            .section { border: 1px solid #ddd; break-inside: avoid; }
+        }
+
+        @media screen and (max-width: 768px) {
+            .container { padding: 24px 16px; }
+            h1 { font-size: 28px; }
+            .advocacy-equation { grid-template-columns: 1fr; gap: 12px; }
+            .eq-operator { display: none; }
+            .two-col, .three-col { grid-template-columns: 1fr; }
+            .section { padding: 20px; }
+        }
+
+        @media screen and (max-width: 480px) {
+            .container { padding: 16px 12px; }
+            .logo { height: 60px; }
+            h1 { font-size: 24px; }
+            .subtitle { font-size: 15px; }
         }
     </style>
 </head>
 <body>
-    <div class="download-bar no-print">
-        <span>Negotiation Preparation Worksheet — Module 5</span>
-        <button class="download-btn" onclick="window.print()">Download / Print</button>
-    </div>
-    <div class="spacer no-print"></div>
+    <div class="container">
+        <header>
+            <img src="https://coachingwomenofcolor.com/wp-content/uploads/2021/04/CWCFinal_logo2.webp" alt="Coaching Women of Color" class="logo">
+            <span class="module-label">Module 5 — May</span>
+            <h1>Negotiation Preparation Worksheet</h1>
+            <p class="subtitle">An ask on paper is 10× more likely to become an ask out loud. Complete every section before your conversation.</p>
+        </header>
 
-    <div class="header-card">
-        <div class="module-label">Module 5 · Executive Leadership Lab</div>
-        <h1>Negotiation Preparation Worksheet</h1>
-        <p>Complete every section before your negotiation conversation. An ask on paper is 10× more likely to become an ask out loud.</p>
-    </div>
+        <div class="advocacy-equation">
+            <div class="eq-item"><h3>Know Your Worth</h3><p>Market data + impact evidence</p></div>
+            <div class="eq-operator">+</div>
+            <div class="eq-item"><h3>Script Your Ask</h3><p>Four-part structure</p></div>
+            <div class="eq-operator">+</div>
+            <div class="eq-item"><h3>Own the Objection</h3><p>Prepared responses</p></div>
+            <div class="eq-operator">=</div>
+            <div class="eq-item"><h3>What You've Earned</h3><p>Comp, title &amp; scope</p></div>
+        </div>
 
-    <!-- SECTION 1: WHAT YOU WANT TO NEGOTIATE -->
-    <div class="section">
-        <div class="section-title">Part 1: What Am I Negotiating?</div>
-        <div class="section-subtitle">Be specific. Vague asks get vague results.</div>
+        <div class="instructions">
+            <h3>How to use this worksheet</h3>
+            <p>Work through each section in order. Your answers auto-save as you type. Print or export when complete — bring it to your practice session before the real conversation.</p>
+        </div>
 
-        <div class="field-row">
+        <!-- SECTION 1 -->
+        <div class="section" id="section-1">
+            <div class="section-header">
+                <div class="step-number">1</div>
+                <div class="section-title">What Am I Negotiating?</div>
+            </div>
+            <div class="section-description">Be specific. Vague asks get vague results.</div>
+
+            <div class="two-col">
+                <div class="field-group">
+                    <label>My Current Title</label>
+                    <input type="text" id="current-title" placeholder="e.g., Senior Manager">
+                </div>
+                <div class="field-group">
+                    <label>Decision-Maker I'm Meeting With</label>
+                    <input type="text" id="decision-maker" placeholder="Name and title">
+                </div>
+            </div>
+
+            <div class="two-col">
+                <div class="field-group">
+                    <label>Target Date for Conversation</label>
+                    <input type="text" id="target-date" placeholder="e.g., March 15, 2026">
+                </div>
+                <div class="field-group">
+                    <label>Meeting Request Will Be Sent By</label>
+                    <input type="text" id="request-by" placeholder="Date you will reach out">
+                </div>
+            </div>
+
             <div class="field-group">
-                <label>My Name</label>
-                <input type="text" placeholder="Your name">
+                <label>What I Am Asking For (describe specifically)</label>
+                <textarea class="short" id="what-asking" placeholder="e.g., Base salary increase from $98K to $127,500, plus title change from Senior Manager to Director of Operations..."></textarea>
+            </div>
+        </div>
+
+        <!-- SECTION 2 -->
+        <div class="section" id="section-2">
+            <div class="section-header">
+                <div class="step-number">2</div>
+                <div class="section-title">Know Your Market Value</div>
+            </div>
+            <div class="section-description">Market data tells them what the job is worth. Pull from at least 3 sources before your conversation.</div>
+
+            <table class="data-table">
+                <thead>
+                    <tr>
+                        <th>Source</th>
+                        <th>Title / Role Used</th>
+                        <th>Low ($)</th>
+                        <th>Median ($)</th>
+                        <th>High ($)</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr><td><input type="text" placeholder="e.g., Glassdoor" class="market-source"></td><td><input type="text" class="market-title"></td><td><input type="text" class="market-low"></td><td><input type="text" class="market-med"></td><td><input type="text" class="market-high"></td></tr>
+                    <tr><td><input type="text" placeholder="e.g., LinkedIn Salary" class="market-source"></td><td><input type="text" class="market-title"></td><td><input type="text" class="market-low"></td><td><input type="text" class="market-med"></td><td><input type="text" class="market-high"></td></tr>
+                    <tr><td><input type="text" placeholder="e.g., Payscale" class="market-source"></td><td><input type="text" class="market-title"></td><td><input type="text" class="market-low"></td><td><input type="text" class="market-med"></td><td><input type="text" class="market-high"></td></tr>
+                    <tr><td><input type="text" placeholder="Other / Network" class="market-source"></td><td><input type="text" class="market-title"></td><td><input type="text" class="market-low"></td><td><input type="text" class="market-med"></td><td><input type="text" class="market-high"></td></tr>
+                </tbody>
+            </table>
+
+            <div class="three-col" style="margin-top: 20px;">
+                <div class="field-group">
+                    <label>Market Range (Low – High)</label>
+                    <input type="text" id="market-range" placeholder="$___ – $___">
+                </div>
+                <div class="field-group">
+                    <label>My Current Compensation</label>
+                    <input type="text" id="current-comp" placeholder="$___">
+                </div>
+                <div class="field-group">
+                    <label>Gap from Market Median</label>
+                    <input type="text" id="market-gap" placeholder="$___">
+                </div>
+            </div>
+
+            <div class="field-group">
+                <label>Why I land at the top of the range (experience + impact)</label>
+                <textarea class="short" id="range-position" placeholder="Based on my years of experience, scope, and the impact I deliver, I belong at the top/upper half of this range because..."></textarea>
+            </div>
+        </div>
+
+        <!-- SECTION 3 -->
+        <div class="section" id="section-3">
+            <div class="section-header">
+                <div class="step-number">3</div>
+                <div class="section-title">My Impact Evidence</div>
+            </div>
+            <div class="section-description">Your impact data tells them what YOU are worth. Pull your top wins — quantify where possible.</div>
+
+            <table class="data-table">
+                <thead>
+                    <tr>
+                        <th>#</th>
+                        <th>What I Did</th>
+                        <th>Quantified Impact</th>
+                        <th>When</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr><td><input type="text" value="1" style="width:32px;text-align:center;font-weight:700;color:var(--accent);"></td><td><input type="text" class="impact-what" placeholder="e.g., Led Q3 retention initiative"></td><td><input type="text" class="impact-result" placeholder="e.g., Reduced churn 18%"></td><td><input type="text" class="impact-when"></td></tr>
+                    <tr><td><input type="text" value="2" style="width:32px;text-align:center;font-weight:700;color:var(--accent);"></td><td><input type="text" class="impact-what"></td><td><input type="text" class="impact-result"></td><td><input type="text" class="impact-when"></td></tr>
+                    <tr><td><input type="text" value="3" style="width:32px;text-align:center;font-weight:700;color:var(--accent);"></td><td><input type="text" class="impact-what"></td><td><input type="text" class="impact-result"></td><td><input type="text" class="impact-when"></td></tr>
+                    <tr><td><input type="text" value="4" style="width:32px;text-align:center;font-weight:700;color:var(--accent);"></td><td><input type="text" class="impact-what"></td><td><input type="text" class="impact-result"></td><td><input type="text" class="impact-when"></td></tr>
+                    <tr><td><input type="text" value="5" style="width:32px;text-align:center;font-weight:700;color:var(--accent);"></td><td><input type="text" class="impact-what"></td><td><input type="text" class="impact-result"></td><td><input type="text" class="impact-when"></td></tr>
+                </tbody>
+            </table>
+
+            <div class="field-group" style="margin-top:20px;">
+                <label>My 2-Sentence Impact Summary (say this out loud until it's natural)</label>
+                <textarea class="short" id="impact-summary" placeholder="Over the past [timeframe], I [top accomplishment with number]. My contributions have [organizational impact]."></textarea>
+            </div>
+        </div>
+
+        <!-- SECTION 4: SCRIPT -->
+        <div class="section" id="section-4">
+            <div class="section-header">
+                <div class="step-number">4</div>
+                <div class="section-title">My Four-Part Negotiation Script</div>
+            </div>
+            <div class="section-description">Write your full script. Then practice out loud — at least 3 times before the meeting.</div>
+
+            <div class="script-block">
+                <div class="script-block-label">Open — Set the context. No apology. No qualifier.</div>
+                <textarea class="short" id="script-open" placeholder="'I appreciate you making time for this. I'd like to have a direct conversation about my compensation...'"></textarea>
+            </div>
+
+            <div class="script-block">
+                <div class="script-block-label">Case — Present your market data and impact evidence</div>
+                <textarea id="script-case" placeholder="'I've done market research. For my role in [location], the range is $X to $Y. My current compensation is below that. Additionally, over the past year I delivered...'"></textarea>
+            </div>
+
+            <div class="script-block">
+                <div class="script-block-label">Ask — State your specific number. Say it. Stop talking. Wait.</div>
+                <textarea class="short" id="script-ask" placeholder="'Based on that, I'm asking for [specific number]. I want to be at...'"></textarea>
+            </div>
+
+            <div class="script-block" style="border-left-color: var(--accent-warm);">
+                <div class="script-block-label" style="color: var(--accent-warm);">Close — Then be silent</div>
+                <textarea class="short" id="script-close" placeholder="'I'd love to hear your thoughts. I'm committed to continuing to deliver at this level — I'd like my compensation to reflect that.'"></textarea>
+            </div>
+
+            <div class="ask-box">
+                <div class="ask-label">My Specific Ask — Write the Number</div>
+                <input type="text" id="ask-number" placeholder="$000,000">
+            </div>
+        </div>
+
+        <!-- SECTION 5: OBJECTIONS -->
+        <div class="section" id="section-5">
+            <div class="section-header">
+                <div class="step-number">5</div>
+                <div class="section-title">Objection Prep</div>
+            </div>
+            <div class="section-description">The ask you can't respond to is the ask you haven't prepared for.</div>
+
+            <div class="field-group">
+                <label>Top objection I'm likely to hear</label>
+                <input type="text" id="objection-1" placeholder="e.g., 'The budget is frozen.'">
             </div>
             <div class="field-group">
-                <label>Current Title</label>
-                <input type="text" placeholder="e.g., Senior Manager">
-            </div>
-        </div>
-
-        <div class="field-row">
-            <div class="field-group">
-                <label>Negotiation Target Date</label>
-                <input type="text" placeholder="e.g., March 15, 2026">
+                <label>My response to Objection 1</label>
+                <textarea class="short" id="objection-1-response" placeholder="Write your full response. Practice it out loud."></textarea>
             </div>
             <div class="field-group">
-                <label>Who I'm Negotiating With</label>
-                <input type="text" placeholder="Name / title of decision-maker">
-            </div>
-        </div>
-
-        <div class="field-group">
-            <label>What I Am Asking For (check all that apply)</label>
-            <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 8px; margin-top: 8px; font-size: 14px;">
-                <label style="text-transform: none; letter-spacing: 0; font-weight: 400; display: flex; align-items: center; gap: 8px;"><input type="checkbox"> Base salary increase</label>
-                <label style="text-transform: none; letter-spacing: 0; font-weight: 400; display: flex; align-items: center; gap: 8px;"><input type="checkbox"> Title change</label>
-                <label style="text-transform: none; letter-spacing: 0; font-weight: 400; display: flex; align-items: center; gap: 8px;"><input type="checkbox"> Expanded scope / responsibilities</label>
-                <label style="text-transform: none; letter-spacing: 0; font-weight: 400; display: flex; align-items: center; gap: 8px;"><input type="checkbox"> Bonus / incentive pay</label>
-                <label style="text-transform: none; letter-spacing: 0; font-weight: 400; display: flex; align-items: center; gap: 8px;"><input type="checkbox"> Equity / RSUs</label>
-                <label style="text-transform: none; letter-spacing: 0; font-weight: 400; display: flex; align-items: center; gap: 8px;"><input type="checkbox"> Remote / schedule flexibility</label>
-                <label style="text-transform: none; letter-spacing: 0; font-weight: 400; display: flex; align-items: center; gap: 8px;"><input type="checkbox"> Professional development budget</label>
-                <label style="text-transform: none; letter-spacing: 0; font-weight: 400; display: flex; align-items: center; gap: 8px;"><input type="checkbox"> Additional PTO</label>
-            </div>
-        </div>
-
-        <div class="field-group" style="margin-top: 16px;">
-            <label>Other / Notes</label>
-            <textarea placeholder="Any additional elements of your negotiation package..."></textarea>
-        </div>
-    </div>
-
-    <!-- SECTION 2: MARKET DATA -->
-    <div class="section">
-        <div class="section-title">Part 2: Know Your Market Value</div>
-        <div class="section-subtitle">Pull data from at least 3 sources. Research is your anchor — not your feelings.</div>
-
-        <div class="tip-box">
-            <strong>Research Sources:</strong> Glassdoor, LinkedIn Salary, Levels.fyi (tech), Payscale, BLS Occupational Outlook, industry salary surveys, your professional network.
-        </div>
-
-        <table class="data-table">
-            <thead>
-                <tr>
-                    <th>Source</th>
-                    <th>Role / Title Used</th>
-                    <th>Low End ($)</th>
-                    <th>Median ($)</th>
-                    <th>High End ($)</th>
-                </tr>
-            </thead>
-            <tbody>
-                <tr><td><input type="text" placeholder="e.g., Glassdoor"></td><td><input type="text"></td><td><input type="text"></td><td><input type="text"></td><td><input type="text"></td></tr>
-                <tr><td><input type="text" placeholder="e.g., LinkedIn Salary"></td><td><input type="text"></td><td><input type="text"></td><td><input type="text"></td><td><input type="text"></td></tr>
-                <tr><td><input type="text" placeholder="e.g., Payscale"></td><td><input type="text"></td><td><input type="text"></td><td><input type="text"></td><td><input type="text"></td></tr>
-                <tr><td><input type="text" placeholder="Other"></td><td><input type="text"></td><td><input type="text"></td><td><input type="text"></td><td><input type="text"></td></tr>
-            </tbody>
-        </table>
-
-        <div class="field-row" style="margin-top: 20px;">
-            <div class="field-group">
-                <label>Market Range Summary (Low – High)</label>
-                <input type="text" placeholder="e.g., $105,000 – $145,000">
+                <label>Second most likely objection</label>
+                <input type="text" id="objection-2" placeholder="e.g., 'You're not quite ready yet.'">
             </div>
             <div class="field-group">
-                <label>My Current Compensation</label>
-                <input type="text" placeholder="e.g., $98,000">
+                <label>My response to Objection 2</label>
+                <textarea class="short" id="objection-2-response" placeholder="Write your full response."></textarea>
             </div>
         </div>
 
-        <div class="field-group">
-            <label>Where I Sit in the Range and Why</label>
-            <textarea placeholder="Am I below median? At median? What factors explain the gap? (years of experience, industry, scope)"></textarea>
-        </div>
-    </div>
+        <!-- SECTION 6: READINESS -->
+        <div class="section" id="section-6">
+            <div class="section-header">
+                <div class="step-number">6</div>
+                <div class="section-title">Readiness Checklist</div>
+            </div>
+            <div class="section-description">Check each item before the meeting. Don't skip this step.</div>
 
-    <!-- SECTION 3: IMPACT EVIDENCE -->
-    <div class="section">
-        <div class="section-title">Part 3: My Impact Evidence</div>
-        <div class="section-subtitle">Market data tells them what the job is worth. Your impact data tells them what YOU are worth.</div>
+            <ul class="checklist-items" id="readiness-checklist">
+                <li>Market research pulled from at least 3 sources</li>
+                <li>My specific ask number is set — not a range, a number</li>
+                <li>Top 3–5 impact wins documented with numbers</li>
+                <li>Impact summary practiced out loud</li>
+                <li>Full four-part script written out</li>
+                <li>Script practiced out loud at least 3 times</li>
+                <li>Top 2 objection responses prepared and rehearsed</li>
+                <li>Walk-away minimum is decided (keep private)</li>
+                <li>Meeting requested on the calendar</li>
+            </ul>
 
-        <table class="data-table">
-            <thead>
-                <tr>
-                    <th>#</th>
-                    <th>What I Did</th>
-                    <th>Quantified Impact</th>
-                    <th>When</th>
-                </tr>
-            </thead>
-            <tbody>
-                <tr><td>1</td><td><input type="text" placeholder="e.g., Led Q3 retention initiative"></td><td><input type="text" placeholder="e.g., Reduced churn 18%"></td><td><input type="text"></td></tr>
-                <tr><td>2</td><td><input type="text"></td><td><input type="text"></td><td><input type="text"></td></tr>
-                <tr><td>3</td><td><input type="text"></td><td><input type="text"></td><td><input type="text"></td></tr>
-                <tr><td>4</td><td><input type="text"></td><td><input type="text"></td><td><input type="text"></td></tr>
-                <tr><td>5</td><td><input type="text"></td><td><input type="text"></td><td><input type="text"></td></tr>
-            </tbody>
-        </table>
-
-        <div class="field-group" style="margin-top: 16px;">
-            <label>My 2-Sentence Impact Summary (Practice saying this aloud)</label>
-            <textarea placeholder="Over the past [timeframe], I [lead accomplishment with number]. Additionally, I [second accomplishment]. My contributions have [organizational impact]."></textarea>
-        </div>
-    </div>
-
-    <!-- SECTION 4: THE FOUR-PART SCRIPT -->
-    <div class="section">
-        <div class="section-title">Part 4: My Four-Part Negotiation Script</div>
-        <div class="section-subtitle">Write your full script below. Then practice it out loud — at least 3 times.</div>
-
-        <div class="script-prompt">
-            <div class="prompt-label">Open — Set the context (no apology, no qualifier)</div>
-            <textarea placeholder="'I appreciate you making time for this conversation. I've been thinking about my growth here and I'd like to have a direct conversation about...'"></textarea>
-        </div>
-
-        <div class="script-prompt">
-            <div class="prompt-label">Case — Present your evidence</div>
-            <textarea placeholder="'I've done market research and the range for my role in this region is $X to $Y. My current compensation is below that range. Additionally, over the past [timeframe] I delivered...'"></textarea>
-        </div>
-
-        <div class="script-prompt">
-            <div class="prompt-label">Ask — State your specific number (be direct, be specific)</div>
-            <textarea placeholder="'Based on that, I'm asking for [specific number or package]. I want to be at...'"></textarea>
-        </div>
-
-        <div class="script-prompt">
-            <div class="prompt-label">Close — Then stop talking</div>
-            <textarea placeholder="'I'd love to hear your thoughts. I'm committed to continuing to deliver at this level — I'd like to know my compensation reflects that.'"></textarea>
-        </div>
-
-        <div class="ask-number-box">
-            <div class="label">My Specific Ask (write the number)</div>
-            <input type="text" placeholder="$000,000">
-        </div>
-    </div>
-
-    <!-- SECTION 5: OBJECTION PREP -->
-    <div class="section">
-        <div class="section-title">Part 5: Objection Prep</div>
-        <div class="section-subtitle">The ask you can't respond to is the ask you haven't prepared for.</div>
-
-        <div class="field-group">
-            <label>Top 2 Objections I'm Likely to Hear</label>
-            <textarea rows="2" placeholder="e.g., 'Budget is frozen' / 'You're not quite ready yet'"></textarea>
-        </div>
-
-        <div class="field-group">
-            <label>My Response to Objection 1</label>
-            <textarea placeholder="Write your response in full. Practice it out loud."></textarea>
-        </div>
-
-        <div class="field-group">
-            <label>My Response to Objection 2</label>
-            <textarea placeholder="Write your response in full."></textarea>
-        </div>
-    </div>
-
-    <!-- SECTION 6: CONFIDENCE CHECK -->
-    <div class="section">
-        <div class="section-title">Part 6: Readiness Check</div>
-        <div class="section-subtitle">Before the conversation, rate yourself honestly.</div>
-
-        <div class="field-group">
-            <label>How confident do I feel about my market research?</label>
-            <div class="confidence-bar">
-                <div class="conf-btn" onclick="toggleConf(this)">Not Ready</div>
-                <div class="conf-btn" onclick="toggleConf(this)">Getting There</div>
-                <div class="conf-btn" onclick="toggleConf(this)">Ready</div>
-                <div class="conf-btn" onclick="toggleConf(this)">Very Confident</div>
+            <div class="field-group" style="margin-top: 24px;">
+                <label>The story I'm telling myself about why I can't ask (write it — then challenge it)</label>
+                <textarea class="short" id="self-story" placeholder="e.g., 'They'll think I'm ungrateful.' → Now challenge it: Is that realistic? What's the evidence?"></textarea>
+            </div>
+            <div class="field-group">
+                <label>The actual realistic worst case if I ask professionally and it doesn't go my way</label>
+                <textarea class="short" id="worst-case" placeholder="Not the imagined worst case — the real one. Write it down. Then ask: is the silence really safer?"></textarea>
             </div>
         </div>
 
-        <div class="field-group" style="margin-top: 16px;">
-            <label>How confident do I feel about my script?</label>
-            <div class="confidence-bar">
-                <div class="conf-btn" onclick="toggleConf(this)">Not Ready</div>
-                <div class="conf-btn" onclick="toggleConf(this)">Getting There</div>
-                <div class="conf-btn" onclick="toggleConf(this)">Ready</div>
-                <div class="conf-btn" onclick="toggleConf(this)">Very Confident</div>
-            </div>
-        </div>
-
-        <div class="field-group" style="margin-top: 16px;">
-            <label>What is the story I'm telling myself about why I can't ask?</label>
-            <textarea placeholder="Write it out. Get it on paper where you can look at it clearly."></textarea>
-        </div>
-
-        <div class="field-group">
-            <label>What is the actual realistic worst case?</label>
-            <textarea placeholder="Not the imagined worst case — the real one. Write it down. Then ask: is the silence really safer?"></textarea>
-        </div>
-
-        <div class="field-group">
-            <label>I am requesting the meeting by this date:</label>
-            <input type="text" placeholder="Date — hold yourself to it">
+        <div class="button-row">
+            <button class="btn btn-secondary" onclick="clearAll()">Clear All</button>
+            <span class="save-status hidden" id="save-status">
+                <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="20 6 9 17 4 12"></polyline></svg>
+                Auto-saved
+            </span>
+            <button class="btn btn-primary" onclick="window.print()">Print / PDF</button>
         </div>
     </div>
 
-    <div class="footer">
-        Module 5: Advocacy &amp; Negotiation · Executive Leadership Lab · Coaching Women of Color®
-    </div>
+    <footer>
+        <p>Executive Leadership Lab — Module 5: Advocacy &amp; Negotiation</p>
+        <p><a href="https://coachingwomenofcolor.com">Coaching Women of Color®</a></p>
+    </footer>
 
     <script>
-        function toggleConf(el) {
-            const siblings = el.parentElement.querySelectorAll('.conf-btn');
-            siblings.forEach(s => s.classList.remove('selected'));
-            el.classList.add('selected');
+        const STORAGE_KEY = 'cwc-negotiation-prep-v1';
+
+        function saveData() {
+            const data = {};
+            document.querySelectorAll('input[type="text"], textarea').forEach(el => {
+                if (el.id) data[el.id] = el.value;
+            });
+            // Save table data
+            ['market-source','market-title','market-low','market-med','market-high',
+             'impact-what','impact-result','impact-when'].forEach(cls => {
+                document.querySelectorAll('.' + cls).forEach((el, i) => {
+                    data[cls + '-' + i] = el.value;
+                });
+            });
+            // Save checklist
+            const checked = [];
+            document.querySelectorAll('#readiness-checklist li').forEach((li, i) => {
+                if (li.classList.contains('checked')) checked.push(i);
+            });
+            data['checklist'] = JSON.stringify(checked);
+            localStorage.setItem(STORAGE_KEY, JSON.stringify(data));
+            const status = document.getElementById('save-status');
+            status.classList.remove('hidden');
+            setTimeout(() => status.classList.add('hidden'), 2000);
         }
+
+        function loadData() {
+            const saved = localStorage.getItem(STORAGE_KEY);
+            if (!saved) return;
+            const data = JSON.parse(saved);
+            Object.keys(data).forEach(key => {
+                if (key === 'checklist') return;
+                const el = document.getElementById(key);
+                if (el) el.value = data[key];
+            });
+            ['market-source','market-title','market-low','market-med','market-high',
+             'impact-what','impact-result','impact-when'].forEach(cls => {
+                document.querySelectorAll('.' + cls).forEach((el, i) => {
+                    if (data[cls + '-' + i] !== undefined) el.value = data[cls + '-' + i];
+                });
+            });
+            if (data['checklist']) {
+                const checked = JSON.parse(data['checklist']);
+                document.querySelectorAll('#readiness-checklist li').forEach((li, i) => {
+                    if (checked.includes(i)) li.classList.add('checked');
+                });
+            }
+        }
+
+        function clearAll() {
+            if (!confirm('Clear all saved data? This cannot be undone.')) return;
+            localStorage.removeItem(STORAGE_KEY);
+            document.querySelectorAll('input[type="text"], textarea').forEach(el => el.value = '');
+            document.querySelectorAll('#readiness-checklist li').forEach(li => li.classList.remove('checked'));
+        }
+
+        // Auto-save on input
+        document.addEventListener('input', saveData);
+
+        // Checklist toggle
+        document.querySelectorAll('#readiness-checklist li').forEach(li => {
+            li.addEventListener('click', () => {
+                li.classList.toggle('checked');
+                saveData();
+            });
+        });
+
+        loadData();
     </script>
 </body>
 </html>

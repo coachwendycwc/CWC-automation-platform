@@ -3,476 +3,471 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Compensation Research Guide | Module 5</title>
+    <title>Compensation Research Guide | Executive Leadership Lab</title>
+    <link href="https://fonts.googleapis.com/css2?family=Source+Serif+4:wght@400;600;700&family=Inter:wght@400;500;600&display=swap" rel="stylesheet">
     <style>
-        @import url('https://fonts.googleapis.com/css2?family=Source+Serif+4:wght@400;600;700&family=Inter:wght@400;500;600&display=swap');
+        :root {
+            --primary: #1A1A1A;
+            --accent: #2A7B8C;
+            --accent-warm: #D4A574;
+            --text: #333333;
+            --text-light: #666666;
+            --text-muted: #999999;
+            --bg: #FAF8F5;
+            --bg-warm: #F5F2ED;
+            --border: #E5E0D8;
+            --success: #4A9B7F;
+        }
 
         * { margin: 0; padding: 0; box-sizing: border-box; }
 
         body {
-            font-family: 'Inter', -apple-system, sans-serif;
-            background: #FAF8F5;
-            color: #1A1A1A;
-            padding: 40px;
-            max-width: 860px;
-            margin: 0 auto;
+            font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
+            background: var(--bg);
+            color: var(--text);
             line-height: 1.6;
+            min-height: 100vh;
         }
 
-        @media print {
-            body { padding: 20px; background: #fff; font-size: 10pt; }
-            .no-print { display: none; }
+        .container { max-width: 900px; margin: 0 auto; padding: 40px 24px; }
+
+        header {
+            text-align: center;
+            margin-bottom: 48px;
+            padding-bottom: 32px;
+            border-bottom: 1px solid var(--border);
         }
 
-        @media screen and (max-width: 640px) {
-            body { padding: 16px; }
-            .spacer { height: 80px; }
-            .header-card { padding: 24px 16px; }
+        .logo { height: 80px; margin-bottom: 24px; }
+        .module-label { font-size: 11px; font-weight: 600; color: var(--accent); text-transform: uppercase; letter-spacing: 2.5px; margin-bottom: 12px; display: block; }
+        h1 { font-family: 'Source Serif 4', Georgia, serif; font-size: 36px; font-weight: 700; color: var(--primary); margin-bottom: 12px; }
+        .subtitle { font-size: 18px; color: var(--text-light); max-width: 600px; margin: 0 auto; }
+
+        .instructions {
+            background: var(--bg-warm);
+            border-left: 3px solid var(--accent-warm);
+            padding: 20px 24px;
+            margin-bottom: 32px;
+            border-radius: 0 4px 4px 0;
         }
+        .instructions h3 { font-family: 'Source Serif 4', Georgia, serif; font-size: 16px; font-weight: 600; color: var(--primary); margin-bottom: 8px; }
+        .instructions p { font-size: 14px; color: var(--text-light); margin: 0; }
 
-        .download-bar {
-            position: fixed;
-            top: 0; left: 0; right: 0;
-            background: #1A1A1A;
-            color: #fff;
-            padding: 14px 40px;
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            z-index: 1000;
-        }
-
-        .download-bar span { font-size: 14px; font-weight: 600; }
-        .download-btn { background: #D4A574; color: #fff; border: none; padding: 8px 20px; border-radius: 6px; font-weight: 600; cursor: pointer; font-size: 13px; }
-
-        .spacer { height: 70px; }
-
-        .header-card {
-            background: linear-gradient(135deg, #2A7B8C 0%, #1A5A6A 100%);
-            color: #fff;
-            border-radius: 12px;
-            padding: 32px 40px;
-            margin-bottom: 28px;
-        }
-
-        .header-card .module-label {
-            font-size: 12px; font-weight: 600; text-transform: uppercase;
-            letter-spacing: 2px; color: rgba(255,255,255,0.6); margin-bottom: 8px;
-        }
-
-        .header-card h1 { font-family: 'Source Serif 4', Georgia, serif; font-size: 28px; margin-bottom: 8px; }
-        .header-card p { color: rgba(255,255,255,0.75); font-size: 14px; }
-
-        .intro-box {
-            background: #fff;
-            border-radius: 10px;
-            padding: 24px 28px;
+        .section {
+            background: white;
+            border: 1px solid var(--border);
+            border-radius: 8px;
+            padding: 32px;
             margin-bottom: 24px;
-            border-left: 4px solid #D4A574;
         }
 
-        .intro-box p { font-size: 15px; line-height: 1.8; color: #333; }
+        .section-header { display: flex; align-items: center; gap: 16px; margin-bottom: 8px; }
+
+        .step-number {
+            width: 40px; height: 40px;
+            background: var(--accent);
+            border-radius: 50%;
+            display: flex; align-items: center; justify-content: center;
+            font-size: 18px; font-weight: 700; color: white; flex-shrink: 0;
+        }
+
+        .section-title { font-family: 'Source Serif 4', Georgia, serif; font-size: 20px; font-weight: 600; color: var(--primary); }
+        .section-description { font-size: 14px; color: var(--text-light); margin-bottom: 24px; padding-left: 56px; }
+
+        /* Source cards */
+        .source-list { display: flex; flex-direction: column; gap: 16px; }
 
         .source-card {
-            background: #fff;
-            border-radius: 10px;
-            padding: 24px 28px;
-            margin-bottom: 16px;
-            border: 1px solid #E5E0D8;
+            border: 1px solid var(--border);
+            border-radius: 8px;
+            overflow: hidden;
         }
 
-        .source-header {
+        .source-top {
             display: flex;
             align-items: flex-start;
             gap: 16px;
-            margin-bottom: 16px;
+            padding: 20px 24px;
+            background: white;
         }
 
         .source-num {
-            background: #2A7B8C;
-            color: #fff;
-            width: 32px;
-            height: 32px;
+            width: 32px; height: 32px;
+            background: var(--accent);
             border-radius: 50%;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            font-weight: 700;
-            font-size: 14px;
-            flex-shrink: 0;
+            display: flex; align-items: center; justify-content: center;
+            font-size: 14px; font-weight: 700; color: white; flex-shrink: 0;
             margin-top: 2px;
         }
 
         .source-info h3 {
             font-family: 'Source Serif 4', Georgia, serif;
-            font-size: 18px;
-            color: #1A1A1A;
-            margin-bottom: 2px;
+            font-size: 17px; font-weight: 600; color: var(--primary); margin-bottom: 2px;
         }
 
-        .source-info .url { font-size: 13px; color: #2A7B8C; }
+        .source-url { font-size: 13px; color: var(--accent); margin-bottom: 6px; }
 
-        .source-tags { display: flex; gap: 8px; flex-wrap: wrap; margin-bottom: 12px; }
-
-        .tag {
-            font-size: 11px; font-weight: 600; padding: 3px 10px;
-            border-radius: 20px; text-transform: uppercase; letter-spacing: 0.5px;
-        }
-
+        .tag-row { display: flex; gap: 6px; flex-wrap: wrap; }
+        .tag { font-size: 11px; font-weight: 600; padding: 3px 10px; border-radius: 20px; text-transform: uppercase; letter-spacing: 0.5px; }
         .tag-free { background: #E8F5E9; color: #2E7D32; }
-        .tag-paid { background: #FFF3E0; color: #E65100; }
         .tag-tech { background: #E3F2FD; color: #1565C0; }
-        .tag-govt { background: #F3E5F5; color: #6A1B9A; }
+        .tag-gov { background: #F3E5F5; color: #6A1B9A; }
 
-        .source-body { font-size: 14px; color: #555; line-height: 1.7; }
-
-        .tip-list { list-style: none; margin-top: 10px; }
-        .tip-list li { padding: 4px 0 4px 20px; position: relative; font-size: 13px; color: #444; }
-        .tip-list li::before { content: '→'; position: absolute; left: 0; color: #D4A574; font-weight: 700; }
-
-        .step-section {
-            background: #1A1A1A;
-            color: #fff;
-            border-radius: 10px;
-            padding: 28px 32px;
-            margin-bottom: 24px;
+        .source-tips {
+            padding: 12px 24px 16px;
+            background: var(--bg);
+            border-top: 1px solid var(--border);
         }
 
-        .step-section h2 {
-            font-family: 'Source Serif 4', Georgia, serif;
-            font-size: 20px;
-            margin-bottom: 20px;
-            color: #D4A574;
+        .source-tips ul { margin-left: 20px; }
+        .source-tips li { font-size: 13px; color: var(--text-light); margin-bottom: 4px; }
+
+        /* Steps */
+        .step-row { display: flex; gap: 16px; margin-bottom: 20px; align-items: flex-start; }
+        .step-row:last-child { margin-bottom: 0; }
+        .step-dot { width: 28px; height: 28px; background: var(--accent-warm); border-radius: 50%; display: flex; align-items: center; justify-content: center; font-size: 13px; font-weight: 700; color: var(--primary); flex-shrink: 0; margin-top: 2px; }
+        .step-content h4 { font-size: 15px; font-weight: 600; color: var(--primary); margin-bottom: 4px; }
+        .step-content p { font-size: 14px; color: var(--text-light); }
+
+        /* Research log table */
+        label { display: block; font-size: 14px; font-weight: 500; color: var(--primary); margin-bottom: 8px; }
+
+        textarea, input[type="text"] {
+            width: 100%; padding: 12px 16px;
+            border: 1px solid var(--border); border-radius: 4px;
+            font-family: inherit; font-size: 15px; color: var(--text);
+            background: var(--bg); transition: border-color 0.2s; resize: vertical;
         }
+        textarea:focus, input[type="text"]:focus { outline: none; border-color: var(--accent); box-shadow: 0 0 0 3px rgba(42,123,140,0.1); }
+        textarea { min-height: 80px; }
 
-        .step {
-            display: flex;
-            gap: 16px;
-            margin-bottom: 20px;
-            align-items: flex-start;
-        }
+        .field-group { margin-bottom: 20px; }
+        .field-group:last-child { margin-bottom: 0; }
+        .three-col { display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 16px; }
+        .two-col { display: grid; grid-template-columns: 1fr 1fr; gap: 16px; }
 
-        .step-num {
-            background: #D4A574;
-            color: #1A1A1A;
-            width: 28px;
-            height: 28px;
-            border-radius: 50%;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            font-weight: 700;
-            font-size: 13px;
-            flex-shrink: 0;
-            margin-top: 2px;
-        }
+        .data-table { width: 100%; border-collapse: collapse; margin-bottom: 20px; }
+        .data-table th { background: var(--primary); color: white; padding: 10px 14px; text-align: left; font-size: 12px; font-weight: 600; text-transform: uppercase; letter-spacing: 0.5px; }
+        .data-table td { padding: 0; border-bottom: 1px solid var(--border); }
+        .data-table td input { width: 100%; padding: 10px 14px; border: none; background: transparent; font-family: inherit; font-size: 14px; color: var(--text); }
+        .data-table td input:focus { outline: none; background: rgba(42,123,140,0.04); }
+        .data-table tr:last-child td { border-bottom: none; }
 
-        .step-content h4 { font-size: 14px; font-weight: 600; margin-bottom: 4px; color: #fff; }
-        .step-content p { font-size: 13px; color: #A3A3A3; line-height: 1.6; }
-
-        .worksheet-section {
-            background: #fff;
-            border-radius: 10px;
-            padding: 28px 32px;
-            margin-bottom: 24px;
-            border: 1px solid #E5E0D8;
-        }
-
-        .worksheet-section h2 {
-            font-family: 'Source Serif 4', Georgia, serif;
-            font-size: 18px;
-            color: #2A7B8C;
-            margin-bottom: 16px;
-        }
-
-        .field-group { margin-bottom: 14px; }
-
-        label {
-            display: block;
-            font-size: 12px;
-            font-weight: 600;
-            text-transform: uppercase;
-            letter-spacing: 0.5px;
-            color: #737373;
-            margin-bottom: 6px;
-        }
-
-        input[type="text"], textarea {
-            width: 100%;
-            border: 1px solid #D1CCBF;
-            border-radius: 6px;
-            padding: 10px 14px;
-            font-size: 14px;
-            font-family: 'Inter', sans-serif;
-            background: #FAF8F5;
-        }
-
-        textarea { resize: vertical; min-height: 70px; }
-        input:focus, textarea:focus { outline: none; border-color: #2A7B8C; }
-
-        .data-table { width: 100%; border-collapse: collapse; margin-top: 12px; }
-        .data-table th { background: #2A7B8C; color: #fff; padding: 10px 14px; text-align: left; font-size: 12px; font-weight: 600; text-transform: uppercase; letter-spacing: 0.5px; }
-        .data-table td { padding: 10px 14px; border-bottom: 1px solid #E5E0D8; font-size: 14px; }
-        .data-table td input { border: none; background: transparent; padding: 0; width: 100%; font-family: 'Inter', sans-serif; font-size: 14px; }
-        .data-table td input:focus { outline: none; border-bottom: 1px solid #2A7B8C; }
-
-        .woc-callout {
+        .woc-note {
             background: #F3E5F5;
-            border-left: 4px solid #9C27B0;
-            border-radius: 0 8px 8px 0;
+            border-left: 3px solid #9C27B0;
+            border-radius: 0 4px 4px 0;
             padding: 16px 20px;
             margin: 20px 0;
         }
-        .woc-callout .title { font-size: 11px; font-weight: 700; color: #6A1B9A; text-transform: uppercase; letter-spacing: 1px; margin-bottom: 6px; }
-        .woc-callout p { font-size: 14px; color: #4A1577; line-height: 1.7; }
+        .woc-note strong { color: #6A1B9A; font-size: 11px; text-transform: uppercase; letter-spacing: 1px; display: block; margin-bottom: 6px; }
+        .woc-note p { font-size: 14px; color: #4A1577; }
 
-        .footer { text-align: center; padding: 24px 0 40px; color: #999; font-size: 12px; }
+        .save-status { font-size: 13px; color: var(--success); display: flex; align-items: center; gap: 6px; }
+        .save-status.hidden { visibility: hidden; }
+
+        .button-row { display: flex; justify-content: space-between; align-items: center; margin-top: 40px; padding-top: 24px; border-top: 1px solid var(--border); }
+        .btn { padding: 12px 24px; border-radius: 4px; font-family: inherit; font-size: 14px; font-weight: 500; cursor: pointer; transition: all 0.2s; }
+        .btn-primary { background: var(--accent); color: white; border: none; }
+        .btn-primary:hover { background: #236a79; }
+        .btn-secondary { background: transparent; color: var(--text-light); border: 1px solid var(--border); }
+        .btn-secondary:hover { border-color: var(--text-light); }
+
+        footer { text-align: center; padding: 40px 24px; color: var(--text-muted); font-size: 13px; }
+        footer a { color: var(--accent); text-decoration: none; }
+
+        @media print { body { background: white; } .container { max-width: 100%; padding: 20px; } .button-row { display: none; } .section { break-inside: avoid; } }
+        @media screen and (max-width: 768px) { .container { padding: 24px 16px; } h1 { font-size: 28px; } .three-col, .two-col { grid-template-columns: 1fr; } .section { padding: 20px; } }
+        @media screen and (max-width: 480px) { .container { padding: 16px 12px; } .logo { height: 60px; } h1 { font-size: 24px; } }
     </style>
 </head>
 <body>
-    <div class="download-bar no-print">
-        <span>Compensation Research Guide — Module 5</span>
-        <button class="download-btn" onclick="window.print()">Download / Print</button>
-    </div>
-    <div class="spacer no-print"></div>
+    <div class="container">
+        <header>
+            <img src="https://coachingwomenofcolor.com/wp-content/uploads/2021/04/CWCFinal_logo2.webp" alt="Coaching Women of Color" class="logo">
+            <span class="module-label">Module 5 — May</span>
+            <h1>Compensation Research Guide</h1>
+            <p class="subtitle">Know what the market says before you walk in the room. Data is confidence.</p>
+        </header>
 
-    <div class="header-card">
-        <div class="module-label">Module 5 · Executive Leadership Lab</div>
-        <h1>Compensation Research Guide</h1>
-        <p>Know what the market says before you walk in the room. Data is confidence.</p>
-    </div>
+        <div class="instructions">
+            <h3>Before you research</h3>
+            <p>You cannot negotiate effectively with feelings alone. Pull data from at least 3 sources, log it in the worksheet at the bottom, and synthesize your market range before drafting your script.</p>
+        </div>
 
-    <div class="intro-box">
-        <p>You cannot negotiate effectively with feelings alone. Market data is your anchor. It transforms your ask from personal preference into objective alignment. This guide walks you through where to look, what to look for, and how to synthesize your research into a number you can stand behind.</p>
-    </div>
-
-    <!-- RESEARCH SOURCES -->
-    <div class="source-card">
-        <div class="source-header">
-            <div class="source-num">1</div>
-            <div class="source-info">
-                <h3>Glassdoor</h3>
-                <div class="url">glassdoor.com/Salaries</div>
+        <!-- RESEARCH SOURCES -->
+        <div class="section">
+            <div class="section-header">
+                <div class="step-number">1</div>
+                <div class="section-title">Where to Research</div>
             </div>
-        </div>
-        <div class="source-tags">
-            <span class="tag tag-free">Free</span>
-        </div>
-        <div class="source-body">
-            Best for: Company-specific salary ranges by title and location. Particularly useful if you already work at or are interviewing with a specific company.
-            <ul class="tip-list">
-                <li>Search by exact job title AND location for the most accurate data</li>
-                <li>Filter by company size (small / mid / enterprise) to match your context</li>
-                <li>Look at both the "Base Pay" range and the "Additional Pay" (bonus, equity)</li>
-                <li>Read the salary reports alongside company reviews — culture context matters</li>
-            </ul>
-        </div>
-    </div>
+            <div class="section-description">Six sources — use at least three. Check off each one you've consulted.</div>
 
-    <div class="source-card">
-        <div class="source-header">
-            <div class="source-num">2</div>
-            <div class="source-info">
-                <h3>LinkedIn Salary</h3>
-                <div class="url">linkedin.com/salary</div>
+            <div class="source-list">
+                <div class="source-card">
+                    <div class="source-top">
+                        <div class="source-num">1</div>
+                        <div class="source-info">
+                            <h3>Glassdoor</h3>
+                            <div class="source-url">glassdoor.com/Salaries</div>
+                            <div class="tag-row"><span class="tag tag-free">Free</span></div>
+                        </div>
+                    </div>
+                    <div class="source-tips">
+                        <ul>
+                            <li>Search by exact job title AND location for the most accurate data</li>
+                            <li>Filter by company size to match your context</li>
+                            <li>Look at Base Pay + Additional Pay (bonus, equity) for total picture</li>
+                        </ul>
+                    </div>
+                </div>
+
+                <div class="source-card">
+                    <div class="source-top">
+                        <div class="source-num">2</div>
+                        <div class="source-info">
+                            <h3>LinkedIn Salary</h3>
+                            <div class="source-url">linkedin.com/salary</div>
+                            <div class="tag-row"><span class="tag tag-free">Free with Premium</span></div>
+                        </div>
+                    </div>
+                    <div class="source-tips">
+                        <ul>
+                            <li>Use experience filters — years of experience changes the estimate significantly</li>
+                            <li>Check median AND 75th percentile — you want to know what top performers earn</li>
+                            <li>Cross-reference with active job postings in your area</li>
+                        </ul>
+                    </div>
+                </div>
+
+                <div class="source-card">
+                    <div class="source-top">
+                        <div class="source-num">3</div>
+                        <div class="source-info">
+                            <h3>Levels.fyi</h3>
+                            <div class="source-url">levels.fyi</div>
+                            <div class="tag-row"><span class="tag tag-free">Free</span><span class="tag tag-tech">Tech / Corporate</span></div>
+                        </div>
+                    </div>
+                    <div class="source-tips">
+                        <ul>
+                            <li>Best for roles with equity — shows total comp (base + bonus + RSUs)</li>
+                            <li>Compare TC (total comp), not just base salary</li>
+                            <li>Pay attention to level equivalencies across companies</li>
+                        </ul>
+                    </div>
+                </div>
+
+                <div class="source-card">
+                    <div class="source-top">
+                        <div class="source-num">4</div>
+                        <div class="source-info">
+                            <h3>Bureau of Labor Statistics</h3>
+                            <div class="source-url">bls.gov/oes</div>
+                            <div class="tag-row"><span class="tag tag-free">Free</span><span class="tag tag-gov">Government Data</span></div>
+                        </div>
+                    </div>
+                    <div class="source-tips">
+                        <ul>
+                            <li>Use the Occupational Employment and Wage Statistics (OEWS) tool</li>
+                            <li>Filter by state and metro area for geographic accuracy</li>
+                            <li>Supplement with real-time sources — BLS data updates slowly</li>
+                        </ul>
+                    </div>
+                </div>
+
+                <div class="source-card">
+                    <div class="source-top">
+                        <div class="source-num">5</div>
+                        <div class="source-info">
+                            <h3>Payscale</h3>
+                            <div class="source-url">payscale.com</div>
+                            <div class="tag-row"><span class="tag tag-free">Free / Paid</span></div>
+                        </div>
+                    </div>
+                    <div class="source-tips">
+                        <ul>
+                            <li>The "What Am I Worth" tool builds personalized reports by skill set</li>
+                            <li>Input your full skill set — each additional skill can shift the estimate</li>
+                        </ul>
+                    </div>
+                </div>
+
+                <div class="source-card">
+                    <div class="source-top">
+                        <div class="source-num">6</div>
+                        <div class="source-info">
+                            <h3>Your Network</h3>
+                            <div class="source-url">Trusted colleagues, recruiters, professional associations</div>
+                            <div class="tag-row"><span class="tag tag-free">Free</span></div>
+                        </div>
+                    </div>
+                    <div class="source-tips">
+                        <ul>
+                            <li>Ask: "Are you comfortable sharing your comp range for [role]?"</li>
+                            <li>Recruiters see hundreds of offers — they are often the most accurate source</li>
+                            <li>Other WOC in comparable roles are your best benchmark</li>
+                        </ul>
+                    </div>
+                </div>
             </div>
-        </div>
-        <div class="source-tags">
-            <span class="tag tag-free">Free (with Premium)</span>
-        </div>
-        <div class="source-body">
-            Best for: Industry-level benchmarks filtered by years of experience, education, and location. More granular than Glassdoor for professional roles.
-            <ul class="tip-list">
-                <li>Use the filters — years of experience is critical to isolate comparable data</li>
-                <li>Check median vs. 75th percentile — you want to understand what top performers make</li>
-                <li>Cross-reference with actual job postings to see what companies are actively paying</li>
-            </ul>
-        </div>
-    </div>
 
-    <div class="source-card">
-        <div class="source-header">
-            <div class="source-num">3</div>
-            <div class="source-info">
-                <h3>Levels.fyi</h3>
-                <div class="url">levels.fyi</div>
-            </div>
-        </div>
-        <div class="source-tags">
-            <span class="tag tag-free">Free</span>
-            <span class="tag tag-tech">Tech / Corporate</span>
-        </div>
-        <div class="source-body">
-            Best for: Tech and corporate roles with equity. Shows total compensation (base + bonus + equity) by company and level.
-            <ul class="tip-list">
-                <li>Particularly useful if your role includes significant equity (RSUs/options)</li>
-                <li>Compare "TC" (total comp) not just base salary — equity is often the biggest number</li>
-                <li>Pay attention to level designations — "L5 at Google" vs. "P5 at Meta" have equivalents</li>
-            </ul>
-        </div>
-    </div>
-
-    <div class="source-card">
-        <div class="source-header">
-            <div class="source-num">4</div>
-            <div class="source-info">
-                <h3>Bureau of Labor Statistics (BLS)</h3>
-                <div class="url">bls.gov/oes</div>
-            </div>
-        </div>
-        <div class="source-tags">
-            <span class="tag tag-free">Free</span>
-            <span class="tag tag-govt">Government Data</span>
-        </div>
-        <div class="source-body">
-            Best for: Authoritative government data on occupational wages by metro area and industry. Useful as an authoritative third source to back up your research.
-            <ul class="tip-list">
-                <li>Use the Occupational Employment and Wage Statistics (OEWS) tool</li>
-                <li>Filter by your state and metro area for geographic accuracy</li>
-                <li>Government data is slower to update — supplement with real-time sources</li>
-            </ul>
-        </div>
-    </div>
-
-    <div class="source-card">
-        <div class="source-header">
-            <div class="source-num">5</div>
-            <div class="source-info">
-                <h3>Payscale</h3>
-                <div class="url">payscale.com</div>
-            </div>
-        </div>
-        <div class="source-tags">
-            <span class="tag tag-free">Free / Paid</span>
-        </div>
-        <div class="source-body">
-            Best for: Personalized salary reports that factor in your specific skills, certifications, and experience level.
-            <ul class="tip-list">
-                <li>The "What Am I Worth" tool is useful for custom salary reports</li>
-                <li>Input your full skill set — each additional skill can change the estimate</li>
-                <li>Use the market data as a range, not a single number</li>
-            </ul>
-        </div>
-    </div>
-
-    <div class="source-card">
-        <div class="source-header">
-            <div class="source-num">6</div>
-            <div class="source-info">
-                <h3>Your Network</h3>
-                <div class="url">Trusted colleagues, mentors, professional associations</div>
-            </div>
-        </div>
-        <div class="source-tags">
-            <span class="tag tag-free">Free</span>
-        </div>
-        <div class="source-body">
-            Best for: Real, current, context-specific data that no database can replicate. A trusted peer in the same function at a comparable company is worth three Glassdoor reports.
-            <ul class="tip-list">
-                <li>Ask: "Are you comfortable sharing your comp range or what you know the market is paying for [role]?"</li>
-                <li>Professional associations (SHRM, NBMBAA, Lean In Circles) often publish salary data</li>
-                <li>Executive coaches and recruiters are often the best sources — they see hundreds of offers</li>
-                <li>LinkedIn connections at comparable companies can be invaluable — especially other WOC</li>
-            </ul>
-        </div>
-    </div>
-
-    <div class="woc-callout">
-        <div class="title">WOC Research Note</div>
-        <p>General salary databases often reflect historical wage gaps — which means the "median" may underrepresent your true market value. Supplement public data with network conversations, especially with women of color in comparable roles. They are your most accurate benchmark.</p>
-    </div>
-
-    <!-- HOW TO SYNTHESIZE -->
-    <div class="step-section">
-        <h2>How to Synthesize Your Research</h2>
-
-        <div class="step">
-            <div class="step-num">1</div>
-            <div class="step-content">
-                <h4>Pull data from at least 3 sources</h4>
-                <p>Log each source's range in the worksheet below. The overlap between sources becomes your credible range.</p>
+            <div class="woc-note">
+                <strong>WOC Research Note</strong>
+                <p>Salary databases often reflect historical wage gaps — which means the "median" may underrepresent your actual market value. Supplement public data with network conversations, especially with women of color in comparable roles. They are your most accurate benchmark.</p>
             </div>
         </div>
 
-        <div class="step">
-            <div class="step-num">2</div>
-            <div class="step-content">
-                <h4>Identify your "market range" — the band where 3+ sources agree</h4>
-                <p>Don't average the numbers. Look for where sources converge. That convergence zone is your anchor.</p>
+        <!-- HOW TO SYNTHESIZE -->
+        <div class="section">
+            <div class="section-header">
+                <div class="step-number">2</div>
+                <div class="section-title">How to Synthesize Your Research</div>
+            </div>
+            <div class="section-description">Don't just average the numbers. Follow this process.</div>
+
+            <div class="step-row">
+                <div class="step-dot">1</div>
+                <div class="step-content">
+                    <h4>Pull data from at least 3 sources</h4>
+                    <p>Log each source's range in the worksheet below. The overlap between sources becomes your credible range.</p>
+                </div>
+            </div>
+            <div class="step-row">
+                <div class="step-dot">2</div>
+                <div class="step-content">
+                    <h4>Find where 3+ sources agree — that's your anchor</h4>
+                    <p>Look for convergence, not the average. The zone where multiple sources cluster is the defensible range.</p>
+                </div>
+            </div>
+            <div class="step-row">
+                <div class="step-dot">3</div>
+                <div class="step-content">
+                    <h4>Position yourself based on your experience and impact</h4>
+                    <p>If you're delivering top-quartile results, your ask belongs in the top quartile of the range — not the median.</p>
+                </div>
+            </div>
+            <div class="step-row">
+                <div class="step-dot">4</div>
+                <div class="step-content">
+                    <h4>Set your target at the ceiling of your acceptable range</h4>
+                    <p>You will almost certainly be countered. Specific asks (e.g., $127,500 not "around $125K") outperform ranges every time.</p>
+                </div>
+            </div>
+            <div class="step-row">
+                <div class="step-dot">5</div>
+                <div class="step-content">
+                    <h4>Decide your walk-away number — before the meeting</h4>
+                    <p>Know the minimum you'll accept. Keep it private. Anything below that is a signal about the ceiling in this space.</p>
+                </div>
             </div>
         </div>
 
-        <div class="step">
-            <div class="step-num">3</div>
-            <div class="step-content">
-                <h4>Position yourself within the range based on your experience and impact</h4>
-                <p>If you're delivering top-quartile results, your ask should be in the top quartile of the range — not the median.</p>
+        <!-- RESEARCH LOG -->
+        <div class="section">
+            <div class="section-header">
+                <div class="step-number">3</div>
+                <div class="section-title">My Research Log</div>
             </div>
-        </div>
+            <div class="section-description">Fill in as you research. Your data auto-saves.</div>
 
-        <div class="step">
-            <div class="step-num">4</div>
-            <div class="step-content">
-                <h4>Set your target at the top of your acceptable range</h4>
-                <p>You will almost certainly be countered. Your first ask should be at the ceiling of what you'd accept, not the floor. Research shows specific asks (e.g., $127,500 instead of "around $125K") result in better outcomes.</p>
+            <table class="data-table">
+                <thead>
+                    <tr>
+                        <th>Source</th>
+                        <th>Title / Role Used</th>
+                        <th>Low ($)</th>
+                        <th>Median ($)</th>
+                        <th>High ($)</th>
+                        <th>Notes</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr><td><input type="text" class="r-source" placeholder="e.g., Glassdoor"></td><td><input type="text" class="r-title"></td><td><input type="text" class="r-low"></td><td><input type="text" class="r-med"></td><td><input type="text" class="r-high"></td><td><input type="text" class="r-notes"></td></tr>
+                    <tr><td><input type="text" class="r-source" placeholder="e.g., LinkedIn"></td><td><input type="text" class="r-title"></td><td><input type="text" class="r-low"></td><td><input type="text" class="r-med"></td><td><input type="text" class="r-high"></td><td><input type="text" class="r-notes"></td></tr>
+                    <tr><td><input type="text" class="r-source" placeholder="e.g., Payscale"></td><td><input type="text" class="r-title"></td><td><input type="text" class="r-low"></td><td><input type="text" class="r-med"></td><td><input type="text" class="r-high"></td><td><input type="text" class="r-notes"></td></tr>
+                    <tr><td><input type="text" class="r-source" placeholder="Network / Other"></td><td><input type="text" class="r-title"></td><td><input type="text" class="r-low"></td><td><input type="text" class="r-med"></td><td><input type="text" class="r-high"></td><td><input type="text" class="r-notes"></td></tr>
+                </tbody>
+            </table>
+
+            <div class="three-col">
+                <div class="field-group">
+                    <label>Market Range (Low – High)</label>
+                    <input type="text" id="market-range" placeholder="$___ – $___">
+                </div>
+                <div class="field-group">
+                    <label>My Target Ask (specific)</label>
+                    <input type="text" id="target-ask" placeholder="$___">
+                </div>
+                <div class="field-group">
+                    <label>My Walk-Away Minimum (private)</label>
+                    <input type="text" id="walk-away" placeholder="$___">
+                </div>
             </div>
-        </div>
 
-        <div class="step">
-            <div class="step-num">5</div>
-            <div class="step-content">
-                <h4>Know your walk-away number</h4>
-                <p>Before the conversation, decide the minimum you will accept. Anything below that is a signal to reconsider the opportunity.</p>
-            </div>
-        </div>
-    </div>
-
-    <!-- RESEARCH LOG WORKSHEET -->
-    <div class="worksheet-section">
-        <h2>My Research Log</h2>
-
-        <table class="data-table">
-            <thead>
-                <tr>
-                    <th>Source</th>
-                    <th>Title Used</th>
-                    <th>Low</th>
-                    <th>Median</th>
-                    <th>High</th>
-                    <th>Notes</th>
-                </tr>
-            </thead>
-            <tbody>
-                <tr><td><input type="text" placeholder="Glassdoor"></td><td><input type="text"></td><td><input type="text"></td><td><input type="text"></td><td><input type="text"></td><td><input type="text"></td></tr>
-                <tr><td><input type="text" placeholder="LinkedIn"></td><td><input type="text"></td><td><input type="text"></td><td><input type="text"></td><td><input type="text"></td><td><input type="text"></td></tr>
-                <tr><td><input type="text" placeholder="Payscale"></td><td><input type="text"></td><td><input type="text"></td><td><input type="text"></td><td><input type="text"></td><td><input type="text"></td></tr>
-                <tr><td><input type="text" placeholder="Network/Other"></td><td><input type="text"></td><td><input type="text"></td><td><input type="text"></td><td><input type="text"></td><td><input type="text"></td></tr>
-            </tbody>
-        </table>
-
-        <div style="display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 16px; margin-top: 20px;">
             <div class="field-group">
-                <label>My Market Range (Low – High)</label>
-                <input type="text" placeholder="$___ – $___">
-            </div>
-            <div class="field-group">
-                <label>My Target Ask</label>
-                <input type="text" placeholder="$___ (specific)">
-            </div>
-            <div class="field-group">
-                <label>My Walk-Away Minimum</label>
-                <input type="text" placeholder="$___ (private)">
+                <label>Why I land where I do in the range</label>
+                <textarea id="range-rationale" placeholder="Based on my [X years] of experience, my scope, and my impact, I belong at the [top/upper] end of the range because..."></textarea>
             </div>
         </div>
 
-        <div class="field-group" style="margin-top: 8px;">
-            <label>Where I Land in the Range and Why</label>
-            <textarea placeholder="Based on my years of experience, scope, and impact, I land at the [top/middle] of the range because..."></textarea>
+        <div class="button-row">
+            <button class="btn btn-secondary" onclick="clearAll()">Clear All</button>
+            <span class="save-status hidden" id="save-status">
+                <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="20 6 9 17 4 12"></polyline></svg>
+                Auto-saved
+            </span>
+            <button class="btn btn-primary" onclick="window.print()">Print / PDF</button>
         </div>
     </div>
 
-    <div class="footer">
-        Module 5: Advocacy &amp; Negotiation · Executive Leadership Lab · Coaching Women of Color®
-    </div>
+    <footer>
+        <p>Executive Leadership Lab — Module 5: Advocacy &amp; Negotiation</p>
+        <p><a href="https://coachingwomenofcolor.com">Coaching Women of Color®</a></p>
+    </footer>
+
+    <script>
+        const STORAGE_KEY = 'cwc-comp-research-v1';
+
+        function saveData() {
+            const data = {};
+            document.querySelectorAll('input[type="text"], textarea').forEach(el => {
+                if (el.id) data[el.id] = el.value;
+            });
+            ['r-source','r-title','r-low','r-med','r-high','r-notes'].forEach(cls => {
+                document.querySelectorAll('.' + cls).forEach((el, i) => {
+                    data[cls + '-' + i] = el.value;
+                });
+            });
+            localStorage.setItem(STORAGE_KEY, JSON.stringify(data));
+            const s = document.getElementById('save-status');
+            s.classList.remove('hidden');
+            setTimeout(() => s.classList.add('hidden'), 2000);
+        }
+
+        function loadData() {
+            const saved = localStorage.getItem(STORAGE_KEY);
+            if (!saved) return;
+            const data = JSON.parse(saved);
+            Object.keys(data).forEach(key => {
+                const el = document.getElementById(key);
+                if (el) el.value = data[key];
+            });
+            ['r-source','r-title','r-low','r-med','r-high','r-notes'].forEach(cls => {
+                document.querySelectorAll('.' + cls).forEach((el, i) => {
+                    if (data[cls + '-' + i] !== undefined) el.value = data[cls + '-' + i];
+                });
+            });
+        }
+
+        function clearAll() {
+            if (!confirm('Clear all saved research? This cannot be undone.')) return;
+            localStorage.removeItem(STORAGE_KEY);
+            document.querySelectorAll('input[type="text"], textarea').forEach(el => el.value = '');
+        }
+
+        document.addEventListener('input', saveData);
+        loadData();
+    </script>
 </body>
 </html>

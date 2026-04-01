@@ -3,268 +3,462 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Meeting Plan Template | Module 5</title>
+    <title>Negotiation Meeting Plan | Executive Leadership Lab</title>
+    <link href="https://fonts.googleapis.com/css2?family=Source+Serif+4:wght@400;600;700&family=Inter:wght@400;500;600&display=swap" rel="stylesheet">
     <style>
-        @import url('https://fonts.googleapis.com/css2?family=Source+Serif+4:wght@400;600;700&family=Inter:wght@400;500;600&display=swap');
+        :root {
+            --primary: #1A1A1A;
+            --accent: #2A7B8C;
+            --accent-warm: #D4A574;
+            --text: #333333;
+            --text-light: #666666;
+            --text-muted: #999999;
+            --bg: #FAF8F5;
+            --bg-warm: #F5F2ED;
+            --border: #E5E0D8;
+            --success: #4A9B7F;
+        }
+
         * { margin: 0; padding: 0; box-sizing: border-box; }
-        body { font-family: 'Inter', sans-serif; background: #FAF8F5; color: #1A1A1A; padding: 40px; max-width: 860px; margin: 0 auto; line-height: 1.6; }
-        @media print { body { padding: 20px; background: #fff; font-size: 10pt; } .no-print { display: none; } }
-        @media screen and (max-width: 640px) { body { padding: 16px; } .spacer { height: 80px; } }
 
-        .download-bar { position: fixed; top: 0; left: 0; right: 0; background: #1A1A1A; color: #fff; padding: 14px 40px; display: flex; justify-content: space-between; align-items: center; z-index: 1000; }
-        .download-bar span { font-size: 14px; font-weight: 600; }
-        .download-btn { background: #D4A574; color: #fff; border: none; padding: 8px 20px; border-radius: 6px; font-weight: 600; cursor: pointer; font-size: 13px; }
-        .spacer { height: 70px; }
+        body {
+            font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
+            background: var(--bg);
+            color: var(--text);
+            line-height: 1.6;
+            min-height: 100vh;
+        }
 
-        .header-card { background: #2A7B8C; color: #fff; border-radius: 12px; padding: 32px 40px; margin-bottom: 28px; }
-        .header-card .module-label { font-size: 12px; font-weight: 600; text-transform: uppercase; letter-spacing: 2px; color: rgba(255,255,255,0.65); margin-bottom: 8px; }
-        .header-card h1 { font-family: 'Source Serif 4', Georgia, serif; font-size: 28px; margin-bottom: 8px; }
-        .header-card p { color: rgba(255,255,255,0.75); font-size: 14px; }
+        .container { max-width: 900px; margin: 0 auto; padding: 40px 24px; }
 
-        .card { background: #fff; border-radius: 10px; padding: 28px 32px; margin-bottom: 20px; border: 1px solid #E5E0D8; }
-        .card-title { font-family: 'Source Serif 4', Georgia, serif; font-size: 18px; color: #2A7B8C; margin-bottom: 6px; }
-        .card-subtitle { font-size: 13px; color: #737373; margin-bottom: 20px; }
+        header {
+            text-align: center;
+            margin-bottom: 48px;
+            padding-bottom: 32px;
+            border-bottom: 1px solid var(--border);
+        }
 
-        label { display: block; font-size: 12px; font-weight: 600; text-transform: uppercase; letter-spacing: 0.5px; color: #737373; margin-bottom: 6px; }
-        input[type="text"], textarea { width: 100%; border: 1px solid #D1CCBF; border-radius: 6px; padding: 10px 14px; font-size: 14px; font-family: 'Inter', sans-serif; background: #FAF8F5; }
-        textarea { resize: vertical; min-height: 80px; }
-        input:focus, textarea:focus { outline: none; border-color: #2A7B8C; background: #fff; }
+        .logo { height: 80px; margin-bottom: 24px; }
+        .module-label { font-size: 11px; font-weight: 600; color: var(--accent); text-transform: uppercase; letter-spacing: 2.5px; margin-bottom: 12px; display: block; }
+        h1 { font-family: 'Source Serif 4', Georgia, serif; font-size: 36px; font-weight: 700; color: var(--primary); margin-bottom: 12px; }
+        .subtitle { font-size: 18px; color: var(--text-light); max-width: 600px; margin: 0 auto; }
 
-        .field-row { display: grid; grid-template-columns: 1fr 1fr; gap: 16px; margin-bottom: 16px; }
-        .field-group { margin-bottom: 16px; }
+        .instructions {
+            background: var(--bg-warm);
+            border-left: 3px solid var(--accent-warm);
+            padding: 20px 24px;
+            margin-bottom: 40px;
+            border-radius: 0 4px 4px 0;
+        }
+        .instructions h3 { font-family: 'Source Serif 4', Georgia, serif; font-size: 16px; font-weight: 600; color: var(--primary); margin-bottom: 8px; }
+        .instructions p { font-size: 14px; color: var(--text-light); margin: 0; }
 
-        .mini-row { display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 12px; margin-bottom: 14px; }
+        .section {
+            background: white;
+            border: 1px solid var(--border);
+            border-radius: 8px;
+            padding: 32px;
+            margin-bottom: 24px;
+        }
 
-        .checklist { list-style: none; }
-        .checklist li { padding: 10px 0 10px 32px; position: relative; border-bottom: 1px solid #F0EBE5; font-size: 14px; }
-        .checklist li:last-child { border-bottom: none; }
-        .checklist li::before { content: '☐'; position: absolute; left: 0; color: #D4A574; font-size: 16px; }
+        .section-header { display: flex; align-items: center; gap: 16px; margin-bottom: 8px; }
 
-        .script-mini { background: #FAF8F5; border-left: 3px solid #D4A574; padding: 14px 18px; margin: 10px 0; font-size: 14px; border-radius: 0 6px 6px 0; }
-        .script-mini-label { font-size: 11px; font-weight: 700; text-transform: uppercase; letter-spacing: 1px; color: #D4A574; margin-bottom: 8px; }
+        .step-number {
+            width: 40px; height: 40px;
+            background: var(--accent);
+            border-radius: 50%;
+            display: flex; align-items: center; justify-content: center;
+            font-size: 18px; font-weight: 700; color: white; flex-shrink: 0;
+        }
 
-        .timeline-row { display: flex; align-items: flex-start; gap: 16px; margin-bottom: 16px; }
-        .timeline-num { background: #2A7B8C; color: #fff; width: 28px; height: 28px; border-radius: 50%; display: flex; align-items: center; justify-content: center; font-weight: 700; font-size: 12px; flex-shrink: 0; margin-top: 2px; }
-        .timeline-content { flex: 1; }
-        .timeline-content h4 { font-size: 14px; font-weight: 600; color: #1A1A1A; margin-bottom: 4px; }
-        .timeline-content p { font-size: 13px; color: #737373; }
+        .section-title { font-family: 'Source Serif 4', Georgia, serif; font-size: 20px; font-weight: 600; color: var(--primary); }
+        .section-description { font-size: 14px; color: var(--text-light); margin-bottom: 24px; padding-left: 56px; }
 
-        .status-bar { display: flex; gap: 8px; margin-top: 8px; }
-        .status-btn { flex: 1; padding: 8px; border: 2px solid #E5E0D8; border-radius: 6px; background: #FAF8F5; cursor: pointer; font-size: 12px; font-weight: 600; text-align: center; }
-        .status-btn:hover { border-color: #2A7B8C; background: #E8F4F6; }
-        .status-btn.done { border-color: #2A7B8C; background: #2A7B8C; color: #fff; }
+        label { display: block; font-size: 14px; font-weight: 500; color: var(--primary); margin-bottom: 8px; }
 
-        .tip-box { background: #E8F4F6; border-radius: 6px; padding: 12px 16px; font-size: 13px; color: #1A4A55; margin-top: 12px; }
-        .footer { text-align: center; padding: 24px 0 40px; color: #999; font-size: 12px; }
+        textarea, input[type="text"] {
+            width: 100%; padding: 12px 16px;
+            border: 1px solid var(--border); border-radius: 4px;
+            font-family: inherit; font-size: 15px; color: var(--text);
+            background: var(--bg); transition: border-color 0.2s, box-shadow 0.2s; resize: vertical;
+        }
+        textarea:focus, input[type="text"]:focus { outline: none; border-color: var(--accent); box-shadow: 0 0 0 3px rgba(42, 123, 140, 0.1); }
+        textarea { min-height: 80px; }
+        textarea.short { min-height: 60px; }
+
+        .field-group { margin-bottom: 20px; }
+        .field-group:last-child { margin-bottom: 0; }
+        .two-col { display: grid; grid-template-columns: 1fr 1fr; gap: 16px; }
+        .three-col { display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 16px; }
+
+        /* Timeline */
+        .timeline { display: flex; flex-direction: column; gap: 0; }
+
+        .timeline-item {
+            display: flex;
+            gap: 20px;
+            padding-bottom: 28px;
+            position: relative;
+        }
+
+        .timeline-item:last-child { padding-bottom: 0; }
+
+        .timeline-item::before {
+            content: '';
+            position: absolute;
+            left: 19px;
+            top: 40px;
+            bottom: 0;
+            width: 2px;
+            background: var(--border);
+        }
+
+        .timeline-item:last-child::before { display: none; }
+
+        .tl-dot {
+            width: 40px; height: 40px;
+            border-radius: 50%;
+            background: var(--accent);
+            display: flex; align-items: center; justify-content: center;
+            font-size: 13px; font-weight: 700; color: white; flex-shrink: 0;
+            z-index: 1;
+        }
+
+        .tl-content { flex: 1; }
+        .tl-content h4 { font-size: 15px; font-weight: 600; color: var(--primary); margin-bottom: 4px; }
+        .tl-content p { font-size: 13px; color: var(--text-light); margin-bottom: 12px; }
+
+        /* Script reminder */
+        .script-reminder {
+            background: var(--bg-warm);
+            border-left: 3px solid var(--accent);
+            padding: 14px 18px;
+            margin: 12px 0;
+            border-radius: 0 4px 4px 0;
+            font-size: 14px;
+            color: var(--text);
+        }
+        .sr-label { font-size: 11px; font-weight: 700; text-transform: uppercase; letter-spacing: 1px; color: var(--accent); margin-bottom: 6px; }
+
+        /* Checklist */
+        .checklist-items { list-style: none; }
+        .checklist-items li {
+            padding: 10px 0 10px 32px;
+            position: relative;
+            border-bottom: 1px solid var(--border);
+            font-size: 14px;
+            cursor: pointer;
+        }
+        .checklist-items li:last-child { border-bottom: none; }
+        .checklist-items li::before { content: '☐'; position: absolute; left: 0; color: var(--accent-warm); font-size: 16px; }
+        .checklist-items li.checked { color: var(--text-muted); text-decoration: line-through; }
+        .checklist-items li.checked::before { content: '☑'; color: var(--success); }
+
+        .save-status { font-size: 13px; color: var(--success); display: flex; align-items: center; gap: 6px; }
+        .save-status.hidden { visibility: hidden; }
+
+        .button-row { display: flex; justify-content: space-between; align-items: center; margin-top: 40px; padding-top: 24px; border-top: 1px solid var(--border); }
+        .btn { padding: 12px 24px; border-radius: 4px; font-family: inherit; font-size: 14px; font-weight: 500; cursor: pointer; transition: all 0.2s; }
+        .btn-primary { background: var(--accent); color: white; border: none; }
+        .btn-primary:hover { background: #236a79; }
+        .btn-secondary { background: transparent; color: var(--text-light); border: 1px solid var(--border); }
+        .btn-secondary:hover { border-color: var(--text-light); }
+
+        footer { text-align: center; padding: 40px 24px; color: var(--text-muted); font-size: 13px; }
+        footer a { color: var(--accent); text-decoration: none; }
+
+        @media print { body { background: white; } .container { max-width: 100%; padding: 20px; } .button-row { display: none; } .section { break-inside: avoid; } }
+        @media screen and (max-width: 768px) { .container { padding: 24px 16px; } h1 { font-size: 28px; } .two-col, .three-col { grid-template-columns: 1fr; } .section { padding: 20px; } }
+        @media screen and (max-width: 480px) { .container { padding: 16px 12px; } .logo { height: 60px; } h1 { font-size: 24px; } }
     </style>
 </head>
 <body>
-    <div class="download-bar no-print">
-        <span>Meeting Plan Template — Module 5</span>
-        <button class="download-btn" onclick="window.print()">Download / Print</button>
-    </div>
-    <div class="spacer no-print"></div>
+    <div class="container">
+        <header>
+            <img src="https://coachingwomenofcolor.com/wp-content/uploads/2021/04/CWCFinal_logo2.webp" alt="Coaching Women of Color" class="logo">
+            <span class="module-label">Module 5 — May</span>
+            <h1>Negotiation Meeting Plan</h1>
+            <p class="subtitle">Plan the meeting before you request it. Preparation is the difference between a conversation and a negotiation.</p>
+        </header>
 
-    <div class="header-card">
-        <div class="module-label">Module 5 · Executive Leadership Lab</div>
-        <h1>Negotiation Meeting Plan</h1>
-        <p>Plan the meeting before you request it. Preparation is the difference between a conversation and a negotiation.</p>
-    </div>
+        <div class="instructions">
+            <h3>Complete in order before the meeting</h3>
+            <p>Fill out Parts 1–3 before you request the meeting. Fill out Part 4 within one hour of the meeting ending — while details are fresh. Your entries auto-save.</p>
+        </div>
 
-    <!-- BEFORE THE MEETING -->
-    <div class="card">
-        <div class="card-title">Part 1: Meeting Setup</div>
-        <div class="card-subtitle">Fill this in before you request the meeting.</div>
-
-        <div class="field-row">
-            <div class="field-group">
-                <label>Who I'm Meeting With</label>
-                <input type="text" placeholder="Name and title">
+        <!-- PART 1: MEETING SETUP -->
+        <div class="section">
+            <div class="section-header">
+                <div class="step-number">1</div>
+                <div class="section-title">Meeting Setup</div>
             </div>
+            <div class="section-description">Fill this in before you request the meeting.</div>
+
+            <div class="two-col">
+                <div class="field-group">
+                    <label>Who I'm Meeting With</label>
+                    <input type="text" id="meeting-with" placeholder="Name and title">
+                </div>
+                <div class="field-group">
+                    <label>Relationship / Power Dynamic</label>
+                    <input type="text" id="relationship" placeholder="e.g., Direct manager, skip-level, HR">
+                </div>
+            </div>
+
+            <div class="two-col">
+                <div class="field-group">
+                    <label>I Will Request the Meeting By</label>
+                    <input type="text" id="request-by" placeholder="Date — hold yourself to this">
+                </div>
+                <div class="field-group">
+                    <label>Target Meeting Date</label>
+                    <input type="text" id="meeting-date" placeholder="When I want it to happen">
+                </div>
+            </div>
+
             <div class="field-group">
-                <label>Relationship / Power Dynamic</label>
-                <input type="text" placeholder="e.g., Direct manager, skip-level, HR partner">
+                <label>How I Will Request It</label>
+                <textarea class="short" id="how-request" placeholder="e.g., Calendar invite, Slack, in person — subject line: 'Career Check-In' (keep it neutral, not alarming)..."></textarea>
+            </div>
+
+            <div class="script-reminder">
+                <div class="sr-label">Meeting Request Message Template</div>
+                "Hi [Name], I'd love to schedule 30 minutes to talk through my role and contributions. I have some things I'd like to discuss and value your perspective. Are you available [date/time options]?"
             </div>
         </div>
 
-        <div class="field-row">
-            <div class="field-group">
-                <label>Meeting Request Date</label>
-                <input type="text" placeholder="When I will ask for the meeting">
+        <!-- PART 2: MEETING AGENDA -->
+        <div class="section">
+            <div class="section-header">
+                <div class="step-number">2</div>
+                <div class="section-title">Meeting Agenda — Know the Arc Before You Walk In</div>
             </div>
-            <div class="field-group">
-                <label>Target Meeting Date</label>
-                <input type="text" placeholder="When I want the meeting to happen">
-            </div>
-        </div>
+            <div class="section-description">Plan your 30 minutes. Know what happens in each phase.</div>
 
-        <div class="field-group">
-            <label>How I Will Request the Meeting (email / Slack / in person)</label>
-            <textarea rows="2" placeholder="e.g., I'll send a calendar invite with a brief subject: 'Career Check-In — [Your Name]' — keep it neutral, not alarming"></textarea>
-        </div>
+            <div class="timeline">
+                <div class="timeline-item">
+                    <div class="tl-dot">0–3</div>
+                    <div class="tl-content">
+                        <h4>Open — Set the tone and state the purpose</h4>
+                        <p>Express appreciation. Anchor to the relationship. State your purpose directly, no qualifier.</p>
+                        <div class="field-group">
+                            <label>My opening line</label>
+                            <input type="text" id="my-open" placeholder="'I appreciate you making time. I want to have a direct conversation about...'">
+                        </div>
+                    </div>
+                </div>
 
-        <div class="script-mini">
-            <div class="script-mini-label">Meeting Request Message Template</div>
-            "Hi [Name], I'd love to schedule 30 minutes to talk through my role and contributions. I have some things I'd like to discuss and value your perspective. Are you available [date/time options]?"
-        </div>
+                <div class="timeline-item">
+                    <div class="tl-dot">3–10</div>
+                    <div class="tl-content">
+                        <h4>Case — Market data → Impact evidence → Ask</h4>
+                        <p>Deliver the full four-part script. Don't rush. Let the evidence land before moving to the number.</p>
+                        <div class="two-col">
+                            <div class="field-group">
+                                <label>Impact Point #1 I'll name</label>
+                                <input type="text" id="impact-1" placeholder="Win with quantified result">
+                            </div>
+                            <div class="field-group">
+                                <label>Impact Point #2 I'll name</label>
+                                <input type="text" id="impact-2" placeholder="Win with quantified result">
+                            </div>
+                        </div>
+                    </div>
+                </div>
 
-        <div class="tip-box">
-            <strong>Tip:</strong> Keep the subject line neutral. "Compensation Discussion" or "Salary Review" can trigger defensiveness before you're even in the room. "Career Check-In" or "Professional Development Conversation" keeps the door open.
-        </div>
-    </div>
+                <div class="timeline-item">
+                    <div class="tl-dot">10–12</div>
+                    <div class="tl-content">
+                        <h4>Ask — Say the number. Stop talking. Wait.</h4>
+                        <p>State the specific number. Close the script. Do not fill the silence. Your patience here is power.</p>
+                        <div class="field-group">
+                            <label>My specific ask (commit to it here)</label>
+                            <input type="text" id="my-ask" placeholder="$___ / [title] / [scope change]">
+                        </div>
+                    </div>
+                </div>
 
-    <!-- MEETING AGENDA -->
-    <div class="card">
-        <div class="card-title">Part 2: Meeting Agenda</div>
-        <div class="card-subtitle">Know the arc of your 30 minutes before you walk in.</div>
+                <div class="timeline-item">
+                    <div class="tl-dot">12–25</div>
+                    <div class="tl-content">
+                        <h4>Respond — Listen, navigate, stay grounded</h4>
+                        <p>Use your Objection Response Cards. Stay calm and direct. You don't have to accept anything on the spot.</p>
+                        <div class="field-group">
+                            <label>Most likely objection I'll hear</label>
+                            <input type="text" id="likely-objection" placeholder="And my prepared response is...">
+                        </div>
+                    </div>
+                </div>
 
-        <div class="timeline-row">
-            <div class="timeline-num">1</div>
-            <div class="timeline-content">
-                <h4>Minutes 0–3: Open and set the tone</h4>
-                <p>Express appreciation for the time. Anchor to the relationship. State the purpose directly and professionally.</p>
-                <div class="field-group" style="margin-top: 8px;">
-                    <label>My Opening Line</label>
-                    <input type="text" placeholder="'I appreciate you making time. I want to have a direct conversation about...'">
+                <div class="timeline-item">
+                    <div class="tl-dot">25–30</div>
+                    <div class="tl-content">
+                        <h4>Close — Leave with something specific</h4>
+                        <p>Regardless of outcome, leave with a follow-up date, a milestone list, or written confirmation agreed.</p>
+                        <div class="field-group">
+                            <label>How I will close / what I'll ask for as next step</label>
+                            <textarea class="short" id="my-close" placeholder="e.g., 'Can we agree on a follow-up date of ___?' or 'Can I expect that confirmed in writing by ___?'"></textarea>
+                        </div>
+                    </div>
                 </div>
             </div>
         </div>
 
-        <div class="timeline-row">
-            <div class="timeline-num">2</div>
-            <div class="timeline-content">
-                <h4>Minutes 3–10: Present the case</h4>
-                <p>Market research → Your impact evidence → Your ask. Deliver the full four-part script without rushing.</p>
-                <div class="field-group" style="margin-top: 8px;">
-                    <label>Top 2 Impact Points I Will Name</label>
-                    <textarea rows="2" placeholder="1. &#10;2."></textarea>
-                </div>
+        <!-- PART 3: MINDSET -->
+        <div class="section">
+            <div class="section-header">
+                <div class="step-number">3</div>
+                <div class="section-title">Pre-Meeting Mindset & Checklist</div>
             </div>
-        </div>
+            <div class="section-description">What you bring into the room shapes what happens in it. Complete this the day before.</div>
 
-        <div class="timeline-row">
-            <div class="timeline-num">3</div>
-            <div class="timeline-content">
-                <h4>Minutes 10–12: State the ask and stop talking</h4>
-                <p>Say the number. Close the script. Then wait. Do not fill the silence.</p>
-                <div class="field-group" style="margin-top: 8px;">
-                    <label>My Specific Ask (write it here to commit to it)</label>
-                    <input type="text" placeholder="$___ / [title] / [scope change]">
-                </div>
-            </div>
-        </div>
-
-        <div class="timeline-row">
-            <div class="timeline-num">4</div>
-            <div class="timeline-content">
-                <h4>Minutes 12–25: Respond and navigate</h4>
-                <p>Listen to their response. Use your objection response cards if needed. Stay calm, direct, and grounded.</p>
-                <div class="field-group" style="margin-top: 8px;">
-                    <label>Most Likely Objection I'll Hear</label>
-                    <input type="text" placeholder="And my prepared response from the Objection Cards...">
-                </div>
-            </div>
-        </div>
-
-        <div class="timeline-row">
-            <div class="timeline-num">5</div>
-            <div class="timeline-content">
-                <h4>Minutes 25–30: Close with a clear next step</h4>
-                <p>Regardless of the outcome, leave with something specific: a follow-up date, a milestone list, or written confirmation.</p>
-                <div class="field-group" style="margin-top: 8px;">
-                    <label>How I Will Close / What I Will Ask For as Next Step</label>
-                    <textarea rows="2" placeholder="e.g., 'Can we agree on a follow-up date of ___ to confirm?' or 'Can I expect that in writing by ___?'"></textarea>
-                </div>
-            </div>
-        </div>
-    </div>
-
-    <!-- MINDSET PREP -->
-    <div class="card">
-        <div class="card-title">Part 3: Mindset Prep</div>
-        <div class="card-subtitle">Complete before the meeting. What you think going in shapes what happens in the room.</div>
-
-        <div class="field-group">
-            <label>The story I'm telling myself about this meeting (write it out — then challenge it)</label>
-            <textarea placeholder="e.g., 'They're going to say no and then think I'm difficult.' → Now challenge it: Is that realistic? What's the evidence?"></textarea>
-        </div>
-
-        <div class="field-group">
-            <label>Three reasons I deserve what I'm asking for</label>
-            <textarea rows="3" placeholder="1. &#10;2. &#10;3."></textarea>
-        </div>
-
-        <div class="field-group">
-            <label>My grounding statement (what I will say to myself before walking in)</label>
-            <input type="text" placeholder="e.g., 'I have evidence. I have a script. I am prepared.'">
-        </div>
-
-        <div class="field-group">
-            <label>Pre-meeting checklist</label>
-            <ul class="checklist">
-                <li>Negotiation Preparation Worksheet complete</li>
-                <li>Script practiced aloud at least 3 times</li>
-                <li>Market research data ready to reference (don't read from it — know it)</li>
-                <li>Top 2–3 impact wins memorized</li>
-                <li>Objection responses reviewed</li>
-                <li>Know my walk-away minimum</li>
-                <li>Know my specific ask — not a range, a number</li>
-            </ul>
-        </div>
-    </div>
-
-    <!-- POST-MEETING NOTES -->
-    <div class="card">
-        <div class="card-title">Part 4: Post-Meeting Notes</div>
-        <div class="card-subtitle">Complete within 1 hour of the meeting — while details are fresh.</div>
-
-        <div class="field-row">
             <div class="field-group">
-                <label>Meeting Date</label>
-                <input type="text">
+                <label>The story I'm telling myself about this meeting — write it, then challenge it</label>
+                <textarea class="short" id="self-story" placeholder="e.g., 'They'll say no and think I'm difficult.' → Challenge: Is that realistic? What's the actual evidence? What's the real worst case?"></textarea>
             </div>
+
             <div class="field-group">
-                <label>Meeting Duration</label>
-                <input type="text" placeholder="e.g., 28 minutes">
+                <label>Three reasons I deserve what I'm asking for</label>
+                <textarea id="deserve-reasons" placeholder="1. &#10;2. &#10;3."></textarea>
+            </div>
+
+            <div class="field-group">
+                <label>My grounding statement — what I'll say to myself right before walking in</label>
+                <input type="text" id="grounding" placeholder="e.g., 'I have evidence. I have a script. I am prepared.'">
+            </div>
+
+            <div class="field-group" style="margin-top: 24px;">
+                <label>Pre-meeting readiness checklist</label>
+                <ul class="checklist-items" id="pre-checklist">
+                    <li>Negotiation Preparation Worksheet complete</li>
+                    <li>Market research data ready — I know the range, I don't need to read from a sheet</li>
+                    <li>Top 2–3 impact wins memorized with numbers</li>
+                    <li>Full script practiced out loud at least 3 times</li>
+                    <li>Top 2 objection responses practiced</li>
+                    <li>My specific ask confirmed — not a range, a number</li>
+                    <li>Walk-away minimum decided (keep private)</li>
+                    <li>Meeting is on the calendar</li>
+                </ul>
             </div>
         </div>
 
-        <div class="field-group">
-            <label>Their Initial Response</label>
-            <textarea placeholder="What did they say? What was their tone? What surprised you?"></textarea>
+        <!-- PART 4: POST-MEETING -->
+        <div class="section">
+            <div class="section-header">
+                <div class="step-number">4</div>
+                <div class="section-title">Post-Meeting Notes</div>
+            </div>
+            <div class="section-description">Complete within one hour of the meeting while details are fresh.</div>
+
+            <div class="two-col">
+                <div class="field-group">
+                    <label>Meeting Date</label>
+                    <input type="text" id="post-date" placeholder="Date">
+                </div>
+                <div class="field-group">
+                    <label>Outcome</label>
+                    <input type="text" id="post-outcome" placeholder="Yes / Not yet / No / TBD">
+                </div>
+            </div>
+
+            <div class="field-group">
+                <label>Their Initial Response (write what they said, their tone, what surprised you)</label>
+                <textarea id="their-response" placeholder="What did they say? What was their body language? What surprised you?"></textarea>
+            </div>
+
+            <div class="field-group">
+                <label>What Was Agreed (be specific — number, title, timeline, or next meeting date)</label>
+                <textarea class="short" id="what-agreed" placeholder="Write the exact outcome. Vague agreements evaporate."></textarea>
+            </div>
+
+            <div class="field-group">
+                <label>Next Step & Follow-Up Date</label>
+                <input type="text" id="next-step" placeholder="Specific action + specific date — put it on the calendar before closing this">
+            </div>
+
+            <div class="two-col">
+                <div class="field-group">
+                    <label>What went well</label>
+                    <textarea class="short" id="went-well" placeholder="Where did you feel confident? What landed?"></textarea>
+                </div>
+                <div class="field-group">
+                    <label>What I'd do differently</label>
+                    <textarea class="short" id="do-differently" placeholder="Learning for the next negotiation — there will be one."></textarea>
+                </div>
+            </div>
         </div>
 
-        <div class="field-group">
-            <label>What Was Agreed (be specific)</label>
-            <textarea placeholder="Write the exact outcome — number, title, timeline, or 'follow-up by [date]'"></textarea>
-        </div>
-
-        <div class="field-group">
-            <label>Next Step / Follow-Up Date</label>
-            <input type="text" placeholder="Specific date + action">
-        </div>
-
-        <div class="field-group">
-            <label>What Went Well</label>
-            <textarea rows="2" placeholder="Where did you feel confident? What landed well?"></textarea>
-        </div>
-
-        <div class="field-group">
-            <label>What I Would Do Differently</label>
-            <textarea rows="2" placeholder="Learning for the next negotiation — there will be one."></textarea>
+        <div class="button-row">
+            <button class="btn btn-secondary" onclick="clearAll()">Clear All</button>
+            <span class="save-status hidden" id="save-status">
+                <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="20 6 9 17 4 12"></polyline></svg>
+                Auto-saved
+            </span>
+            <button class="btn btn-primary" onclick="window.print()">Print / PDF</button>
         </div>
     </div>
 
-    <div class="footer">
-        Module 5: Advocacy &amp; Negotiation · Executive Leadership Lab · Coaching Women of Color®
-    </div>
+    <footer>
+        <p>Executive Leadership Lab — Module 5: Advocacy &amp; Negotiation</p>
+        <p><a href="https://coachingwomenofcolor.com">Coaching Women of Color®</a></p>
+    </footer>
 
     <script>
-        function toggle(el) {
-            const siblings = el.parentElement.querySelectorAll('.status-btn');
-            siblings.forEach(s => s.classList.remove('done'));
-            el.classList.add('done');
+        const STORAGE_KEY = 'cwc-meeting-plan-v1';
+
+        const TEXT_IDS = ['meeting-with','relationship','request-by','meeting-date','how-request',
+            'my-open','impact-1','impact-2','my-ask','likely-objection','my-close',
+            'self-story','deserve-reasons','grounding','post-date','post-outcome',
+            'their-response','what-agreed','next-step','went-well','do-differently'];
+
+        function saveData() {
+            const data = {};
+            TEXT_IDS.forEach(id => {
+                const el = document.getElementById(id);
+                if (el) data[id] = el.value;
+            });
+            const checked = [];
+            document.querySelectorAll('#pre-checklist li').forEach((li, i) => {
+                if (li.classList.contains('checked')) checked.push(i);
+            });
+            data['checklist'] = JSON.stringify(checked);
+            localStorage.setItem(STORAGE_KEY, JSON.stringify(data));
+            const s = document.getElementById('save-status');
+            s.classList.remove('hidden');
+            setTimeout(() => s.classList.add('hidden'), 2000);
         }
+
+        function loadData() {
+            const saved = localStorage.getItem(STORAGE_KEY);
+            if (!saved) return;
+            const data = JSON.parse(saved);
+            TEXT_IDS.forEach(id => {
+                const el = document.getElementById(id);
+                if (el && data[id] !== undefined) el.value = data[id];
+            });
+            if (data['checklist']) {
+                const checked = JSON.parse(data['checklist']);
+                document.querySelectorAll('#pre-checklist li').forEach((li, i) => {
+                    if (checked.includes(i)) li.classList.add('checked');
+                });
+            }
+        }
+
+        function clearAll() {
+            if (!confirm('Clear all saved data? This cannot be undone.')) return;
+            localStorage.removeItem(STORAGE_KEY);
+            TEXT_IDS.forEach(id => {
+                const el = document.getElementById(id);
+                if (el) el.value = '';
+            });
+            document.querySelectorAll('#pre-checklist li').forEach(li => li.classList.remove('checked'));
+        }
+
+        document.addEventListener('input', saveData);
+        document.querySelectorAll('#pre-checklist li').forEach(li => {
+            li.addEventListener('click', () => { li.classList.toggle('checked'); saveData(); });
+        });
+        loadData();
     </script>
 </body>
 </html>
