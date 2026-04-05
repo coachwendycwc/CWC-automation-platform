@@ -99,6 +99,12 @@ class InvoiceList(BaseModel):
     balance_due: Decimal
     status: str
     due_date: date
+    due_soon_reminder_sent_at: Optional[datetime] = None
+    overdue_reminder_sent_at: Optional[datetime] = None
+    final_notice_sent_at: Optional[datetime] = None
+    last_collection_email_sent_at: Optional[datetime] = None
+    collection_stage: Optional[str] = None
+    needs_collection_attention: bool = False
     created_at: datetime
 
     model_config = ConfigDict(from_attributes=True)
@@ -122,6 +128,7 @@ class InvoiceStats(BaseModel):
     paid_count: int
     pending_count: int
     overdue_count: int
+    collections_attention_count: int
 
 
 # Public invoice view (limited data)

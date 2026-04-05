@@ -31,6 +31,12 @@ interface Invoice {
   balance_due: number;
   status: string;
   due_date: string;
+  due_soon_reminder_sent_at: string | null;
+  overdue_reminder_sent_at: string | null;
+  final_notice_sent_at: string | null;
+  last_collection_email_sent_at: string | null;
+  collection_stage: "due_soon" | "overdue" | "final_notice" | null;
+  needs_collection_attention: boolean;
   created_at: string;
 }
 
@@ -42,6 +48,7 @@ interface InvoiceStats {
   paid_count: number;
   pending_count: number;
   overdue_count: number;
+  collections_attention_count: number;
 }
 
 const STATUS_COLORS: Record<string, string> = {
@@ -52,6 +59,12 @@ const STATUS_COLORS: Record<string, string> = {
   paid: "bg-success/10 text-success",
   overdue: "bg-destructive/10 text-destructive",
   cancelled: "bg-muted text-muted-foreground",
+};
+
+const COLLECTION_STAGE_LABELS: Record<NonNullable<Invoice["collection_stage"]>, string> = {
+  due_soon: "Due Soon Reminder",
+  overdue: "Overdue Reminder",
+  final_notice: "Final Notice",
 };
 
 export default function InvoicesPage() {
@@ -142,6 +155,14 @@ export default function InvoicesPage() {
     }
   };
 
+  const formatCollectionTimestamp = (value: string | null) => {
+    if (!value) return "Not sent";
+    return new Date(value).toLocaleDateString("en-US", {
+      month: "short",
+      day: "numeric",
+    });
+  };
+
   if (loading) {
     return (
       <Shell>
@@ -176,7 +197,7 @@ export default function InvoicesPage() {
 
         {/* Stats Cards */}
         {stats && (
-          <div className="grid grid-cols-1 md:grid-cols-4 gap-4">
+          <div className="grid grid-cols-1 gap-4 md:grid-cols-2 xl:grid-cols-5">
             <Card>
               <CardContent className="pt-6">
                 <div className="flex items-center">
@@ -224,6 +245,19 @@ export default function InvoicesPage() {
                     <p className="text-sm font-medium text-muted-foreground">Total Invoices</p>
                     <p className="text-2xl font-bold text-foreground">
                       {stats.invoices_count}
+                    </p>
+                  </div>
+                </div>
+              </CardContent>
+            </Card>
+            <Card>
+              <CardContent className="pt-6">
+                <div className="flex items-center">
+                  <Send className="h-8 w-8 text-amber-600" />
+                  <div className="ml-4">
+                    <p className="text-sm font-medium text-muted-foreground">Needs Follow-Up</p>
+                    <p className="text-2xl font-bold text-foreground">
+                      {stats.collections_attention_count}
                     </p>
                   </div>
                 </div>
@@ -323,6 +357,9 @@ export default function InvoicesPage() {
                     <th className="px-6 py-3 text-left text-xs font-medium text-muted-foreground uppercase tracking-wider">
                       Due Date
                     </th>
+                    <th className="px-6 py-3 text-left text-xs font-medium text-muted-foreground uppercase tracking-wider">
+                      Collections
+                    </th>
                     <th className="px-6 py-3 text-right text-xs font-medium text-muted-foreground uppercase tracking-wider">
                       Actions
                     </th>
@@ -359,6 +396,24 @@ export default function InvoicesPage() {
                       </td>
                       <td className="px-6 py-4 whitespace-nowrap text-sm text-muted-foreground">
                         {formatDueDate(invoice.due_date)}
+                      </td>
+                      <td className="px-6 py-4">
+                        <div className="space-y-1">
+                          {invoice.collection_stage ? (
+                            <Badge variant="outline">
+                              {COLLECTION_STAGE_LABELS[invoice.collection_stage]}
+                            </Badge>
+                          ) : invoice.needs_collection_attention ? (
+                            <Badge variant="outline" className="border-amber-200 bg-amber-50 text-amber-700">
+                              Follow up now
+                            </Badge>
+                          ) : (
+                            <span className="text-sm text-muted-foreground">Quiet</span>
+                          )}
+                          <div className="text-xs text-muted-foreground">
+                            Last email: {formatCollectionTimestamp(invoice.last_collection_email_sent_at)}
+                          </div>
+                        </div>
                       </td>
                       <td className="px-6 py-4 whitespace-nowrap text-right text-sm font-medium">
                         <div className="flex items-center justify-end gap-2">

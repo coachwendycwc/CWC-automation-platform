@@ -6,7 +6,7 @@ from decimal import Decimal
 from typing import Optional
 
 from sqlalchemy.ext.asyncio import AsyncSession
-from sqlalchemy import select, func, and_
+from sqlalchemy import select, func, and_, or_
 
 from app.models.invoice import Invoice
 from app.models.payment import Payment
@@ -119,6 +119,9 @@ class InvoiceService:
 
     async def get_stats(self) -> dict:
         """Get invoice statistics for dashboard."""
+        today = date.today()
+        due_soon_date = today + timedelta(days=3)
+
         # Total revenue (paid invoices)
         paid_result = await self.db.execute(
             select(func.sum(Invoice.total))
@@ -134,7 +137,6 @@ class InvoiceService:
         total_outstanding = outstanding_result.scalar_one_or_none() or Decimal("0")
 
         # Total overdue
-        today = date.today()
         overdue_result = await self.db.execute(
             select(func.sum(Invoice.balance_due))
             .where(
@@ -153,6 +155,19 @@ class InvoiceService:
                 func.count().filter(Invoice.status == "paid").label("paid"),
                 func.count().filter(Invoice.status.in_(["sent", "viewed", "partial"])).label("pending"),
                 func.count().filter(Invoice.status == "overdue").label("overdue"),
+                func.count().filter(
+                    and_(
+                        Invoice.status.in_(["sent", "viewed", "partial", "overdue"]),
+                        Invoice.balance_due > 0,
+                        or_(
+                            Invoice.due_date < today,
+                            and_(
+                                Invoice.due_date <= due_soon_date,
+                                Invoice.due_soon_reminder_sent_at.is_(None),
+                            ),
+                        ),
+                    )
+                ).label("collections_attention"),
             )
         )
         counts = count_result.one()
@@ -165,6 +180,7 @@ class InvoiceService:
             "paid_count": counts.paid,
             "pending_count": counts.pending,
             "overdue_count": counts.overdue,
+            "collections_attention_count": counts.collections_attention,
         }
 
     async def check_overdue_invoices(self) -> int:

@@ -1,7 +1,7 @@
 """
 Invoice management router.
 """
-from datetime import datetime, date
+from datetime import datetime, date, timedelta
 from typing import Optional
 from decimal import Decimal
 
@@ -29,6 +29,28 @@ from app.config import get_settings
 
 router = APIRouter(prefix="/api/invoices", tags=["invoices"])
 settings = get_settings()
+
+
+def get_collection_stage(invoice: Invoice) -> str | None:
+    if invoice.status == "paid" or invoice.balance_due <= 0:
+        return None
+    if invoice.final_notice_sent_at:
+        return "final_notice"
+    if invoice.overdue_reminder_sent_at or invoice.status == "overdue":
+        return "overdue"
+    if invoice.due_soon_reminder_sent_at:
+        return "due_soon"
+    return None
+
+
+def needs_collection_attention(invoice: Invoice) -> bool:
+    if invoice.status in ["draft", "paid", "cancelled"] or invoice.balance_due <= 0:
+        return False
+    today = date.today()
+    due_soon_date = today + timedelta(days=3)
+    if invoice.due_date < today:
+        return True
+    return invoice.due_date <= due_soon_date and invoice.due_soon_reminder_sent_at is None
 
 
 @router.get("", response_model=list[InvoiceList])
@@ -84,6 +106,12 @@ async def list_invoices(
             balance_due=inv.balance_due,
             status=inv.status,
             due_date=inv.due_date,
+            due_soon_reminder_sent_at=inv.due_soon_reminder_sent_at,
+            overdue_reminder_sent_at=inv.overdue_reminder_sent_at,
+            final_notice_sent_at=inv.final_notice_sent_at,
+            last_collection_email_sent_at=inv.last_collection_email_sent_at,
+            collection_stage=get_collection_stage(inv),
+            needs_collection_attention=needs_collection_attention(inv),
             created_at=inv.created_at,
         )
         for inv in invoices

@@ -35,3 +35,7 @@
 - Upgraded reminder emails to include a richer HTML template and direct clients back to `/book/manage/{token}`.
 - Added public self-service rescheduling controls on `/book/manage/{token}` with date-based slot loading and one-click reschedule actions.
 - Verified the booking email and self-service management slice with focused backend tests and a live `200` response from `/book/manage/test-token`.
+- Added collections visibility metadata to invoice list responses, including reminder timestamps, collection stage, and a follow-up attention flag.
+- Expanded invoice stats with `collections_attention_count` so the invoice screen can show follow-up workload at a glance.
+- Updated the invoice list UI to surface collection badges and last-email timestamps directly in the table.
+- Verified the collections-visibility slice with focused invoice tests, backend compile checks, and a live `200` response from `/invoices`.
