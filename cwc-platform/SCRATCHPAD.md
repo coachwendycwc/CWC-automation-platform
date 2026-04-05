@@ -39,3 +39,5 @@
 - Expanded invoice stats with `collections_attention_count` so the invoice screen can show follow-up workload at a glance.
 - Updated the invoice list UI to surface collection badges and last-email timestamps directly in the table.
 - Verified the collections-visibility slice with focused invoice tests, backend compile checks, and a live `200` response from `/invoices`.
+- Added a dashboard-level `Needs Follow-Up` invoice metric so collections workload is visible from the main home screen.
+- Extended `/api/reports/dashboard` to return `invoices.collections_attention` for invoices that are overdue or due soon without a reminder.

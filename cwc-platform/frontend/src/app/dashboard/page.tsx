@@ -36,7 +36,14 @@ import {
 
 interface DashboardData {
   revenue: { total: number; this_month: number; outstanding: number };
-  invoices: { draft: number; sent: number; partial: number; paid: number; overdue: number };
+  invoices: {
+    draft: number;
+    sent: number;
+    partial: number;
+    paid: number;
+    overdue: number;
+    collections_attention: number;
+  };
   contacts: number;
   projects: { active: number };
   bookings: { this_month: number; upcoming: number };
@@ -174,6 +181,14 @@ export default function DashboardPage() {
       bgColor: "bg-accent/10",
       href: "/bookings",
     },
+    {
+      title: "Needs Follow-Up",
+      value: dashboard?.invoices.collections_attention || 0,
+      icon: AlertCircle,
+      color: "text-destructive",
+      bgColor: "bg-destructive/10",
+      href: "/invoices",
+    },
   ];
 
   const quickStats = [
@@ -203,7 +218,7 @@ export default function DashboardPage() {
         </div>
 
         {/* Main Stats Grid */}
-        <div className="grid gap-4 md:grid-cols-2 lg:grid-cols-4">
+        <div className="grid gap-4 md:grid-cols-2 xl:grid-cols-5">
           {statCards.map((stat) => (
             <Link key={stat.title} href={stat.href}>
               <Card className="hover:shadow-md transition-shadow cursor-pointer">

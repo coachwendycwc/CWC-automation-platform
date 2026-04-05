@@ -64,6 +64,7 @@ This file tracks active execution items, blockers, and verification work.
 - [x] Add automated due-soon reminders in workflow scheduler
 - [x] Add automated overdue and final notice collections emails in workflow scheduler
 - [x] Add collections visibility to invoice list and stats so follow-up work is obvious
+- [x] Add dashboard-level follow-up visibility for invoice collections attention
 
 ## Blocked / Depends On
 
@@ -93,6 +94,7 @@ This file tracks active execution items, blockers, and verification work.
 - [ ] Verify invoice detail page collections card reflects live reminder timestamps
 - [ ] Verify invoice list shows follow-up badges and last collection email timestamps correctly
 - [ ] Verify automated due-soon, overdue, and final notice emails in a real configured environment
+- [ ] Verify dashboard `Needs Follow-Up` metric tracks invoice collections workload accurately
 - [ ] Client portal access for post-session assets
 - [ ] Pilot readiness for active CWC workflows
 
@@ -109,6 +111,5 @@ This file tracks active execution items, blockers, and verification work.
 - [ ] Google calendar conflict verification with a live connected account
 - [ ] Add branded follow-up reminder emails beyond confirmation/cancellation
 - [ ] Add collections cadence controls and custom reminder templates
-- [ ] Add collections visibility summary to the main dashboard, not just invoice stats
 - [ ] Session intelligence domain model expansion
 - [ ] Finance ledger domain design doc
