@@ -8,9 +8,10 @@ import { publicBookingApi } from "@/lib/api";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Textarea } from "@/components/ui/textarea";
+import { Input } from "@/components/ui/input";
 import { Skeleton } from "@/components/ui/skeleton";
 import { Calendar, Clock3, ExternalLink, MapPin, Video } from "lucide-react";
-import type { PublicBookingResult } from "@/types";
+import type { PublicBookingResult, TimeSlot } from "@/types";
 
 export default function ManageBookingPage() {
   const params = useParams();
@@ -18,6 +19,10 @@ export default function ManageBookingPage() {
   const [loading, setLoading] = useState(true);
   const [cancelling, setCancelling] = useState(false);
   const [cancelReason, setCancelReason] = useState("");
+  const [selectedDate, setSelectedDate] = useState("");
+  const [availableSlots, setAvailableSlots] = useState<TimeSlot[]>([]);
+  const [loadingSlots, setLoadingSlots] = useState(false);
+  const [rescheduling, setRescheduling] = useState(false);
 
   useEffect(() => {
     if (!params.token) return;
@@ -55,6 +60,48 @@ export default function ManageBookingPage() {
     }
   };
 
+  const loadSlots = async (date: string) => {
+    if (!booking?.booking_type_slug) return;
+    setLoadingSlots(true);
+    try {
+      const data = await publicBookingApi.getSlots(booking.booking_type_slug, date);
+      setAvailableSlots(data.slots as TimeSlot[]);
+    } catch (error) {
+      const message = error instanceof Error ? error.message : "Failed to load available times";
+      toast.error(message);
+      setAvailableSlots([]);
+    } finally {
+      setLoadingSlots(false);
+    }
+  };
+
+  const handleDateChange = async (value: string) => {
+    setSelectedDate(value);
+    if (!value) {
+      setAvailableSlots([]);
+      return;
+    }
+    await loadSlots(value);
+  };
+
+  const handleReschedule = async (startTime: string) => {
+    if (!params.token || !booking?.can_reschedule) return;
+
+    setRescheduling(true);
+    try {
+      const updated = await publicBookingApi.rescheduleBooking(params.token as string, startTime);
+      setBooking(updated);
+      setSelectedDate("");
+      setAvailableSlots([]);
+      toast.success("Booking rescheduled");
+    } catch (error) {
+      const message = error instanceof Error ? error.message : "Failed to reschedule booking";
+      toast.error(message);
+    } finally {
+      setRescheduling(false);
+    }
+  };
+
   const formatDate = (value: string) =>
     new Date(value).toLocaleString("en-US", {
       weekday: "long",
@@ -62,6 +109,13 @@ export default function ManageBookingPage() {
       day: "numeric",
       hour: "numeric",
       minute: "2-digit",
+    });
+
+  const formatTime = (value: string) =>
+    new Date(value).toLocaleTimeString("en-US", {
+      hour: "numeric",
+      minute: "2-digit",
+      hour12: true,
     });
 
   if (loading) {
@@ -191,6 +245,48 @@ export default function ManageBookingPage() {
             </CardTitle>
           </CardHeader>
           <CardContent className="space-y-4 px-8 pb-8">
+            {booking.can_reschedule && booking.status !== "cancelled" && (
+              <div className="space-y-4 rounded-2xl border border-slate-200 bg-slate-50/80 p-5">
+                <div>
+                  <div className="mb-1 text-sm font-medium text-slate-800">Reschedule</div>
+                  <p className="text-sm text-slate-600">
+                    Pick a new date to see the currently available times for this session.
+                  </p>
+                </div>
+                <Input
+                  type="date"
+                  value={selectedDate}
+                  onChange={(event) => void handleDateChange(event.target.value)}
+                  className="h-12 rounded-2xl border-slate-200 bg-white"
+                />
+                {loadingSlots ? (
+                  <div className="grid grid-cols-2 gap-3">
+                    {Array.from({ length: 4 }).map((_, index) => (
+                      <Skeleton key={index} className="h-11 rounded-2xl" />
+                    ))}
+                  </div>
+                ) : availableSlots.length > 0 ? (
+                  <div className="grid grid-cols-2 gap-3">
+                    {availableSlots.map((slot) => (
+                      <Button
+                        key={slot.start_time}
+                        variant="outline"
+                        className="justify-center rounded-2xl"
+                        disabled={rescheduling}
+                        onClick={() => void handleReschedule(slot.start_time)}
+                      >
+                        {rescheduling ? "Updating..." : formatTime(slot.start_time)}
+                      </Button>
+                    ))}
+                  </div>
+                ) : selectedDate ? (
+                  <p className="text-sm text-slate-500">
+                    No available times on that date.
+                  </p>
+                ) : null}
+              </div>
+            )}
+
             {booking.can_cancel ? (
               <>
                 <p className="text-sm text-slate-600">

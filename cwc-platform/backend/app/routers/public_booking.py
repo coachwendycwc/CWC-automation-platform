@@ -18,6 +18,7 @@ from app.models.invoice import Invoice
 from app.models.user import User
 from app.schemas.invoice import LineItemCreate
 from app.services.booking_calendar_service import BookingCalendarService
+from app.services.email_service import email_service
 from app.services.invoice_service import InvoiceService
 from app.services.scheduling_service import SchedulingService
 from app.services.zoom_service import zoom_service
@@ -142,6 +143,10 @@ async def create_booking_invoice(
     await db.commit()
     await db.refresh(invoice)
     return invoice
+
+
+def get_manage_booking_url(confirmation_token: str) -> str:
+    return f"{settings.frontend_url}/book/manage/{confirmation_token}"
 
 
 @router.get("/{slug}", response_model=PublicBookingTypeInfo)
@@ -334,7 +339,17 @@ async def create_public_booking(
         await provision_public_booking_meeting(user, booking, booking_type, contact, db)
         await db.refresh(booking)
 
-    # TODO: Send confirmation email
+    if booking.status == "confirmed" and contact.email:
+        await email_service.send_booking_confirmation(
+            to_email=contact.email,
+            contact_name=contact.full_name,
+            booking_type=booking_type.name,
+            booking_date=booking.start_time,
+            booking_duration=booking_type.duration_minutes,
+            meeting_link=booking.meeting_url or booking_type.location_details,
+            manage_booking_url=get_manage_booking_url(booking.confirmation_token),
+            instructions=booking_type.post_booking_instructions,
+        )
 
     can_modify = await scheduling.can_cancel(booking)
 
@@ -345,6 +360,7 @@ async def create_public_booking(
         status=booking.status,
         confirmation_token=booking.confirmation_token,
         booking_type_name=booking_type.name,
+        booking_type_slug=booking_type.slug,
         booking_type_duration=booking_type.duration_minutes,
         meeting_provider=booking.meeting_provider,
         meeting_url=booking.meeting_url,
@@ -390,6 +406,7 @@ async def get_booking_by_token(
         status=booking.status,
         confirmation_token=booking.confirmation_token,
         booking_type_name=booking.booking_type.name,
+        booking_type_slug=booking.booking_type.slug,
         booking_type_duration=booking.booking_type.duration_minutes,
         meeting_provider=booking.meeting_provider,
         meeting_url=booking.meeting_url,
@@ -480,7 +497,17 @@ async def reschedule_booking(
         )
         await db.refresh(booking)
 
-    # TODO: Send reschedule confirmation email
+    if booking.contact and booking.contact.email:
+        await email_service.send_booking_confirmation(
+            to_email=booking.contact.email,
+            contact_name=booking.contact.full_name,
+            booking_type=booking.booking_type.name,
+            booking_date=booking.start_time,
+            booking_duration=booking.booking_type.duration_minutes,
+            meeting_link=booking.meeting_url or booking.booking_type.location_details,
+            manage_booking_url=get_manage_booking_url(booking.confirmation_token),
+            instructions=booking.booking_type.post_booking_instructions,
+        )
 
     can_modify = await scheduling.can_cancel(booking)
 
@@ -491,6 +518,7 @@ async def reschedule_booking(
         status=booking.status,
         confirmation_token=booking.confirmation_token,
         booking_type_name=booking.booking_type.name,
+        booking_type_slug=booking.booking_type.slug,
         booking_type_duration=booking.booking_type.duration_minutes,
         meeting_provider=booking.meeting_provider,
         meeting_url=booking.meeting_url,
@@ -561,7 +589,13 @@ async def cancel_booking_self_service(
         await calendar_service.delete_booking_event(user=user, booking=booking)
         await db.refresh(booking)
 
-    # TODO: Send cancellation confirmation email
+    if booking.contact and booking.contact.email:
+        await email_service.send_booking_cancelled(
+            to_email=booking.contact.email,
+            contact_name=booking.contact.full_name,
+            booking_type=booking_type.name,
+            booking_date=booking.start_time,
+        )
 
     return PublicBookingResponse(
         id=booking.id,
@@ -570,6 +604,7 @@ async def cancel_booking_self_service(
         status=booking.status,
         confirmation_token=booking.confirmation_token,
         booking_type_name=booking_type.name,
+        booking_type_slug=booking_type.slug,
         booking_type_duration=booking_type.duration_minutes,
         meeting_provider=booking.meeting_provider,
         meeting_url=booking.meeting_url,

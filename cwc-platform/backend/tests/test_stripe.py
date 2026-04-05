@@ -370,6 +370,7 @@ class TestStripeWebhook:
             patch("app.routers.stripe.stripe_service") as mock_service,
             patch("app.routers.stripe.provision_public_booking_meeting", new=AsyncMock()) as mock_provision,
             patch("app.routers.stripe.email_service.send_payment_confirmation", new=AsyncMock()),
+            patch("app.routers.stripe.email_service.send_booking_confirmation", new=AsyncMock()) as mock_booking_confirmation,
             patch("app.routers.stripe.email_service.send_onboarding_assessment", new=AsyncMock()),
         ):
             mock_service.verify_webhook_signature.return_value = webhook_event
@@ -387,6 +388,7 @@ class TestStripeWebhook:
         await db_session.refresh(booking)
         assert booking.status == "confirmed"
         mock_provision.assert_awaited_once()
+        mock_booking_confirmation.assert_awaited_once()
 
     @pytest.mark.asyncio
     async def test_webhook_payment_intent_succeeded(

@@ -108,6 +108,11 @@ async def provision_booking_meeting(
         await db.refresh(booking)
 
 
+def get_manage_booking_url(confirmation_token: str) -> str:
+    from app.config import get_settings
+    return f"{get_settings().frontend_url}/book/manage/{confirmation_token}"
+
+
 @router.get("", response_model=BookingList)
 async def list_bookings(
     status_filter: Optional[str] = Query(None, alias="status"),
@@ -231,19 +236,19 @@ async def create_booking(
     await db.commit()
     await db.refresh(booking)
 
-    # Send confirmation email if auto-confirmed
-    if booking.status == "confirmed" and contact.email:
-        await email_service.send_booking_confirmation(
-            to_email=contact.email,
-            contact_name=contact.full_name,
-            booking_type=booking_type.name,
-            booking_date=booking.start_time,
-            booking_duration=booking_type.duration_minutes,
-            meeting_link=booking.meeting_url or booking_type.location_details,
-        )
-
     if booking.status == "confirmed":
         await provision_booking_meeting(current_user, booking, booking_type, contact, db)
+        if contact.email:
+            await email_service.send_booking_confirmation(
+                to_email=contact.email,
+                contact_name=contact.full_name,
+                booking_type=booking_type.name,
+                booking_date=booking.start_time,
+                booking_duration=booking_type.duration_minutes,
+                meeting_link=booking.meeting_url or booking_type.location_details,
+                manage_booking_url=get_manage_booking_url(booking.confirmation_token),
+                instructions=booking_type.post_booking_instructions,
+            )
 
     return BookingDetailResponse(
         id=booking.id,
@@ -411,6 +416,8 @@ async def confirm_booking(
             booking_date=booking.start_time,
             booking_duration=booking.booking_type.duration_minutes,
             meeting_link=meeting_link,
+            manage_booking_url=get_manage_booking_url(booking.confirmation_token),
+            instructions=booking.booking_type.post_booking_instructions,
         )
 
     return BookingDetailResponse(

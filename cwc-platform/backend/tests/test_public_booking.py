@@ -324,6 +324,41 @@ class TestCreatePublicBooking:
         assert bookings[0].meeting_url == "https://meet.google.com/test-link"
 
     @pytest.mark.anyio
+    async def test_create_confirmed_booking_sends_confirmation_email(
+        self, db_session, client: AsyncClient, test_booking_type: BookingType, test_user_for_booking: User
+    ):
+        today = date.today()
+        days_until_monday = (7 - today.weekday()) % 7 or 7
+        next_monday = today + timedelta(days=days_until_monday)
+        start_time = datetime.combine(next_monday, time(11, 0))
+
+        with (
+            patch(
+                "app.routers.public_booking.SchedulingService.get_available_slots",
+                new=AsyncMock(return_value=[start_time]),
+            ),
+            patch(
+                "app.routers.public_booking.email_service.send_booking_confirmation",
+                new=AsyncMock(),
+            ) as mock_confirmation,
+        ):
+            response = await client.post(
+                f"/api/book/{test_booking_type.slug}",
+                json={
+                    "start_time": start_time.isoformat(),
+                    "first_name": "Jamie",
+                    "last_name": "Rivera",
+                    "email": "jamie@example.com",
+                },
+            )
+
+        assert response.status_code == 201
+        mock_confirmation.assert_awaited_once()
+        kwargs = mock_confirmation.await_args.kwargs
+        assert "/book/manage/" in kwargs["manage_booking_url"]
+        assert kwargs["instructions"] == "Bring your biggest leadership question."
+
+    @pytest.mark.anyio
     async def test_create_paid_booking_creates_invoice_and_payment_url(
         self, db_session, client: AsyncClient, test_booking_type: BookingType, test_user_for_booking: User
     ):
@@ -400,6 +435,7 @@ class TestManageBooking:
         data = response.json()
         assert data["status"] == "confirmed"
         assert data["confirmation_token"] == confirmation_token
+        assert data["booking_type_slug"] == test_booking_type.slug
         assert data["location_details"] == "Zoom link will be sent automatically"
         assert data["post_booking_instructions"] == "Bring your biggest leadership question."
 

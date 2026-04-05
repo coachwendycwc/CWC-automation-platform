@@ -80,6 +80,7 @@ class PublicBookingResponse(BaseModel):
     status: str
     confirmation_token: str
     booking_type_name: str
+    booking_type_slug: str
     booking_type_duration: int
     meeting_provider: str | None = None
     meeting_url: str | None = None

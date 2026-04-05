@@ -27,3 +27,11 @@
 - Added `/api/invoices/{id}/send-reminder` for manual due-soon, overdue, and final notice collections emails.
 - Added workflow scheduler automation for due-soon reminders, overdue reminders, and final notices.
 - Upgraded the invoice detail page with collection activity visibility and one-click reminder sending.
+
+## 2026-04-05
+
+- Upgraded booking confirmation emails so free, paid, admin-created, and rescheduled bookings can include meeting links, booking instructions, and a `Manage booking` CTA.
+- Wired paid-booking confirmation delivery into Stripe checkout completion after the booking is actually confirmed and provisioned.
+- Upgraded reminder emails to include a richer HTML template and direct clients back to `/book/manage/{token}`.
+- Added public self-service rescheduling controls on `/book/manage/{token}` with date-based slot loading and one-click reschedule actions.
+- Verified the booking email and self-service management slice with focused backend tests and a live `200` response from `/book/manage/test-token`.

@@ -16,6 +16,8 @@ This file tracks active execution items, blockers, and verification work.
 - [x] Seed visible dev branding for Wendy-facing booking page
 - [x] Add direct image uploads for profile photo and booking logo
 - [x] Auto-detect booking-page accent color from uploaded logo
+- [x] Add branded booking confirmation emails with meeting links, instructions, and manage-booking CTA
+- [x] Add public manage-booking reschedule UI for self-service changes
 
 ### Scheduling Stack Replacement
 - [x] Add backend foundation for multi-calendar connections
@@ -80,7 +82,9 @@ This file tracks active execution items, blockers, and verification work.
 - [ ] Verify seeded test booking page at `/book/strategy-session`
 - [ ] Verify paid booking flow lands on `/pay/{token}/success` with live booking summary and `Manage booking` action
 - [ ] Verify `/book/manage/{token}` loads session details and allows self-service cancellation
+- [ ] Verify `/book/manage/{token}` loads available slots and completes self-service rescheduling
 - [ ] Verify free booking confirmation screen links to `/book/manage/{token}`
+- [ ] Verify booking confirmation emails include meeting link, instructions, and `Manage booking` CTA for free, paid, and rescheduled bookings
 - [ ] Verify booking branding edits persist from `/settings/profile` to `/book/strategy-session`
 - [ ] Verify direct profile-photo and booking-logo uploads persist from `/settings/profile`
 - [ ] Verify uploaded booking logo auto-updates `booking_page_brand_color`
@@ -101,8 +105,7 @@ This file tracks active execution items, blockers, and verification work.
 ## Next Up After Current Slice
 
 - [ ] Google calendar conflict verification with a live connected account
-- [ ] Booking confirmation and follow-up emails with branded styling
-- [ ] Public booking reschedule UI on top of `/api/book/manage/{token}/reschedule`
+- [ ] Add branded follow-up reminder emails beyond confirmation/cancellation
 - [ ] Add collections cadence controls and custom reminder templates
 - [ ] Session intelligence domain model expansion
 - [ ] Finance ledger domain design doc

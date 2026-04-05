@@ -26,7 +26,7 @@ from app.models.subscription import Subscription
 from app.models.stripe_price import StripePrice
 from app.models.onboarding_assessment import OnboardingAssessment
 from app.config import get_settings
-from app.routers.public_booking import get_first_user, provision_public_booking_meeting
+from app.routers.public_booking import get_first_user, provision_public_booking_meeting, get_manage_booking_url
 
 settings = get_settings()
 
@@ -237,6 +237,16 @@ async def handle_checkout_completed(db: AsyncSession, session: dict):
             user = await get_first_user(db)
             await provision_public_booking_meeting(user, booking, booking.booking_type, booking.contact, db)
             await db.refresh(booking)
+            await email_service.send_booking_confirmation(
+                to_email=booking.contact.email,
+                contact_name=booking.contact.full_name,
+                booking_type=booking.booking_type.name,
+                booking_date=booking.start_time,
+                booking_duration=booking.booking_type.duration_minutes,
+                meeting_link=booking.meeting_url or booking.booking_type.location_details,
+                manage_booking_url=get_manage_booking_url(booking.confirmation_token),
+                instructions=booking.booking_type.post_booking_instructions,
+            )
 
     # Send receipt email
     if invoice.contact and invoice.contact.email:

@@ -314,6 +314,7 @@ export interface PublicBookingResult {
   status: string;
   confirmation_token: string;
   booking_type_name: string;
+  booking_type_slug: string;
   booking_type_duration: number;
   meeting_provider?: string | null;
   meeting_url?: string | null;
