@@ -3,7 +3,7 @@ from datetime import datetime
 from decimal import Decimal
 from typing import TYPE_CHECKING
 
-from sqlalchemy import String, Integer, Boolean, DateTime, Text, Numeric, func
+from sqlalchemy import String, Integer, Boolean, DateTime, Text, Numeric, JSON, func
 from sqlalchemy.orm import Mapped, mapped_column, relationship
 
 from app.database import Base
@@ -26,6 +26,13 @@ class BookingType(Base):
     duration_minutes: Mapped[int] = mapped_column(Integer, nullable=False, default=60)
     color: Mapped[str] = mapped_column(String(7), nullable=False, default="#3B82F6")
     price: Mapped[Decimal | None] = mapped_column(Numeric(10, 2), nullable=True)
+    show_price_on_booking_page: Mapped[bool] = mapped_column(
+        Boolean, nullable=False, default=True
+    )
+    location_type: Mapped[str] = mapped_column(String(30), nullable=False, default="zoom")
+    location_details: Mapped[str | None] = mapped_column(Text, nullable=True)
+    post_booking_instructions: Mapped[str | None] = mapped_column(Text, nullable=True)
+    intake_questions: Mapped[list[dict]] = mapped_column(JSON, nullable=False, default=list)
     buffer_before: Mapped[int] = mapped_column(Integer, nullable=False, default=0)
     buffer_after: Mapped[int] = mapped_column(Integer, nullable=False, default=15)
     min_notice_hours: Mapped[int] = mapped_column(Integer, nullable=False, default=24)

@@ -84,6 +84,42 @@ export const authApi = {
     }),
 };
 
+export const usersApi = {
+  getMe: (token: string) =>
+    fetchApi<any>("/api/users/me", { token }),
+
+  updateMe: (token: string, data: any) =>
+    fetchApi<any>("/api/users/me", {
+      method: "PUT",
+      body: JSON.stringify(data),
+      token,
+    }),
+
+  uploadImage: async (
+    token: string,
+    target: "avatar" | "booking_logo" | "booking_banner",
+    file: File
+  ): Promise<{ user: any; suggested_colors: string[] }> => {
+    const formData = new FormData();
+    formData.append("file", file);
+
+    const response = await fetch(`${API_URL}/api/users/me/upload-image?target=${target}`, {
+      method: "POST",
+      headers: {
+        Authorization: `Bearer ${token}`,
+      },
+      body: formData,
+    });
+
+    if (!response.ok) {
+      const error = await response.json().catch(() => ({ detail: "Upload failed" }));
+      throw new ApiError(response.status, error.detail || "Upload failed");
+    }
+
+    return response.json();
+  },
+};
+
 // Organizations API
 export const organizationsApi = {
   list: (token: string, params?: { page?: number; size?: number; search?: string }) => {
@@ -228,6 +264,45 @@ export const availabilityApi = {
 
   deleteOverride: (token: string, id: string) =>
     fetchApi<void>(`/api/availability/overrides/${id}`, {
+      method: "DELETE",
+      token,
+    }),
+};
+
+// Integrations API
+export const integrationsApi = {
+  getStatus: (token: string) =>
+    fetchApi<any>("/api/integrations/status", { token }),
+
+  listCalendarConnections: (token: string) =>
+    fetchApi<any[]>("/api/integrations/calendar-connections", { token }),
+
+  getGoogleAuthUrl: (token: string) =>
+    fetchApi<{ auth_url: string }>("/api/integrations/google/auth-url", { token }),
+
+  disconnectGoogle: (token: string) =>
+    fetchApi<{ message: string }>("/api/integrations/google/disconnect", {
+      method: "DELETE",
+      token,
+    }),
+
+  getZoomAuthUrl: (token: string) =>
+    fetchApi<{ auth_url: string }>("/api/integrations/zoom/auth-url", { token }),
+
+  disconnectZoom: (token: string) =>
+    fetchApi<{ message: string }>("/api/integrations/zoom/disconnect", {
+      method: "DELETE",
+      token,
+    }),
+
+  setPrimaryCalendarConnection: (token: string, connectionId: string) =>
+    fetchApi<any>(`/api/integrations/calendar-connections/${connectionId}/set-primary`, {
+      method: "POST",
+      token,
+    }),
+
+  disconnectCalendarConnection: (token: string, connectionId: string) =>
+    fetchApi<{ message: string }>(`/api/integrations/calendar-connections/${connectionId}`, {
       method: "DELETE",
       token,
     }),

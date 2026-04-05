@@ -16,7 +16,9 @@ from app.database import get_db
 from app.services.auth_service import get_current_user
 from app.services.google_calendar_service import google_calendar_service
 from app.services.zoom_service import zoom_service
+from app.models.calendar_connection import CalendarConnection
 from app.models.user import User
+from app.schemas.calendar_connection import CalendarConnectionResponse
 
 router = APIRouter(prefix="/api/integrations", tags=["integrations"])
 
@@ -24,6 +26,7 @@ router = APIRouter(prefix="/api/integrations", tags=["integrations"])
 class IntegrationStatus(BaseModel):
     """Integration status response."""
     google_calendar: bool = False
+    google_calendar_accounts: int = 0
     zoom: bool = False
 
 
@@ -41,15 +44,151 @@ class GoogleCalendarEvent(BaseModel):
 oauth_states: dict[str, str] = {}
 
 
+async def _get_google_calendar_connections(
+    db: AsyncSession,
+    user_id: str,
+) -> list[CalendarConnection]:
+    result = await db.execute(
+        select(CalendarConnection)
+        .where(
+            CalendarConnection.user_id == user_id,
+            CalendarConnection.provider == "google",
+            CalendarConnection.is_active == True,
+        )
+        .order_by(CalendarConnection.is_primary.desc(), CalendarConnection.created_at.asc())
+    )
+    return list(result.scalars().all())
+
+
+async def _get_primary_google_connection(
+    db: AsyncSession,
+    user_id: str,
+) -> CalendarConnection | None:
+    result = await db.execute(
+        select(CalendarConnection).where(
+            CalendarConnection.user_id == user_id,
+            CalendarConnection.provider == "google",
+            CalendarConnection.is_active == True,
+            CalendarConnection.is_primary == True,
+        )
+    )
+    connection = result.scalar_one_or_none()
+    if connection:
+        return connection
+
+    connections = await _get_google_calendar_connections(db, user_id)
+    return connections[0] if connections else None
+
+
 @router.get("/status", response_model=IntegrationStatus)
 async def get_integration_status(
+    db: AsyncSession = Depends(get_db),
     current_user: User = Depends(get_current_user),
 ) -> IntegrationStatus:
     """Get status of all integrations for current user."""
+    google_connections = await _get_google_calendar_connections(db, current_user.id)
     return IntegrationStatus(
-        google_calendar=current_user.google_calendar_token is not None,
+        google_calendar=bool(current_user.google_calendar_token is not None or google_connections),
+        google_calendar_accounts=len(google_connections),
         zoom=current_user.zoom_token is not None,
     )
+
+
+@router.get("/calendar-connections", response_model=list[CalendarConnectionResponse])
+async def list_calendar_connections(
+    db: AsyncSession = Depends(get_db),
+    current_user: User = Depends(get_current_user),
+) -> list[CalendarConnectionResponse]:
+    """List all connected calendar accounts for the current user."""
+    result = await db.execute(
+        select(CalendarConnection)
+        .where(CalendarConnection.user_id == current_user.id)
+        .order_by(CalendarConnection.provider.asc(), CalendarConnection.is_primary.desc(), CalendarConnection.created_at.asc())
+    )
+    return [
+        CalendarConnectionResponse.model_validate(connection)
+        for connection in result.scalars().all()
+    ]
+
+
+@router.post("/calendar-connections/{connection_id}/set-primary", response_model=CalendarConnectionResponse)
+async def set_primary_calendar_connection(
+    connection_id: str,
+    db: AsyncSession = Depends(get_db),
+    current_user: User = Depends(get_current_user),
+) -> CalendarConnectionResponse:
+    """Mark one calendar connection as the primary write-back calendar."""
+    result = await db.execute(
+        select(CalendarConnection).where(
+            CalendarConnection.id == connection_id,
+            CalendarConnection.user_id == current_user.id,
+            CalendarConnection.is_active == True,
+        )
+    )
+    connection = result.scalar_one_or_none()
+    if not connection:
+        raise HTTPException(status_code=404, detail="Calendar connection not found")
+
+    other_connections = await db.execute(
+        select(CalendarConnection).where(
+            CalendarConnection.user_id == current_user.id,
+            CalendarConnection.provider == connection.provider,
+            CalendarConnection.is_active == True,
+        )
+    )
+    for other in other_connections.scalars().all():
+        other.is_primary = other.id == connection.id
+
+    # Preserve the legacy primary Google token field until the old path is retired.
+    if connection.provider == "google":
+        current_user.google_calendar_token = connection.token_data
+
+    await db.commit()
+    await db.refresh(connection)
+    return CalendarConnectionResponse.model_validate(connection)
+
+
+@router.delete("/calendar-connections/{connection_id}")
+async def disconnect_calendar_connection(
+    connection_id: str,
+    db: AsyncSession = Depends(get_db),
+    current_user: User = Depends(get_current_user),
+) -> dict:
+    """Disconnect a specific calendar connection."""
+    result = await db.execute(
+        select(CalendarConnection).where(
+            CalendarConnection.id == connection_id,
+            CalendarConnection.user_id == current_user.id,
+        )
+    )
+    connection = result.scalar_one_or_none()
+    if not connection:
+        raise HTTPException(status_code=404, detail="Calendar connection not found")
+
+    provider = connection.provider
+    await db.delete(connection)
+    await db.commit()
+
+    remaining_connections = await db.execute(
+        select(CalendarConnection).where(
+            CalendarConnection.user_id == current_user.id,
+            CalendarConnection.provider == provider,
+            CalendarConnection.is_active == True,
+        )
+    )
+    remaining = remaining_connections.scalars().all()
+
+    if provider == "google":
+        if remaining:
+            primary = next((item for item in remaining if item.is_primary), remaining[0])
+            if not primary.is_primary:
+                primary.is_primary = True
+            current_user.google_calendar_token = primary.token_data
+        else:
+            current_user.google_calendar_token = None
+        await db.commit()
+
+    return {"message": "Calendar connection disconnected"}
 
 
 # ============ Google Calendar ============
@@ -96,18 +235,58 @@ async def google_oauth_callback(
         # Exchange code for tokens
         token_data = google_calendar_service.exchange_code(code)
 
-        # Store tokens in user record
+        # Keep the legacy token field for existing integrations code paths.
         user.google_calendar_token = token_data
+
+        existing_connection_result = await db.execute(
+            select(CalendarConnection).where(
+                CalendarConnection.user_id == user.id,
+                CalendarConnection.provider == "google",
+                CalendarConnection.calendar_id == "primary",
+                CalendarConnection.is_active == True,
+            )
+        )
+        connection = existing_connection_result.scalar_one_or_none()
+
+        if connection:
+            connection.token_data = token_data
+            connection.is_primary = True
+        else:
+            # New multi-calendar foundation. For now each Google OAuth link
+            # creates or refreshes the user's primary Google calendar connection.
+            connection = CalendarConnection(
+                user_id=user.id,
+                provider="google",
+                calendar_id="primary",
+                calendar_name="Primary Calendar",
+                token_data=token_data,
+                is_primary=True,
+                provider_metadata={"source": "oauth_callback"},
+            )
+            db.add(connection)
+
+        # Ensure only one Google connection is marked primary.
+        other_connections_query = select(CalendarConnection).where(
+            CalendarConnection.user_id == user.id,
+            CalendarConnection.provider == "google",
+        )
+        if connection.id:
+            other_connections_query = other_connections_query.where(
+                CalendarConnection.id != connection.id
+            )
+        other_connections = await db.execute(other_connections_query)
+        for other in other_connections.scalars().all():
+            other.is_primary = False
 
         await db.commit()
 
         # Redirect to settings page with success message
         frontend_url = os.getenv("FRONTEND_URL", "http://localhost:3001")
-        return RedirectResponse(f"{frontend_url}/settings?google_connected=true")
+        return RedirectResponse(f"{frontend_url}/settings/integrations?google_connected=true")
 
     except Exception as e:
         frontend_url = os.getenv("FRONTEND_URL", "http://localhost:3001")
-        return RedirectResponse(f"{frontend_url}/settings?google_error={str(e)}")
+        return RedirectResponse(f"{frontend_url}/settings/integrations?google_error={str(e)}")
 
 
 @router.delete("/google/disconnect")
@@ -122,6 +301,9 @@ async def disconnect_google(
 
     if user:
         user.google_calendar_token = None
+        connections = await _get_google_calendar_connections(db, current_user.id)
+        for connection in connections:
+            await db.delete(connection)
         await db.commit()
 
     return {"message": "Google Calendar disconnected"}
@@ -130,10 +312,14 @@ async def disconnect_google(
 @router.get("/google/events")
 async def list_google_events(
     days: int = Query(30, ge=1, le=365),
+    db: AsyncSession = Depends(get_db),
     current_user: User = Depends(get_current_user),
 ) -> list[dict]:
     """List upcoming Google Calendar events."""
-    if not current_user.google_calendar_token:
+    primary_connection = await _get_primary_google_connection(db, current_user.id)
+    token_data = primary_connection.token_data if primary_connection and primary_connection.token_data else current_user.google_calendar_token
+
+    if not token_data:
         raise HTTPException(
             status_code=400,
             detail="Google Calendar not connected",
@@ -146,7 +332,7 @@ async def list_google_events(
         time_max = time_min + timedelta(days=days)
 
         events = google_calendar_service.list_events(
-            token_data=current_user.google_calendar_token,
+            token_data=token_data,
             time_min=time_min,
             time_max=time_max,
         )
@@ -159,10 +345,14 @@ async def list_google_events(
 @router.post("/google/events")
 async def create_google_event(
     event: GoogleCalendarEvent,
+    db: AsyncSession = Depends(get_db),
     current_user: User = Depends(get_current_user),
 ) -> dict:
     """Create a Google Calendar event."""
-    if not current_user.google_calendar_token:
+    primary_connection = await _get_primary_google_connection(db, current_user.id)
+    token_data = primary_connection.token_data if primary_connection and primary_connection.token_data else current_user.google_calendar_token
+
+    if not token_data:
         raise HTTPException(
             status_code=400,
             detail="Google Calendar not connected",
@@ -170,7 +360,7 @@ async def create_google_event(
 
     try:
         result = google_calendar_service.create_event(
-            token_data=current_user.google_calendar_token,
+            token_data=token_data,
             summary=event.summary,
             start_time=event.start_time,
             end_time=event.end_time,
@@ -187,10 +377,14 @@ async def create_google_event(
 @router.delete("/google/events/{event_id}")
 async def delete_google_event(
     event_id: str,
+    db: AsyncSession = Depends(get_db),
     current_user: User = Depends(get_current_user),
 ) -> dict:
     """Delete a Google Calendar event."""
-    if not current_user.google_calendar_token:
+    primary_connection = await _get_primary_google_connection(db, current_user.id)
+    token_data = primary_connection.token_data if primary_connection and primary_connection.token_data else current_user.google_calendar_token
+
+    if not token_data:
         raise HTTPException(
             status_code=400,
             detail="Google Calendar not connected",
@@ -198,7 +392,7 @@ async def delete_google_event(
 
     try:
         success = google_calendar_service.delete_event(
-            token_data=current_user.google_calendar_token,
+            token_data=token_data,
             event_id=event_id,
         )
 
@@ -263,11 +457,11 @@ async def zoom_oauth_callback(
 
         # Redirect to settings page with success message
         frontend_url = os.getenv("FRONTEND_URL", "http://localhost:3001")
-        return RedirectResponse(f"{frontend_url}/settings?zoom_connected=true")
+        return RedirectResponse(f"{frontend_url}/settings/integrations?zoom_connected=true")
 
     except Exception as e:
         frontend_url = os.getenv("FRONTEND_URL", "http://localhost:3001")
-        return RedirectResponse(f"{frontend_url}/settings?zoom_error={str(e)}")
+        return RedirectResponse(f"{frontend_url}/settings/integrations?zoom_error={str(e)}")
 
 
 @router.delete("/zoom/disconnect")

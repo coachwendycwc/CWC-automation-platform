@@ -1,8 +1,9 @@
 """
-Cloudinary service for video testimonial uploads.
-Handles video uploads, transformations, and deletion.
+Cloudinary service for media uploads.
+Handles image/video uploads, transformations, and deletion.
 """
 import logging
+import base64
 from typing import Optional, Dict, Any
 import cloudinary
 import cloudinary.uploader
@@ -14,7 +15,7 @@ logger = logging.getLogger(__name__)
 
 class CloudinaryService:
     """
-    Service for managing video uploads to Cloudinary.
+    Service for managing media uploads to Cloudinary.
 
     Uses Cloudinary when credentials are provided, otherwise operates in stub mode.
     """
@@ -97,6 +98,56 @@ class CloudinaryService:
             }
         except Exception as e:
             logger.error(f"Failed to upload video to Cloudinary: {e}")
+            raise
+
+    def upload_image(
+        self,
+        file_data: bytes,
+        filename: str,
+        folder: str = "branding",
+        content_type: str | None = None,
+    ) -> Dict[str, Any]:
+        """
+        Upload an image to Cloudinary.
+
+        Args:
+            file_data: Image file bytes
+            filename: Original filename
+            folder: Cloudinary folder to upload to
+
+        Returns:
+            Dict with url, public_id, format, width, and height
+        """
+        if not self.is_configured:
+            logger.info(f"STUB: Would upload image {filename} to Cloudinary")
+            mime_type = content_type or "image/png"
+            encoded = base64.b64encode(file_data).decode("ascii")
+            return {
+                "url": f"data:{mime_type};base64,{encoded}",
+                "public_id": f"{folder}/stub_{filename}",
+                "format": mime_type.split("/")[-1],
+                "width": 600,
+                "height": 600,
+            }
+
+        try:
+            result = cloudinary.uploader.upload(
+                file_data,
+                resource_type="image",
+                folder=folder,
+                quality="auto",
+                fetch_format="auto",
+            )
+
+            return {
+                "url": result.get("secure_url"),
+                "public_id": result.get("public_id"),
+                "format": result.get("format"),
+                "width": result.get("width"),
+                "height": result.get("height"),
+            }
+        except Exception as e:
+            logger.error(f"Failed to upload image to Cloudinary: {e}")
             raise
 
     def delete_video(self, public_id: str) -> bool:

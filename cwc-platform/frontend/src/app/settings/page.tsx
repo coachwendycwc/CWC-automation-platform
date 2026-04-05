@@ -3,7 +3,7 @@
 import Link from "next/link";
 import { Shell } from "@/components/layout/Shell";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
-import { Calendar, Clock, User, Bell } from "lucide-react";
+import { Calendar, Clock, User, Bell, Link2 } from "lucide-react";
 
 const settingsLinks = [
   {
@@ -20,10 +20,15 @@ const settingsLinks = [
   },
   {
     name: "Profile",
-    description: "Update your personal information and preferences",
+    description: "Update your profile and customize your public booking page",
     href: "/settings/profile",
     icon: User,
-    disabled: true,
+  },
+  {
+    name: "Integrations",
+    description: "Connect calendars and prepare unified availability",
+    href: "/settings/integrations",
+    icon: Link2,
   },
   {
     name: "Notifications",

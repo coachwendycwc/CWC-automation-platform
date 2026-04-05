@@ -46,6 +46,10 @@ class ResetPasswordRequest(BaseModel):
     password: str
 
 
+class DevLoginRequest(BaseModel):
+    email: EmailStr | None = None
+
+
 class TokenResponse(BaseModel):
     access_token: str
     token_type: str = "bearer"
@@ -233,7 +237,7 @@ async def reset_password(
 # Dev-only endpoint for testing without Google OAuth
 @router.post("/dev-login", response_model=TokenResponse)
 async def dev_login(
-    email: str = "dev@cwcplatform.com",
+    request: DevLoginRequest | None = None,
     db: AsyncSession = Depends(get_db),
 ):
     """
@@ -241,6 +245,8 @@ async def dev_login(
     Creates or gets a dev user without Google OAuth.
     Remove in production!
     """
+    email = request.email if request and request.email else "dev@cwcplatform.com"
+
     result = await db.execute(select(User).where(User.email == email))
     user = result.scalar_one_or_none()
 

@@ -4,6 +4,11 @@ export interface User {
   email: string;
   name: string | null;
   avatar_url: string | null;
+  booking_page_title: string | null;
+  booking_page_description: string | null;
+  booking_page_brand_color: string;
+  booking_page_logo_url: string | null;
+  booking_page_banner_url: string | null;
   role: string;
   created_at: string;
   updated_at: string;
@@ -141,6 +146,11 @@ export interface BookingType {
   duration_minutes: number;
   color: string;
   price: number | null;
+  show_price_on_booking_page: boolean;
+  location_type: "zoom" | "google_meet" | "phone" | "in_person" | "custom";
+  location_details: string | null;
+  post_booking_instructions: string | null;
+  intake_questions: BookingIntakeQuestion[];
   buffer_before: number;
   buffer_after: number;
   min_notice_hours: number;
@@ -152,6 +162,15 @@ export interface BookingType {
   updated_at: string;
 }
 
+export interface BookingIntakeQuestion {
+  id: string;
+  label: string;
+  question_type: "short_text" | "long_text" | "select" | "phone";
+  required: boolean;
+  placeholder?: string;
+  options: string[];
+}
+
 export interface BookingTypeFormData {
   name: string;
   slug: string;
@@ -159,6 +178,11 @@ export interface BookingTypeFormData {
   duration_minutes: number;
   color: string;
   price?: number;
+  show_price_on_booking_page?: boolean;
+  location_type?: "zoom" | "google_meet" | "phone" | "in_person" | "custom";
+  location_details?: string;
+  post_booking_instructions?: string;
+  intake_questions?: BookingIntakeQuestion[];
   buffer_before?: number;
   buffer_after?: number;
   min_notice_hours?: number;
@@ -200,6 +224,29 @@ export interface AvailabilityOverride {
   created_at: string;
 }
 
+export interface IntegrationStatus {
+  google_calendar: boolean;
+  google_calendar_accounts: number;
+  zoom: boolean;
+}
+
+export interface CalendarConnection {
+  id: string;
+  provider: string;
+  account_email: string | null;
+  account_name: string | null;
+  external_account_id: string | null;
+  calendar_id: string;
+  calendar_name: string | null;
+  sync_direction: string;
+  conflict_check_enabled: boolean;
+  is_primary: boolean;
+  is_active: boolean;
+  provider_metadata: Record<string, unknown> | null;
+  created_at: string;
+  updated_at: string;
+}
+
 // Booking types
 export type BookingStatus = "pending" | "confirmed" | "completed" | "cancelled" | "no_show";
 
@@ -211,6 +258,12 @@ export interface Booking {
   end_time: string;
   status: BookingStatus;
   google_event_id: string | null;
+  meeting_provider: string | null;
+  meeting_url: string | null;
+  zoom_meeting_id?: string | null;
+  zoom_meeting_url?: string | null;
+  zoom_meeting_password?: string | null;
+  intake_responses?: Record<string, string> | null;
   notes: string | null;
   cancellation_reason: string | null;
   cancelled_at: string | null;
@@ -236,6 +289,18 @@ export interface PublicBookingTypeInfo {
   name: string;
   slug: string;
   description: string | null;
+  host_name: string | null;
+  host_avatar_url: string | null;
+  booking_page_title: string | null;
+  booking_page_description: string | null;
+  booking_page_brand_color: string | null;
+  booking_page_logo_url: string | null;
+  booking_page_banner_url: string | null;
+  location_type: "zoom" | "google_meet" | "phone" | "in_person" | "custom";
+  location_details: string | null;
+  post_booking_instructions: string | null;
+  intake_questions: BookingIntakeQuestion[];
+  show_price_on_booking_page: boolean;
   duration_minutes: number;
   price: number | null;
   min_notice_hours: number;

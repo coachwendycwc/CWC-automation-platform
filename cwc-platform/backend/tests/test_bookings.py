@@ -4,6 +4,12 @@ Tests for bookings endpoints.
 import pytest
 from httpx import AsyncClient
 from datetime import datetime, timedelta
+from unittest.mock import patch
+
+from sqlalchemy import select
+
+from app.models.booking import Booking
+from app.models.calendar_connection import CalendarConnection
 
 
 class TestBookingTypesEndpoints:
@@ -110,12 +116,52 @@ class TestBookingsEndpoints:
         assert data["status"] == "confirmed"
         assert "id" in data
 
+    @pytest.mark.anyio
+    async def test_create_booking_uses_primary_calendar_connection(
+        self, client: AsyncClient, auth_headers, test_user, test_booking_type, test_contact, db_session
+    ):
+        """Test internal booking create writes to the primary calendar connection."""
+        start_time = (datetime.utcnow() + timedelta(days=7)).replace(
+            hour=10, minute=0, second=0, microsecond=0
+        )
+        connection = CalendarConnection(
+            user_id=test_user.id,
+            provider="google",
+            calendar_id="ops-calendar",
+            token_data={"access_token": "connection-token"},
+            is_primary=True,
+            is_active=True,
+        )
+        db_session.add(connection)
+        await db_session.commit()
+
+        with patch(
+            "app.services.booking_calendar_service.google_calendar_service.create_event",
+            return_value={"id": "evt_internal"},
+        ) as mock_create:
+            response = await client.post(
+                "/api/bookings",
+                headers=auth_headers,
+                json={
+                    "booking_type_id": test_booking_type.id,
+                    "contact_id": test_contact.id,
+                    "start_time": start_time.isoformat(),
+                    "status": "confirmed",
+                },
+            )
+
+        assert response.status_code == 201
+        result = await db_session.execute(select(Booking))
+        created = result.scalars().all()
+        assert len(created) == 1
+        assert created[0].google_event_id == "evt_internal"
+        assert created[0].calendar_connection_id == connection.id
+        assert mock_create.call_args.kwargs["calendar_id"] == "ops-calendar"
+
     async def test_filter_bookings_by_status(
         self, client: AsyncClient, auth_headers, test_booking_type, test_contact, db_session
     ):
         """Test filtering bookings by status."""
-        from app.models.booking import Booking
-
         # Create a confirmed booking
         start_time = (datetime.utcnow() + timedelta(days=7))
         booking = Booking(
@@ -135,6 +181,31 @@ class TestBookingsEndpoints:
         assert response.status_code == 200
         data = response.json()
         assert len(data["items"]) >= 1
+
+    @pytest.mark.anyio
+    async def test_get_booking_includes_intake_responses(
+        self, client: AsyncClient, auth_headers, test_booking_type, test_contact, db_session
+    ):
+        """Test booking detail returns stored intake responses."""
+        start_time = datetime.utcnow() + timedelta(days=3)
+        booking = Booking(
+            booking_type_id=test_booking_type.id,
+            contact_id=test_contact.id,
+            start_time=start_time,
+            end_time=start_time + timedelta(minutes=30),
+            status="confirmed",
+            intake_responses={"focus-area": "Executive presence"},
+        )
+        db_session.add(booking)
+        await db_session.commit()
+
+        response = await client.get(
+            f"/api/bookings/{booking.id}",
+            headers=auth_headers,
+        )
+        assert response.status_code == 200
+        data = response.json()
+        assert data["intake_responses"] == {"focus-area": "Executive presence"}
 
 
 class TestPublicBookingEndpoints:

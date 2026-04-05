@@ -7,7 +7,9 @@ from datetime import datetime, timedelta
 import uuid
 
 from httpx import AsyncClient
+from sqlalchemy import select
 
+from app.models.calendar_connection import CalendarConnection
 from app.models.user import User
 
 
@@ -29,6 +31,7 @@ class TestIntegrationStatus:
         assert response.status_code == 200
         data = response.json()
         assert data["google_calendar"] is False
+        assert data["google_calendar_accounts"] == 0
         assert data["zoom"] is False
 
     @pytest.mark.asyncio
@@ -48,6 +51,30 @@ class TestIntegrationStatus:
         assert response.status_code == 200
         data = response.json()
         assert data["google_calendar"] is True
+        assert data["google_calendar_accounts"] == 0
+        assert data["zoom"] is False
+
+    @pytest.mark.asyncio
+    async def test_get_status_with_google_calendar_connection(
+        self, db_session, auth_client: AsyncClient, test_user: User
+    ):
+        """Test status reports connected Google calendar accounts."""
+        connection = CalendarConnection(
+            user_id=test_user.id,
+            provider="google",
+            account_email="coach@example.com",
+            calendar_id="primary",
+            token_data={"access_token": "test_access_token"},
+            is_primary=True,
+        )
+        db_session.add(connection)
+        await db_session.commit()
+
+        response = await auth_client.get("/api/integrations/status")
+        assert response.status_code == 200
+        data = response.json()
+        assert data["google_calendar"] is True
+        assert data["google_calendar_accounts"] == 1
         assert data["zoom"] is False
 
     @pytest.mark.asyncio
@@ -70,6 +97,128 @@ class TestIntegrationStatus:
 
 class TestGoogleCalendarIntegration:
     """Tests for Google Calendar OAuth flow."""
+
+    @pytest.mark.asyncio
+    async def test_list_calendar_connections_empty(
+        self, auth_client: AsyncClient
+    ):
+        """Test listing calendar connections when none exist."""
+        response = await auth_client.get("/api/integrations/calendar-connections")
+        assert response.status_code == 200
+        assert response.json() == []
+
+    @pytest.mark.asyncio
+    async def test_list_calendar_connections_returns_connections(
+        self, db_session, auth_client: AsyncClient, test_user: User
+    ):
+        """Test listing stored calendar connections."""
+        db_session.add_all([
+            CalendarConnection(
+                user_id=test_user.id,
+                provider="google",
+                account_email="primary@example.com",
+                calendar_id="primary",
+                token_data={"access_token": "primary_token"},
+                is_primary=True,
+            ),
+            CalendarConnection(
+                user_id=test_user.id,
+                provider="google",
+                account_email="secondary@example.com",
+                calendar_id="secondary",
+                token_data={"access_token": "secondary_token"},
+                is_primary=False,
+            ),
+        ])
+        await db_session.commit()
+
+        response = await auth_client.get("/api/integrations/calendar-connections")
+        assert response.status_code == 200
+        data = response.json()
+        assert len(data) == 2
+        assert data[0]["provider"] == "google"
+        assert data[0]["is_primary"] is True
+        assert data[1]["is_primary"] is False
+
+    @pytest.mark.asyncio
+    async def test_set_primary_calendar_connection(
+        self, db_session, auth_client: AsyncClient, test_user: User
+    ):
+        """Test setting a specific calendar connection as primary."""
+        primary = CalendarConnection(
+            user_id=test_user.id,
+            provider="google",
+            account_email="primary@example.com",
+            calendar_id="primary",
+            token_data={"access_token": "primary-token"},
+            is_primary=True,
+        )
+        secondary = CalendarConnection(
+            user_id=test_user.id,
+            provider="google",
+            account_email="secondary@example.com",
+            calendar_id="secondary",
+            token_data={"access_token": "secondary-token"},
+            is_primary=False,
+        )
+        db_session.add_all([primary, secondary])
+        await db_session.commit()
+
+        response = await auth_client.post(
+            f"/api/integrations/calendar-connections/{secondary.id}/set-primary"
+        )
+        assert response.status_code == 200
+        data = response.json()
+        assert data["id"] == secondary.id
+        assert data["is_primary"] is True
+
+        await db_session.refresh(primary)
+        await db_session.refresh(secondary)
+        await db_session.refresh(test_user)
+        assert primary.is_primary is False
+        assert secondary.is_primary is True
+        assert test_user.google_calendar_token == {"access_token": "secondary-token"}
+
+    @pytest.mark.asyncio
+    async def test_disconnect_specific_calendar_connection(
+        self, db_session, auth_client: AsyncClient, test_user: User
+    ):
+        """Test disconnecting one calendar connection preserves others."""
+        primary = CalendarConnection(
+            user_id=test_user.id,
+            provider="google",
+            account_email="primary@example.com",
+            calendar_id="primary",
+            token_data={"access_token": "primary-token"},
+            is_primary=True,
+        )
+        secondary = CalendarConnection(
+            user_id=test_user.id,
+            provider="google",
+            account_email="secondary@example.com",
+            calendar_id="secondary",
+            token_data={"access_token": "secondary-token"},
+            is_primary=False,
+        )
+        db_session.add_all([primary, secondary])
+        test_user.google_calendar_token = {"access_token": "primary-token"}
+        await db_session.commit()
+
+        response = await auth_client.delete(
+            f"/api/integrations/calendar-connections/{primary.id}"
+        )
+        assert response.status_code == 200
+        assert "disconnected" in response.json()["message"].lower()
+
+        remaining_result = await db_session.execute(
+            select(CalendarConnection).where(CalendarConnection.user_id == test_user.id)
+        )
+        remaining = remaining_result.scalars().all()
+        assert len(remaining) == 1
+        assert remaining[0].id == secondary.id
+
+        await db_session.refresh(test_user)
+        assert test_user.google_calendar_token == {"access_token": "secondary-token"}
 
     @pytest.mark.asyncio
     async def test_get_auth_url_not_configured(
@@ -153,6 +302,20 @@ class TestGoogleCalendarIntegration:
             assert response.status_code == 307
             assert "google_connected=true" in response.headers["location"]
 
+        await db_session.refresh(test_user)
+        assert test_user.google_calendar_token is not None
+
+        connection_result = await db_session.execute(
+            select(CalendarConnection).where(
+                CalendarConnection.user_id == test_user.id,
+                CalendarConnection.provider == "google",
+            )
+        )
+        connections = connection_result.scalars().all()
+        assert len(connections) == 1
+        assert connections[0].is_primary is True
+        assert connections[0].calendar_id == "primary"
+
     @pytest.mark.asyncio
     async def test_disconnect_google(
         self, db_session, auth_client: AsyncClient, test_user: User
@@ -160,6 +323,16 @@ class TestGoogleCalendarIntegration:
         """Test disconnecting Google Calendar."""
         # First connect
         test_user.google_calendar_token = {"access_token": "test"}
+        db_session.add(
+            CalendarConnection(
+                user_id=test_user.id,
+                provider="google",
+                account_email="coach@example.com",
+                calendar_id="primary",
+                token_data={"access_token": "test"},
+                is_primary=True,
+            )
+        )
         await db_session.commit()
 
         response = await auth_client.delete("/api/integrations/google/disconnect")
@@ -169,6 +342,10 @@ class TestGoogleCalendarIntegration:
         # Verify token is removed
         await db_session.refresh(test_user)
         assert test_user.google_calendar_token is None
+        connection_result = await db_session.execute(
+            select(CalendarConnection).where(CalendarConnection.user_id == test_user.id)
+        )
+        assert connection_result.scalars().all() == []
 
     @pytest.mark.asyncio
     async def test_list_events_not_connected(
@@ -184,7 +361,16 @@ class TestGoogleCalendarIntegration:
         self, db_session, auth_client: AsyncClient, test_user: User
     ):
         """Test listing Google Calendar events."""
-        test_user.google_calendar_token = {"access_token": "test_token"}
+        db_session.add(
+            CalendarConnection(
+                user_id=test_user.id,
+                provider="google",
+                account_email="coach@example.com",
+                calendar_id="primary",
+                token_data={"access_token": "test_token"},
+                is_primary=True,
+            )
+        )
         await db_session.commit()
 
         with patch("app.routers.integrations.google_calendar_service") as mock_service:
@@ -230,7 +416,16 @@ class TestGoogleCalendarIntegration:
         self, db_session, auth_client: AsyncClient, test_user: User
     ):
         """Test creating a Google Calendar event."""
-        test_user.google_calendar_token = {"access_token": "test_token"}
+        db_session.add(
+            CalendarConnection(
+                user_id=test_user.id,
+                provider="google",
+                account_email="coach@example.com",
+                calendar_id="primary",
+                token_data={"access_token": "test_token"},
+                is_primary=True,
+            )
+        )
         await db_session.commit()
 
         with patch("app.routers.integrations.google_calendar_service") as mock_service:
@@ -258,7 +453,16 @@ class TestGoogleCalendarIntegration:
         self, db_session, auth_client: AsyncClient, test_user: User
     ):
         """Test deleting a Google Calendar event."""
-        test_user.google_calendar_token = {"access_token": "test_token"}
+        db_session.add(
+            CalendarConnection(
+                user_id=test_user.id,
+                provider="google",
+                account_email="coach@example.com",
+                calendar_id="primary",
+                token_data={"access_token": "test_token"},
+                is_primary=True,
+            )
+        )
         await db_session.commit()
 
         with patch("app.routers.integrations.google_calendar_service") as mock_service:

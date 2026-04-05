@@ -13,7 +13,9 @@ from app.models.booking import Booking
 from app.models.booking_type import BookingType
 from app.models.contact import Contact
 from app.models.user import User
+from app.services.booking_calendar_service import BookingCalendarService
 from app.services.scheduling_service import SchedulingService
+from app.services.zoom_service import zoom_service
 from app.schemas.booking import (
     PublicBookingCreate,
     PublicBookingResponse,
@@ -25,6 +27,57 @@ from app.schemas.booking import (
 )
 
 router = APIRouter(prefix="/book", tags=["Public Booking"])
+
+
+async def create_zoom_meeting_for_public_booking(
+    user: User,
+    booking: Booking,
+    booking_type: BookingType,
+    contact: Contact,
+    db: AsyncSession,
+) -> None:
+    if booking_type.location_type != "zoom" or not user.zoom_token:
+        return
+
+    access_token = user.zoom_token.get("access_token")
+    if not access_token:
+        return
+
+    meeting = await zoom_service.create_meeting(
+        access_token=access_token,
+        topic=f"{booking_type.name} - {contact.full_name}",
+        start_time=booking.start_time,
+        duration_minutes=booking_type.duration_minutes,
+        agenda=f"Booking with {contact.full_name}",
+    )
+
+    booking.zoom_meeting_id = meeting["id"]
+    booking.zoom_meeting_url = meeting["join_url"]
+    booking.zoom_meeting_password = meeting.get("password", "")
+    booking.meeting_provider = "zoom"
+    booking.meeting_url = meeting["join_url"]
+    await db.commit()
+
+
+async def provision_public_booking_meeting(
+    user: User,
+    booking: Booking,
+    booking_type: BookingType,
+    contact: Contact,
+    db: AsyncSession,
+) -> None:
+    calendar_service = BookingCalendarService(db)
+    await calendar_service.create_booking_event(
+        user=user,
+        booking=booking,
+        booking_type=booking_type,
+        contact=contact,
+    )
+    await db.refresh(booking)
+
+    if booking_type.location_type == "zoom":
+        await create_zoom_meeting_for_public_booking(user, booking, booking_type, contact, db)
+        await db.refresh(booking)
 
 
 async def get_first_user(db: AsyncSession) -> User:
@@ -59,12 +112,26 @@ async def get_public_booking_type(
             detail="Booking type not found",
         )
 
+    user = await get_first_user(db)
+
     return PublicBookingTypeInfo(
         name=booking_type.name,
         slug=booking_type.slug,
         description=booking_type.description,
+        host_name=user.name,
+        host_avatar_url=user.avatar_url,
+        booking_page_title=user.booking_page_title,
+        booking_page_description=user.booking_page_description,
+        booking_page_brand_color=user.booking_page_brand_color,
+        booking_page_logo_url=user.booking_page_logo_url,
+        booking_page_banner_url=user.booking_page_banner_url,
+        location_type=booking_type.location_type,
+        location_details=booking_type.location_details,
+        post_booking_instructions=booking_type.post_booking_instructions,
+        intake_questions=booking_type.intake_questions or [],
+        show_price_on_booking_page=booking_type.show_price_on_booking_page,
         duration_minutes=booking_type.duration_minutes,
-        price=float(booking_type.price) if booking_type.price else None,
+        price=float(booking_type.price) if booking_type.price is not None else None,
         min_notice_hours=booking_type.min_notice_hours,
         max_advance_days=booking_type.max_advance_days,
     )
@@ -195,12 +262,17 @@ async def create_public_booking(
         contact_id=contact.id,
         start_time=data.start_time,
         end_time=end_time,
+        intake_responses=data.intake_responses,
         notes=data.notes,
         status="confirmed" if not booking_type.requires_confirmation else "pending",
     )
     db.add(booking)
     await db.commit()
     await db.refresh(booking)
+
+    if booking.status == "confirmed":
+        await provision_public_booking_meeting(user, booking, booking_type, contact, db)
+        await db.refresh(booking)
 
     # TODO: Send confirmation email
 
@@ -229,7 +301,7 @@ async def get_booking_by_token(
     """Get booking details by confirmation token."""
     result = await db.execute(
         select(Booking)
-        .options(selectinload(Booking.booking_type))
+        .options(selectinload(Booking.booking_type), selectinload(Booking.contact))
         .where(Booking.confirmation_token == token)
     )
     booking = result.scalar_one_or_none()
@@ -264,7 +336,7 @@ async def reschedule_booking(
     """Reschedule a booking (self-service)."""
     result = await db.execute(
         select(Booking)
-        .options(selectinload(Booking.booking_type))
+        .options(selectinload(Booking.booking_type), selectinload(Booking.contact))
         .where(Booking.confirmation_token == token)
     )
     booking = result.scalar_one_or_none()
@@ -321,6 +393,16 @@ async def reschedule_booking(
 
     await db.commit()
     await db.refresh(booking)
+
+    if booking.status == "confirmed" and booking.contact:
+        calendar_service = BookingCalendarService(db)
+        await calendar_service.update_booking_event(
+            user=user,
+            booking=booking,
+            booking_type=booking.booking_type,
+            contact=booking.contact,
+        )
+        await db.refresh(booking)
 
     # TODO: Send reschedule confirmation email
 
@@ -386,6 +468,11 @@ async def cancel_booking_self_service(
     booking.cancelled_by = "client"
 
     await db.commit()
+    await db.refresh(booking)
+
+    user = await get_first_user(db)
+    calendar_service = BookingCalendarService(db)
+    await calendar_service.delete_booking_event(user=user, booking=booking)
     await db.refresh(booking)
 
     # TODO: Send cancellation confirmation email

@@ -12,6 +12,7 @@ from app.services.scheduling_service import SchedulingService
 from app.models.booking_type import BookingType
 from app.models.availability import Availability, AvailabilityOverride
 from app.models.booking import Booking
+from app.models.calendar_connection import CalendarConnection
 
 
 @pytest.fixture
@@ -240,6 +241,58 @@ class TestGetAvailableSlots:
         )
 
         # 10am slot should not be available
+        for slot in result:
+            assert slot.hour != 10
+
+    @pytest.mark.asyncio
+    async def test_slots_filtered_by_external_calendar_busy_time(self, db_session, mock_booking_type):
+        """Test external calendar busy time blocks matching slots."""
+        service = SchedulingService(db_session)
+
+        target = date.today() + timedelta(days=3)
+        day_of_week = target.weekday()
+
+        availability = Availability(
+            id=str(uuid.uuid4()),
+            user_id="user123",
+            day_of_week=day_of_week,
+            start_time="09:00",
+            end_time="12:00",
+            is_active=True,
+        )
+        db_session.add(availability)
+        db_session.add(
+            CalendarConnection(
+                user_id="user123",
+                provider="google",
+                account_email="coach@example.com",
+                calendar_id="primary",
+                token_data={"access_token": "test-token"},
+                is_primary=True,
+                conflict_check_enabled=True,
+            )
+        )
+        await db_session.commit()
+
+        busy_start = datetime.combine(target, time(10, 0))
+        busy_end = datetime.combine(target, time(11, 0))
+
+        with patch(
+            "app.services.calendar_availability_service.google_calendar_service.list_events"
+        ) as mock_list_events:
+            mock_list_events.return_value = [
+                {
+                    "id": "external-event-1",
+                    "status": "confirmed",
+                    "start": {"dateTime": busy_start.isoformat() + "Z"},
+                    "end": {"dateTime": busy_end.isoformat() + "Z"},
+                }
+            ]
+
+            result = await service.get_available_slots(
+                mock_booking_type, target, "user123"
+            )
+
         for slot in result:
             assert slot.hour != 10
 

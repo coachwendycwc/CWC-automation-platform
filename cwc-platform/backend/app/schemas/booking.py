@@ -2,7 +2,7 @@ from datetime import datetime
 from pydantic import BaseModel, Field, EmailStr
 from typing import Literal
 
-from app.schemas.booking_type import BookingTypeResponse
+from app.schemas.booking_type import BookingTypeResponse, IntakeQuestion
 from app.schemas.contact import ContactResponse
 
 
@@ -24,6 +24,7 @@ class PublicBookingCreate(BaseModel):
     last_name: str | None = Field(default=None, max_length=100)
     email: EmailStr
     phone: str | None = Field(default=None, max_length=50)
+    intake_responses: dict[str, str] = Field(default_factory=dict)
     notes: str | None = None
 
 
@@ -40,9 +41,12 @@ class BookingResponse(BookingBase):
     end_time: datetime
     status: str
     google_event_id: str | None
+    meeting_provider: str | None = None
+    meeting_url: str | None = None
     zoom_meeting_id: str | None = None
     zoom_meeting_url: str | None = None
     zoom_meeting_password: str | None = None
+    intake_responses: dict | None = None
     cancellation_reason: str | None
     cancelled_at: datetime | None
     cancelled_by: str | None
@@ -106,6 +110,18 @@ class PublicBookingTypeInfo(BaseModel):
     name: str
     slug: str
     description: str | None
+    host_name: str | None = None
+    host_avatar_url: str | None = None
+    booking_page_title: str | None = None
+    booking_page_description: str | None = None
+    booking_page_brand_color: str | None = None
+    booking_page_logo_url: str | None = None
+    booking_page_banner_url: str | None = None
+    location_type: str
+    location_details: str | None = None
+    post_booking_instructions: str | None = None
+    intake_questions: list[IntakeQuestion] = Field(default_factory=list)
+    show_price_on_booking_page: bool = True
     duration_minutes: int
     price: float | None
     min_notice_hours: int

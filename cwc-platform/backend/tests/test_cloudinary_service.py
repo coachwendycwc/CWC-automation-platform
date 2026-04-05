@@ -35,6 +35,18 @@ class TestCloudinaryServiceStubMode:
         assert result["duration"] == 60
         assert "thumbnail_url" in result
 
+    def test_upload_image_stub(self, stub_service):
+        """Test image upload in stub mode returns mock data."""
+        result = stub_service.upload_image(
+            file_data=b"fake image data",
+            filename="logo.png",
+            folder="branding",
+            content_type="image/png",
+        )
+        assert result["url"].startswith("data:image/png;base64,")
+        assert result["public_id"] == "branding/stub_logo.png"
+        assert result["format"] == "png"
+
     def test_delete_video_stub(self, stub_service):
         """Test video deletion in stub mode returns True."""
         result = stub_service.delete_video("testimonials/test123")
@@ -136,6 +148,27 @@ class TestCloudinaryServiceConfigured:
                 file_data=b"video data",
                 filename="test.mp4",
             )
+
+    @patch("cloudinary.uploader.upload")
+    def test_upload_image_success(self, mock_upload, configured_service):
+        """Test successful image upload."""
+        mock_upload.return_value = {
+            "secure_url": "https://cloudinary.com/logo.png",
+            "public_id": "branding/logo123",
+            "format": "png",
+            "width": 512,
+            "height": 512,
+        }
+
+        result = configured_service.upload_image(
+            file_data=b"image data",
+            filename="logo.png",
+            folder="branding",
+        )
+
+        assert result["url"] == "https://cloudinary.com/logo.png"
+        assert result["public_id"] == "branding/logo123"
+        assert result["width"] == 512
 
     @patch("cloudinary.uploader.destroy")
     def test_delete_video_success(self, mock_destroy, configured_service):

@@ -17,6 +17,7 @@ os.environ["SECRET_KEY"] = "test-secret-key-for-testing-only"
 from app.database import Base, get_db
 from app.main import app
 from app.models.user import User
+from app.models.calendar_connection import CalendarConnection
 from app.models.contact import Contact
 from app.models.organization import Organization
 from app.models.invoice import Invoice

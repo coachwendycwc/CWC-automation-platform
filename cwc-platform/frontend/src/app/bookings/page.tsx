@@ -6,10 +6,9 @@ import { Shell } from "@/components/layout/Shell";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
-import { bookingsApi, bookingTypesApi } from "@/lib/api";
-import { BookingWithDetails, BookingType } from "@/types";
-import { formatDate } from "@/lib/utils";
-import { Calendar, Clock, User, Check, X, ChevronLeft, ChevronRight } from "lucide-react";
+import { bookingsApi } from "@/lib/api";
+import { BookingWithDetails } from "@/types";
+import { Calendar, User, Check, X, Video, Phone, MapPin, Link2 } from "lucide-react";
 import Link from "next/link";
 import { Skeleton } from "@/components/ui/skeleton";
 
@@ -23,7 +22,6 @@ const STATUS_COLORS: Record<string, string> = {
 
 export default function BookingsPage() {
   const [bookings, setBookings] = useState<BookingWithDetails[]>([]);
-  const [bookingTypes, setBookingTypes] = useState<BookingType[]>([]);
   const [loading, setLoading] = useState(true);
   const [filter, setFilter] = useState<string>("");
   const [startDate, setStartDate] = useState<string>("");
@@ -38,17 +36,13 @@ export default function BookingsPage() {
       const token = localStorage.getItem("token");
       if (!token) return;
 
-      const [bookingsResponse, typesResponse] = await Promise.all([
-        bookingsApi.list(token, {
-          status: filter || undefined,
-          start_date: startDate || undefined,
-          end_date: endDate || undefined,
-        }),
-        bookingTypesApi.list(token),
-      ]);
+      const bookingsResponse = await bookingsApi.list(token, {
+        status: filter || undefined,
+        start_date: startDate || undefined,
+        end_date: endDate || undefined,
+      });
 
       setBookings(bookingsResponse.items);
-      setBookingTypes(typesResponse.items);
     } catch (err) {
       console.error("Failed to load bookings:", err);
     } finally {
@@ -97,6 +91,36 @@ export default function BookingsPage() {
       month: "short",
       day: "numeric",
     });
+  };
+
+  const getMeetingLabel = (booking: BookingWithDetails) => {
+    switch (booking.meeting_provider) {
+      case "zoom":
+        return "Zoom";
+      case "google_meet":
+        return "Google Meet";
+      case "phone":
+        return "Phone";
+      case "in_person":
+        return "In person";
+      case "custom":
+        return "Custom link";
+      default:
+        return null;
+    }
+  };
+
+  const getMeetingIcon = (booking: BookingWithDetails) => {
+    switch (booking.meeting_provider) {
+      case "phone":
+        return Phone;
+      case "in_person":
+        return MapPin;
+      case "custom":
+        return Link2;
+      default:
+        return Video;
+    }
   };
 
   // Group bookings by date
@@ -257,6 +281,15 @@ export default function BookingsPage() {
                                         {booking.contact.email}
                                       </div>
                                     )}
+                                    {booking.meeting_url && (
+                                      <div className="mt-2 flex items-center gap-2 text-sm text-muted-foreground">
+                                        {(() => {
+                                          const MeetingIcon = getMeetingIcon(booking);
+                                          return <MeetingIcon className="h-4 w-4" />;
+                                        })()}
+                                        <span>{getMeetingLabel(booking)}</span>
+                                      </div>
+                                    )}
                                     {booking.notes && (
                                       <div className="text-sm text-muted-foreground mt-2 italic">
                                         "{booking.notes}"
@@ -265,6 +298,18 @@ export default function BookingsPage() {
                                   </div>
                                 </div>
                                 <div className="flex items-center gap-2">
+                                  {booking.meeting_url && (
+                                    <a href={booking.meeting_url} target="_blank" rel="noreferrer">
+                                      <Button size="sm" variant="outline">
+                                        Open Link
+                                      </Button>
+                                    </a>
+                                  )}
+                                  <Link href={`/bookings/${booking.id}`}>
+                                    <Button size="sm" variant="outline">
+                                      Details
+                                    </Button>
+                                  </Link>
                                   {booking.status === "pending" && (
                                     <>
                                       <Button

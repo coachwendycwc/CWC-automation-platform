@@ -238,7 +238,7 @@ async def get_dashboard(
             start_time=b.start_time,
             end_time=b.end_time,
             status=b.status,
-            meeting_link=b.zoom_meeting_url,
+            meeting_link=b.meeting_url or b.zoom_meeting_url,
         )
         for b in result.scalars()
     ]
@@ -556,7 +556,7 @@ async def list_bookings(
             start_time=b.start_time,
             end_time=b.end_time,
             status=b.status,
-            meeting_link=b.zoom_meeting_url,
+            meeting_link=b.meeting_url or b.zoom_meeting_url,
         )
         for b in result.scalars()
     ]
@@ -591,7 +591,7 @@ async def get_booking(
         start_time=booking.start_time,
         end_time=booking.end_time,
         status=booking.status,
-        meeting_link=booking.zoom_meeting_url,
+        meeting_link=booking.meeting_url or booking.zoom_meeting_url,
         notes=booking.notes,
         can_cancel=can_cancel,
     )

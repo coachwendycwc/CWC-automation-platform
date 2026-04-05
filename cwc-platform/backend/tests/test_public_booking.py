@@ -8,10 +8,12 @@ from decimal import Decimal
 import uuid
 
 from httpx import AsyncClient
+from sqlalchemy import select
 
 from app.models.booking_type import BookingType
 from app.models.booking import Booking
 from app.models.availability import Availability, AvailabilityOverride
+from app.models.calendar_connection import CalendarConnection
 from app.models.contact import Contact
 from app.models.user import User
 
@@ -28,6 +30,19 @@ async def test_booking_type(db_session) -> BookingType:
         is_active=True,
         description="Free 30-minute discovery call",
         color="#7c3aed",
+        location_type="zoom",
+        location_details="Zoom link will be sent automatically",
+        post_booking_instructions="Bring your biggest leadership question.",
+        intake_questions=[
+            {
+                "id": "support-topic",
+                "label": "What would you like support with?",
+                "question_type": "long_text",
+                "required": True,
+                "placeholder": "Share the context for your call",
+                "options": [],
+            }
+        ],
     )
     db_session.add(booking_type)
     await db_session.commit()
@@ -58,7 +73,7 @@ async def test_user_for_booking(db_session) -> User:
     user = User(
         id=str(uuid.uuid4()),
         email="coach@example.com",
-        hashed_password="hashedpassword",
+        password_hash="hashedpassword",
         name="Test Coach",
         is_active=True,
     )
@@ -77,11 +92,14 @@ class TestGetBookingType:
         response = await client.get("/api/book/nonexistent")
         assert response.status_code == 404
 
-    @pytest.mark.asyncio
+    @pytest.mark.anyio
     async def test_get_type_success(
-        self, client: AsyncClient, test_booking_type: BookingType
+        self, client: AsyncClient, test_booking_type: BookingType, test_user_for_booking: User
     ):
         """Test getting booking type by slug."""
+        test_user_for_booking.avatar_url = "https://example.com/avatar.png"
+        test_user_for_booking.booking_page_banner_url = "https://example.com/banner.png"
+        test_user_for_booking.booking_page_logo_url = "https://example.com/logo.png"
         response = await client.get(
             f"/api/book/{test_booking_type.slug}"
         )
@@ -89,6 +107,13 @@ class TestGetBookingType:
         data = response.json()
         assert data["name"] == "Discovery Call"
         assert data["duration_minutes"] == 30
+        assert data["host_avatar_url"] == "https://example.com/avatar.png"
+        assert data["booking_page_banner_url"] == "https://example.com/banner.png"
+        assert data["booking_page_logo_url"] == "https://example.com/logo.png"
+        assert data["location_type"] == "zoom"
+        assert data["location_details"] == "Zoom link will be sent automatically"
+        assert data["post_booking_instructions"] == "Bring your biggest leadership question."
+        assert data["intake_questions"][0]["id"] == "support-topic"
 
     @pytest.mark.asyncio
     async def test_get_type_inactive(
@@ -189,6 +214,113 @@ class TestCreatePublicBooking:
             }
         )
         assert response.status_code == 400
+
+    @pytest.mark.anyio
+    async def test_create_booking_syncs_to_primary_calendar_connection(
+        self, db_session, client: AsyncClient, test_booking_type: BookingType, test_user_for_booking: User
+    ):
+        """Test confirmed public booking writes back to the primary calendar connection."""
+        today = date.today()
+        days_until_monday = (7 - today.weekday()) % 7
+        if days_until_monday == 0:
+            days_until_monday = 7
+        next_monday = today + timedelta(days=days_until_monday)
+
+        connection = CalendarConnection(
+            id=str(uuid.uuid4()),
+            user_id=test_user_for_booking.id,
+            provider="google",
+            calendar_id="primary",
+            token_data={"access_token": "connection-token"},
+            is_primary=True,
+            is_active=True,
+        )
+        db_session.add(connection)
+        await db_session.commit()
+
+        start_time = datetime.combine(next_monday, time(10, 0))
+
+        with (
+            patch(
+                "app.routers.public_booking.SchedulingService.get_available_slots",
+                new=AsyncMock(return_value=[start_time]),
+            ),
+            patch(
+                "app.services.booking_calendar_service.google_calendar_service.create_event",
+                return_value={"id": "evt_public"},
+            ) as mock_create,
+        ):
+            response = await client.post(
+                f"/api/book/{test_booking_type.slug}",
+                json={
+                    "start_time": start_time.isoformat(),
+                    "first_name": "John",
+                    "last_name": "Doe",
+                    "email": "john@example.com",
+                    "intake_responses": {"support-topic": "I want to work on executive presence."},
+                    "notes": "Looking forward to this session.",
+                },
+            )
+
+        assert response.status_code == 201
+        result = await db_session.execute(select(Booking))
+        bookings = result.scalars().all()
+        assert len(bookings) == 1
+        assert bookings[0].google_event_id == "evt_public"
+        assert bookings[0].calendar_connection_id == connection.id
+        assert bookings[0].intake_responses == {"support-topic": "I want to work on executive presence."}
+        assert mock_create.call_args.kwargs["token_data"] == {"access_token": "connection-token"}
+
+    @pytest.mark.anyio
+    async def test_create_booking_generates_google_meet_link(
+        self, db_session, client: AsyncClient, test_booking_type: BookingType, test_user_for_booking: User
+    ):
+        test_booking_type.location_type = "google_meet"
+        await db_session.commit()
+
+        today = date.today()
+        days_until_monday = (7 - today.weekday()) % 7 or 7
+        next_monday = today + timedelta(days=days_until_monday)
+
+        connection = CalendarConnection(
+            id=str(uuid.uuid4()),
+            user_id=test_user_for_booking.id,
+            provider="google",
+            calendar_id="primary",
+            token_data={"access_token": "connection-token"},
+            is_primary=True,
+            is_active=True,
+        )
+        db_session.add(connection)
+        await db_session.commit()
+
+        start_time = datetime.combine(next_monday, time(11, 0))
+
+        with (
+            patch(
+                "app.routers.public_booking.SchedulingService.get_available_slots",
+                new=AsyncMock(return_value=[start_time]),
+            ),
+            patch(
+                "app.services.booking_calendar_service.google_calendar_service.create_event",
+                return_value={"id": "evt_meet", "hangoutLink": "https://meet.google.com/test-link"},
+            ),
+        ):
+            response = await client.post(
+                f"/api/book/{test_booking_type.slug}",
+                json={
+                    "start_time": start_time.isoformat(),
+                    "first_name": "Jordan",
+                    "last_name": "Taylor",
+                    "email": "jordan@example.com",
+                },
+            )
+
+        assert response.status_code == 201
+        result = await db_session.execute(select(Booking))
+        bookings = result.scalars().all()
+        assert bookings[0].meeting_provider == "google_meet"
+        assert bookings[0].meeting_url == "https://meet.google.com/test-link"
 
 
 class TestManageBooking:
