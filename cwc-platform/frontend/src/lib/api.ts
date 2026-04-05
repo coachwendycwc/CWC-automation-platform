@@ -426,6 +426,17 @@ export const invoicesApi = {
       token,
     }),
 
+  sendReminder: (
+    token: string,
+    id: string,
+    data: { kind: "due_soon" | "overdue" | "final_notice"; email_message?: string }
+  ) =>
+    fetchApi<any>(`/api/invoices/${id}/send-reminder`, {
+      method: "POST",
+      body: JSON.stringify(data),
+      token,
+    }),
+
   duplicate: (token: string, id: string) =>
     fetchApi<any>(`/api/invoices/${id}/duplicate`, {
       method: "POST",

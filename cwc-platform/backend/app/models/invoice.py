@@ -75,6 +75,10 @@ class Invoice(Base):
     sent_at: Mapped[datetime | None] = mapped_column(DateTime, nullable=True)
     viewed_at: Mapped[datetime | None] = mapped_column(DateTime, nullable=True)
     paid_at: Mapped[datetime | None] = mapped_column(DateTime, nullable=True)
+    due_soon_reminder_sent_at: Mapped[datetime | None] = mapped_column(DateTime, nullable=True)
+    overdue_reminder_sent_at: Mapped[datetime | None] = mapped_column(DateTime, nullable=True)
+    final_notice_sent_at: Mapped[datetime | None] = mapped_column(DateTime, nullable=True)
+    last_collection_email_sent_at: Mapped[datetime | None] = mapped_column(DateTime, nullable=True)
 
     # Payment plan support
     is_payment_plan: Mapped[bool] = mapped_column(Boolean, nullable=False, default=False)

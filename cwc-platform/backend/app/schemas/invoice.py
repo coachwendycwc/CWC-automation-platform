@@ -75,6 +75,10 @@ class InvoiceRead(BaseModel):
     sent_at: Optional[datetime] = None
     viewed_at: Optional[datetime] = None
     paid_at: Optional[datetime] = None
+    due_soon_reminder_sent_at: Optional[datetime] = None
+    overdue_reminder_sent_at: Optional[datetime] = None
+    final_notice_sent_at: Optional[datetime] = None
+    last_collection_email_sent_at: Optional[datetime] = None
     is_payment_plan: bool
     view_token: str
     notes: Optional[str] = None
@@ -102,6 +106,11 @@ class InvoiceList(BaseModel):
 
 class InvoiceSend(BaseModel):
     send_email: bool = True
+    email_message: Optional[str] = None
+
+
+class InvoiceReminderSend(BaseModel):
+    kind: Literal["due_soon", "overdue", "final_notice"] = "due_soon"
     email_message: Optional[str] = None
 
 

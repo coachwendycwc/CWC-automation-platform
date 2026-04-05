@@ -52,6 +52,7 @@ from app.schemas.invoice import (
     InvoiceRead,
     InvoiceList,
     InvoiceSend,
+    InvoiceReminderSend,
     InvoiceStats,
     InvoicePublic,
 )
@@ -161,6 +162,7 @@ __all__ = [
     "InvoiceRead",
     "InvoiceList",
     "InvoiceSend",
+    "InvoiceReminderSend",
     "InvoiceStats",
     "InvoicePublic",
     "PaymentCreate",

@@ -24,6 +24,7 @@ from app.models.client_action_item import ClientActionItem
 from app.models.client_goal import ClientGoal
 from app.models.booking import Booking
 from app.models.contact import Contact
+from app.models.invoice import Invoice
 from app.services.email_service import email_service
 from app.config import get_settings
 
@@ -87,6 +88,10 @@ class WorkflowScheduler:
 
             # Session workflows
             await self._process_post_session_followups(db)
+
+            # Revenue workflows
+            await self._process_invoice_due_soon_reminders(db)
+            await self._process_overdue_invoice_collections(db)
 
             # Summary workflows (check day/time before sending)
             await self._process_weekly_summaries(db)
@@ -403,6 +408,103 @@ class WorkflowScheduler:
 
             except Exception as e:
                 logger.error(f"Failed to send post-session follow-up: {e}")
+                await db.rollback()
+
+    async def _process_invoice_due_soon_reminders(self, db: AsyncSession):
+        """Send reminders three days before invoice due date."""
+        today = date.today()
+        target_date = today + timedelta(days=3)
+        now = datetime.utcnow()
+
+        result = await db.execute(
+            select(Invoice)
+            .options(selectinload(Invoice.contact))
+            .where(
+                and_(
+                    Invoice.status.in_(["sent", "viewed", "partial"]),
+                    Invoice.balance_due > 0,
+                    Invoice.due_date == target_date,
+                    Invoice.due_soon_reminder_sent_at.is_(None),
+                )
+            )
+        )
+        invoices = result.scalars().all()
+
+        for invoice in invoices:
+            if not invoice.contact or not invoice.contact.email:
+                continue
+
+            try:
+                await email_service.send_reminder_due_soon(
+                    invoice=invoice,
+                    contact=invoice.contact,
+                    base_url=settings.frontend_url,
+                    days_until_due=3,
+                )
+                invoice.due_soon_reminder_sent_at = now
+                invoice.last_collection_email_sent_at = now
+                await db.commit()
+                logger.info(f"Sent due-soon reminder for invoice {invoice.invoice_number}")
+            except Exception as e:
+                logger.error(f"Failed to send due-soon reminder for invoice {invoice.invoice_number}: {e}")
+                await db.rollback()
+
+    async def _process_overdue_invoice_collections(self, db: AsyncSession):
+        """Mark invoices overdue and send overdue/final collections emails."""
+        today = date.today()
+        now = datetime.utcnow()
+
+        result = await db.execute(
+            select(Invoice)
+            .options(selectinload(Invoice.contact))
+            .where(
+                and_(
+                    Invoice.status.in_(["sent", "viewed", "partial", "overdue"]),
+                    Invoice.balance_due > 0,
+                    Invoice.due_date < today,
+                )
+            )
+        )
+        invoices = result.scalars().all()
+
+        for invoice in invoices:
+            if not invoice.contact or not invoice.contact.email:
+                continue
+
+            days_overdue = (today - invoice.due_date).days
+
+            try:
+                if invoice.status in ["sent", "viewed", "partial"]:
+                    invoice.status = "overdue"
+
+                if days_overdue >= 14 and invoice.final_notice_sent_at is None:
+                    await email_service.send_reminder_overdue(
+                        invoice=invoice,
+                        contact=invoice.contact,
+                        base_url=settings.frontend_url,
+                        days_overdue=days_overdue,
+                        stage="final_notice",
+                    )
+                    invoice.final_notice_sent_at = now
+                    invoice.last_collection_email_sent_at = now
+                    await db.commit()
+                    logger.info(f"Sent final notice for invoice {invoice.invoice_number}")
+                elif days_overdue >= 1 and invoice.overdue_reminder_sent_at is None:
+                    await email_service.send_reminder_overdue(
+                        invoice=invoice,
+                        contact=invoice.contact,
+                        base_url=settings.frontend_url,
+                        days_overdue=days_overdue,
+                        stage="overdue",
+                    )
+                    invoice.overdue_reminder_sent_at = now
+                    invoice.last_collection_email_sent_at = now
+                    await db.commit()
+                    logger.info(f"Sent overdue reminder for invoice {invoice.invoice_number}")
+                else:
+                    await db.commit()
+            except Exception as e:
+                logger.error(f"Failed invoice collections processing for {invoice.invoice_number}: {e}")
                 await db.rollback()
 
     # =========================================================================

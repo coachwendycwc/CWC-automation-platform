@@ -2,6 +2,7 @@
 Tests for invoices endpoints.
 """
 import pytest
+from unittest.mock import AsyncMock, patch
 from httpx import AsyncClient
 from datetime import datetime, timedelta
 
@@ -132,6 +133,48 @@ class TestInvoicesEndpoints:
         assert response.status_code == 200
         data = response.json()
         assert len(data) >= 1
+
+    @pytest.mark.anyio
+    async def test_send_due_soon_reminder(
+        self, client: AsyncClient, auth_headers, test_invoice, db_session
+    ):
+        test_invoice.status = "sent"
+        test_invoice.balance_due = test_invoice.total
+        test_invoice.due_date = (datetime.utcnow() + timedelta(days=3)).date()
+        await db_session.commit()
+
+        with patch("app.routers.invoices.email_service.send_reminder_due_soon", new=AsyncMock(return_value=True)):
+            response = await client.post(
+                f"/api/invoices/{test_invoice.id}/send-reminder",
+                headers=auth_headers,
+                json={"kind": "due_soon"},
+            )
+
+        assert response.status_code == 200
+        data = response.json()
+        assert data["due_soon_reminder_sent_at"] is not None
+        assert data["last_collection_email_sent_at"] is not None
+
+    @pytest.mark.anyio
+    async def test_send_overdue_reminder_marks_invoice_overdue(
+        self, client: AsyncClient, auth_headers, test_invoice, db_session
+    ):
+        test_invoice.status = "sent"
+        test_invoice.balance_due = test_invoice.total
+        test_invoice.due_date = (datetime.utcnow() - timedelta(days=5)).date()
+        await db_session.commit()
+
+        with patch("app.routers.invoices.email_service.send_reminder_overdue", new=AsyncMock(return_value=True)):
+            response = await client.post(
+                f"/api/invoices/{test_invoice.id}/send-reminder",
+                headers=auth_headers,
+                json={"kind": "overdue"},
+            )
+
+        assert response.status_code == 200
+        data = response.json()
+        assert data["status"] == "overdue"
+        assert data["overdue_reminder_sent_at"] is not None
 
 
 class TestPublicInvoiceEndpoints:

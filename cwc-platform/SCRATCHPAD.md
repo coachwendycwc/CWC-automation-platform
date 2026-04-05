@@ -23,3 +23,7 @@
 - Extended public invoice responses with related booking summary data, including meeting link context.
 - Added a public `/book/manage/{token}` page and wired payment success to a `Manage booking` action for post-payment self-service.
 - Exposed `confirmation_token` through public booking and invoice responses so both free and paid bookings can land in the same self-service management flow.
+- Added invoice collections tracking fields and migration `017_invoice_collection_tracking`.
+- Added `/api/invoices/{id}/send-reminder` for manual due-soon, overdue, and final notice collections emails.
+- Added workflow scheduler automation for due-soon reminders, overdue reminders, and final notices.
+- Upgraded the invoice detail page with collection activity visibility and one-click reminder sending.

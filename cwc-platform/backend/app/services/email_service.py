@@ -328,6 +328,7 @@ CWC Coaching
         contact: Contact,
         base_url: str,
         days_until_due: int,
+        custom_message: Optional[str] = None,
     ) -> bool:
         """
         Send reminder for invoice due soon (e.g., 3 days before).
@@ -348,6 +349,8 @@ Invoice: #{invoice.invoice_number}
 Amount Due: ${invoice.balance_due:,.2f}
 Due Date: {invoice.due_date.strftime('%B %d, %Y')} ({days_until_due} days from now)
 
+{custom_message if custom_message else ''}
+
 Pay your invoice here:
 {view_url}
 
@@ -355,7 +358,35 @@ Best regards,
 CWC Coaching
 """
 
-        return await self._send_email(contact.email, subject, body)
+        custom_html = f"<p>{custom_message}</p>" if custom_message else ""
+        html_content = f'''
+            <p>This is a friendly reminder that your invoice is due soon.</p>
+            {custom_html}
+            <table style="width: 100%; margin: 20px 0; border-collapse: collapse;">
+                <tr>
+                    <td style="padding: 12px; border-bottom: 1px solid #e5e7eb;"><strong>Invoice</strong></td>
+                    <td style="padding: 12px; border-bottom: 1px solid #e5e7eb; text-align: right;">#{invoice.invoice_number}</td>
+                </tr>
+                <tr>
+                    <td style="padding: 12px; border-bottom: 1px solid #e5e7eb;"><strong>Amount Due</strong></td>
+                    <td style="padding: 12px; border-bottom: 1px solid #e5e7eb; text-align: right; font-weight: 700;">${invoice.balance_due:,.2f}</td>
+                </tr>
+                <tr>
+                    <td style="padding: 12px;"><strong>Due Date</strong></td>
+                    <td style="padding: 12px; text-align: right;">{invoice.due_date.strftime('%B %d, %Y')}</td>
+                </tr>
+            </table>
+        '''
+
+        html_body = _create_html_email(
+            title=subject,
+            greeting=f"Hi {contact.first_name},",
+            content=html_content,
+            cta_text="Pay Invoice",
+            cta_url=view_url,
+        )
+
+        return await self._send_email(contact.email, subject, body, html_body)
 
     async def send_reminder_overdue(
         self,
@@ -363,6 +394,8 @@ CWC Coaching
         contact: Contact,
         base_url: str,
         days_overdue: int,
+        stage: str = "overdue",
+        custom_message: Optional[str] = None,
     ) -> bool:
         """
         Send reminder for overdue invoice.
@@ -372,16 +405,23 @@ CWC Coaching
 
         view_url = f"{base_url}/pay/{invoice.view_token}"
 
-        subject = f"Payment Overdue: Invoice #{invoice.invoice_number}"
+        if stage == "final_notice":
+            subject = f"Final Notice: Invoice #{invoice.invoice_number}"
+            opener = "This is a final reminder that your invoice remains unpaid."
+        else:
+            subject = f"Payment Overdue: Invoice #{invoice.invoice_number}"
+            opener = f"Your invoice is now {days_overdue} day{'s' if days_overdue != 1 else ''} overdue."
 
         body = f"""
 Hi {contact.first_name},
 
-Your invoice is now {days_overdue} day{'s' if days_overdue != 1 else ''} overdue.
+{opener}
 
 Invoice: #{invoice.invoice_number}
 Amount Due: ${invoice.balance_due:,.2f}
 Original Due Date: {invoice.due_date.strftime('%B %d, %Y')}
+
+{custom_message if custom_message else ''}
 
 Please make your payment as soon as possible:
 {view_url}
@@ -392,7 +432,35 @@ Best regards,
 CWC Coaching
 """
 
-        return await self._send_email(contact.email, subject, body)
+        custom_html = f"<p>{custom_message}</p>" if custom_message else ""
+        html_content = f'''
+            <p>{opener}</p>
+            {custom_html}
+            <table style="width: 100%; margin: 20px 0; border-collapse: collapse;">
+                <tr>
+                    <td style="padding: 12px; border-bottom: 1px solid #e5e7eb;"><strong>Invoice</strong></td>
+                    <td style="padding: 12px; border-bottom: 1px solid #e5e7eb; text-align: right;">#{invoice.invoice_number}</td>
+                </tr>
+                <tr>
+                    <td style="padding: 12px; border-bottom: 1px solid #e5e7eb;"><strong>Amount Due</strong></td>
+                    <td style="padding: 12px; border-bottom: 1px solid #e5e7eb; text-align: right; font-weight: 700; color: #b91c1c;">${invoice.balance_due:,.2f}</td>
+                </tr>
+                <tr>
+                    <td style="padding: 12px;"><strong>Original Due Date</strong></td>
+                    <td style="padding: 12px; text-align: right;">{invoice.due_date.strftime('%B %d, %Y')}</td>
+                </tr>
+            </table>
+        '''
+
+        html_body = _create_html_email(
+            title=subject,
+            greeting=f"Hi {contact.first_name},",
+            content=html_content,
+            cta_text="Review Invoice",
+            cta_url=view_url,
+        )
+
+        return await self._send_email(contact.email, subject, body, html_body)
 
     # Contract email methods
 

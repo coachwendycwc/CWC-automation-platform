@@ -197,7 +197,7 @@ class TestInvoiceEmails:
 
             assert result is True
 
-    @pytest.mark.asyncio
+    @pytest.mark.anyio
     async def test_send_reminder_due_soon(self, test_contact: Contact, test_invoice: Invoice):
         """Test sending due soon reminder."""
         with patch("app.services.email_service.get_settings") as mock_settings:
@@ -214,7 +214,7 @@ class TestInvoiceEmails:
 
             assert result is True
 
-    @pytest.mark.asyncio
+    @pytest.mark.anyio
     async def test_send_reminder_overdue(self, test_contact: Contact, test_invoice: Invoice):
         """Test sending overdue reminder."""
         with patch("app.services.email_service.get_settings") as mock_settings:

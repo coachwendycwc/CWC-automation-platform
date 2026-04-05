@@ -57,6 +57,10 @@ This file tracks active execution items, blockers, and verification work.
 - [ ] Define expense and contractor workflow
 - [ ] Define CPA export package
 - [ ] Define reconciliation workflow
+- [x] Add invoice collection tracking fields for reminder cadence
+- [x] Add manual invoice reminder / collections trigger on invoice detail page
+- [x] Add automated due-soon reminders in workflow scheduler
+- [x] Add automated overdue and final notice collections emails in workflow scheduler
 
 ## Blocked / Depends On
 
@@ -81,6 +85,8 @@ This file tracks active execution items, blockers, and verification work.
 - [ ] Verify direct profile-photo and booking-logo uploads persist from `/settings/profile`
 - [ ] Verify uploaded booking logo auto-updates `booking_page_brand_color`
 - [ ] Invoice and contract flow with real pilot data
+- [ ] Verify invoice detail page collections card reflects live reminder timestamps
+- [ ] Verify automated due-soon, overdue, and final notice emails in a real configured environment
 - [ ] Client portal access for post-session assets
 - [ ] Pilot readiness for active CWC workflows
 
@@ -97,5 +103,6 @@ This file tracks active execution items, blockers, and verification work.
 - [ ] Google calendar conflict verification with a live connected account
 - [ ] Booking confirmation and follow-up emails with branded styling
 - [ ] Public booking reschedule UI on top of `/api/book/manage/{token}/reschedule`
+- [ ] Add collections cadence controls and custom reminder templates
 - [ ] Session intelligence domain model expansion
 - [ ] Finance ledger domain design doc

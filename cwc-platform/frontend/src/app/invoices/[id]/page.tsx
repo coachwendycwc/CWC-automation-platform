@@ -58,6 +58,10 @@ interface Invoice {
   sent_at: string | null;
   viewed_at: string | null;
   paid_at: string | null;
+  due_soon_reminder_sent_at: string | null;
+  overdue_reminder_sent_at: string | null;
+  final_notice_sent_at: string | null;
+  last_collection_email_sent_at: string | null;
   is_payment_plan: boolean;
   view_token: string;
   notes: string | null;
@@ -106,6 +110,7 @@ export default function InvoiceDetailPage() {
   const [payments, setPayments] = useState<Payment[]>([]);
   const [loading, setLoading] = useState(true);
   const [showPaymentModal, setShowPaymentModal] = useState(false);
+  const [sendingReminder, setSendingReminder] = useState(false);
 
   // Payment form state
   const [paymentAmount, setPaymentAmount] = useState<string>("");
@@ -166,6 +171,43 @@ export default function InvoiceDetailPage() {
       router.push(`/invoices/${newInvoice.id}`);
     } catch (err: any) {
       toast.error(err.message || "Failed to duplicate invoice");
+    }
+  };
+
+  const getReminderKind = (currentInvoice: Invoice): "due_soon" | "overdue" | "final_notice" => {
+    const dueDate = new Date(currentInvoice.due_date);
+    const now = new Date();
+    const daysUntilDue = Math.ceil((dueDate.getTime() - now.getTime()) / (1000 * 60 * 60 * 24));
+    if (daysUntilDue < -14) {
+      return "final_notice";
+    }
+    if (daysUntilDue < 0) {
+      return "overdue";
+    }
+    return "due_soon";
+  };
+
+  const getReminderLabel = (currentInvoice: Invoice) => {
+    const kind = getReminderKind(currentInvoice);
+    if (kind === "final_notice") return "Send Final Notice";
+    if (kind === "overdue") return "Send Overdue Reminder";
+    return "Send Reminder";
+  };
+
+  const handleSendReminder = async () => {
+    if (!invoice) return;
+
+    try {
+      setSendingReminder(true);
+      const token = localStorage.getItem("token");
+      if (!token) return;
+      await invoicesApi.sendReminder(token, invoice.id, { kind: getReminderKind(invoice) });
+      toast.success("Collections email sent");
+      await loadInvoice(invoice.id);
+    } catch (err: any) {
+      toast.error(err.message || "Failed to send reminder");
+    } finally {
+      setSendingReminder(false);
     }
   };
 
@@ -341,6 +383,10 @@ export default function InvoiceDetailPage() {
                 }}>
                   <DollarSign className="h-4 w-4 mr-2" />
                   Record Payment
+                </Button>
+                <Button variant="outline" onClick={handleSendReminder} disabled={sendingReminder}>
+                  <Send className="h-4 w-4 mr-2" />
+                  {sendingReminder ? "Sending..." : getReminderLabel(invoice)}
                 </Button>
                 <Button variant="outline" onClick={handleCancel}>
                   <X className="h-4 w-4 mr-2" />
@@ -576,6 +622,38 @@ export default function InvoiceDetailPage() {
                 <div className="border-t pt-3 flex justify-between">
                   <span className="font-medium">Balance Due</span>
                   <span className="font-bold text-lg">{formatCurrency(invoice.balance_due)}</span>
+                </div>
+              </CardContent>
+            </Card>
+
+            <Card>
+              <CardHeader>
+                <CardTitle>Collections</CardTitle>
+              </CardHeader>
+              <CardContent className="space-y-3">
+                <div className="flex justify-between">
+                  <span className="text-muted-foreground">Last email</span>
+                  <span className="font-medium">
+                    {invoice.last_collection_email_sent_at ? formatDate(invoice.last_collection_email_sent_at) : "Not sent"}
+                  </span>
+                </div>
+                <div className="flex justify-between">
+                  <span className="text-muted-foreground">Due soon reminder</span>
+                  <span className="font-medium">
+                    {invoice.due_soon_reminder_sent_at ? formatDate(invoice.due_soon_reminder_sent_at) : "Not sent"}
+                  </span>
+                </div>
+                <div className="flex justify-between">
+                  <span className="text-muted-foreground">Overdue reminder</span>
+                  <span className="font-medium">
+                    {invoice.overdue_reminder_sent_at ? formatDate(invoice.overdue_reminder_sent_at) : "Not sent"}
+                  </span>
+                </div>
+                <div className="flex justify-between">
+                  <span className="text-muted-foreground">Final notice</span>
+                  <span className="font-medium">
+                    {invoice.final_notice_sent_at ? formatDate(invoice.final_notice_sent_at) : "Not sent"}
+                  </span>
                 </div>
               </CardContent>
             </Card>
