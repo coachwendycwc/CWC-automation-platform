@@ -65,6 +65,7 @@ This file tracks active execution items, blockers, and verification work.
 - [x] Add automated overdue and final notice collections emails in workflow scheduler
 - [x] Add collections visibility to invoice list and stats so follow-up work is obvious
 - [x] Add dashboard-level follow-up visibility for invoice collections attention
+- [x] Add one-click collections reminder sending from the invoice list
 
 ## Blocked / Depends On
 
@@ -93,6 +94,7 @@ This file tracks active execution items, blockers, and verification work.
 - [ ] Invoice and contract flow with real pilot data
 - [ ] Verify invoice detail page collections card reflects live reminder timestamps
 - [ ] Verify invoice list shows follow-up badges and last collection email timestamps correctly
+- [ ] Verify invoice list one-click reminder action sends the expected due-soon, overdue, or final notice email
 - [ ] Verify automated due-soon, overdue, and final notice emails in a real configured environment
 - [ ] Verify dashboard `Needs Follow-Up` metric tracks invoice collections workload accurately
 - [ ] Client portal access for post-session assets

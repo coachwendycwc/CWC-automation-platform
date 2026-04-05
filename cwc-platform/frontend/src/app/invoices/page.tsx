@@ -1,6 +1,7 @@
 "use client";
 
 import { useEffect, useState } from "react";
+import { toast } from "sonner";
 import { Shell } from "@/components/layout/Shell";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
@@ -73,6 +74,7 @@ export default function InvoicesPage() {
   const [loading, setLoading] = useState(true);
   const [filter, setFilter] = useState<string>("");
   const [search, setSearch] = useState<string>("");
+  const [sendingReminderFor, setSendingReminderFor] = useState<string | null>(null);
 
   useEffect(() => {
     loadData();
@@ -105,9 +107,10 @@ export default function InvoicesPage() {
       const token = localStorage.getItem("token");
       if (!token) return;
       await invoicesApi.send(token, id);
+      toast.success("Invoice sent");
       await loadData();
     } catch (err: any) {
-      alert(err.message || "Failed to send invoice");
+      toast.error(err.message || "Failed to send invoice");
     }
   };
 
@@ -116,9 +119,48 @@ export default function InvoicesPage() {
       const token = localStorage.getItem("token");
       if (!token) return;
       await invoicesApi.duplicate(token, id);
+      toast.success("Invoice duplicated");
       await loadData();
     } catch (err: any) {
-      alert(err.message || "Failed to duplicate invoice");
+      toast.error(err.message || "Failed to duplicate invoice");
+    }
+  };
+
+  const getReminderKind = (invoice: Invoice): "due_soon" | "overdue" | "final_notice" => {
+    const dueDate = new Date(invoice.due_date);
+    const now = new Date();
+    const daysUntilDue = Math.ceil((dueDate.getTime() - now.getTime()) / (1000 * 60 * 60 * 24));
+    if (daysUntilDue < -14) {
+      return "final_notice";
+    }
+    if (daysUntilDue < 0) {
+      return "overdue";
+    }
+    return "due_soon";
+  };
+
+  const getReminderLabel = (invoice: Invoice) => {
+    const kind = getReminderKind(invoice);
+    if (kind === "final_notice") return "Final notice";
+    if (kind === "overdue") return "Remind";
+    return "Nudge";
+  };
+
+  const canSendReminder = (invoice: Invoice) =>
+    invoice.balance_due > 0 && ["sent", "viewed", "partial", "overdue"].includes(invoice.status);
+
+  const handleSendReminder = async (invoice: Invoice) => {
+    try {
+      const token = localStorage.getItem("token");
+      if (!token) return;
+      setSendingReminderFor(invoice.id);
+      await invoicesApi.sendReminder(token, invoice.id, { kind: getReminderKind(invoice) });
+      toast.success("Collections email sent");
+      await loadData();
+    } catch (err: any) {
+      toast.error(err.message || "Failed to send reminder");
+    } finally {
+      setSendingReminderFor(null);
     }
   };
 
@@ -430,6 +472,17 @@ export default function InvoicesPage() {
                               title="Send invoice"
                             >
                               <Send className="h-4 w-4" />
+                            </Button>
+                          )}
+                          {canSendReminder(invoice) && (
+                            <Button
+                              size="sm"
+                              variant="ghost"
+                              onClick={() => handleSendReminder(invoice)}
+                              disabled={sendingReminderFor === invoice.id}
+                              title={getReminderLabel(invoice)}
+                            >
+                              <Clock className="h-4 w-4" />
                             </Button>
                           )}
                           <Button

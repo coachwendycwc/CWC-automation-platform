@@ -41,3 +41,5 @@
 - Verified the collections-visibility slice with focused invoice tests, backend compile checks, and a live `200` response from `/invoices`.
 - Added a dashboard-level `Needs Follow-Up` invoice metric so collections workload is visible from the main home screen.
 - Extended `/api/reports/dashboard` to return `invoices.collections_attention` for invoices that are overdue or due soon without a reminder.
+- Added one-click reminder sending from the invoice list so collections follow-up can happen without opening each invoice.
+- Replaced the invoice list page's remaining send/duplicate browser alerts with toast feedback for a more consistent operator flow.
