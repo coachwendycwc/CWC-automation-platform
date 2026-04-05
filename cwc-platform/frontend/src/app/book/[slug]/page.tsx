@@ -2,12 +2,13 @@
 
 import { useEffect, useState } from "react";
 import { useParams } from "next/navigation";
+import Link from "next/link";
 import { Card, CardContent, CardHeader, CardTitle, CardDescription } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Skeleton } from "@/components/ui/skeleton";
 import { publicBookingApi } from "@/lib/api";
-import { PublicBookingTypeInfo, TimeSlot } from "@/types";
+import { PublicBookingResult, PublicBookingTypeInfo, TimeSlot } from "@/types";
 import { Clock, ChevronLeft, ChevronRight, Check } from "lucide-react";
 
 export default function PublicBookingPage() {
@@ -38,6 +39,8 @@ export default function PublicBookingPage() {
   });
   const [submitting, setSubmitting] = useState(false);
   const [success, setSuccess] = useState(false);
+  const [paymentRedirecting, setPaymentRedirecting] = useState(false);
+  const [bookingResult, setBookingResult] = useState<PublicBookingResult | null>(null);
 
   const brandColor = bookingType?.booking_page_brand_color || "#2A7B8C";
   const bookingTitle = bookingType?.booking_page_title || bookingType?.name || "Book your session";
@@ -90,13 +93,20 @@ export default function PublicBookingPage() {
     setError("");
 
     try {
-      await publicBookingApi.createBooking(slug, {
+      const result: PublicBookingResult = await publicBookingApi.createBooking(slug, {
         start_time: selectedSlot.start_time,
         intake_responses: Object.fromEntries(
           (bookingType?.intake_questions || []).map((question) => [question.id, formData[question.id] || ""])
         ),
         ...formData,
       });
+
+      if (result.payment_required && result.payment_url) {
+        setPaymentRedirecting(true);
+        window.location.href = result.payment_url;
+        return;
+      }
+      setBookingResult(result);
       setSuccess(true);
     } catch (err: any) {
       setError(err.message || "Failed to create booking");
@@ -227,6 +237,15 @@ export default function PublicBookingPage() {
             <p className="text-sm text-slate-500">
               A confirmation email has been sent to {formData.email}.
             </p>
+            {bookingResult?.confirmation_token && (
+              <div className="mt-6">
+                <Button variant="outline" asChild className="w-full rounded-2xl">
+                  <Link href={`/book/manage/${bookingResult.confirmation_token}`}>
+                    Manage booking
+                  </Link>
+                </Button>
+              </div>
+            )}
           </CardContent>
         </Card>
         </div>
@@ -480,6 +499,15 @@ export default function PublicBookingPage() {
                       <div className="rounded-md bg-destructive/10 border border-destructive/20 p-3 text-sm text-destructive">{error}</div>
                     )}
 
+                    {bookingType?.price !== null && bookingType?.price !== undefined && bookingType.price > 0 && (
+                      <div className="rounded-2xl border border-slate-200/80 bg-slate-50/80 p-4 text-sm text-slate-600">
+                        <p className="font-medium text-slate-900">Your time will be reserved after you continue to payment.</p>
+                        <p className="mt-1">
+                          Once payment is completed, your booking will be confirmed and your meeting details will be sent automatically.
+                        </p>
+                      </div>
+                    )}
+
                     <div className="grid grid-cols-2 gap-4">
                       <div className="space-y-2">
                         <label className="block text-sm font-medium text-slate-700">
@@ -601,10 +629,16 @@ export default function PublicBookingPage() {
                     <Button
                       type="submit"
                       className="h-12 w-full cursor-pointer rounded-2xl text-white shadow-[0_18px_40px_rgba(15,23,42,0.14)]"
-                      disabled={submitting}
+                      disabled={submitting || paymentRedirecting}
                       style={{ backgroundColor: brandColor }}
                     >
-                      {submitting ? "Booking..." : "Confirm booking"}
+                      {paymentRedirecting
+                        ? "Redirecting to payment..."
+                        : submitting
+                        ? "Booking..."
+                        : bookingType?.price && bookingType.price > 0
+                        ? "Continue to payment"
+                        : "Confirm booking"}
                     </Button>
                   </form>
                 </CardContent>

@@ -17,3 +17,9 @@
 - Reused Cloudinary service for image uploads and added frontend upload buttons/previews in Settings > Profile.
 - Added `BrandColorService` using Pillow to detect a dominant non-neutral color from uploaded logos.
 - Booking-logo uploads now automatically update `booking_page_brand_color` while still allowing manual override.
+- Added booking type duplication, starter templates, and cleaner copy/preview actions in Settings > Booking Types.
+- Added paid public booking flow that creates an invoice, redirects to `/pay/{token}`, and confirms the pending booking after Stripe checkout.
+- Upgraded the public payment page and success page to feel booking-aware rather than generic invoice screens.
+- Extended public invoice responses with related booking summary data, including meeting link context.
+- Added a public `/book/manage/{token}` page and wired payment success to a `Manage booking` action for post-payment self-service.
+- Exposed `confirmation_token` through public booking and invoice responses so both free and paid bookings can land in the same self-service management flow.

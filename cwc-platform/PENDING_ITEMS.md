@@ -74,6 +74,9 @@ This file tracks active execution items, blockers, and verification work.
 - [ ] Verify public booking create writes a Google event to the selected primary calendar
 - [ ] Verify public booking cancel removes the Google event from the selected primary calendar
 - [ ] Verify seeded test booking page at `/book/strategy-session`
+- [ ] Verify paid booking flow lands on `/pay/{token}/success` with live booking summary and `Manage booking` action
+- [ ] Verify `/book/manage/{token}` loads session details and allows self-service cancellation
+- [ ] Verify free booking confirmation screen links to `/book/manage/{token}`
 - [ ] Verify booking branding edits persist from `/settings/profile` to `/book/strategy-session`
 - [ ] Verify direct profile-photo and booking-logo uploads persist from `/settings/profile`
 - [ ] Verify uploaded booking logo auto-updates `booking_page_brand_color`
@@ -93,6 +96,6 @@ This file tracks active execution items, blockers, and verification work.
 
 - [ ] Google calendar conflict verification with a live connected account
 - [ ] Booking confirmation and follow-up emails with branded styling
-- [ ] Booking page logo upload flow instead of URL-only input
+- [ ] Public booking reschedule UI on top of `/api/book/manage/{token}/reschedule`
 - [ ] Session intelligence domain model expansion
 - [ ] Finance ledger domain design doc

@@ -8,7 +8,7 @@ import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
 import { Skeleton } from "@/components/ui/skeleton";
 import { publicInvoiceApi, stripeApi } from "@/lib/api";
-import { AlertTriangle, CheckCircle, CreditCard, Loader2 } from "lucide-react";
+import { AlertTriangle, CheckCircle, Clock3, CreditCard, Loader2, ShieldCheck } from "lucide-react";
 
 interface LineItem {
   description: string;
@@ -52,6 +52,7 @@ export default function PublicInvoicePage() {
   const [invoice, setInvoice] = useState<PublicInvoice | null>(null);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
+  const [paymentError, setPaymentError] = useState<string | null>(null);
   const [paying, setPaying] = useState(false);
 
   useEffect(() => {
@@ -80,6 +81,7 @@ export default function PublicInvoicePage() {
   const handlePay = async () => {
     if (!params.token) return;
 
+    setPaymentError(null);
     setPaying(true);
     try {
       // Create Stripe checkout session and redirect
@@ -93,9 +95,9 @@ export default function PublicInvoicePage() {
       }
     } catch (err: any) {
       if (err.message?.includes("not configured")) {
-        alert("Online payments are not yet available. Please contact us to arrange payment.");
+        setPaymentError("Online payments are not available yet. Please contact us to arrange payment.");
       } else {
-        alert(err.message || "Payment failed. Please try again.");
+        setPaymentError(err.message || "Payment failed. Please try again.");
       }
       setPaying(false);
     }
@@ -119,7 +121,7 @@ export default function PublicInvoicePage() {
 
   if (loading) {
     return (
-      <div className="min-h-screen bg-muted flex items-center justify-center">
+      <div className="min-h-screen bg-[radial-gradient(circle_at_top_left,_rgba(255,255,255,0.92),_rgba(241,245,249,0.92)_48%,_rgba(233,241,244,0.96))] flex items-center justify-center">
         <div className="max-w-3xl w-full mx-auto px-4 space-y-6">
           <div className="text-center space-y-3">
             <Skeleton className="h-20 w-48 mx-auto" />
@@ -133,8 +135,8 @@ export default function PublicInvoicePage() {
 
   if (error) {
     return (
-      <div className="min-h-screen bg-muted flex items-center justify-center p-4">
-        <Card className="max-w-md w-full">
+      <div className="min-h-screen bg-[radial-gradient(circle_at_top_left,_rgba(255,255,255,0.92),_rgba(241,245,249,0.92)_48%,_rgba(233,241,244,0.96))] flex items-center justify-center p-4">
+        <Card className="max-w-md w-full rounded-[2rem] border-white/70 bg-white/92 shadow-[0_30px_90px_rgba(15,23,42,0.12)]">
           <CardContent className="py-12 text-center">
             <AlertTriangle className="h-12 w-12 mx-auto text-destructive mb-4" />
             <h2 className="text-xl font-bold text-foreground mb-2">Invoice Not Available</h2>
@@ -150,9 +152,10 @@ export default function PublicInvoicePage() {
   }
 
   const isPaid = invoice.status === "paid";
+  const primaryLineItem = invoice.line_items[0];
 
   return (
-    <div className="min-h-screen bg-muted py-8 px-4">
+    <div className="min-h-screen bg-[radial-gradient(circle_at_top_left,_rgba(255,255,255,0.92),_rgba(241,245,249,0.92)_48%,_rgba(233,241,244,0.96))] py-10 px-4">
       <div className="max-w-3xl mx-auto">
         {/* Header */}
         <div className="mb-8 text-center">
@@ -163,12 +166,20 @@ export default function PublicInvoicePage() {
             height={170}
             className="h-20 w-auto mx-auto mb-2"
           />
-          <p className="text-muted-foreground mt-1">Invoice</p>
+          <div className="inline-flex rounded-full border border-slate-200/80 bg-white/80 px-3 py-1 text-[11px] font-semibold uppercase tracking-[0.18em] text-slate-500">
+            Secure payment
+          </div>
+          <h1 className="mt-4 text-3xl font-semibold tracking-[-0.04em] text-slate-950">
+            Complete your booking
+          </h1>
+          <p className="mt-3 text-sm leading-6 text-slate-600">
+            Review your session details and complete payment to finalize your booking.
+          </p>
         </div>
 
         {/* Status Banner */}
         {isPaid && (
-          <div className="mb-6 bg-success/10 border border-success/20 rounded-lg p-4 flex items-center gap-3">
+          <div className="mb-6 flex items-center gap-3 rounded-2xl border border-success/20 bg-success/10 p-4">
             <CheckCircle className="h-6 w-6 text-success" />
             <div>
               <p className="font-medium text-success">Invoice Paid</p>
@@ -178,7 +189,7 @@ export default function PublicInvoicePage() {
         )}
 
         {invoice.is_overdue && !isPaid && (
-          <div className="mb-6 bg-destructive/10 border border-destructive/20 rounded-lg p-4 flex items-center gap-3">
+          <div className="mb-6 flex items-center gap-3 rounded-2xl border border-destructive/20 bg-destructive/10 p-4">
             <AlertTriangle className="h-6 w-6 text-destructive" />
             <div>
               <p className="font-medium text-destructive">Invoice Overdue</p>
@@ -187,8 +198,8 @@ export default function PublicInvoicePage() {
           </div>
         )}
 
-        <Card>
-          <CardHeader className="border-b">
+        <Card className="rounded-[2rem] border-white/70 bg-white/92 shadow-[0_30px_90px_rgba(15,23,42,0.12)]">
+          <CardHeader className="border-b border-slate-200/80">
             <div className="flex justify-between items-start">
               <div>
                 <CardTitle className="text-xl">{invoice.invoice_number}</CardTitle>
@@ -205,6 +216,35 @@ export default function PublicInvoicePage() {
           </CardHeader>
 
           <CardContent className="py-6">
+            <div className="mb-6 grid gap-4 md:grid-cols-2">
+              <div className="rounded-2xl border border-slate-200/80 bg-slate-50/80 p-4">
+                <div className="mb-2 text-xs font-semibold uppercase tracking-[0.18em] text-slate-400">
+                  Session
+                </div>
+                <p className="font-medium text-slate-950">
+                  {primaryLineItem?.description || "Booked session"}
+                </p>
+                {invoice.memo && (
+                  <p className="mt-2 text-sm leading-6 text-slate-600">
+                    {invoice.memo}
+                  </p>
+                )}
+              </div>
+              <div className="rounded-2xl border border-slate-200/80 bg-slate-50/80 p-4">
+                <div className="mb-2 text-xs font-semibold uppercase tracking-[0.18em] text-slate-400">
+                  Payment Status
+                </div>
+                <div className="flex items-center gap-2 text-sm text-slate-600">
+                  <Clock3 className="h-4 w-4" />
+                  Due {formatDate(invoice.due_date)}
+                </div>
+                <div className="mt-3 flex items-center gap-2 text-sm text-slate-600">
+                  <ShieldCheck className="h-4 w-4" />
+                  Secure checkout powered by Stripe
+                </div>
+              </div>
+            </div>
+
             {/* Line Items */}
             <table className="w-full">
               <thead className="border-b">
@@ -283,14 +323,14 @@ export default function PublicInvoicePage() {
             {/* Payment Button */}
             {!isPaid && invoice.balance_due > 0 && (
               <div className="mt-8 pt-6 border-t">
-                <div className="bg-muted rounded-lg p-6 text-center">
+                <div className="rounded-[1.75rem] border border-slate-200/80 bg-slate-50/85 p-6 text-center">
                   <h3 className="text-lg font-medium text-foreground mb-2">
                     Amount Due: {formatCurrency(invoice.balance_due)}
                   </h3>
                   <p className="text-sm text-muted-foreground mb-4">
-                    Click below to pay securely with credit card or bank transfer
+                    Continue to secure checkout to confirm this session and receive your final meeting details.
                   </p>
-                  <Button size="lg" onClick={handlePay} disabled={paying} className="cursor-pointer">
+                  <Button size="lg" onClick={handlePay} disabled={paying} className="h-12 cursor-pointer rounded-2xl px-8">
                     {paying ? (
                       <>
                         <Loader2 className="h-5 w-5 mr-2 animate-spin" />
@@ -303,6 +343,11 @@ export default function PublicInvoicePage() {
                       </>
                     )}
                   </Button>
+                  {paymentError && (
+                    <div className="mt-4 rounded-2xl border border-destructive/20 bg-destructive/10 px-4 py-3 text-sm text-destructive">
+                      {paymentError}
+                    </div>
+                  )}
                   <p className="text-sm text-muted-foreground mt-4">
                     Secure payment processing by Stripe
                   </p>

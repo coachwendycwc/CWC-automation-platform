@@ -2,18 +2,23 @@
 Public booking endpoints - no authentication required.
 """
 from datetime import datetime, date, timedelta
+from decimal import Decimal
 
 from fastapi import APIRouter, Depends, HTTPException, status, Query
 from sqlalchemy.ext.asyncio import AsyncSession
 from sqlalchemy import select
 from sqlalchemy.orm import selectinload
 
+from app.config import get_settings
 from app.database import get_db
 from app.models.booking import Booking
 from app.models.booking_type import BookingType
 from app.models.contact import Contact
+from app.models.invoice import Invoice
 from app.models.user import User
+from app.schemas.invoice import LineItemCreate
 from app.services.booking_calendar_service import BookingCalendarService
+from app.services.invoice_service import InvoiceService
 from app.services.scheduling_service import SchedulingService
 from app.services.zoom_service import zoom_service
 from app.schemas.booking import (
@@ -27,6 +32,7 @@ from app.schemas.booking import (
 )
 
 router = APIRouter(prefix="/book", tags=["Public Booking"])
+settings = get_settings()
 
 
 async def create_zoom_meeting_for_public_booking(
@@ -90,6 +96,52 @@ async def get_first_user(db: AsyncSession) -> User:
             detail="No users configured in the system",
         )
     return user
+
+
+async def get_first_user_or_none(db: AsyncSession) -> User | None:
+    """Get the first user when present without failing the request."""
+    result = await db.execute(select(User).limit(1))
+    return result.scalar_one_or_none()
+
+
+async def create_booking_invoice(
+    booking: Booking,
+    booking_type: BookingType,
+    contact: Contact,
+    db: AsyncSession,
+) -> Invoice:
+    """Create a payable invoice for a paid public booking."""
+    invoice_service = InvoiceService(db)
+    invoice_number = await invoice_service.generate_invoice_number()
+    line_item = LineItemCreate(
+        description=booking_type.name,
+        quantity=Decimal("1"),
+        unit_price=Decimal(str(booking_type.price)),
+        service_type="coaching",
+        booking_id=booking.id,
+    )
+    totals = invoice_service.calculate_totals([line_item])
+
+    invoice = Invoice(
+        invoice_number=invoice_number,
+        contact_id=contact.id,
+        line_items=invoice_service.prepare_line_items([line_item]),
+        subtotal=totals["subtotal"],
+        tax_amount=totals["tax_amount"],
+        total=totals["total"],
+        amount_paid=Decimal("0"),
+        balance_due=totals["total"],
+        payment_terms="due_on_receipt",
+        due_date=invoice_service.calculate_due_date("due_on_receipt"),
+        status="sent",
+        sent_at=datetime.now(),
+        memo=f"Payment for {booking_type.name} on {booking.start_time.strftime('%B %d, %Y at %I:%M %p')}",
+        notes="Generated from public booking flow",
+    )
+    db.add(invoice)
+    await db.commit()
+    await db.refresh(invoice)
+    return invoice
 
 
 @router.get("/{slug}", response_model=PublicBookingTypeInfo)
@@ -255,6 +307,8 @@ async def create_public_booking(
 
     # Calculate end time
     end_time = data.start_time + timedelta(minutes=booking_type.duration_minutes)
+    payment_required = booking_type.price is not None and Decimal(str(booking_type.price)) > 0
+    should_auto_confirm = not payment_required and not booking_type.requires_confirmation
 
     # Create booking
     booking = Booking(
@@ -264,11 +318,17 @@ async def create_public_booking(
         end_time=end_time,
         intake_responses=data.intake_responses,
         notes=data.notes,
-        status="confirmed" if not booking_type.requires_confirmation else "pending",
+        status="confirmed" if should_auto_confirm else "pending",
     )
     db.add(booking)
     await db.commit()
     await db.refresh(booking)
+
+    invoice = None
+    payment_url = None
+    if payment_required:
+        invoice = await create_booking_invoice(booking, booking_type, contact, db)
+        payment_url = f"{settings.frontend_url}/pay/{invoice.view_token}"
 
     if booking.status == "confirmed":
         await provision_public_booking_meeting(user, booking, booking_type, contact, db)
@@ -283,8 +343,16 @@ async def create_public_booking(
         start_time=booking.start_time,
         end_time=booking.end_time,
         status=booking.status,
+        confirmation_token=booking.confirmation_token,
         booking_type_name=booking_type.name,
         booking_type_duration=booking_type.duration_minutes,
+        meeting_provider=booking.meeting_provider,
+        meeting_url=booking.meeting_url,
+        location_details=booking_type.location_details,
+        post_booking_instructions=booking_type.post_booking_instructions,
+        payment_required=payment_required,
+        payment_url=payment_url,
+        invoice_view_token=invoice.view_token if invoice else None,
         can_cancel=can_modify,
         can_reschedule=can_modify,
     )
@@ -320,8 +388,16 @@ async def get_booking_by_token(
         start_time=booking.start_time,
         end_time=booking.end_time,
         status=booking.status,
+        confirmation_token=booking.confirmation_token,
         booking_type_name=booking.booking_type.name,
         booking_type_duration=booking.booking_type.duration_minutes,
+        meeting_provider=booking.meeting_provider,
+        meeting_url=booking.meeting_url,
+        location_details=booking.booking_type.location_details,
+        post_booking_instructions=booking.booking_type.post_booking_instructions,
+        payment_required=False,
+        payment_url=None,
+        invoice_view_token=None,
         can_cancel=can_modify and booking.status not in ["cancelled", "completed"],
         can_reschedule=can_modify and booking.status not in ["cancelled", "completed"],
     )
@@ -413,8 +489,16 @@ async def reschedule_booking(
         start_time=booking.start_time,
         end_time=booking.end_time,
         status=booking.status,
+        confirmation_token=booking.confirmation_token,
         booking_type_name=booking.booking_type.name,
         booking_type_duration=booking.booking_type.duration_minutes,
+        meeting_provider=booking.meeting_provider,
+        meeting_url=booking.meeting_url,
+        location_details=booking.booking_type.location_details,
+        post_booking_instructions=booking.booking_type.post_booking_instructions,
+        payment_required=False,
+        payment_url=None,
+        invoice_view_token=None,
         can_cancel=can_modify,
         can_reschedule=can_modify,
     )
@@ -453,6 +537,7 @@ async def cancel_booking_self_service(
         )
 
     scheduling = SchedulingService(db)
+    booking_type = booking.booking_type
 
     # Check 24hr policy
     if not await scheduling.can_cancel(booking):
@@ -470,10 +555,11 @@ async def cancel_booking_self_service(
     await db.commit()
     await db.refresh(booking)
 
-    user = await get_first_user(db)
-    calendar_service = BookingCalendarService(db)
-    await calendar_service.delete_booking_event(user=user, booking=booking)
-    await db.refresh(booking)
+    user = await get_first_user_or_none(db)
+    if user:
+        calendar_service = BookingCalendarService(db)
+        await calendar_service.delete_booking_event(user=user, booking=booking)
+        await db.refresh(booking)
 
     # TODO: Send cancellation confirmation email
 
@@ -482,8 +568,16 @@ async def cancel_booking_self_service(
         start_time=booking.start_time,
         end_time=booking.end_time,
         status=booking.status,
-        booking_type_name=booking.booking_type.name,
-        booking_type_duration=booking.booking_type.duration_minutes,
+        confirmation_token=booking.confirmation_token,
+        booking_type_name=booking_type.name,
+        booking_type_duration=booking_type.duration_minutes,
+        meeting_provider=booking.meeting_provider,
+        meeting_url=booking.meeting_url,
+        location_details=booking_type.location_details,
+        post_booking_instructions=booking_type.post_booking_instructions,
+        payment_required=False,
+        payment_url=None,
+        invoice_view_token=None,
         can_cancel=False,
         can_reschedule=False,
     )

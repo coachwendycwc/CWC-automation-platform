@@ -2,7 +2,8 @@
 
 import { useEffect, useState } from "react";
 import Link from "next/link";
-import { ArrowLeft, Copy, Pencil, Plus, Trash2 } from "lucide-react";
+import { toast } from "sonner";
+import { ArrowLeft, Copy, ExternalLink, Pencil, Plus, Trash2 } from "lucide-react";
 
 import { Shell } from "@/components/layout/Shell";
 import { Badge } from "@/components/ui/badge";
@@ -42,6 +43,153 @@ const defaultFormData: BookingTypeFormData = {
   is_active: true,
 };
 
+const STARTER_TEMPLATES: Array<{
+  key: string;
+  title: string;
+  description: string;
+  data: BookingTypeFormData;
+}> = [
+  {
+    key: "discovery-call",
+    title: "Discovery Call",
+    description: "Free introductory session to understand fit and next steps.",
+    data: {
+      name: "Discovery Call",
+      slug: "discovery-call",
+      description: "A free conversation to explore your goals, current challenges, and whether we are a good fit to work together.",
+      duration_minutes: 30,
+      color: "#0F766E",
+      price: undefined,
+      show_price_on_booking_page: true,
+      location_type: "zoom",
+      location_details: "",
+      post_booking_instructions: "Please come ready to share what support you are looking for and what you want to walk away with.",
+      intake_questions: [
+        {
+          id: "discovery-focus",
+          label: "What would you most like support with right now?",
+          question_type: "long_text",
+          required: true,
+          placeholder: "Tell me what is bringing you to this call.",
+          options: [],
+        },
+      ],
+      buffer_before: 0,
+      buffer_after: 15,
+      min_notice_hours: 12,
+      max_advance_days: 45,
+      requires_confirmation: false,
+      is_active: true,
+    },
+  },
+  {
+    key: "strategy-session",
+    title: "Strategy Session",
+    description: "Paid working session for focused problem-solving and planning.",
+    data: {
+      name: "Strategy Session",
+      slug: "strategy-session",
+      description: "A focused strategy session to work through a specific challenge, map next steps, and leave with a clear plan.",
+      duration_minutes: 60,
+      color: "#1D4ED8",
+      price: 250,
+      show_price_on_booking_page: true,
+      location_type: "zoom",
+      location_details: "",
+      post_booking_instructions: "Bring any context, documents, or questions you want us to work through together during the session.",
+      intake_questions: [
+        {
+          id: "strategy-outcome",
+          label: "What outcome would make this session successful for you?",
+          question_type: "long_text",
+          required: true,
+          placeholder: "Describe the result you want from this call.",
+          options: [],
+        },
+      ],
+      buffer_before: 15,
+      buffer_after: 15,
+      min_notice_hours: 24,
+      max_advance_days: 60,
+      requires_confirmation: false,
+      is_active: true,
+    },
+  },
+  {
+    key: "coaching-session",
+    title: "Coaching Session",
+    description: "Standard coaching session for active clients.",
+    data: {
+      name: "Coaching Session",
+      slug: "coaching-session",
+      description: "A coaching session for ongoing client work, reflection, goal progress, and next-step accountability.",
+      duration_minutes: 60,
+      color: "#7C3AED",
+      price: undefined,
+      show_price_on_booking_page: false,
+      location_type: "google_meet",
+      location_details: "",
+      post_booking_instructions: "Please take a few minutes before the session to reflect on wins, challenges, and what you want to focus on today.",
+      intake_questions: [
+        {
+          id: "coaching-focus",
+          label: "What would you like to focus on in this session?",
+          question_type: "long_text",
+          required: true,
+          placeholder: "Share the main topic or challenge for today.",
+          options: [],
+        },
+      ],
+      buffer_before: 15,
+      buffer_after: 15,
+      min_notice_hours: 24,
+      max_advance_days: 90,
+      requires_confirmation: false,
+      is_active: true,
+    },
+  },
+];
+
+const getPublicBookingUrl = (slug: string) => `${window.location.origin}/book/${slug}`;
+const generateSlug = (name: string) =>
+  name
+    .toLowerCase()
+    .replace(/[^a-z0-9]+/g, "-")
+    .replace(/^-|-$/g, "");
+
+const buildFormDataFromBookingType = (
+  bookingType: BookingType,
+  options?: { duplicate?: boolean }
+): BookingTypeFormData => {
+  const duplicate = options?.duplicate ?? false;
+  const baseName = duplicate ? `${bookingType.name} Copy` : bookingType.name;
+
+  return {
+    name: baseName,
+    slug: duplicate ? generateSlug(`${bookingType.slug}-copy`) : bookingType.slug,
+    description: bookingType.description || "",
+    duration_minutes: bookingType.duration_minutes,
+    color: bookingType.color,
+    price: bookingType.price ?? undefined,
+    show_price_on_booking_page: bookingType.show_price_on_booking_page,
+    location_type: bookingType.location_type,
+    location_details: bookingType.location_details || "",
+    post_booking_instructions: bookingType.post_booking_instructions || "",
+    intake_questions: (bookingType.intake_questions || []).map((question) => ({
+      ...question,
+      id: createQuestion().id,
+      options: [...question.options],
+    })),
+    buffer_before: bookingType.buffer_before,
+    buffer_after: bookingType.buffer_after,
+    min_notice_hours: bookingType.min_notice_hours,
+    max_advance_days: bookingType.max_advance_days,
+    max_per_day: bookingType.max_per_day ?? undefined,
+    requires_confirmation: bookingType.requires_confirmation,
+    is_active: bookingType.is_active,
+  };
+};
+
 export default function BookingTypesPage() {
   const [bookingTypes, setBookingTypes] = useState<BookingType[]>([]);
   const [loading, setLoading] = useState(true);
@@ -49,6 +197,7 @@ export default function BookingTypesPage() {
   const [editingId, setEditingId] = useState<string | null>(null);
   const [formData, setFormData] = useState<BookingTypeFormData>(defaultFormData);
   const [saving, setSaving] = useState(false);
+  const [templateKeyLoading, setTemplateKeyLoading] = useState<string | null>(null);
   const [error, setError] = useState("");
 
   useEffect(() => {
@@ -76,12 +225,6 @@ export default function BookingTypesPage() {
     setFormData(defaultFormData);
     setError("");
   };
-
-  const generateSlug = (name: string) =>
-    name
-      .toLowerCase()
-      .replace(/[^a-z0-9]+/g, "-")
-      .replace(/^-|-$/g, "");
 
   const normalizePayload = (data: BookingTypeFormData): BookingTypeFormData => ({
     ...data,
@@ -130,29 +273,18 @@ export default function BookingTypesPage() {
   };
 
   const handleEdit = (bookingType: BookingType) => {
-    setFormData({
-      name: bookingType.name,
-      slug: bookingType.slug,
-      description: bookingType.description || "",
-      duration_minutes: bookingType.duration_minutes,
-      color: bookingType.color,
-      price: bookingType.price ?? undefined,
-      show_price_on_booking_page: bookingType.show_price_on_booking_page,
-      location_type: bookingType.location_type,
-      location_details: bookingType.location_details || "",
-      post_booking_instructions: bookingType.post_booking_instructions || "",
-      intake_questions: bookingType.intake_questions || [],
-      buffer_before: bookingType.buffer_before,
-      buffer_after: bookingType.buffer_after,
-      min_notice_hours: bookingType.min_notice_hours,
-      max_advance_days: bookingType.max_advance_days,
-      max_per_day: bookingType.max_per_day ?? undefined,
-      requires_confirmation: bookingType.requires_confirmation,
-      is_active: bookingType.is_active,
-    });
+    setFormData(buildFormDataFromBookingType(bookingType));
     setEditingId(bookingType.id);
     setShowForm(true);
     setError("");
+  };
+
+  const handleDuplicate = (bookingType: BookingType) => {
+    setFormData(buildFormDataFromBookingType(bookingType, { duplicate: true }));
+    setEditingId(null);
+    setShowForm(true);
+    setError("");
+    toast.success("Booking type duplicated into the form");
   };
 
   const handleDelete = async (id: string) => {
@@ -173,9 +305,59 @@ export default function BookingTypesPage() {
   };
 
   const copyBookingLink = async (slug: string) => {
-    const link = `${window.location.origin}/book/${slug}`;
-    await navigator.clipboard.writeText(link);
-    alert("Booking link copied to clipboard.");
+    try {
+      const link = getPublicBookingUrl(slug);
+      await navigator.clipboard.writeText(link);
+      toast.success("Booking link copied");
+    } catch {
+      toast.error("Failed to copy booking link");
+    }
+  };
+
+  const handleCreateFromTemplate = async (templateKey: string) => {
+    const token = localStorage.getItem("token");
+    if (!token) {
+      return;
+    }
+
+    const template = STARTER_TEMPLATES.find((item) => item.key === templateKey);
+    if (!template) {
+      toast.error("Starter template not found");
+      return;
+    }
+
+    setTemplateKeyLoading(templateKey);
+    setError("");
+
+    try {
+      const existingSlugs = new Set(bookingTypes.map((bookingType) => bookingType.slug));
+      let nextSlug = template.data.slug || generateSlug(template.data.name);
+      let attempt = 2;
+
+      while (existingSlugs.has(nextSlug)) {
+        nextSlug = `${template.data.slug}-${attempt}`;
+        attempt += 1;
+      }
+
+      const payload = normalizePayload({
+        ...template.data,
+        slug: nextSlug,
+        intake_questions: (template.data.intake_questions || []).map((question) => ({
+          ...question,
+          id: createQuestion().id,
+          options: [...question.options],
+        })),
+      });
+
+      await bookingTypesApi.create(token, payload);
+      await loadBookingTypes();
+      toast.success(`${template.title} created`);
+    } catch (err) {
+      setError(err instanceof Error ? err.message : "Failed to create booking type from template");
+      toast.error("Failed to create starter template");
+    } finally {
+      setTemplateKeyLoading(null);
+    }
   };
 
   const updateQuestion = (questionId: string, updater: (question: BookingIntakeQuestion) => BookingIntakeQuestion) => {
@@ -227,6 +409,30 @@ export default function BookingTypesPage() {
           )}
         </div>
 
+        <Card>
+          <CardHeader>
+            <CardTitle>Starter Templates</CardTitle>
+          </CardHeader>
+          <CardContent>
+            <div className="grid gap-4 md:grid-cols-3">
+              {STARTER_TEMPLATES.map((template) => (
+                <div key={template.key} className="rounded-xl border border-border bg-background p-4">
+                  <h3 className="font-semibold text-foreground">{template.title}</h3>
+                  <p className="mt-2 text-sm text-muted-foreground">{template.description}</p>
+                  <Button
+                    className="mt-4 w-full"
+                    variant="outline"
+                    onClick={() => void handleCreateFromTemplate(template.key)}
+                    disabled={templateKeyLoading !== null}
+                  >
+                    {templateKeyLoading === template.key ? "Creating..." : `Use ${template.title}`}
+                  </Button>
+                </div>
+              ))}
+            </div>
+          </CardContent>
+        </Card>
+
         {showForm && (
           <Card>
             <CardHeader>
@@ -266,7 +472,33 @@ export default function BookingTypesPage() {
                       pattern="[a-z0-9-]+"
                       required
                     />
-                    <p className="mt-1 text-sm text-muted-foreground">Booking URL: /book/{formData.slug || "your-slug"}</p>
+                    <div className="mt-2 flex flex-wrap items-center gap-2 text-sm text-muted-foreground">
+                      <span>Booking URL:</span>
+                      <span className="rounded-full border border-border bg-muted/40 px-3 py-1 font-mono text-xs">
+                        /book/{formData.slug || "your-slug"}
+                      </span>
+                      {formData.slug && (
+                        <>
+                          <button
+                            type="button"
+                            onClick={() => void copyBookingLink(formData.slug)}
+                            className="inline-flex items-center gap-1 text-primary hover:underline"
+                          >
+                            <Copy className="h-3.5 w-3.5" />
+                            Copy
+                          </button>
+                          <a
+                            href={getPublicBookingUrl(formData.slug)}
+                            target="_blank"
+                            rel="noreferrer"
+                            className="inline-flex items-center gap-1 text-primary hover:underline"
+                          >
+                            Preview
+                            <ExternalLink className="h-3.5 w-3.5" />
+                          </a>
+                        </>
+                      )}
+                    </div>
                   </div>
                 </div>
 
@@ -598,10 +830,36 @@ export default function BookingTypesPage() {
                         {bt.location_details && (
                           <p className="text-sm text-muted-foreground">Location: {bt.location_details}</p>
                         )}
-                        <p className="text-sm text-muted-foreground">/book/{bt.slug}</p>
+                        <div className="flex flex-wrap items-center gap-2 text-sm text-muted-foreground">
+                          <span className="rounded-full border border-border bg-muted/40 px-3 py-1 font-mono text-xs">
+                            /book/{bt.slug}
+                          </span>
+                          <a
+                            href={getPublicBookingUrl(bt.slug)}
+                            target="_blank"
+                            rel="noreferrer"
+                            className="inline-flex items-center gap-1 text-primary hover:underline"
+                          >
+                            Open public page
+                            <ExternalLink className="h-3.5 w-3.5" />
+                          </a>
+                        </div>
                       </div>
                       <div className="flex items-center gap-2">
-                        <Button variant="ghost" size="sm" onClick={() => void copyBookingLink(bt.slug)} title="Copy booking link">
+                        <Button
+                          variant="ghost"
+                          size="sm"
+                          onClick={() => void copyBookingLink(bt.slug)}
+                          title="Copy booking link"
+                        >
+                          <Copy className="h-4 w-4" />
+                        </Button>
+                        <a href={getPublicBookingUrl(bt.slug)} target="_blank" rel="noreferrer">
+                          <Button variant="ghost" size="sm" title="Open public booking page">
+                            <ExternalLink className="h-4 w-4" />
+                          </Button>
+                        </a>
+                        <Button variant="ghost" size="sm" onClick={() => handleDuplicate(bt)} title="Duplicate booking type">
                           <Copy className="h-4 w-4" />
                         </Button>
                         <Button variant="ghost" size="sm" onClick={() => handleEdit(bt)}>

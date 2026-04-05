@@ -10,6 +10,8 @@ import uuid
 from httpx import AsyncClient
 
 from app.models.invoice import Invoice
+from app.models.booking import Booking
+from app.models.booking_type import BookingType
 from app.models.contact import Contact
 from app.models.payment import Payment
 
@@ -133,6 +135,65 @@ class TestGetPublicInvoice:
         assert data["status"] == "partial"
         assert float(data["amount_paid"]) == 100.0
         assert float(data["balance_due"]) == 100.0
+
+    @pytest.mark.anyio
+    async def test_get_invoice_includes_related_booking_summary(
+        self, db_session, client: AsyncClient, test_contact: Contact
+    ):
+        booking_type = BookingType(
+            id=str(uuid.uuid4()),
+            name="Strategy Session",
+            slug="strategy-session",
+            duration_minutes=60,
+            price=Decimal("250.00"),
+            is_active=True,
+        )
+        db_session.add(booking_type)
+        await db_session.commit()
+
+        booking = Booking(
+            id=str(uuid.uuid4()),
+            booking_type_id=booking_type.id,
+            contact_id=test_contact.id,
+            start_time=datetime.utcnow() + timedelta(days=5),
+            end_time=datetime.utcnow() + timedelta(days=5, hours=1),
+            status="confirmed",
+            meeting_provider="custom",
+            meeting_url="https://example.com/session-room",
+        )
+        db_session.add(booking)
+        await db_session.commit()
+
+        invoice = Invoice(
+            id=str(uuid.uuid4()),
+            contact_id=test_contact.id,
+            invoice_number="INV-BOOKING-001",
+            status="paid",
+            line_items=[{
+                "description": "Strategy Session",
+                "quantity": 1,
+                "unit_price": 250.0,
+                "amount": 250.0,
+                "booking_id": booking.id,
+            }],
+            subtotal=Decimal("250.00"),
+            total=Decimal("250.00"),
+            amount_paid=Decimal("250.00"),
+            balance_due=Decimal("0"),
+            due_date=date.today(),
+            view_token="booking_summary_token",
+        )
+        db_session.add(invoice)
+        await db_session.commit()
+
+        response = await client.get("/api/invoice/booking_summary_token")
+        assert response.status_code == 200
+        data = response.json()
+        assert data["booking"]["id"] == booking.id
+        assert data["booking"]["status"] == "confirmed"
+        assert data["booking"]["booking_type_name"] == "Strategy Session"
+        assert data["booking"]["confirmation_token"] == booking.confirmation_token
+        assert data["booking"]["meeting_url"] == "https://example.com/session-room"
 
 
 class TestGetPaymentHistory:

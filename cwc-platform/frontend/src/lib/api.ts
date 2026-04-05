@@ -1,3 +1,5 @@
+import type { PublicBookingResult, PublicInvoice } from "@/types";
+
 const API_URL = process.env.NEXT_PUBLIC_API_URL || "http://localhost:8001";
 
 interface ApiOptions extends RequestInit {
@@ -360,22 +362,22 @@ export const publicBookingApi = {
     fetchApi<any>(`/api/book/${slug}/slots?date=${date}`),
 
   createBooking: (slug: string, data: any) =>
-    fetchApi<any>(`/api/book/${slug}`, {
+    fetchApi<PublicBookingResult>(`/api/book/${slug}`, {
       method: "POST",
       body: JSON.stringify(data),
     }),
 
   getBookingByToken: (token: string) =>
-    fetchApi<any>(`/api/book/manage/${token}`),
+    fetchApi<PublicBookingResult>(`/api/book/manage/${token}`),
 
   rescheduleBooking: (token: string, newStartTime: string) =>
-    fetchApi<any>(`/api/book/manage/${token}/reschedule`, {
+    fetchApi<PublicBookingResult>(`/api/book/manage/${token}/reschedule`, {
       method: "POST",
       body: JSON.stringify({ new_start_time: newStartTime }),
     }),
 
   cancelBooking: (token: string, reason?: string) =>
-    fetchApi<any>(`/api/book/manage/${token}/cancel`, {
+    fetchApi<PublicBookingResult>(`/api/book/manage/${token}/cancel`, {
       method: "POST",
       body: JSON.stringify({ reason }),
     }),
@@ -478,7 +480,7 @@ export const paymentPlansApi = {
 // Public Invoice API (no auth required)
 export const publicInvoiceApi = {
   get: (viewToken: string) =>
-    fetchApi<any>(`/api/invoice/${viewToken}`),
+    fetchApi<PublicInvoice>(`/api/invoice/${viewToken}`),
 
   pay: (viewToken: string) =>
     fetchApi<any>(`/api/invoice/${viewToken}/pay`, {

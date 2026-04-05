@@ -306,3 +306,53 @@ export interface PublicBookingTypeInfo {
   min_notice_hours: number;
   max_advance_days: number;
 }
+
+export interface PublicBookingResult {
+  id: string;
+  start_time: string;
+  end_time: string;
+  status: string;
+  confirmation_token: string;
+  booking_type_name: string;
+  booking_type_duration: number;
+  meeting_provider?: string | null;
+  meeting_url?: string | null;
+  location_details?: string | null;
+  post_booking_instructions?: string | null;
+  payment_required: boolean;
+  payment_url: string | null;
+  invoice_view_token: string | null;
+  can_cancel: boolean;
+  can_reschedule: boolean;
+}
+
+export interface PublicInvoiceBookingSummary {
+  id: string;
+  status: string;
+  start_time: string;
+  end_time: string;
+  booking_type_name: string;
+  confirmation_token: string;
+  meeting_provider: string | null;
+  meeting_url: string | null;
+  location_details: string | null;
+  post_booking_instructions: string | null;
+}
+
+export interface PublicInvoice {
+  invoice_number: string;
+  line_items: Array<{
+    description: string;
+    quantity: number;
+    unit_price: number;
+    amount: number;
+  }>;
+  total: number;
+  amount_paid: number;
+  balance_due: number;
+  status: string;
+  contact_name: string;
+  organization_name: string | null;
+  memo: string | null;
+  booking: PublicInvoiceBookingSummary | null;
+}

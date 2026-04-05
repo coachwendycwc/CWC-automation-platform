@@ -116,6 +116,19 @@ class InvoiceStats(BaseModel):
 
 
 # Public invoice view (limited data)
+class InvoicePublicBooking(BaseModel):
+    id: str
+    status: str
+    start_time: datetime
+    end_time: datetime
+    booking_type_name: str
+    confirmation_token: str
+    meeting_provider: Optional[str] = None
+    meeting_url: Optional[str] = None
+    location_details: Optional[str] = None
+    post_booking_instructions: Optional[str] = None
+
+
 class InvoicePublic(BaseModel):
     invoice_number: str
     line_items: list[dict]
@@ -133,5 +146,6 @@ class InvoicePublic(BaseModel):
     contact_name: str
     organization_name: Optional[str] = None
     is_overdue: bool
+    booking: Optional[InvoicePublicBooking] = None
 
     model_config = ConfigDict(from_attributes=True)

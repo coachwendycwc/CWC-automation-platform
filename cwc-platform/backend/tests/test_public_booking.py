@@ -15,6 +15,7 @@ from app.models.booking import Booking
 from app.models.availability import Availability, AvailabilityOverride
 from app.models.calendar_connection import CalendarConnection
 from app.models.contact import Contact
+from app.models.invoice import Invoice
 from app.models.user import User
 
 
@@ -322,6 +323,50 @@ class TestCreatePublicBooking:
         assert bookings[0].meeting_provider == "google_meet"
         assert bookings[0].meeting_url == "https://meet.google.com/test-link"
 
+    @pytest.mark.anyio
+    async def test_create_paid_booking_creates_invoice_and_payment_url(
+        self, db_session, client: AsyncClient, test_booking_type: BookingType, test_user_for_booking: User
+    ):
+        test_booking_type.price = Decimal("250.00")
+        await db_session.commit()
+
+        today = date.today()
+        days_until_monday = (7 - today.weekday()) % 7 or 7
+        next_monday = today + timedelta(days=days_until_monday)
+        start_time = datetime.combine(next_monday, time(13, 0))
+
+        with patch(
+            "app.routers.public_booking.SchedulingService.get_available_slots",
+            new=AsyncMock(return_value=[start_time]),
+        ):
+            response = await client.post(
+                f"/api/book/{test_booking_type.slug}",
+                json={
+                    "start_time": start_time.isoformat(),
+                    "first_name": "Avery",
+                    "last_name": "Cole",
+                    "email": "avery@example.com",
+                },
+            )
+
+        assert response.status_code == 201
+        data = response.json()
+        assert data["payment_required"] is True
+        assert data["payment_url"]
+        assert "/pay/" in data["payment_url"]
+        assert data["status"] == "pending"
+
+        booking_result = await db_session.execute(select(Booking))
+        bookings = booking_result.scalars().all()
+        assert bookings[0].status == "pending"
+        assert bookings[0].google_event_id is None
+
+        invoice_result = await db_session.execute(select(Invoice))
+        invoices = invoice_result.scalars().all()
+        assert len(invoices) == 1
+        assert invoices[0].contact_id == bookings[0].contact_id
+        assert invoices[0].line_items[0]["booking_id"] == bookings[0].id
+
 
 class TestManageBooking:
     """Tests for managing bookings via token."""
@@ -332,7 +377,7 @@ class TestManageBooking:
         response = await client.get("/api/book/manage/invalid-token")
         assert response.status_code == 404
 
-    @pytest.mark.asyncio
+    @pytest.mark.anyio
     async def test_get_booking_success(
         self, db_session, client: AsyncClient, test_booking_type: BookingType, test_contact: Contact
     ):
@@ -354,8 +399,11 @@ class TestManageBooking:
         assert response.status_code == 200
         data = response.json()
         assert data["status"] == "confirmed"
+        assert data["confirmation_token"] == confirmation_token
+        assert data["location_details"] == "Zoom link will be sent automatically"
+        assert data["post_booking_instructions"] == "Bring your biggest leadership question."
 
-    @pytest.mark.asyncio
+    @pytest.mark.anyio
     async def test_cancel_booking(
         self, db_session, client: AsyncClient, test_booking_type: BookingType, test_contact: Contact
     ):

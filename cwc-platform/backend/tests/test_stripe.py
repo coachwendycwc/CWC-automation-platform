@@ -2,7 +2,7 @@
 Tests for Stripe payment integration.
 """
 import pytest
-from unittest.mock import Mock, patch, MagicMock
+from unittest.mock import AsyncMock, Mock, patch, MagicMock
 from decimal import Decimal
 from datetime import datetime
 import uuid
@@ -10,8 +10,11 @@ import uuid
 from httpx import AsyncClient
 
 from app.models.invoice import Invoice
+from app.models.booking import Booking
+from app.models.booking_type import BookingType
 from app.models.payment import Payment
 from app.models.contact import Contact
+from app.models.user import User
 
 
 class TestStripeConfig:
@@ -295,6 +298,95 @@ class TestStripeWebhook:
             )
             assert response.status_code == 200
             assert response.json()["status"] == "ok"
+
+    @pytest.mark.anyio
+    async def test_webhook_checkout_completed_confirms_paid_booking(
+        self, db_session, client: AsyncClient, test_contact: Contact
+    ):
+        user = User(
+            id=str(uuid.uuid4()),
+            email="coach@example.com",
+            password_hash="hashedpassword",
+            name="Coach",
+            is_active=True,
+        )
+        booking_type = BookingType(
+            id=str(uuid.uuid4()),
+            name="Strategy Session",
+            slug="strategy-session",
+            duration_minutes=60,
+            price=Decimal("250.00"),
+            is_active=True,
+            location_type="custom",
+            location_details="https://example.com/session-room",
+        )
+        db_session.add_all([user, booking_type])
+        await db_session.commit()
+
+        booking = Booking(
+            id=str(uuid.uuid4()),
+            booking_type_id=booking_type.id,
+            contact_id=test_contact.id,
+            start_time=datetime.utcnow(),
+            end_time=datetime.utcnow(),
+            status="pending",
+        )
+        db_session.add(booking)
+        await db_session.commit()
+
+        invoice = Invoice(
+            id=str(uuid.uuid4()),
+            contact_id=test_contact.id,
+            invoice_number="INV-BOOKING-001",
+            status="sent",
+            line_items=[{
+                "description": "Strategy Session",
+                "quantity": 1,
+                "unit_price": 250.0,
+                "amount": 250.0,
+                "booking_id": booking.id,
+            }],
+            subtotal=Decimal("250.00"),
+            total=Decimal("250.00"),
+            balance_due=Decimal("250.00"),
+            due_date=datetime.utcnow().date(),
+        )
+        db_session.add(invoice)
+        await db_session.commit()
+
+        webhook_event = {
+            "type": "checkout.session.completed",
+            "data": {
+                "object": {
+                    "id": "cs_test_booking_123",
+                    "metadata": {"invoice_id": invoice.id},
+                    "amount_total": 25000,
+                    "payment_intent": "pi_test_booking_123",
+                }
+            }
+        }
+
+        with (
+            patch("app.routers.stripe.stripe_service") as mock_service,
+            patch("app.routers.stripe.provision_public_booking_meeting", new=AsyncMock()) as mock_provision,
+            patch("app.routers.stripe.email_service.send_payment_confirmation", new=AsyncMock()),
+            patch("app.routers.stripe.email_service.send_onboarding_assessment", new=AsyncMock()),
+        ):
+            mock_service.verify_webhook_signature.return_value = webhook_event
+
+            response = await client.post(
+                "/api/stripe/webhook",
+                content=b"{}",
+                headers={
+                    "Content-Type": "application/json",
+                    "Stripe-Signature": "valid_signature",
+                }
+            )
+
+        assert response.status_code == 200
+        await db_session.refresh(booking)
+        assert booking.status == "confirmed"
+        mock_provision.assert_awaited_once()
 
     @pytest.mark.asyncio
     async def test_webhook_payment_intent_succeeded(

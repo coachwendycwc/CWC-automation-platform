@@ -78,8 +78,16 @@ class PublicBookingResponse(BaseModel):
     start_time: datetime
     end_time: datetime
     status: str
+    confirmation_token: str
     booking_type_name: str
     booking_type_duration: int
+    meeting_provider: str | None = None
+    meeting_url: str | None = None
+    location_details: str | None = None
+    post_booking_instructions: str | None = None
+    payment_required: bool = False
+    payment_url: str | None = None
+    invoice_view_token: str | None = None
     can_cancel: bool  # Based on 24hr policy
     can_reschedule: bool
 
