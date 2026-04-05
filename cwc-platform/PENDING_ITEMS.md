@@ -67,6 +67,7 @@ This file tracks active execution items, blockers, and verification work.
 - [x] Add dashboard-level follow-up visibility for invoice collections attention
 - [x] Add one-click collections reminder sending from the invoice list
 - [x] Add a follow-up invoice queue linked from the dashboard `Needs Follow-Up` card
+- [x] Add optional custom reminder messaging on invoice detail before sending collections emails
 
 ## Blocked / Depends On
 
@@ -96,6 +97,7 @@ This file tracks active execution items, blockers, and verification work.
 - [ ] Verify invoice detail page collections card reflects live reminder timestamps
 - [ ] Verify invoice list shows follow-up badges and last collection email timestamps correctly
 - [ ] Verify invoice list one-click reminder action sends the expected due-soon, overdue, or final notice email
+- [ ] Verify invoice detail custom reminder message is appended to outgoing collections emails
 - [ ] Verify automated due-soon, overdue, and final notice emails in a real configured environment
 - [ ] Verify dashboard `Needs Follow-Up` metric tracks invoice collections workload accurately
 - [ ] Verify `/invoices?queue=follow-up` isolates invoices that need collections action

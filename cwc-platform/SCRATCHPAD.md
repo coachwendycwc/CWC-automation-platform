@@ -44,3 +44,4 @@
 - Added one-click reminder sending from the invoice list so collections follow-up can happen without opening each invoice.
 - Replaced the invoice list page's remaining send/duplicate browser alerts with toast feedback for a more consistent operator flow.
 - Added a `Needs Follow-Up` queue toggle on the invoice list and wired the dashboard card to deep-link into that filtered view.
+- Added an optional custom collections message field on the invoice detail page so Wendy can tailor manual reminder emails before sending.
