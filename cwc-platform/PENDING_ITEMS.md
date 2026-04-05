@@ -66,6 +66,7 @@ This file tracks active execution items, blockers, and verification work.
 - [x] Add collections visibility to invoice list and stats so follow-up work is obvious
 - [x] Add dashboard-level follow-up visibility for invoice collections attention
 - [x] Add one-click collections reminder sending from the invoice list
+- [x] Add a follow-up invoice queue linked from the dashboard `Needs Follow-Up` card
 
 ## Blocked / Depends On
 
@@ -97,6 +98,7 @@ This file tracks active execution items, blockers, and verification work.
 - [ ] Verify invoice list one-click reminder action sends the expected due-soon, overdue, or final notice email
 - [ ] Verify automated due-soon, overdue, and final notice emails in a real configured environment
 - [ ] Verify dashboard `Needs Follow-Up` metric tracks invoice collections workload accurately
+- [ ] Verify `/invoices?queue=follow-up` isolates invoices that need collections action
 - [ ] Client portal access for post-session assets
 - [ ] Pilot readiness for active CWC workflows
 

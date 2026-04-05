@@ -187,7 +187,7 @@ export default function DashboardPage() {
       icon: AlertCircle,
       color: "text-destructive",
       bgColor: "bg-destructive/10",
-      href: "/invoices",
+      href: "/invoices?queue=follow-up",
     },
   ];
 

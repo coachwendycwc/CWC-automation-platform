@@ -1,6 +1,7 @@
 "use client";
 
-import { useEffect, useState } from "react";
+import { useEffect, useMemo, useState } from "react";
+import { useSearchParams } from "next/navigation";
 import { toast } from "sonner";
 import { Shell } from "@/components/layout/Shell";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
@@ -69,16 +70,24 @@ const COLLECTION_STAGE_LABELS: Record<NonNullable<Invoice["collection_stage"]>, 
 };
 
 export default function InvoicesPage() {
+  const searchParams = useSearchParams();
   const [invoices, setInvoices] = useState<Invoice[]>([]);
   const [stats, setStats] = useState<InvoiceStats | null>(null);
   const [loading, setLoading] = useState(true);
   const [filter, setFilter] = useState<string>("");
   const [search, setSearch] = useState<string>("");
+  const [queueFilter, setQueueFilter] = useState<string>("");
   const [sendingReminderFor, setSendingReminderFor] = useState<string | null>(null);
 
   useEffect(() => {
     loadData();
   }, [filter, search]);
+
+  useEffect(() => {
+    setFilter(searchParams.get("status") || "");
+    setSearch(searchParams.get("search") || "");
+    setQueueFilter(searchParams.get("queue") === "follow-up" ? "follow-up" : "");
+  }, [searchParams]);
 
   const loadData = async () => {
     try {
@@ -204,6 +213,13 @@ export default function InvoicesPage() {
       day: "numeric",
     });
   };
+
+  const visibleInvoices = useMemo(() => {
+    if (queueFilter !== "follow-up") {
+      return invoices;
+    }
+    return invoices.filter((invoice) => invoice.needs_collection_attention);
+  }, [invoices, queueFilter]);
 
   if (loading) {
     return (
@@ -339,7 +355,17 @@ export default function InvoicesPage() {
                   onChange={(e) => setSearch(e.target.value)}
                 />
               </div>
-              {(filter || search) && (
+              <div className="flex items-end">
+                <Button
+                  variant={queueFilter === "follow-up" ? "default" : "outline"}
+                  size="sm"
+                  onClick={() => setQueueFilter((current) => (current === "follow-up" ? "" : "follow-up"))}
+                >
+                  Needs Follow-Up
+                  {stats ? ` (${stats.collections_attention_count})` : ""}
+                </Button>
+              </div>
+              {(filter || search || queueFilter) && (
                 <div className="flex items-end">
                   <Button
                     variant="ghost"
@@ -347,6 +373,7 @@ export default function InvoicesPage() {
                     onClick={() => {
                       setFilter("");
                       setSearch("");
+                      setQueueFilter("");
                     }}
                   >
                     Clear filters
@@ -358,17 +385,17 @@ export default function InvoicesPage() {
         </Card>
 
         {/* Invoices List */}
-        {invoices.length === 0 ? (
+        {visibleInvoices.length === 0 ? (
           <Card>
             <CardContent className="py-12 text-center">
               <FileText className="h-12 w-12 mx-auto text-muted-foreground mb-4" />
               <h3 className="text-lg font-medium text-foreground mb-2">No invoices found</h3>
               <p className="text-muted-foreground mb-4">
-                {filter || search
+                {filter || search || queueFilter
                   ? "Try adjusting your filters"
                   : "Create your first invoice to get started"}
               </p>
-              {!filter && !search && (
+              {!filter && !search && !queueFilter && (
                 <Link href="/invoices/new">
                   <Button>
                     <Plus className="h-4 w-4 mr-2" />
@@ -408,7 +435,7 @@ export default function InvoicesPage() {
                   </tr>
                 </thead>
                 <tbody className="divide-y divide-border">
-                  {invoices.map((invoice) => (
+                  {visibleInvoices.map((invoice) => (
                     <tr key={invoice.id} className="hover:bg-muted cursor-pointer">
                       <td className="px-6 py-4 whitespace-nowrap">
                         <Link href={`/invoices/${invoice.id}`} className="text-primary hover:underline font-medium">

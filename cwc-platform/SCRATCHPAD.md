@@ -43,3 +43,4 @@
 - Extended `/api/reports/dashboard` to return `invoices.collections_attention` for invoices that are overdue or due soon without a reminder.
 - Added one-click reminder sending from the invoice list so collections follow-up can happen without opening each invoice.
 - Replaced the invoice list page's remaining send/duplicate browser alerts with toast feedback for a more consistent operator flow.
+- Added a `Needs Follow-Up` queue toggle on the invoice list and wired the dashboard card to deep-link into that filtered view.
