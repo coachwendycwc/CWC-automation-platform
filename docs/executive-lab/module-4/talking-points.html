@@ -1,0 +1,864 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Module 4: Leadership Composure - Facilitator Talking Points</title>
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Source+Serif+4:wght@400;600;700&family=Inter:wght@400;500;600&display=swap');
+
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+
+        body {
+            font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
+            line-height: 1.7;
+            color: #333;
+            background: #fff;
+            padding: 40px;
+            max-width: 900px;
+            margin: 0 auto;
+        }
+
+        @media print {
+            body { padding: 20px; font-size: 11pt; }
+            .no-print { display: none; }
+            .page-break { page-break-before: always; }
+            h1 { font-size: 24pt; }
+            h2 { font-size: 16pt; }
+            h3 { font-size: 13pt; }
+        }
+
+        @media screen and (max-width: 768px) {
+            body { padding: 20px; }
+            .download-bar { padding: 12px 20px; flex-direction: column; gap: 10px; }
+            .download-bar h1 { font-size: 14px; text-align: center; }
+            .spacer { height: 100px; }
+            .header h1 { font-size: 26px; }
+            .header p { font-size: 16px; }
+            h1 { font-size: 22px; margin: 32px 0 16px; }
+            h2 { font-size: 18px; }
+            .script-box { padding: 16px 20px; }
+            .script-box p { font-size: 15px; }
+            .key-points { padding: 16px; }
+            .engagement-box { padding: 14px 16px; }
+            .checklist { padding: 16px; }
+            table { font-size: 13px; }
+            th, td { padding: 10px 12px; }
+        }
+
+        @media screen and (max-width: 480px) {
+            body { padding: 12px; }
+            .download-bar { padding: 10px 12px; }
+            .download-bar h1 { font-size: 12px; }
+            .download-btn { padding: 8px 16px; font-size: 12px; }
+            .spacer { height: 90px; }
+            .header { margin-bottom: 32px; padding-bottom: 24px; }
+            .header h1 { font-size: 22px; }
+            .logo { height: 50px; }
+            h1 { font-size: 20px; margin: 24px 0 12px; padding-top: 16px; }
+            h2 { font-size: 16px; margin: 24px 0 12px; }
+            h3 { font-size: 13px; }
+            .script-box { padding: 12px 14px; }
+            .script-box p { font-size: 14px; line-height: 1.6; }
+            .time-badge { font-size: 11px; padding: 3px 10px; }
+            table { font-size: 12px; }
+            th, td { padding: 8px; }
+        }
+
+        .download-bar {
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            background: #1A1A1A;
+            color: #fff;
+            padding: 16px 40px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            z-index: 1000;
+        }
+
+        .download-bar h1 {
+            font-size: 16px;
+            font-weight: 600;
+            color: #fff;
+            border: none;
+            padding: 0;
+            margin: 0;
+        }
+
+        .download-btn {
+            background: #D4A574;
+            color: #fff;
+            border: none;
+            padding: 10px 24px;
+            border-radius: 6px;
+            font-weight: 600;
+            cursor: pointer;
+            font-size: 14px;
+        }
+
+        .download-btn:hover { background: #c49660; }
+
+        .spacer { height: 80px; }
+
+        .header {
+            text-align: center;
+            margin-bottom: 48px;
+            padding-bottom: 32px;
+            border-bottom: 3px solid #1A1A1A;
+        }
+
+        .logo { height: 60px; margin-bottom: 24px; }
+
+        .header h1 {
+            font-family: 'Source Serif 4', Georgia, serif;
+            font-size: 32px;
+            color: #1A1A1A;
+            margin-bottom: 8px;
+            border: none;
+            padding: 0;
+        }
+
+        .header p {
+            font-size: 18px;
+            color: #666;
+        }
+
+        h1 {
+            font-family: 'Source Serif 4', Georgia, serif;
+            font-size: 28px;
+            color: #1A1A1A;
+            margin: 48px 0 24px;
+            padding-top: 24px;
+            border-top: 2px solid #E5E0D8;
+        }
+
+        h2 {
+            font-family: 'Source Serif 4', Georgia, serif;
+            font-size: 20px;
+            color: #2A7B8C;
+            margin: 32px 0 16px;
+        }
+
+        h3 {
+            font-size: 15px;
+            font-weight: 600;
+            color: #D4A574;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            margin: 24px 0 12px;
+        }
+
+        p { margin-bottom: 16px; }
+
+        .time-badge {
+            display: inline-block;
+            background: #2A7B8C;
+            color: #fff;
+            padding: 4px 12px;
+            border-radius: 4px;
+            font-size: 12px;
+            font-weight: 600;
+            margin-bottom: 16px;
+        }
+
+        .script-box {
+            background: #FAF8F5;
+            border-left: 4px solid #D4A574;
+            padding: 24px 28px;
+            margin: 16px 0;
+            color: #333;
+        }
+
+        .script-box p { margin-bottom: 16px; line-height: 1.8; }
+        .script-box p:last-child { margin-bottom: 0; }
+
+        .key-points {
+            background: #f5f5f5;
+            padding: 20px 24px;
+            margin: 16px 0;
+            border-radius: 8px;
+        }
+
+        .key-points ul { margin-left: 20px; }
+        .key-points li { margin-bottom: 8px; }
+
+        .engagement-box {
+            background: #E8F4F6;
+            border: 1px solid #2A7B8C;
+            padding: 16px 20px;
+            margin: 16px 0;
+            border-radius: 8px;
+        }
+
+        .engagement-box strong { color: #2A7B8C; }
+
+        .checklist {
+            background: #FFF9F5;
+            border: 1px solid #D4A574;
+            padding: 20px 24px;
+            margin: 16px 0;
+            border-radius: 8px;
+        }
+
+        .checklist ul { list-style: none; margin: 0; }
+
+        .checklist li {
+            padding: 8px 0;
+            padding-left: 28px;
+            position: relative;
+            border-bottom: 1px solid #F0EBE5;
+        }
+
+        .checklist li:last-child { border-bottom: none; }
+
+        .checklist li::before {
+            content: '☐';
+            position: absolute;
+            left: 0;
+            color: #D4A574;
+        }
+
+        table { width: 100%; border-collapse: collapse; margin: 24px 0; }
+
+        th {
+            background: #1A1A1A;
+            color: #fff;
+            padding: 12px 16px;
+            text-align: left;
+            font-size: 13px;
+            font-weight: 600;
+        }
+
+        td {
+            padding: 12px 16px;
+            border-bottom: 1px solid #E5E0D8;
+            font-size: 14px;
+        }
+
+        tr:nth-child(even) { background: #FAF8F5; }
+
+        .highlight {
+            background: #FFFDE7;
+            padding: 2px 6px;
+            border-radius: 3px;
+        }
+
+        hr { border: none; border-top: 1px solid #E5E0D8; margin: 32px 0; }
+
+        .footer {
+            margin-top: 64px;
+            padding-top: 32px;
+            border-top: 2px solid #1A1A1A;
+            text-align: center;
+            color: #999;
+            font-size: 13px;
+        }
+
+        .transition-note {
+            background: #FFF3E0;
+            border-left: 4px solid #FF9800;
+            padding: 12px 16px;
+            margin: 16px 0;
+            font-size: 14px;
+            font-style: italic;
+        }
+
+        .woc-note {
+            background: #F3E5F5;
+            border-left: 4px solid #9C27B0;
+            padding: 16px 20px;
+            margin: 16px 0;
+            font-size: 14px;
+            border-radius: 0 6px 6px 0;
+        }
+
+        .woc-note strong { color: #7B1FA2; }
+    </style>
+</head>
+<body>
+    <div class="download-bar no-print">
+        <h1>Module 4 Talking Points - Detailed Script</h1>
+        <button class="download-btn" onclick="window.print()">Download / Print PDF</button>
+    </div>
+
+    <div class="spacer no-print"></div>
+
+    <div class="header">
+        <img src="https://coachingwomenofcolor.com/wp-content/uploads/2021/04/CWCFinal_logo2.webp" alt="CWC" class="logo">
+        <h1>Module 4: Leadership Composure</h1>
+        <p>Managing Triggers, Bias & High-Stakes Moments</p>
+        <p style="font-size: 14px; margin-top: 12px; color: #999;">Detailed Script for Recorded Module</p>
+    </div>
+
+    <h1>Pre-Recording Checklist</h1>
+    <div class="checklist">
+        <ul>
+            <li>Test screen share with presentation (do a dry run before recording)</li>
+            <li>Ensure all worksheets are uploaded to Skool platform:
+                <ul style="margin-top: 8px; margin-left: 20px; list-style: disc;">
+                    <li>Trigger Map Worksheet</li>
+                    <li>EI Self-Assessment Scale</li>
+                    <li>Microaggression Response Scripts</li>
+                    <li>Incident Documentation Template</li>
+                    <li>The Response Continuum Guide</li>
+                    <li>14-Day Composure Sprint Checklist</li>
+                </ul>
+            </li>
+            <li>Quiet recording environment with good lighting</li>
+            <li>Water and notes within reach</li>
+            <li>Timer ready for activity sections (to guide pacing)</li>
+        </ul>
+    </div>
+
+    <!-- ==================== SLIDE 1 ==================== -->
+    <h1>Slide 1: Title Slide</h1>
+    <div class="time-badge">3–4 minutes</div>
+
+    <h3>Complete Opening Script</h3>
+    <div class="script-box">
+        <p>"Welcome, welcome, welcome to Module 4 of the Executive Leadership Lab. I am so glad you are here. And I want to say something before we even begin — if you are showing up for this module, it means you have felt something. You have been in a moment where your body told you something was wrong. Where a comment landed sideways. Where you had to work to keep your face neutral while your insides were screaming. You showed up. That takes courage, and that matters."</p>
+
+        <p>"This month we are talking about composure. And I need to be clear about what that word means in our context. Composure is not silence. Composure is not swallowing it. Composure is not pretending that the microaggression didn't happen, that the bias didn't show, that the moment didn't sting. Composure is something different. It is knowing what happened. Feeling what happened. And then making a strategic choice about what to do with it."</p>
+
+        <p>"For women of color in leadership, composure is one of the most underrated skills we have. Because the pressure is real. You are watched more closely. Your emotions are scrutinized more intensely. And the cost of losing your cool — or of being perceived as having lost it — is different than it is for your white male colleagues. That is not fair. And it is absolutely true."</p>
+
+        <p>"So this month, we are not going to pretend that reality away. We are going to build the awareness, the tools, and the strategic responses that let you navigate high-stakes moments with clarity. Not because you should have to. But because you deserve to keep your power in the room. Let's get into it."</p>
+    </div>
+
+    <div class="engagement-box">
+        <strong>Framing Note:</strong> This opening acknowledges the labor of showing up. It names the double standard without making it the woman's burden to fix alone. It reframes composure from suppression to strategy.
+    </div>
+
+    <!-- ==================== SLIDE 2 ==================== -->
+    <h1>Slide 2: Welcome — The Data on Microaggressions</h1>
+    <div class="time-badge">4–5 minutes</div>
+
+    <h3>Opening with Hard Numbers</h3>
+    <div class="script-box">
+        <p>"Let me start with what research actually shows about this — because before we talk about strategy, I need you to understand what is happening, and that it is not in your head."</p>
+
+        <p>"Black women experience microaggressions at a rate of 3 to 4 times higher than white women in the same organizations. That means if a white woman experiences one incident, a Black woman is experiencing three or four. Over a week, a month, a year — that adds up. Your nervous system is not overreacting. It is responding proportionally to a higher volume of incidents."</p>
+
+        <p>"The emotional tax is measurable. Catalyst's research on the emotional tax of bias shows that women of color who regularly experience microaggressions report 25% higher stress levels, double the imposter syndrome, and a 40% reduction in sense of belonging at work. This is not psychological fragility. This is a physiological response to systemic pressure."</p>
+
+        <p>"And then there is this: global EQ scores have declined 5.5% since 2019. Workplaces are getting more high-stakes, more uncertain, more triggering. And the people in the room with the least psychological safety — women of color — are expected to stay the calmest. That is the nuance we do not talk about enough."</p>
+
+        <p>"So when I say 'composure' this month, I am not asking you to become unflappable. I am asking you to become strategic. To know your own system. To have tools. To make choices that protect your power in the room."</p>
+    </div>
+
+    <div class="engagement-box">
+        <strong>Chat Prompt:</strong> On a scale of 1–5, how often do you feel triggered in professional settings? 1 = rarely, 5 = frequently. No judgment. Just awareness. Drop your number in the chat.
+    </div>
+
+    <!-- ==================== SLIDE 3 ==================== -->
+    <h1>Slide 3: Module Objectives — What You'll Walk Away With</h1>
+    <div class="time-badge">2–3 minutes</div>
+
+    <h3>Framing the Learning Outcomes</h3>
+    <div class="script-box">
+        <p>"Here is exactly what we are going to build together this month. By the time we are done, you will understand how emotions actually work in your body — not as weakness, but as data. You will be able to map your triggers and recognize the early warning signs before you lose your footing. You will have specific strategies for managing high-stakes moments in real time. And you will have response options for the microaggressions that show up most — whether you choose to address them now, document them, or let them go strategically."</p>
+
+        <p>"This is not about becoming someone different. This is about becoming more of yourself — more aware, more intentional, more in control of your own narrative in the room."</p>
+    </div>
+
+    <!-- ==================== SLIDE 4 ==================== -->
+    <h1>Slide 4: The Double Bind of Emotion</h1>
+    <div class="time-badge">5–6 minutes</div>
+
+    <h3>Teaching the Core Tension</h3>
+    <div class="script-box">
+        <p>"There is a situation that women of color face in leadership that I need to name clearly. Research calls it the double bind of emotion. And it looks like this: if you show emotion, you are seen as unprofessional, unstable, unable to lead. If you do not show emotion, you are seen as cold, difficult, unapproachable, not a team player. You cannot win."</p>
+
+        <p>"This is not universal. This is racialized and gendered. Black women are stereotyped as aggressive if they express frustration. Latina women are stereotyped as overly emotional. Asian women are expected to be quiet and compliant. And the moment you deviate, you are not just breaking a professional norm — you are breaking a racial stereotype. The stakes are higher because the scrutiny is more intense."</p>
+
+        <p>"The research on this is clear — Motro et al. in the Journal of Applied Psychology showed that women who display anger in professional contexts are penalized 35% more harshly than men displaying the same anger. And when you layer in race, the penalty compounds. A Black woman expressing frustration in a meeting is more likely to be labeled aggressive than a white man expressing the same frustration."</p>
+
+        <p>"So the composure we are building is not about suppressing emotion. It is about understanding that the field you are playing on is not level, and building the skills to navigate that reality with power rather than pretending the slope does not exist."</p>
+    </div>
+
+    <div class="woc-note">
+        <strong>WOC Context:</strong> Pause here. Let this land. Many women of color have internalized the double bind as a personal failure. Name it as structural. Say: "This is not because you are too emotional or not emotional enough. This is because the rules were written by people who do not have to follow them the same way."
+    </div>
+
+    <!-- ==================== SLIDE 5 ==================== -->
+    <h1>Slide 5: The Composure Equation Framework</h1>
+    <div class="time-badge">4–5 minutes</div>
+
+    <h3>Introducing the Core Framework</h3>
+    <div class="script-box">
+        <p>"Here is the framework we are building toward. I call it the Composure Equation."</p>
+
+        <p>"Awareness + Regulation + Strategic Response = Leadership Composure."</p>
+
+        <p>"Three components. All essential. None of them mean suppression. Awareness means you know what happened and what your body is doing in response. Regulation means you have tools to slow down your nervous system so you can think clearly. Strategic response means you decide — not in a panic, but in clarity — what the moment requires from you."</p>
+
+        <p>"The old model of composure was just regulation — just the ability to stay calm and not show your feelings. That is outdated. That burns you out. The new model is all three. Because if you are aware and regulated but you do not respond strategically, you are still silencing yourself. And that costs you."</p>
+    </div>
+
+    <!-- ==================== SLIDE 6 ==================== -->
+    <h1>Slide 6: Emotional Intelligence as Your Foundation</h1>
+    <div class="time-badge">6–7 minutes</div>
+
+    <h3>Deep Dive: Understanding EI in Context</h3>
+    <div class="script-box">
+        <p>"Emotional intelligence is not a soft skill. It is a power skill. And for women of color in leadership, it is one of your most strategic assets if you know how to use it. But first, we have to reframe what EI actually is."</p>
+
+        <p>"EI has four core components: self-awareness — knowing what you are feeling and why. Self-regulation — managing those feelings so they do not manage you. Social awareness — understanding what is happening in the room, reading the energy, picking up on unstated agendas. And relationship management — being able to influence and guide interactions in a way that maintains your authority and your humanity."</p>
+
+        <p>"Now here is the thing that nobody talks about: women of color typically score higher on social awareness and relationship management. We are incredibly attuned to the room, to how people are responding to us, to the unspoken dynamics. We read people well. What we often struggle with is the boundary between awareness and over-responsibility. We become so attuned to everyone else's feelings that we lose track of our own needs."</p>
+
+        <p>"And when we do not regulate ourselves, we swing from over-adapting — making ourselves smaller, quieter, less threatening — to overwhelm, where the accumulated pressure of constant monitoring and adjusting finally breaks through. That is not an EI problem. That is an over-giving problem. And the solution is not to become more emotionally intelligent. It is to become more boundaried."</p>
+
+        <p>"So this month, we are building EI with a specific focus: using your awareness and social skills to protect yourself, not just to serve others. Using regulation to stay in your power, not to make yourself smaller."</p>
+    </div>
+
+    <div class="engagement-box">
+        <strong>Reflection Prompt:</strong> Which of the four components of EI comes most naturally to you? Self-awareness, self-regulation, social awareness, or relationship management? Think about a recent high-stakes moment. Which one did you lean on most?
+    </div>
+
+    <!-- ==================== SLIDE 7 ==================== -->
+    <h1>Slide 7: Your Triggers Are Data, Not Weakness</h1>
+    <div class="time-badge">5–6 minutes</div>
+
+    <h3>Reframing the Trigger Response</h3>
+    <div class="script-box">
+        <p>"Before we talk about how to manage triggers, we have to change the conversation about what a trigger is. Because most of us learned to see our triggers as weakness. As something we should have transcended by now. As evidence that we are not as far along as we thought we were."</p>
+
+        <p>"But a trigger is not weakness. A trigger is data. It is your nervous system saying: something that feels unsafe just happened. Sometimes that warning is about real danger. Sometimes it is your system reacting to a pattern — a tone of voice that reminds you of something from the past, a dismissal that echoes a history of not being taken seriously, a comment that lands on a known bias."</p>
+
+        <p>"The most common triggers for women of color in professional settings follow patterns. Being interrupted and not having that interruption called out. Having your competence questioned by someone with less experience. Being asked to do emotional labor — to calm someone else down, to manage someone else's discomfort about race or gender. Being tokenized — brought into a meeting to represent 'diversity' rather than for your expertise. Being mistaken for someone else in the organization. Receiving feedback that feels coded with racial or gendered judgment."</p>
+
+        <p>"These are not random. They are patterns. And they trigger you because they are connected to real experiences of bias and exclusion. Your system is not broken. Your system is working. It is protecting you. The work is learning to listen to what it is telling you, and then choosing what to do with that information."</p>
+    </div>
+
+    <div class="key-points">
+        <strong>Common Trigger Patterns for WOC:</strong>
+        <ul>
+            <li>Being interrupted without acknowledgment or being talked over</li>
+            <li>Having your expertise questioned, especially by less-experienced colleagues</li>
+            <li>Receiving criticism framed as "you are being too intense" or "not a team player"</li>
+            <li>Being asked to speak for your entire identity or community</li>
+            <li>Exclusion from informal decision-making spaces</li>
+            <li>Racial or gender-coded language ("articulate," "aggressive," "emotional")</li>
+        </ul>
+    </div>
+
+    <!-- ==================== SLIDE 8 ==================== -->
+    <h1>Slide 8: Microaggressions — The Invisible Drain</h1>
+    <div class="time-badge">6–8 minutes</div>
+
+    <h3>Deep Dive: What WOC Face Most</h3>
+    <div class="script-box">
+        <p>"Let's talk specifically about microaggressions, because they are one of the most persistent and most underestimated triggers in professional environments. And they are more common than you probably realize."</p>
+
+        <p>"A microaggression is a brief, everyday statement, action, or incident that delivers a negative message to someone based on their identity. The key word is everyday. It is not a slur or a direct attack. It is the comment that is just deniable enough that you question yourself for reacting to it. 'You are so articulate' — as if that is surprising. 'Where are you really from?' — suggesting you do not belong here. 'You are one of the good ones' — comparing you against a negative stereotype of your group. 'I don't see color' — erasing the reality of your experience."</p>
+
+        <p>"The research shows that Black women face an average of 15 to 20 microaggressions per week in professional environments. Latina women report similar numbers. And the cumulative effect is not small. It is not 'just one comment.' It is the compounding drain on your emotional and cognitive resources. You are spending energy managing the moment, managing your reaction, managing the relationship with the person who said it, and managing your self-doubt about whether you were right to be bothered."</p>
+
+        <p>"So when we talk about what to do with microaggressions, we are not talking about oversensitivity. We are talking about strategic resource management. You get to decide what is worth your energy and what is not. And you have options."</p>
+    </div>
+
+    <table>
+        <thead>
+            <tr>
+                <th>Microaggression Type</th>
+                <th>Common Examples</th>
+                <th>Why It Triggers</th>
+            </tr>
+        </thead>
+        <tbody>
+            <tr>
+                <td><strong>Assumption of Incompetence</strong></td>
+                <td>"You're so articulate." "Are you a summer intern?" "Let me help you with that."</td>
+                <td>Assumes lower competence based on identity. Denies your expertise.</td>
+            </tr>
+            <tr>
+                <td><strong>Belonging Denial</strong></td>
+                <td>"Where are you really from?" "You don't look like an engineer." Being asked "Who are you here with?"</td>
+                <td>Suggests you don't belong in the space, organization, or profession.</td>
+            </tr>
+            <tr>
+                <td><strong>Emotion Policing</strong></td>
+                <td>"You're so angry." "You seem upset." "Smile more." Being asked to calm down when upset.</td>
+                <td>Your emotional response is judged differently. Your authority is questioned.</td>
+            </tr>
+            <tr>
+                <td><strong>Tokenization</strong></td>
+                <td>"We want to hear from the Black woman perspective." Being put on task forces for "diversity." Solo representation.</td>
+                <td>You are present for your identity, not your expertise. You are the symbol, not the subject matter expert.</td>
+            </tr>
+            <tr>
+                <td><strong>Stereotype Confirmation</strong></td>
+                <td>"You're one of the good ones." "I don't see color." Having achievements attributed to "diverse hiring."</td>
+                <td>Your success is threatened by stereotypes about your group. Your accomplishments are questioned.</td>
+            </tr>
+        </tbody>
+    </table>
+
+    <h3>Strategic Response Options</h3>
+    <div class="script-box">
+        <p>"Now, here is where choice comes in. For every microaggression, you have four response options. And you get to choose which one makes sense based on the moment, the person, the stakes, and your energy."</p>
+
+        <p>"<strong>Option One: Address It Now.</strong> You respond immediately and directly. 'I want to push back on that — I do have expertise in this area, and I'd like to walk through my analysis.' 'Actually, I'm from here, and that question assumes I don't belong. I'm wondering what prompted it.' Address It Now works when the relationship can handle it, when the stakes allow for it, and when you have the energy for it. It stops the pattern in real time. It sets a boundary. And it teaches people how to interact with you."</p>
+
+        <p>"<strong>Option Two: Address It Later.</strong> You do not respond in the moment, but you follow up. You catch the person after the meeting. 'Hey, I wanted to circle back on something you said earlier. I think you might have meant well, but when you said X, it landed as Y, and I want to make sure we are understanding each other.' Address It Later works when you need time to regulate, when the public moment is not the right place, or when you want a private conversation rather than a call-out. It is still setting a boundary. It is just quieter."</p>
+
+        <p>"<strong>Option Three: Document It.</strong> You do not address it with the person, but you create a record. You email yourself or put it in a file with the date, the exact words used, any witnesses, and the impact. 'Today in the strategy meeting, [person] said [exact quote]. Context: [situation]. Impact: [what it meant to you, how it affected the meeting or your feeling of safety]. This pattern connects to [previous incidents if applicable].' Document It when there is a pattern, when you are concerned about your record, or when you are building evidence of hostile behavior. This protects you. It is not confrontational. It is strategic."</p>
+
+        <p>"<strong>Option Four: Release It.</strong> You acknowledge that it happened. Your nervous system gets to feel the sting. And then you consciously let it go because you have assessed that this situation, this person, this moment is not worth your energy. You do not need to extract justice or education or a boundary. You just need to keep moving. This is not suppression. This is strategic resource allocation. You are preserving yourself for battles that matter."</p>
+
+        <p>"All four options are valid. All four are power moves. The power is in the choice, not in the response type."</p>
+    </div>
+
+    <div class="woc-note">
+        <strong>Facilitation Tip:</strong> Walk through each option with a real example. Many participants have never heard it framed this way — as choice rather than obligation. Emphasize that addressing every microaggression is not the goal. The goal is having options.
+    </div>
+
+    <!-- ==================== SLIDE 9 ==================== -->
+    <h1>Slide 9: Why High-Stakes Moments Hit Harder for WOC</h1>
+    <div class="time-badge">5–6 minutes</div>
+
+    <h3>Understanding the Compounding Effect</h3>
+    <div class="script-box">
+        <p>"There is something specific that happens when you add stakes to an already complex situation. The pressure amplifies. And it hits women of color differently because you are bringing more into the room than just the moment."</p>
+
+        <p>"When a white man walks into a high-stakes meeting, he is carrying his preparation and his expertise. When a woman of color walks into that same meeting, she is carrying her preparation, her expertise, and she is also managing the awareness that she will be watched more closely, scrutinized more harshly, that her mistakes will be attributed to incompetence while his might be attributed to the situation. She is also hyperaware of how she looks, how she sounds, whether she is coming across as confident or aggressive. She is managing the emotional tax of microaggressions from the week. She may be the only person who looks like her in the room. She is aware that her presence or absence is being noted as a statement about diversity."</p>
+
+        <p>"Catalyst's research on the emotional tax shows that this compounding awareness drains 20% of your cognitive capacity before you even open your mouth. You are not less intelligent. You are operating with your mental resources partially allocated to managing a situation that others in the room do not have to manage. That is the situation."</p>
+
+        <p>"And then, when something triggering happens in that high-stakes moment — when you are interrupted, when someone questions your expertise, when a comment lands sideways — your nervous system is already in a heightened state. You are more likely to feel a surge of emotion. You are more likely to feel panic about how you are being perceived. You are more likely to either freeze or to express frustration more intensely than you would in a lower-stakes moment."</p>
+
+        <p>"This is not weakness. This is what happens when you are operating in a system designed for someone else. The solution is not to get over it. The solution is to prepare for it, to build tools to navigate it, and to set up your environment so it does not have to be this hard."</p>
+    </div>
+
+    <!-- ==================== SLIDE 10 ==================== -->
+    <h1>Slide 10: Emotional Intelligence Self-Assessment</h1>
+    <div class="time-badge">6–8 minutes</div>
+
+    <h3>Facilitation Guide for Self-Assessment Activity</h3>
+    <div class="script-box">
+        <p>"I want you to take out your EI Self-Assessment Scale. You are going to rate yourself on four dimensions. This is not a test. There is no failing. This is a mirror. You are looking at where you are strong and where you have room to build."</p>
+
+        <p>"First dimension: Self-awareness. On a scale of 1 to 5, how well do you know what you are feeling in the moment? Can you name it? Can you track where it is coming from? Are you aware of the difference between an actual threat and a perceived threat? Rate yourself."</p>
+
+        <p>"Second dimension: Self-regulation. On a scale of 1 to 5, how able are you to slow down when you are triggered? Do you have tools to shift your nervous system from sympathetic activation — fight, flight, freeze — back to parasympathetic calm? Can you think clearly when you are activated, or does emotion take over? Rate yourself."</p>
+
+        <p>"Third dimension: Social awareness. On a scale of 1 to 5, how well do you read the room? Can you sense when the energy shifts? Do you pick up on unspoken tensions or agendas? Are you able to recognize when someone is uncomfortable with what you are saying? Rate yourself."</p>
+
+        <p>"Fourth dimension: Relationship management. On a scale of 1 to 5, how able are you to maintain connection and respect even when you are frustrated or angry? Can you set a boundary without breaking the relationship? Can you advocate for yourself without being perceived as difficult? Rate yourself honestly."</p>
+
+        <p>"Now look at your scores. Where are you strongest? Where do you have the most room to grow? This month, we are going to focus on the places where you scored lower than you would like. But know that your strengths are power. The women who are highest in social awareness and relationship management — that is a strength. Use it strategically."</p>
+    </div>
+
+    <div class="engagement-box">
+        <strong>Debrief Prompt:</strong> In the chat, share one of your four scores and one insight about why that score makes sense to you. What situation comes to mind when you think about that dimension?
+    </div>
+
+    <!-- ==================== SLIDE 11 ==================== -->
+    <h1>Slide 11: The Trigger Map — Your Personal Blueprint</h1>
+    <div class="time-badge">5–6 minutes</div>
+
+    <h3>Teaching the Four-Layer Model</h3>
+    <div class="script-box">
+        <p>"Here is the model that is going to change how you navigate triggers. I call it the Trigger Map, and it has four layers."</p>
+
+        <p>"<strong>Layer One: The Trigger.</strong> This is the external event. Someone interrupts you. Someone questions your expertise. Someone makes a comment that carries a racial or gendered edge. This is the thing that happens. It is usually quick, and often deniable. The person might not even realize they did it."</p>
+
+        <p>"<strong>Layer Two: The Body Signal.</strong> Your body responds before your brain catches up. Your chest tightens. Your face gets hot. Your jaw clenches. Your hands shake. Your stomach drops. This is your nervous system saying: alert, alert, alert. This is where most people get stuck — they notice the physical sensation and they label it as panic or weakness. But it is data. Your body is reading the room faster than your brain can consciously process it."</p>
+
+        <p>"<strong>Layer Three: The Automatic Thought.</strong> Once your body fires up, your brain tells you a story about what the trigger means. 'They do not respect me.' 'I am not good enough.' 'If I speak up, I will be seen as aggressive.' 'This is about my race.' 'I should have known better.' These automatic thoughts are usually fast and often harsh. They feel true. They are not. They are your interpretation of the threat based on your history."</p>
+
+        <p>"<strong>Layer Four: The Chosen Response.</strong> And here is where your power lives. Once you understand the first three layers — once you can see the trigger, notice the body signal, recognize the automatic thought — you have a moment. A small moment. A space where you can choose. You can address the trigger. You can regulate your nervous system. You can question the automatic thought and replace it with something more true. You can decide what the moment actually requires from you."</p>
+
+        <p>"Most people skip straight from the trigger to the response. There is no conscious layer. They are just reacting. The Trigger Map gives you the conscious layer. It gives you the choice."</p>
+    </div>
+
+    <!-- ==================== SLIDE 12 ==================== -->
+    <h1>Slide 12: Map Your Triggers (Activity)</h1>
+    <div class="time-badge">8–10 minutes</div>
+
+    <h3>Facilitation Guide for Deep Work Activity</h3>
+    <div class="script-box">
+        <p>"Now it is your turn. Open your Trigger Map Worksheet. I am going to walk you through this, and then I am going to give you time to fill it out for yourself."</p>
+
+        <p>"Think of a recent moment — in the last week or two — where you felt triggered. A moment where your body went tight or hot or shaky. A moment where you felt something shift in the room and it landed wrong. Hold that moment in your mind."</p>
+
+        <p>"Now map it. First box: What was the trigger? What happened? Write it down, as objectively as you can. Not your interpretation. The event. 'Sarah interrupted me three times during the presentation.' 'My manager said I was being too emotional.' 'Someone asked where I was really from.' Write the fact."</p>
+
+        <p>"Second box: What was the body signal? When that trigger happened, what did your body do? Did your face get hot? Did your chest tighten? Did you feel shaky? Did you want to cry or to punch something? Write down what you noticed in your body."</p>
+
+        <p>"Third box: What was the automatic thought? What story did your brain tell you about what that trigger meant? 'I am not being heard.' 'I am being perceived as unprofessional.' 'I do not belong here.' 'This is because I am Black/Latina/Asian/a woman.' Write down the thought that came up."</p>
+
+        <p>"Fourth box: What did you do? How did you respond in the moment? Did you stay silent? Did you speak up? Did you address it later? Did you document it? Did you let it go? Write down what actually happened."</p>
+
+        <p>"And finally: Looking back, was that the response you wanted to have? If not, what response would have served you better in that moment? This is not about blame. This is about learning. What would a more empowered response have looked like?"</p>
+
+        <p>"You have eight minutes. Map one trigger. Go deep. Be honest. This is just for you."</p>
+    </div>
+
+    <div class="engagement-box">
+        <strong>Debrief:</strong> Ask 2–3 volunteers to share their trigger (just the event, not the whole map) and their body signal. Normalize the experience. Show how different people's bodies respond differently to the same type of trigger.
+    </div>
+
+    <!-- ==================== SLIDE 13 ==================== -->
+    <h1>Slide 13: The Response Continuum</h1>
+    <div class="time-badge">6–8 minutes</div>
+
+    <h3>Teaching the Four Strategic Options</h3>
+    <div class="script-box">
+        <p>"Remember when we talked about the four options for responding to microaggressions? Address Now, Address Later, Document, Release. We are going to expand that into a full framework called the Response Continuum. This is how you decide what a moment actually requires from you."</p>
+
+        <p>"The continuum has three dimensions: visibility, risk, and relationships. Every trigger you experience lives somewhere on this continuum, and you get to decide where it goes."</p>
+
+        <p>"<strong>Address Now</strong> is for high-visibility moments where the issue is significant, where the relationship can handle directness, and where addressing it immediately sets a boundary that protects you going forward. Someone interrupts you repeatedly in a room where you have authority — you address it now. 'I want to finish my thought.' You do not apologize. You do not soften it. You state it. This is high-visibility, high-impact, low-risk if you have credibility in the room."</p>
+
+        <p>"<strong>Address Later</strong> is for moments where public address is not strategic, but the relationship is important enough that you want direct feedback delivered. You catch the person after the meeting or via email. 'I want to circle back on something you said. I think you might have meant well, but it landed as...' Address Later is medium-visibility, medium-risk, but it preserves the relationship while still setting a boundary."</p>
+
+        <p>"<strong>Document</strong> is for moments where there is a pattern, where you are concerned about your safety or your record, or where you are building evidence of hostile behavior. You do not address it with the person. You create a record. Date, time, exact words, witnesses, impact. Document is low-visibility, low-risk to the relationship, but it protects you. It is building your case, not in a legal sense necessarily, but in a self-protection sense."</p>
+
+        <p>"<strong>Release</strong> is for moments where the trigger is real but the person is not worth your energy. The situation is not worth your time. The pattern is not your responsibility to fix. You let it go. You feel the feeling. And then you redirect your energy to something that matters more. Release is low-visibility, low-risk, but it requires discernment. You are choosing your battles."</p>
+
+        <p>"The key is that you are choosing. Not reacting. Not defaulting to silence. Choosing which response serves you best in that moment."</p>
+    </div>
+
+    <table>
+        <thead>
+            <tr>
+                <th>Response Type</th>
+                <th>When to Use</th>
+                <th>What It Sounds Like</th>
+                <th>Relationship Impact</th>
+            </tr>
+        </thead>
+        <tbody>
+            <tr>
+                <td><strong>Address Now</strong></td>
+                <td>High-stakes moment, you have credibility in the room, the pattern is significant, the relationship can handle directness</td>
+                <td>"I want to finish my thought." "I'm going to push back on that — here is what the data actually shows." "That comment is not accurate, and I want to clarify."</td>
+                <td>Sets a boundary, teaches people how to interact with you, demonstrates authority</td>
+            </tr>
+            <tr>
+                <td><strong>Address Later</strong></td>
+                <td>Low-stakes moment, the relationship matters, you need time to regulate, you want a private conversation</td>
+                <td>"Can I grab you after? I wanted to circle back on something." "I got a chance to think more about what you said, and I want to make sure we are understanding each other."</td>
+                <td>Preserves the relationship, still sets a boundary, shows you care about the dynamic</td>
+            </tr>
+            <tr>
+                <td><strong>Document</strong></td>
+                <td>There is a pattern, you are concerned about your record, you are building evidence of hostile behavior, you want protection</td>
+                <td>Email to yourself: "Date, exact words used, context, impact, connection to other incidents." Create a file. Keep records.</td>
+                <td>No immediate relationship impact, protects you long-term, creates accountability if needed later</td>
+            </tr>
+            <tr>
+                <td><strong>Release</strong></td>
+                <td>The person is not worth your energy, the pattern is not your responsibility to fix, you are preserving yourself for battles that matter</td>
+                <td>Internal conversation: "I see you. This is about you, not about me. I'm going to let this go and keep moving."</td>
+                <td>No direct impact on the relationship, protects your energy, requires discernment about which battles matter</td>
+            </tr>
+        </tbody>
+    </table>
+
+    <!-- ==================== SLIDE 14 ==================== -->
+    <h1>Slide 14: Microaggression Response Scripts (Scenarios)</h1>
+    <div class="time-badge">8–10 minutes</div>
+
+    <h3>Teaching Specific Response Scripts</h3>
+    <div class="script-box">
+        <p>"I want to give you specific words for the most common microaggressions you will encounter. These are not scripts you memorize. These are scripts you practice until they become options you can pull from in the moment."</p>
+
+        <p>"<strong>Scenario 1: Being Interrupted.</strong> You are in a meeting. You are in the middle of making a point. Someone interrupts you. The impulse is to let them go because you do not want to be seen as defensive. Do not do that. Address It Now: 'I'm going to finish my thought, and then I'm happy to hear from you.' Say it warmly, say it clearly, do not apologize. If it happens again: 'I notice I'm being interrupted. I want to make sure I finish this point.' You are not being aggressive. You are protecting your airtime."</p>
+
+        <p>"<strong>Scenario 2: Competence Questioned.</strong> Someone says, 'You're so articulate,' or 'You're the only one who could pull that off,' or asks 'Is this your first time doing this?' Address It Now: 'I appreciate that. I've been doing this for [X years] and I'm confident in my expertise here.' You are stating a fact, not asking for permission. You are claiming your competence. If the person seems genuinely curious: 'What made you ask? I want to understand what gave you that impression.'"</p>
+
+        <p>"<strong>Scenario 3: Belonging Questioned.</strong> Someone asks 'Where are you really from?' or 'How did you get this job?' Address It Now: 'I'm from here, and I earned this role the way everyone does — by doing good work.' Or, if you want to be more direct: 'That question assumes I don't belong here, and I want to flag that. I'm a [title] here, and I have the same credentials as everyone else in this room.' If it is a colleague you have some relationship with, Address It Later: 'Hey, I wanted to circle back. That question about where I'm from felt like you were questioning whether I belong here, and I want to make sure we are clear that I do.'"</p>
+
+        <p>"<strong>Scenario 4: Emotion Policing.</strong> Someone says, 'You seem upset,' or 'Don't be so emotional about this,' or 'Smile more.' Address It Now: 'I'm not upset. I'm advocating for my position, and I'm going to keep advocating.' Or: 'I'm expressing how I feel about this, and that is part of the conversation.' Or, if it is blatant: 'That comment is actually about my gender, not about my emotional state. I notice it, and I'm going to keep moving.' Do not defend. Do not apologize for having feelings. State it as fact and keep going."</p>
+
+        <p>"<strong>Scenario 5: Tokenization.</strong> You are asked to speak for your entire community, or you are put on a task force for 'diversity,' or you are the only one brought into a meeting because of your identity. Address It Now: 'I'm here for my expertise in [X], not to represent my race/gender/identity. I want to make sure we are clear about that.' Or: 'I'm happy to contribute, and I want to make sure this role is not just about diversity. What is the business case?' You are claiming your expertise. You are refusing to be reduced."</p>
+
+        <p>"Scenarios 6 through 10: [Continue with coding feedback, racial stereotypes, questions about hair or appearance, being mistaken for someone else, being asked about 'the Black/Latina/Asian perspective' — deliver each with clear Address Now scripts and alternatives for Address Later.]"</p>
+
+        <p>"These scripts are starting points. The power is not in the exact words. The power is in the clarity. You are not asking for permission. You are not apologizing. You are stating a fact and moving forward. Practice these until they feel natural. Then, when a microaggression happens, you will have something to say instead of silence."</p>
+    </div>
+
+    <div class="woc-note">
+        <strong>Facilitation Tip:</strong> Say these scripts out loud. Let participants hear them in Wendy's voice. Many have never heard a woman of color respond to microaggressions this directly. The modeling is powerful. Then invite them to practice variations of their own.
+    </div>
+
+    <!-- ==================== SLIDE 15 ==================== -->
+    <h1>Slide 15: Practice Scenario Role-Play</h1>
+    <div class="time-badge">10–12 minutes</div>
+
+    <h3>Facilitation Guide for Active Practice</h3>
+    <div class="script-box">
+        <p>"We are going to practice now. I know this might feel uncomfortable, and that discomfort is exactly what we are building muscle for. Rehearsal builds competence. Competence builds confidence. Confidence changes everything."</p>
+
+        <p>"You are going to break into pairs in your breakout rooms. One person is the participant who has just been hit with a microaggression. The other is the person who delivered it. I am going to give you five specific scenarios. You are going to practice your response. Use the scripts. Make them your own. Then switch roles."</p>
+
+        <p>"After the role play, we will come back as a group and you will tell me what came up for you. What felt hard? What surprised you? What did you learn about your own automatic response?"</p>
+
+        <p>"[After 10 minutes of role-play, reconvene the group.]"</p>
+
+        <p>"Okay, let's debrief. What came up for you? Who experienced something interesting?" [Listen to 3–4 responses. Affirm each one specifically. Name what they did well. If someone struggled, normalize it.] "Here is what I want you to hear: the discomfort you felt is normal. But you did not fall apart. You responded. You kept going. That is the muscle we are building. Not the perfect response. The ability to respond instead of freeze."</p>
+
+        <p>"The goal is not to get it right the first time. The goal is to know that when someone microaggressions you, you have options. And you can say something. And the world does not end. You survive it. You keep moving. And next time, you do it with more ease."</p>
+    </div>
+
+    <!-- ==================== SLIDE 16 ==================== -->
+    <h1>Slide 16: The Composure Toolkit — Regulation Techniques</h1>
+    <div class="time-badge">6–8 minutes</div>
+
+    <h3>Teaching Real Tools for the Body</h3>
+    <div class="script-box">
+        <p>"These are tools for when your nervous system is activated. When you feel that surge of adrenaline or anger or shame. When you need to slow down so you can think clearly. These are not fluff. These are neuroscience-backed interventions."</p>
+
+        <p>"<strong>Box Breathing.</strong> Breathe in for a count of four. Hold for four. Exhale for four. Hold for four. Then repeat. The holding is key — it is what slows your nervous system down. Do this five times and you have shifted your state. You can do this under the table in a meeting. You can do this before you speak up. It is invisible and it works."</p>
+
+        <p>"<strong>Grounding — The 5-4-3-2-1 Technique.</strong> When you are triggered and spinning, name five things you can see right now. Four things you can touch. Three things you can hear. Two things you can smell. One thing you can taste. This technique pulls you out of the threat loop and brings you back into your senses, into your body, into the present moment. It takes two minutes and it is incredibly effective."</p>
+
+        <p>"<strong>The Physiological Sigh.</strong> This is my favorite. Breathe in through your nose for a count of four, then take another small breath in through the nose to top off your lungs. Then exhale slowly through your mouth for a count of six or eight. That double inhale and long exhale is the most efficient way to lower your nervous system activation. Do it two or three times and you will feel the shift immediately."</p>
+
+        <p>"<strong>Tension and Release.</strong> When your body is tight, tense every muscle in your body on an inhale — your hands, your arms, your legs, your face. Hold it. Then release on an exhale, letting your whole body go loose. Do this three times. It is a reset. It tells your nervous system: we are safe. We can relax now."</p>
+
+        <p>"<strong>Walking or Movement.</strong> If you can step away from the situation for even two minutes, move your body. Walk. Shake out your hands. Do some stretches. Movement metabolizes stress hormones and shifts your nervous system state. You will come back with more clarity."</p>
+
+        <p>"Practice one or two of these until they feel natural. Then, when you are in a triggering moment, you will have something to reach for. You will not have to white-knuckle your way through. You will have a tool."</p>
+    </div>
+
+    <!-- ==================== SLIDE 17 ==================== -->
+    <h1>Slide 17: The Incident Documentation Template</h1>
+    <div class="time-badge">4–5 minutes</div>
+
+    <h3>Teaching How to Document Without Over-Documenting</h3>
+    <div class="script-box">
+        <p>"I want to talk about documentation because some of you need this and some of you don't, and you need to know which category you are in."</p>
+
+        <p>"If you are experiencing repeated microaggressions from the same person, if you are concerned about how your work is being evaluated, if you are building evidence of bias or hostile behavior, if you are worried about retaliation, or if you are in an organization where documentation matters for legal protection — you need to document."</p>
+
+        <p>"Here is how you do it. Create a file. Google Doc, Word document, whatever. Every time something happens, record the date, the time if you remember it, the exact words that were said — not your interpretation, the exact words. The context: what was the meeting about, who was in the room, what were you doing when this happened. The impact: how it made you feel, whether it affected your work, whether it fits a pattern. And any witnesses."</p>
+
+        <p>"Example: 'January 15, 2024, 2:30 PM, strategy meeting. Present: [names]. I was presenting the Q1 plan. Mark said, "You're so articulate for someone from your background." Impact: The comment assumed lower competence based on race, undermined my authority in the room, echoed similar comments from Mark in December and November. Two witnesses present: Sarah and James.' Keep it factual. Keep it clear. Build the file."</p>
+
+        <p>"Then, if something escalates, if you need to have a conversation with HR or with your manager, you have documentation. Not paranoia. Not drama. Just facts. This is protection."</p>
+    </div>
+
+    <!-- ==================== SLIDE 18 ==================== -->
+    <h1>Slide 18: High-Stakes Moments — Your Pre-Game Checklist</h1>
+    <div class="time-badge">5–6 minutes</div>
+
+    <h3>Preparing for the Moments That Matter</h3>
+    <div class="script-box">
+        <p>"Before you go into a high-stakes moment — a presentation, a difficult conversation, a meeting with someone who has triggered you before, a situation where you are going to be the only person who looks like you — you do a pre-game check."</p>
+
+        <p>"<strong>First: Get into your body.</strong> Do one regulation technique. Box breathing, physiological sigh, tension and release. Get your nervous system calm before you walk in. You want to show up grounded, not activated."</p>
+
+        <p>"<strong>Second: Get your story straight.</strong> What is the narrative you want to carry into this moment? 'I am prepared. I know what I am talking about.' 'I have value to add and I am going to add it.' 'If they push back, I can handle it.' Decide this before you walk in. Do not go in with the default story, which for many of us is 'I hope I do not mess this up.' Choose your story."</p>
+
+        <p>"<strong>Third: Know your tools.</strong> If you get triggered in this moment, what are you going to do? Are you going to step out and breathe? Are you going to pause before responding? Are you going to use one of your microaggression scripts? Know your plan."</p>
+
+        <p>"<strong>Fourth: Remember your power.</strong> You have prepared. You have thought about this. You belong in this room. Your voice matters. Your contribution is valuable. Carry that in with you."</p>
+
+        <p>"This takes five minutes. Five minutes of pre-game work before a high-stakes moment will change how you show up and how people respond to you."</p>
+    </div>
+
+    <!-- ==================== SLIDE 19 ==================== -->
+    <h1>Slide 19: The Composure Conversation</h1>
+    <div class="time-badge">5–6 minutes</div>
+
+    <h3>Teaching How to Debrief High-Stakes Moments</h3>
+    <div class="script-box">
+        <p>"After the high-stakes moment, after the presentation or the difficult conversation or the moment where you got triggered, you need to debrief it. And I do not mean replay it obsessively. I mean deliberately review it."</p>
+
+        <p>"Ask yourself: What triggered me in that moment? What body signal did I notice? What automatic thought came up? How did I respond? Was it the response I wanted to have? If not, what would have served me better? What do I know now that I did not know before I walked in? What did I do well? What do I want to practice before the next time?"</p>
+
+        <p>"This is learning. This is building your composure muscle. Every high-stakes moment is data. You are training yourself to respond more intentionally each time. You are building competence through practice."</p>
+
+        <p>"And importantly: do not debrief alone in your head, where the story can get distorted. Talk to someone you trust. A coach, a mentor, a friend, a peer in this cohort. Tell them what happened and ask for their perspective. Often, you will discover that what felt like a disaster in your head was actually handled with grace. That what felt like a mess was clear to everyone else. We are often harsher critics of ourselves than anyone else is."</p>
+    </div>
+
+    <!-- ==================== SLIDE 20 ==================== -->
+    <h1>Slide 20: The 14-Day Composure Sprint</h1>
+    <div class="time-badge">5–6 minutes</div>
+
+    <h3>Closing Action Commitment</h3>
+    <div class="script-box">
+        <p>"Every module ends with action. Not reflection — action. Because reflection without commitment changes nothing."</p>
+
+        <p>"Your 14-Day Composure Sprint works like this. In the first seven days, you build awareness and tools. You map your triggers. You practice one regulation technique until it feels natural. You read through the microaggression response scripts and pick three that resonate with you. You set up your documentation file if you need it."</p>
+
+        <p>"In the second seven days, you practice in real situations. When you get triggered, you use your tools. You try one of your scripts. You notice what happens. You debrief. You do not have to get it perfect. You just have to practice. You have to move from knowing about composure to embodying it."</p>
+
+        <p>"I know what some of you are thinking. 'This is a lot.' 'I do not have time for this.' 'I'll do it later.' Here is what I need you to hear: later is when most people do not do it. The commitment is now. The 14-Day Sprint is designed to get you moving and practicing while this material is fresh. Two weeks of deliberate practice will build more composure than six months of knowing about it without doing it."</p>
+
+        <p>"So here is my ask: commit to this Sprint. Not perfectly. Just commit. Write down which regulation technique you are going to practice. Write down which microaggression scenario feels most relevant to you. Write down one high-stakes moment coming up where you are going to do your pre-game check. Put it somewhere you will see it. And then do the work."</p>
+    </div>
+
+    <div class="engagement-box">
+        <strong>Accountability Prompt:</strong> In the chat, tell us which regulation technique you are committing to practice first. Box breathing, grounding, physiological sigh, tension and release, or walking. Say it out loud. Public commitment increases follow-through.
+    </div>
+
+    <!-- ==================== SLIDE 21 ==================== -->
+    <h1>Slide 21: Reflection Quote</h1>
+    <div class="time-badge">2–3 minutes</div>
+
+    <h3>Delivering the Reflection</h3>
+    <div class="script-box">
+        <p>"I want to leave you with something to sit with. This is the core of everything we talked about today."</p>
+
+        <p>"Composure is not silence. It is choosing when and how to use your voice for maximum impact."</p>
+
+        <p>"I have heard so many women of color say they need to learn composure because they lose their cool, because they get emotional, because they cannot keep their face neutral. And I want to reframe that completely. Your feelings are not the problem. The system that judges your feelings more harshly than anyone else's — that is the problem. Your composure is not about becoming someone else. It is about becoming more strategically yourself. It is about knowing what you feel, knowing what you need to say, and deciding when and how to say it for your maximum benefit."</p>
+
+        <p>"Composure is power. And the power belongs to you."</p>
+    </div>
+
+    <!-- ==================== SLIDE 22 ==================== -->
+    <h1>Slide 22: Five Key Takeaways</h1>
+    <div class="time-badge">4–5 minutes</div>
+
+    <h3>Closing with Clarity</h3>
+    <div class="script-box">
+        <p>"Let's lock in what we covered today. Five things I want you to walk away knowing in your bones."</p>
+
+        <p>"One: Composure is not suppression. You are not going to become unflappable or emotionless. You are going to become more aware of what you are feeling and more strategic about what you do with it."</p>
+
+        <p>"Two: Your triggers are data, not weakness. A trigger means your nervous system registered something as unsafe. That is information. That is intelligence. Use it."</p>
+
+        <p>"Three: You have response options for every microaggression. Address Now, Address Later, Document, Release. The power is in the choice. You are not obligated to extract justice from every interaction."</p>
+
+        <p>"Four: You have tools for regulating your nervous system in real time. Box breathing, grounding, physiological sigh, tension and release, movement. Practice one until it becomes automatic."</p>
+
+        <p>"Five: Composure is built through practice, not through willpower. The 14-Day Sprint is designed to get you practicing while this material is fresh. Rehearsal builds competence. Competence builds confidence. That is how change happens."</p>
+    </div>
+
+    <!-- ==================== SLIDE 23 ==================== -->
+    <h1>Slide 23: Homework + Next Month Transition</h1>
+    <div class="time-badge">4–5 minutes</div>
+
+    <h3>Assigning the Work and Setting Up Next Month</h3>
+    <div class="script-box">
+        <p>"Here is your homework for this month. Four things."</p>
+
+        <p>"First: Complete your Trigger Map. Map at least one recent trigger using all four layers — the external event, the body signal, the automatic thought, and your response. Write it down. Do not just think about it."</p>
+
+        <p>"Second: Practice one regulation technique at least three times before our next session. Box breathing, grounding, physiological sigh — pick one and practice it until it feels natural. You want to know how to use it in the moment, not just in theory."</p>
+
+        <p>"Third: Identify one microaggression that has been happening to you repeatedly. Use the script from today to draft how you would respond if it happens again. Write out what you would say. Practice saying it out loud. Not perfectly, just for real."</p>
+
+        <p>"Fourth: Upload your completed Trigger Map to the Skool platform before our next session. We are going to do a brief hot seat with a few of you — we will walk through your trigger and workshop your response options together. This is live practice with feedback."</p>
+
+        <p>"Next month, we are shifting gears completely. In May, we move from managing triggers to maximizing your power. We are talking about Advocacy and Negotiation — how to ask for what you have earned without apology. We are talking about your seat at the table and making sure you take up the space that belongs to you. You have built the awareness and the composure. Now we are going to build the ask."</p>
+
+        <p>"I am so proud of the work you are doing. Every month, you are showing up, you are looking at the hard stuff, and you are building the capacity to navigate it with more power. This month — practice your composure. Notice your triggers. Use your tools. In May, we ask for what we are worth. I will see you then."</p>
+    </div>
+
+    <div class="footer">
+        <p>Module 4: Leadership Composure — Executive Leadership Lab</p>
+        <p>Coaching Women of Color® | coachingwomenofcolor.com | wendy@coachingwomenofcolor.com</p>
+        <p>Confidential — For Facilitator Use Only</p>
+    </div>
+</body>
+</html>

@@ -1,0 +1,611 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Microaggression Response Scripts | Executive Leadership Lab</title>
+    <link href="https://fonts.googleapis.com/css2?family=Source+Serif+4:wght@400;600;700&family=Inter:wght@400;500;600&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --primary: #1A1A1A;
+            --accent: #2A7B8C;
+            --accent-warm: #D4A574;
+            --text: #333333;
+            --text-light: #666666;
+            --text-muted: #999999;
+            --bg: #FAF8F5;
+            --bg-warm: #F5F2ED;
+            --border: #E5E0D8;
+            --success: #4A9B7F;
+        }
+
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+
+        body {
+            font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
+            background: var(--bg);
+            color: var(--text);
+            line-height: 1.6;
+            min-height: 100vh;
+        }
+
+        .container { max-width: 900px; margin: 0 auto; padding: 40px 24px; }
+
+        header {
+            text-align: center;
+            margin-bottom: 48px;
+            padding-bottom: 32px;
+            border-bottom: 1px solid var(--border);
+        }
+
+        .logo { height: 80px; margin-bottom: 24px; }
+        .module-label { font-size: 11px; font-weight: 600; color: var(--accent); text-transform: uppercase; letter-spacing: 2.5px; margin-bottom: 12px; display: block; }
+        h1 { font-family: 'Source Serif 4', Georgia, serif; font-size: 36px; font-weight: 700; color: var(--primary); margin-bottom: 12px; }
+        .subtitle { font-size: 18px; color: var(--text-light); max-width: 700px; margin: 0 auto; }
+
+        .instructions {
+            background: var(--bg-warm);
+            border-left: 3px solid var(--accent-warm);
+            padding: 20px 24px;
+            margin-bottom: 40px;
+            border-radius: 0 4px 4px 0;
+        }
+        .instructions h3 { font-family: 'Source Serif 4', Georgia, serif; font-size: 16px; font-weight: 600; color: var(--primary); margin-bottom: 8px; }
+        .instructions p { font-size: 14px; color: var(--text-light); margin: 0; }
+
+        .section {
+            background: white;
+            border: 1px solid var(--border);
+            border-radius: 8px;
+            padding: 32px;
+            margin-bottom: 24px;
+        }
+
+        .section-header { display: flex; align-items: center; gap: 16px; margin-bottom: 8px; }
+
+        .step-number {
+            width: 40px; height: 40px;
+            background: var(--accent);
+            border-radius: 50%;
+            display: flex; align-items: center; justify-content: center;
+            font-size: 18px; font-weight: 700; color: white; flex-shrink: 0;
+        }
+
+        .section-title { font-family: 'Source Serif 4', Georgia, serif; font-size: 20px; font-weight: 600; color: var(--primary); }
+        .section-description { font-size: 14px; color: var(--text-light); margin-bottom: 24px; padding-left: 56px; }
+
+        .scenario-intro {
+            background: var(--primary);
+            color: white;
+            padding: 16px 20px;
+            border-radius: 4px 4px 0 0;
+            margin: 0 -32px 24px -32px;
+            padding-left: 32px;
+            padding-right: 32px;
+        }
+        .scenario-intro p { margin: 0; font-size: 15px; line-height: 1.5; }
+        .scenario-intro strong { font-weight: 600; }
+
+        .why-matters {
+            background: var(--bg-warm);
+            border-left: 3px solid var(--accent);
+            padding: 16px 20px;
+            margin-bottom: 24px;
+            border-radius: 0 4px 4px 0;
+        }
+        .why-matters-label { font-size: 11px; font-weight: 700; text-transform: uppercase; letter-spacing: 1.5px; color: var(--accent); margin-bottom: 10px; }
+        .why-matters p { margin: 0; font-size: 14px; color: var(--text-light); }
+
+        .response-option {
+            background: var(--bg);
+            border: 1px solid var(--border);
+            border-radius: 4px;
+            padding: 20px;
+            margin-bottom: 16px;
+        }
+        .response-label { font-size: 12px; font-weight: 700; text-transform: uppercase; letter-spacing: 1.5px; color: var(--accent-warm); margin-bottom: 8px; display: block; }
+        .response-option p { margin: 0 0 12px 0; font-size: 14px; color: var(--text-light); }
+        .response-script {
+            background: white;
+            padding: 14px 16px;
+            border-radius: 4px;
+            border-left: 3px solid var(--accent-warm);
+            font-family: 'Source Serif 4', Georgia, serif;
+            font-size: 15px;
+            color: var(--text);
+            margin: 0;
+            line-height: 1.6;
+            font-style: italic;
+        }
+
+        .my-response {
+            background: var(--bg);
+            border: 1px solid var(--border);
+            border-radius: 4px;
+            padding: 20px;
+            margin-top: 24px;
+        }
+        .my-response-label { font-size: 12px; font-weight: 700; text-transform: uppercase; letter-spacing: 1.5px; color: var(--accent); margin-bottom: 8px; display: block; }
+
+        label { display: block; font-size: 14px; font-weight: 500; color: var(--primary); margin-bottom: 8px; }
+
+        textarea, input[type="text"] {
+            width: 100%; padding: 12px 16px;
+            border: 1px solid var(--border); border-radius: 4px;
+            font-family: inherit; font-size: 15px; color: var(--text);
+            background: white; transition: border-color 0.2s, box-shadow 0.2s; resize: vertical;
+        }
+        textarea:focus, input[type="text"]:focus { outline: none; border-color: var(--accent); box-shadow: 0 0 0 3px rgba(42, 123, 140, 0.1); }
+        textarea { min-height: 80px; }
+        textarea.short { min-height: 60px; }
+
+        .field-group { margin-bottom: 20px; }
+        .field-group:last-child { margin-bottom: 0; }
+
+        .commitment-section {
+            background: var(--primary);
+            color: white;
+            padding: 32px;
+            border-radius: 8px;
+            margin-bottom: 24px;
+        }
+        .commitment-section h3 {
+            font-family: 'Source Serif 4', Georgia, serif;
+            font-size: 22px;
+            font-weight: 700;
+            margin-bottom: 20px;
+        }
+        .commitment-row { display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 16px; margin-bottom: 16px; }
+        .commitment-row:last-child { margin-bottom: 0; }
+
+        .commitment-section label {
+            color: rgba(255, 255, 255, 0.9);
+            font-size: 13px;
+            margin-bottom: 10px;
+        }
+        .commitment-section textarea {
+            background: rgba(255, 255, 255, 0.1);
+            border: 1px solid rgba(255, 255, 255, 0.2);
+            color: white;
+            min-height: 70px;
+        }
+        .commitment-section textarea::placeholder { color: rgba(255, 255, 255, 0.4); }
+        .commitment-section textarea:focus { border-color: var(--accent-warm); box-shadow: 0 0 0 3px rgba(212, 165, 116, 0.2); }
+
+        .button-row {
+            display: flex; justify-content: space-between; align-items: center;
+            margin-top: 40px; padding-top: 24px; border-top: 1px solid var(--border);
+        }
+
+        .save-status { font-size: 13px; color: var(--success); display: flex; align-items: center; gap: 6px; }
+        .save-status.hidden { visibility: hidden; }
+
+        .btn { padding: 12px 24px; border-radius: 4px; font-family: inherit; font-size: 14px; font-weight: 500; cursor: pointer; transition: all 0.2s; }
+        .btn-primary { background: var(--accent); color: white; border: none; }
+        .btn-primary:hover { background: #236a79; }
+        .btn-secondary { background: transparent; color: var(--text-light); border: 1px solid var(--border); }
+        .btn-secondary:hover { border-color: var(--text-light); }
+
+        footer { text-align: center; padding: 40px 24px; color: var(--text-muted); font-size: 13px; }
+        footer a { color: var(--accent); text-decoration: none; }
+
+        @media print {
+            body { background: white; }
+            .container { max-width: 100%; padding: 20px; }
+            .button-row { display: none; }
+            .section { border: 1px solid #ddd; break-inside: avoid; }
+        }
+
+        @media screen and (max-width: 768px) {
+            .container { padding: 24px 16px; }
+            h1 { font-size: 28px; }
+            .commitment-row { grid-template-columns: 1fr; }
+            .section { padding: 20px; }
+            .scenario-intro, .why-matters { margin-left: -20px; margin-right: -20px; }
+        }
+
+        @media screen and (max-width: 480px) {
+            .container { padding: 16px 12px; }
+            .logo { height: 60px; }
+            h1 { font-size: 24px; }
+            .subtitle { font-size: 15px; }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <header>
+            <img src="https://coachingwomenofcolor.com/wp-content/uploads/2021/04/CWCFinal_logo2.webp" alt="Coaching Women of Color" class="logo">
+            <span class="module-label">Module 4 — April</span>
+            <h1>Microaggression Response Scripts</h1>
+            <p class="subtitle">Rehearsal builds muscle memory. These scripts give you language you can practice until it feels natural — so when the moment arrives, you're ready.</p>
+        </header>
+
+        <div class="instructions">
+            <h3>How to use this worksheet</h3>
+            <p>Each scenario includes what happened, why it matters, and 2–3 response options at different intensity levels. Practice them out loud. Write your own version in "My Preferred Response." Your answers auto-save as you type.</p>
+        </div>
+
+        <!-- SCENARIO 1 -->
+        <div class="section" id="scenario-1">
+            <div class="section-header">
+                <div class="step-number">1</div>
+                <div class="section-title">"You're so articulate"</div>
+            </div>
+            <div class="scenario-intro">
+                <p><strong>What Happened:</strong> Someone compliments your communication skills in a way that signals surprise. "You're so articulate — it's great for someone in your position." The subtext: it's unexpected.</p>
+            </div>
+
+            <div class="why-matters">
+                <div class="why-matters-label">Why This Matters</div>
+                <p>The unspoken assumption is that women of color don't naturally speak well. This "compliment" reinforces a stereotype and marks you as the exception rather than the norm. Over time, these small messages erode how you're seen professionally.</p>
+            </div>
+
+            <div class="response-option">
+                <span class="response-label">Option A: In the Moment (Direct)</span>
+                <p>Immediate, clear, no apology. Use this when you have energy and want to address it head-on.</p>
+                <p class="response-script">"Thanks. I notice that sometimes gets presented as a surprise, and I think that says more about expectations than about me. I'm just doing my job the way I was trained."</p>
+            </div>
+
+            <div class="response-option">
+                <span class="response-label">Option B: Strategic Follow-Up (Private)</span>
+                <p>Later, in a private moment or email. Use this to plant a seed without confrontation.</p>
+                <p class="response-script">"I wanted to circle back to what you said earlier about my communication. I'm curious — would you say that about [man/person not of color] in the same role? I ask because I notice it's often framed as exceptional when women of color communicate clearly, but it's just normal for others."</p>
+            </div>
+
+            <div class="response-option">
+                <span class="response-label">Option C: Document & Move (When Pattern Warrants)</span>
+                <p>If this is repeated by the same person, document and escalate or flag for HR if it escalates.</p>
+                <p class="response-script">"I appreciate the feedback, and I'm going to keep a record of comments like this. I want to be clear: I expect my work to be evaluated on impact, not on whether my communication surprises you. If feedback is about my actual performance, I'm open to it. But comments on how 'articulate' I am aren't helpful."</p>
+            </div>
+
+            <div class="my-response">
+                <label class="my-response-label">My Preferred Response</label>
+                <textarea id="scenario-1-response" placeholder="Write your own version of how you'd respond. What feels authentic to you?"></textarea>
+            </div>
+        </div>
+
+        <!-- SCENARIO 2 -->
+        <div class="section" id="scenario-2">
+            <div class="section-header">
+                <div class="step-number">2</div>
+                <div class="section-title">Being interrupted or talked over in meetings</div>
+            </div>
+            <div class="scenario-intro">
+                <p><strong>What Happened:</strong> You're mid-sentence in a meeting. Someone (often a male colleague) interrupts or talks over you. It happens once. Then again. The room allows it.</p>
+            </div>
+
+            <div class="why-matters">
+                <div class="why-matters-label">Why This Matters</div>
+                <p>Research shows women of color are interrupted more frequently and with less pushback. Each interruption signals that your voice is less important. Over a career, it shapes who gets heard, who gets credit, and who rises.</p>
+            </div>
+
+            <div class="response-option">
+                <span class="response-label">Option A: In the Moment (Firm)</span>
+                <p>Immediate, non-negotiable. Hold your ground.</p>
+                <p class="response-script">"I'm going to finish my thought, and then we can discuss it. [Pause. Continue.]"</p>
+            </div>
+
+            <div class="response-option">
+                <span class="response-label">Option B: Call the Pattern (Publicly)</span>
+                <p>If it's habitual in the meeting, name it. Works when you have peer support or when your role allows it.</p>
+                <p class="response-script">"I've noticed this pattern in our meetings, and I want to flag it: [Name/people in this role] tend to get interrupted more. Let's agree that we finish thoughts before we respond. I'll do the same."</p>
+            </div>
+
+            <div class="response-option">
+                <span class="response-label">Option C: Manager Conversation (After)</span>
+                <p>If it's a pattern with one person, address it privately with your manager or the interrupter directly.</p>
+                <p class="response-script">"I've noticed in our recent meetings that I've been interrupted several times. I want to share ideas fully before we move on. Can we agree to let people finish before responding?"</p>
+            </div>
+
+            <div class="my-response">
+                <label class="my-response-label">My Preferred Response</label>
+                <textarea id="scenario-2-response" placeholder="Write your own version of how you'd respond."></textarea>
+            </div>
+        </div>
+
+        <!-- SCENARIO 3 -->
+        <div class="section" id="scenario-3">
+            <div class="section-header">
+                <div class="step-number">3</div>
+                <div class="section-title">Your idea is attributed to someone else</div>
+            </div>
+            <div class="scenario-intro">
+                <p><strong>What Happened:</strong> You pitch an idea in a meeting. Someone else (often a peer) repeats it later, and your manager or the room gives them credit. "That's a great idea, [Name]." You're still in the room.</p>
+            </div>
+
+            <div class="why-matters">
+                <div class="why-matters-label">Why This Matters</div>
+                <p>Credit shapes promotions, raises, and reputation. If your ideas consistently get attributed to others, you become invisible. This is one of the most damaging microaggressions because it directly affects your career trajectory.</p>
+            </div>
+
+            <div class="response-option">
+                <span class="response-label">Option A: Real-Time Correction (Immediate)</span>
+                <p>Clear, factual, no emotion. Do this in the moment to reset the record.</p>
+                <p class="response-script">"I appreciate that feedback. I want to clarify — I actually shared that idea earlier. [Name] is building on it, which is great. But I want to make sure credit stays accurate."</p>
+            </div>
+
+            <div class="response-option">
+                <span class="response-label">Option B: Written Record (Strategic)</span>
+                <p>Send a follow-up message with your name attached to the original idea. Professional, documented.</p>
+                <p class="response-script">"Following up on the meeting today — wanted to make sure my original proposal on [topic] is documented. I shared this first, and I want clarity on next steps and who's leading implementation."</p>
+            </div>
+
+            <div class="response-option">
+                <span class="response-label">Option C: Manager Escalation (Pattern)</span>
+                <p>If this happens repeatedly, escalate privately to your manager or skip-level.</p>
+                <p class="response-script">"I've noticed a pattern in meetings where I contribute ideas, and credit goes to someone else who repeats them. This is affecting my visibility and advancement. I need your partnership in making sure my contributions are recognized."</p>
+            </div>
+
+            <div class="my-response">
+                <label class="my-response-label">My Preferred Response</label>
+                <textarea id="scenario-3-response" placeholder="Write your own version of how you'd respond."></textarea>
+            </div>
+        </div>
+
+        <!-- SCENARIO 4 -->
+        <div class="section" id="scenario-4">
+            <div class="section-header">
+                <div class="step-number">4</div>
+                <div class="section-title">"You're not like other [group]" (Othering as compliment)</div>
+            </div>
+            <div class="scenario-intro">
+                <p><strong>What Happened:</strong> Someone tries to compliment you by separating you from your identity. "You're different." "You don't have an accent like..." "You're not like other women of color I've worked with." The compliment is designed to isolate.</p>
+            </div>
+
+            <div class="why-matters">
+                <div class="why-matters-label">Why This Matters</div>
+                <p>This separates you from your community and suggests your identity is a deficit to overcome. It's an invitation to distance yourself from people like you — to be the "good one." It's designed to make you complicit in stereotyping your own group.</p>
+            </div>
+
+            <div class="response-option">
+                <span class="response-label">Option A: Reframe Directly (Immediate)</span>
+                <p>Challenge the assumption without making them defensive.</p>
+                <p class="response-script">"I appreciate the intention, but I'm actually pretty typical in my work style. The difference might be that you haven't worked with many [women of color/people from my background] at this level. That's a data problem, not a me problem."</p>
+            </div>
+
+            <div class="response-option">
+                <span class="response-label">Option B: Educate Calmly (If you have energy)</span>
+                <p>Turn it into a learning moment.</p>
+                <p class="response-script">"I think comments like that, even when well-intentioned, create a pressure to separate myself from my identity to fit in. I'd rather just be myself — which happens to include being Latina/Asian/etc. — and have that be normal here."</p>
+            </div>
+
+            <div class="response-option">
+                <span class="response-label">Option C: Boundary (Firm Close)</span>
+                <p>If this person doesn't adjust, set a boundary.</p>
+                <p class="response-script">"I'm going to be direct: comments that separate me from my identity aren't compliments. I'd prefer you judge my work on its merits, not on how 'different' I am from other people who share my background."</p>
+            </div>
+
+            <div class="my-response">
+                <label class="my-response-label">My Preferred Response</label>
+                <textarea id="scenario-4-response" placeholder="Write your own version of how you'd respond."></textarea>
+            </div>
+        </div>
+
+        <!-- SCENARIO 5 -->
+        <div class="section" id="scenario-5">
+            <div class="section-header">
+                <div class="step-number">5</div>
+                <div class="section-title">Tone policing: "You seem upset" when you're being direct</div>
+            </div>
+            <div class="scenario-intro">
+                <p><strong>What Happened:</strong> You're in a meeting being direct about a decision you disagree with. Clear, professional, factual. Someone says, "You seem upset," or "I can sense some frustration," deflecting from your point to your emotional temperature.</p>
+            </div>
+
+            <div class="why-matters">
+                <div class="why-matters-label">Why This Matters</div>
+                <p>This is a way to silence you by reframing your directness as an emotional outburst. Women of color are more frequently tone-policed than white men saying the exact same thing. The message: don't be direct. Stay small. Smile more.</p>
+            </div>
+
+            <div class="response-option">
+                <span class="response-label">Option A: Redirect to Substance (Immediate)</span>
+                <p>Stay on the point. Don't engage the emotion trap.</p>
+                <p class="response-script">"My tone is professional. My point stands — [restate your actual argument]. I'd like to continue discussing whether this decision is the right one."</p>
+            </div>
+
+            <div class="response-option">
+                <span class="response-label">Option B: Name the Pattern (Clear)</span>
+                <p>Make the bias visible without aggression.</p>
+                <p class="response-script">"I notice I'm being asked about my tone when I'm being direct. If [colleague's name] said the exact same thing, would it be described as emotional? Because I'm being factual, not upset."</p>
+            </div>
+
+            <div class="response-option">
+                <span class="response-label">Option C: Close the Door (Boundary)</span>
+                <p>For repeated offenders, be explicit about what you won't tolerate.</p>
+                <p class="response-script">"I need to be clear: I'm going to share direct feedback without my tone being up for debate. If you need to discuss my actual point, I'm here for that. But commenting on how I seem is not a conversation I'm having."</p>
+            </div>
+
+            <div class="my-response">
+                <label class="my-response-label">My Preferred Response</label>
+                <textarea id="scenario-5-response" placeholder="Write your own version of how you'd respond."></textarea>
+            </div>
+        </div>
+
+        <!-- SCENARIO 6 -->
+        <div class="section" id="scenario-6">
+            <div class="section-header">
+                <div class="step-number">6</div>
+                <div class="section-title">Being confused with the only other person of color</div>
+            </div>
+            <div class="scenario-intro">
+                <p><strong>What Happened:</strong> You're at an event or in a meeting. Someone mistakes you for the other woman of color in the room. "Oh, I thought you were [Name]." Or they mix up your work with hers.</p>
+            </div>
+
+            <div class="why-matters">
+                <div class="why-matters-label">Why This Matters</div>
+                <p>This happens because the person is not seeing you as an individual — they're seeing a category. It's dehumanizing and it erases your unique identity and contributions. It sends the message: you're interchangeable.</p>
+            </div>
+
+            <div class="response-option">
+                <span class="response-label">Option A: Correct Calmly (First Time)</span>
+                <p>Clear, without drama. Give them the benefit of the doubt once.</p>
+                <p class="response-script">"Actually, I'm [Your Name]. I work on [your area]. [Other Name] works on [hers]. We're different people and different teams."</p>
+            </div>
+
+            <div class="response-option">
+                <span class="response-label">Option B: Make It Memorable (Second Time)</span>
+                <p>If it happens again with the same person, make it stick.</p>
+                <p class="response-script">"This is the second time you've confused me with [Name]. We look different, work on different projects, and have different names. I'm going to assume you need help remembering — what would help you keep us straight?"</p>
+            </div>
+
+            <div class="response-option">
+                <span class="response-label">Option C: Escalate (Pattern)</span>
+                <p>If this happens repeatedly in a team or meeting context, escalate to your manager or HR.</p>
+                <p class="response-script">"I want to document that [Name] has confused me with [other colleague] multiple times, despite corrections. This pattern feels like it's about not seeing me as an individual. I want HR and leadership aware of it."</p>
+            </div>
+
+            <div class="my-response">
+                <label class="my-response-label">My Preferred Response</label>
+                <textarea id="scenario-6-response" placeholder="Write your own version of how you'd respond."></textarea>
+            </div>
+        </div>
+
+        <!-- SCENARIO 7 -->
+        <div class="section" id="scenario-7">
+            <div class="section-header">
+                <div class="step-number">7</div>
+                <div class="section-title">"I don't see color" or "We're all the same here"</div>
+            </div>
+            <div class="scenario-intro">
+                <p><strong>What Happened:</strong> You mention an experience related to your identity, or you bring up a disparity. Someone responds, "I don't see race," or "That doesn't happen here, we're all equal," denying both your experience and the existence of the situation.</p>
+            </div>
+
+            <div class="why-matters">
+                <div class="why-matters-label">Why This Matters</div>
+                <p>Colorblindness is not equity. It's an erasure. If someone doesn't see color, they also can't see the real disparities that exist. This response shuts down conversation about systemic issues and leaves you gaslit and isolated.</p>
+            </div>
+
+            <div class="response-option">
+                <span class="response-label">Option A: Name Reality (Direct)</span>
+                <p>Don't accept the denial. State fact.</p>
+                <p class="response-script">"I appreciate that perspective, but I'm describing my actual experience. My identity exists, and it affects my experience here. That's not a character flaw or a bias on my part — it's just reality. Acknowledging it isn't divisive; ignoring it is."</p>
+            </div>
+
+            <div class="response-option">
+                <span class="response-label">Option B: Educate (If you choose to)</span>
+                <p>Research shows colorblindness actually increases bias. If you have energy, share that.</p>
+                <p class="response-script">"Research actually shows that colorblindness doesn't reduce bias — it increases it, because it prevents us from seeing real disparities. True inclusion means seeing and valuing difference, not pretending it doesn't exist."</p>
+            </div>
+
+            <div class="response-option">
+                <span class="response-label">Option C: Move On (Protect Your Energy)</span>
+                <p>Some people aren't ready. You don't have to convince them.</p>
+                <p class="response-script">"I hear you. And I'm going to continue talking about my experience and what I see. You can listen or not, but I'm not debating whether it's real."</p>
+            </div>
+
+            <div class="my-response">
+                <label class="my-response-label">My Preferred Response</label>
+                <textarea id="scenario-7-response" placeholder="Write your own version of how you'd respond."></textarea>
+            </div>
+        </div>
+
+        <!-- SCENARIO 8 -->
+        <div class="section" id="scenario-8">
+            <div class="section-header">
+                <div class="step-number">8</div>
+                <div class="section-title">Hair comments, touching, or name mispronunciation (repeated)</div>
+            </div>
+            <div class="scenario-intro">
+                <p><strong>What Happened:</strong> Someone comments on your hair: "It's so curly," or "That's so different," or they touch it without permission. Or they mispronounce your name repeatedly despite correction: "I know, I know, I'm bad at names," and laugh it off.</p>
+            </div>
+
+            <div class="why-matters">
+                <div class="why-matters-label">Why This Matters</div>
+                <p>Hair touching is a boundary violation rooted in a history of dehumanization. Name mispronunciation is a choice — repeated choices to devalue your identity. Both are saying: you're not quite professional, not quite one of us, and that's okay to point out.</p>
+            </div>
+
+            <div class="response-option">
+                <span class="response-label">Option A: Set Boundary Immediately (Hair/Touch)</span>
+                <p>Do not wait. Your body is your property.</p>
+                <p class="response-script">"Please don't touch my hair. I know it might seem friendly, but I don't want it touched. Thank you."</p>
+            </div>
+
+            <div class="response-option">
+                <span class="response-label">Option B: Name Correction (Clear, One Chance)</span>
+                <p>First time: give them the correct pronunciation. Be patient. Second time: that's on them.</p>
+                <p class="response-script">"It's [correct pronunciation]. I know it's not common, so I'll say it once for clarity. Going forward, I'd appreciate if you took the time to get it right."</p>
+            </div>
+
+            <div class="response-option">
+                <span class="response-label">Option C: Escalate (Repeated Violations)</span>
+                <p>If hair is touched again or name is mispronounced intentionally, escalate formally.</p>
+                <p class="response-script">"I've asked you to respect both my body and my name. [Touching my hair / mispronouncing my name] is disrespectful. I need you to stop, and I'm documenting this. If it continues, I'm escalating to HR."</p>
+            </div>
+
+            <div class="my-response">
+                <label class="my-response-label">My Preferred Response</label>
+                <textarea id="scenario-8-response" placeholder="Write your own version of how you'd respond."></textarea>
+            </div>
+        </div>
+
+        <!-- COMMITMENT SECTION -->
+        <div class="commitment-section">
+            <h3>My Go-To Responses</h3>
+            <p style="color: rgba(255,255,255,0.9); margin-bottom: 20px;">These are the scripts you'll come back to repeatedly. Write your personalized versions here. Commit to them. Practice them until they feel like second nature.</p>
+
+            <div class="commitment-row">
+                <div class="field-group">
+                    <label>My immediate redirect (what I say in the moment to take back space)</label>
+                    <textarea id="commitment-1"></textarea>
+                </div>
+                <div class="field-group">
+                    <label>My boundary statement (for repeated behavior, when I'm done being patient)</label>
+                    <textarea id="commitment-2"></textarea>
+                </div>
+                <div class="field-group">
+                    <label>My escalation statement (what I say when I'm documenting or involving leadership)</label>
+                    <textarea id="commitment-3"></textarea>
+                </div>
+            </div>
+        </div>
+
+        <div class="button-row">
+            <button class="btn btn-secondary" onclick="clearAll()">Clear All</button>
+            <span class="save-status hidden" id="save-status">
+                <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="20 6 9 17 4 12"></polyline></svg>
+                Auto-saved
+            </span>
+            <button class="btn btn-primary" onclick="window.print()">Print / PDF</button>
+        </div>
+    </div>
+
+    <footer>
+        <p>Executive Leadership Lab — Module 4: Leadership Composure: Managing Triggers, Bias &amp; High-Stakes Moments</p>
+        <p><a href="https://coachingwomenofcolor.com">Coaching Women of Color®</a></p>
+    </footer>
+
+    <script>
+        const STORAGE_KEY = 'cwc-microaggression-scripts-v1';
+
+        function saveData() {
+            const data = {};
+            document.querySelectorAll('textarea, input[type="text"]').forEach(el => {
+                if (el.id) data[el.id] = el.value;
+            });
+            localStorage.setItem(STORAGE_KEY, JSON.stringify(data));
+            const status = document.getElementById('save-status');
+            status.classList.remove('hidden');
+            setTimeout(() => status.classList.add('hidden'), 2000);
+        }
+
+        function loadData() {
+            const saved = localStorage.getItem(STORAGE_KEY);
+            if (!saved) return;
+            const data = JSON.parse(saved);
+            Object.keys(data).forEach(key => {
+                const el = document.getElementById(key);
+                if (el) el.value = data[key];
+            });
+        }
+
+        function clearAll() {
+            if (!confirm('Clear all saved responses? This cannot be undone.')) return;
+            localStorage.removeItem(STORAGE_KEY);
+            document.querySelectorAll('textarea, input[type="text"]').forEach(el => el.value = '');
+        }
+
+        document.addEventListener('input', saveData);
+        loadData();
+    </script>
+</body>
+</html>

@@ -1,0 +1,993 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>EI Self-Assessment | Leadership Composure</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Source+Serif+4:wght@400;600&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --primary: #1A1A1A;
+            --accent: #2A7B8C;
+            --accent-warm: #D4A574;
+            --bg: #FAF8F5;
+            --bg-warm: #F5F2ED;
+            --border: #E5E0D8;
+            --success: #4A9B7F;
+            --text: #2D2D2D;
+            --text-light: #5A5A5A;
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Inter', sans-serif;
+            color: var(--text);
+            background-color: var(--bg);
+            line-height: 1.6;
+            padding: 0;
+        }
+
+        .container {
+            max-width: 1000px;
+            margin: 0 auto;
+            padding: 40px 20px;
+        }
+
+        .header {
+            text-align: center;
+            margin-bottom: 40px;
+            padding-bottom: 30px;
+            border-bottom: 2px solid var(--border);
+        }
+
+        .header h1 {
+            font-family: 'Source Serif 4', serif;
+            font-size: 36px;
+            font-weight: 600;
+            color: var(--primary);
+            margin-bottom: 10px;
+        }
+
+        .header p {
+            font-size: 16px;
+            color: var(--text-light);
+            font-weight: 500;
+        }
+
+        .instruction-box {
+            background-color: var(--bg-warm);
+            border-left: 4px solid var(--accent);
+            padding: 20px;
+            margin-bottom: 30px;
+            border-radius: 2px;
+        }
+
+        .instruction-box p {
+            font-size: 14px;
+            color: var(--text);
+            line-height: 1.6;
+        }
+
+        .section {
+            margin-bottom: 40px;
+        }
+
+        .section-header {
+            display: flex;
+            align-items: baseline;
+            margin-bottom: 20px;
+            padding-bottom: 15px;
+            border-bottom: 1px solid var(--border);
+        }
+
+        .section-number {
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            width: 32px;
+            height: 32px;
+            background-color: var(--accent);
+            color: white;
+            border-radius: 50%;
+            font-weight: 600;
+            font-size: 14px;
+            margin-right: 15px;
+            flex-shrink: 0;
+        }
+
+        .section-title {
+            font-family: 'Source Serif 4', serif;
+            font-size: 22px;
+            font-weight: 600;
+            color: var(--primary);
+        }
+
+        .assessment-grid {
+            display: grid;
+            grid-template-columns: 1fr;
+            gap: 20px;
+            margin-bottom: 25px;
+        }
+
+        .assessment-item {
+            border: 1px solid var(--border);
+            border-radius: 4px;
+            padding: 20px;
+            background-color: white;
+        }
+
+        .assessment-label {
+            font-weight: 600;
+            color: var(--primary);
+            margin-bottom: 15px;
+            display: block;
+            font-size: 15px;
+        }
+
+        .assessment-description {
+            font-size: 13px;
+            color: var(--text-light);
+            margin-bottom: 15px;
+            line-height: 1.5;
+            font-style: italic;
+        }
+
+        .rating-scale {
+            display: flex;
+            gap: 8px;
+            justify-content: flex-start;
+            align-items: center;
+        }
+
+        .rating-label {
+            font-size: 12px;
+            color: var(--text-light);
+            margin-right: 10px;
+            font-weight: 500;
+        }
+
+        .rating-btn {
+            width: 40px;
+            height: 40px;
+            border: 2px solid var(--border);
+            background-color: white;
+            border-radius: 4px;
+            cursor: pointer;
+            font-weight: 600;
+            font-size: 13px;
+            color: var(--text-light);
+            transition: all 0.2s ease;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .rating-btn:hover {
+            border-color: var(--accent);
+            color: var(--accent);
+        }
+
+        .rating-btn.selected {
+            background-color: var(--accent);
+            color: white;
+            border-color: var(--accent);
+        }
+
+        .score-display {
+            margin-top: 20px;
+            padding: 15px;
+            background-color: var(--bg-warm);
+            border-radius: 4px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .score-label {
+            font-size: 13px;
+            color: var(--text-light);
+            font-weight: 500;
+        }
+
+        .score-value {
+            font-size: 20px;
+            font-weight: 700;
+            color: var(--accent);
+        }
+
+        .competency-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 20px;
+            margin-top: 30px;
+        }
+
+        .competency-card {
+            border: 1px solid var(--border);
+            border-radius: 4px;
+            padding: 20px;
+            background-color: white;
+            text-align: center;
+        }
+
+        .competency-name {
+            font-family: 'Source Serif 4', serif;
+            font-size: 16px;
+            font-weight: 600;
+            color: var(--primary);
+            margin-bottom: 10px;
+        }
+
+        .competency-score {
+            font-size: 32px;
+            font-weight: 700;
+            color: var(--accent);
+            margin-bottom: 10px;
+        }
+
+        .competency-max {
+            font-size: 12px;
+            color: var(--text-light);
+        }
+
+        .reflection-section {
+            background-color: var(--bg-warm);
+            border: 1px solid var(--border);
+            border-radius: 4px;
+            padding: 25px;
+            margin-top: 30px;
+        }
+
+        .reflection-title {
+            font-family: 'Source Serif 4', serif;
+            font-size: 18px;
+            font-weight: 600;
+            color: var(--primary);
+            margin-bottom: 15px;
+        }
+
+        .reflection-item {
+            margin-bottom: 20px;
+        }
+
+        .reflection-item:last-child {
+            margin-bottom: 0;
+        }
+
+        .reflection-label {
+            font-weight: 600;
+            color: var(--primary);
+            margin-bottom: 8px;
+            display: block;
+            font-size: 14px;
+        }
+
+        .reflection-input {
+            width: 100%;
+            min-height: 80px;
+            padding: 12px;
+            border: 1px solid var(--border);
+            border-radius: 4px;
+            font-family: 'Inter', sans-serif;
+            font-size: 13px;
+            color: var(--text);
+            resize: vertical;
+            transition: border-color 0.2s ease;
+        }
+
+        .reflection-input:focus {
+            outline: none;
+            border-color: var(--accent);
+            box-shadow: 0 0 0 3px rgba(42, 123, 140, 0.1);
+        }
+
+        .action-buttons {
+            display: flex;
+            gap: 10px;
+            margin-top: 30px;
+            flex-wrap: wrap;
+        }
+
+        .btn {
+            padding: 12px 24px;
+            border: 2px solid var(--accent);
+            background-color: white;
+            color: var(--accent);
+            font-weight: 600;
+            border-radius: 4px;
+            cursor: pointer;
+            font-size: 14px;
+            transition: all 0.2s ease;
+        }
+
+        .btn:hover {
+            background-color: var(--accent);
+            color: white;
+        }
+
+        .btn-primary {
+            background-color: var(--accent);
+            color: white;
+            border-color: var(--accent);
+        }
+
+        .btn-primary:hover {
+            background-color: #1f5f6d;
+            border-color: #1f5f6d;
+        }
+
+        .status-message {
+            padding: 12px 16px;
+            border-radius: 4px;
+            font-size: 13px;
+            font-weight: 500;
+            margin-top: 10px;
+            display: none;
+        }
+
+        .status-message.show {
+            display: block;
+        }
+
+        .status-message.success {
+            background-color: #e8f5e9;
+            color: var(--success);
+            border: 1px solid var(--success);
+        }
+
+        .footer {
+            margin-top: 40px;
+            padding-top: 20px;
+            border-top: 1px solid var(--border);
+            text-align: center;
+            font-size: 12px;
+            color: var(--text-light);
+        }
+
+        @media (max-width: 768px) {
+            .container {
+                padding: 25px 15px;
+            }
+
+            .header h1 {
+                font-size: 28px;
+            }
+
+            .section-title {
+                font-size: 18px;
+            }
+
+            .competency-grid {
+                grid-template-columns: 1fr;
+            }
+
+            .action-buttons {
+                flex-direction: column;
+            }
+
+            .btn {
+                width: 100%;
+            }
+        }
+
+        @media (max-width: 480px) {
+            .container {
+                padding: 15px 10px;
+            }
+
+            .header h1 {
+                font-size: 22px;
+            }
+
+            .header p {
+                font-size: 14px;
+            }
+
+            .section-title {
+                font-size: 16px;
+            }
+
+            .rating-scale {
+                flex-wrap: wrap;
+            }
+
+            .rating-btn {
+                width: 36px;
+                height: 36px;
+                font-size: 12px;
+            }
+
+            .reflection-input {
+                min-height: 60px;
+                font-size: 13px;
+            }
+        }
+
+        @media print {
+            body {
+                background-color: white;
+                padding: 0;
+            }
+
+            .container {
+                padding: 0;
+                max-width: 100%;
+            }
+
+            .action-buttons,
+            .btn,
+            .status-message {
+                display: none !important;
+            }
+
+            .assessment-item,
+            .competency-card,
+            .reflection-section {
+                break-inside: avoid;
+                page-break-inside: avoid;
+            }
+
+            .rating-btn.selected {
+                background-color: var(--accent);
+                color: white;
+                border: 2px solid var(--accent);
+            }
+
+            .reflection-input {
+                border: 1px solid var(--border);
+                background-color: white;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="header">
+            <h1>Emotional Intelligence Self-Assessment</h1>
+            <p>Understanding Your EI Competencies for Leadership Composure</p>
+        </div>
+
+        <div class="instruction-box">
+            <p><strong>Instructions:</strong> Rate yourself honestly on each statement using the scale 1 (Rarely True) to 5 (Consistently True). This assessment helps you identify your EI strengths and development areas. There are no "right" answers—only truthful reflection. Your scores will help you design targeted composure strategies.</p>
+        </div>
+
+        <div class="section">
+            <div class="section-header">
+                <span class="section-number">1</span>
+                <h2 class="section-title">Self-Awareness: Know Your Inner World</h2>
+            </div>
+            <p style="color: var(--text-light); margin-bottom: 20px; font-size: 14px;">The ability to recognize and understand your own emotions, triggers, and patterns.</p>
+
+            <div class="assessment-grid">
+                <div class="assessment-item">
+                    <label class="assessment-label">I notice physical sensations when I'm getting triggered (tight chest, jaw clenching, etc.)</label>
+                    <p class="assessment-description">Body awareness helps you catch emotions early before they escalate.</p>
+                    <div class="rating-scale">
+                        <span class="rating-label">Rarely</span>
+                        <button class="rating-btn" data-section="sa" data-item="1" data-rating="1">1</button>
+                        <button class="rating-btn" data-section="sa" data-item="1" data-rating="2">2</button>
+                        <button class="rating-btn" data-section="sa" data-item="1" data-rating="3">3</button>
+                        <button class="rating-btn" data-section="sa" data-item="1" data-rating="4">4</button>
+                        <button class="rating-btn" data-section="sa" data-item="1" data-rating="5">5</button>
+                        <span class="rating-label">Consistently</span>
+                    </div>
+                </div>
+
+                <div class="assessment-item">
+                    <label class="assessment-label">I can name the emotions I'm experiencing in the moment</label>
+                    <p class="assessment-description">Emotional vocabulary allows you to communicate and manage feelings more effectively.</p>
+                    <div class="rating-scale">
+                        <span class="rating-label">Rarely</span>
+                        <button class="rating-btn" data-section="sa" data-item="2" data-rating="1">1</button>
+                        <button class="rating-btn" data-section="sa" data-item="2" data-rating="2">2</button>
+                        <button class="rating-btn" data-section="sa" data-item="2" data-rating="3">3</button>
+                        <button class="rating-btn" data-section="sa" data-item="2" data-rating="4">4</button>
+                        <button class="rating-btn" data-section="sa" data-item="2" data-rating="5">5</button>
+                        <span class="rating-label">Consistently</span>
+                    </div>
+                </div>
+
+                <div class="assessment-item">
+                    <label class="assessment-label">I understand what typically triggers my defensive reactions</label>
+                    <p class="assessment-description">Trigger awareness enables you to anticipate and prepare for high-stakes situations.</p>
+                    <div class="rating-scale">
+                        <span class="rating-label">Rarely</span>
+                        <button class="rating-btn" data-section="sa" data-item="3" data-rating="1">1</button>
+                        <button class="rating-btn" data-section="sa" data-item="3" data-rating="2">2</button>
+                        <button class="rating-btn" data-section="sa" data-item="3" data-rating="3">3</button>
+                        <button class="rating-btn" data-section="sa" data-item="3" data-rating="4">4</button>
+                        <button class="rating-btn" data-section="sa" data-item="3" data-rating="5">5</button>
+                        <span class="rating-label">Consistently</span>
+                    </div>
+                </div>
+
+                <div class="assessment-item">
+                    <label class="assessment-label">I'm aware of how my emotions impact my thinking and decisions</label>
+                    <p class="assessment-description">This awareness prevents reactive decisions and supports more strategic responses.</p>
+                    <div class="rating-scale">
+                        <span class="rating-label">Rarely</span>
+                        <button class="rating-btn" data-section="sa" data-item="4" data-rating="1">1</button>
+                        <button class="rating-btn" data-section="sa" data-item="4" data-rating="2">2</button>
+                        <button class="rating-btn" data-section="sa" data-item="4" data-rating="3">3</button>
+                        <button class="rating-btn" data-section="sa" data-item="4" data-rating="4">4</button>
+                        <button class="rating-btn" data-section="sa" data-item="4" data-rating="5">5</button>
+                        <span class="rating-label">Consistently</span>
+                    </div>
+                </div>
+
+                <div class="assessment-item">
+                    <label class="assessment-label">I can identify my blind spots and biases without defensiveness</label>
+                    <p class="assessment-description">Openness to self-assessment strengthens your ability to grow and adapt.</p>
+                    <div class="rating-scale">
+                        <span class="rating-label">Rarely</span>
+                        <button class="rating-btn" data-section="sa" data-item="5" data-rating="1">1</button>
+                        <button class="rating-btn" data-section="sa" data-item="5" data-rating="2">2</button>
+                        <button class="rating-btn" data-section="sa" data-item="5" data-rating="3">3</button>
+                        <button class="rating-btn" data-section="sa" data-item="5" data-rating="4">4</button>
+                        <button class="rating-btn" data-section="sa" data-item="5" data-rating="5">5</button>
+                        <span class="rating-label">Consistently</span>
+                    </div>
+                </div>
+            </div>
+
+            <div class="score-display">
+                <span class="score-label">Self-Awareness Score</span>
+                <span class="score-value"><span id="sa-score">0</span>/25</span>
+            </div>
+        </div>
+
+        <div class="section">
+            <div class="section-header">
+                <span class="section-number">2</span>
+                <h2 class="section-title">Self-Regulation: Manage Your Response</h2>
+            </div>
+            <p style="color: var(--text-light); margin-bottom: 20px; font-size: 14px;">The ability to manage your emotions, impulses, and stress in constructive ways.</p>
+
+            <div class="assessment-grid">
+                <div class="assessment-item">
+                    <label class="assessment-label">I can pause before reacting, even in high-pressure moments</label>
+                    <p class="assessment-description">The pause is where composure lives. This is your superpower.</p>
+                    <div class="rating-scale">
+                        <span class="rating-label">Rarely</span>
+                        <button class="rating-btn" data-section="sr" data-item="1" data-rating="1">1</button>
+                        <button class="rating-btn" data-section="sr" data-item="1" data-rating="2">2</button>
+                        <button class="rating-btn" data-section="sr" data-item="1" data-rating="3">3</button>
+                        <button class="rating-btn" data-section="sr" data-item="1" data-rating="4">4</button>
+                        <button class="rating-btn" data-section="sr" data-item="1" data-rating="5">5</button>
+                        <span class="rating-label">Consistently</span>
+                    </div>
+                </div>
+
+                <div class="assessment-item">
+                    <label class="assessment-label">I have reliable techniques to calm myself when I'm escalated</label>
+                    <p class="assessment-description">Proven de-escalation practices anchor you during storms.</p>
+                    <div class="rating-scale">
+                        <span class="rating-label">Rarely</span>
+                        <button class="rating-btn" data-section="sr" data-item="2" data-rating="1">1</button>
+                        <button class="rating-btn" data-section="sr" data-item="2" data-rating="2">2</button>
+                        <button class="rating-btn" data-section="sr" data-item="2" data-rating="3">3</button>
+                        <button class="rating-btn" data-section="sr" data-item="2" data-rating="4">4</button>
+                        <button class="rating-btn" data-section="sr" data-item="2" data-rating="5">5</button>
+                        <span class="rating-label">Consistently</span>
+                    </div>
+                </div>
+
+                <div class="assessment-item">
+                    <label class="assessment-label">I can disagree with someone without becoming defensive or attacking</label>
+                    <p class="assessment-description">This distinguishes leaders who regulate from those who simply suppress.</p>
+                    <div class="rating-scale">
+                        <span class="rating-label">Rarely</span>
+                        <button class="rating-btn" data-section="sr" data-item="3" data-rating="1">1</button>
+                        <button class="rating-btn" data-section="sr" data-item="3" data-rating="2">2</button>
+                        <button class="rating-btn" data-section="sr" data-item="3" data-rating="3">3</button>
+                        <button class="rating-btn" data-section="sr" data-item="3" data-rating="4">4</button>
+                        <button class="rating-btn" data-section="sr" data-item="3" data-rating="5">5</button>
+                        <span class="rating-label">Consistently</span>
+                    </div>
+                </div>
+
+                <div class="assessment-item">
+                    <label class="assessment-label">I take responsibility for my emotional reactions rather than blaming others</label>
+                    <p class="assessment-description">Accountability shifts you from victim to agent in your own story.</p>
+                    <div class="rating-scale">
+                        <span class="rating-label">Rarely</span>
+                        <button class="rating-btn" data-section="sr" data-item="4" data-rating="1">1</button>
+                        <button class="rating-btn" data-section="sr" data-item="4" data-rating="2">2</button>
+                        <button class="rating-btn" data-section="sr" data-item="4" data-rating="3">3</button>
+                        <button class="rating-btn" data-section="sr" data-item="4" data-rating="4">4</button>
+                        <button class="rating-btn" data-section="sr" data-item="4" data-rating="5">5</button>
+                        <span class="rating-label">Consistently</span>
+                    </div>
+                </div>
+
+                <div class="assessment-item">
+                    <label class="assessment-label">I maintain focus on my goals even when I'm frustrated or discouraged</label>
+                    <p class="assessment-description">Resilience allows you to stay on course through rough terrain.</p>
+                    <div class="rating-scale">
+                        <span class="rating-label">Rarely</span>
+                        <button class="rating-btn" data-section="sr" data-item="5" data-rating="1">1</button>
+                        <button class="rating-btn" data-section="sr" data-item="5" data-rating="2">2</button>
+                        <button class="rating-btn" data-section="sr" data-item="5" data-rating="3">3</button>
+                        <button class="rating-btn" data-section="sr" data-item="5" data-rating="4">4</button>
+                        <button class="rating-btn" data-section="sr" data-item="5" data-rating="5">5</button>
+                        <span class="rating-label">Consistently</span>
+                    </div>
+                </div>
+            </div>
+
+            <div class="score-display">
+                <span class="score-label">Self-Regulation Score</span>
+                <span class="score-value"><span id="sr-score">0</span>/25</span>
+            </div>
+        </div>
+
+        <div class="section">
+            <div class="section-header">
+                <span class="section-number">3</span>
+                <h2 class="section-title">Social Awareness: Read the Room</h2>
+            </div>
+            <p style="color: var(--text-light); margin-bottom: 20px; font-size: 14px;">The ability to perceive and understand the emotions of others.</p>
+
+            <div class="assessment-grid">
+                <div class="assessment-item">
+                    <label class="assessment-label">I notice when someone is upset or uncomfortable, even if they don't say so</label>
+                    <p class="assessment-description">This sensitivity prevents escalation and builds trust.</p>
+                    <div class="rating-scale">
+                        <span class="rating-label">Rarely</span>
+                        <button class="rating-btn" data-section="soa" data-item="1" data-rating="1">1</button>
+                        <button class="rating-btn" data-section="soa" data-item="1" data-rating="2">2</button>
+                        <button class="rating-btn" data-section="soa" data-item="1" data-rating="3">3</button>
+                        <button class="rating-btn" data-section="soa" data-item="1" data-rating="4">4</button>
+                        <button class="rating-btn" data-section="soa" data-item="1" data-rating="5">5</button>
+                        <span class="rating-label">Consistently</span>
+                    </div>
+                </div>
+
+                <div class="assessment-item">
+                    <label class="assessment-label">I can read non-verbal cues (body language, tone, silence) accurately</label>
+                    <p class="assessment-description">What's left unsaid often carries more weight than words.</p>
+                    <div class="rating-scale">
+                        <span class="rating-label">Rarely</span>
+                        <button class="rating-btn" data-section="soa" data-item="2" data-rating="1">1</button>
+                        <button class="rating-btn" data-section="soa" data-item="2" data-rating="2">2</button>
+                        <button class="rating-btn" data-section="soa" data-item="2" data-rating="3">3</button>
+                        <button class="rating-btn" data-section="soa" data-item="2" data-rating="4">4</button>
+                        <button class="rating-btn" data-section="soa" data-item="2" data-rating="5">5</button>
+                        <span class="rating-label">Consistently</span>
+                    </div>
+                </div>
+
+                <div class="assessment-item">
+                    <label class="assessment-label">I understand how my behavior and words land with others</label>
+                    <p class="assessment-description">Impact awareness is essential for leadership composure.</p>
+                    <div class="rating-scale">
+                        <span class="rating-label">Rarely</span>
+                        <button class="rating-btn" data-section="soa" data-item="3" data-rating="1">1</button>
+                        <button class="rating-btn" data-section="soa" data-item="3" data-rating="2">2</button>
+                        <button class="rating-btn" data-section="soa" data-item="3" data-rating="3">3</button>
+                        <button class="rating-btn" data-section="soa" data-item="3" data-rating="4">4</button>
+                        <button class="rating-btn" data-section="soa" data-item="3" data-rating="5">5</button>
+                        <span class="rating-label">Consistently</span>
+                    </div>
+                </div>
+
+                <div class="assessment-item">
+                    <label class="assessment-label">I can see situations from perspectives different from my own</label>
+                    <p class="assessment-description">Perspective-taking reduces judgment and increases connection.</p>
+                    <div class="rating-scale">
+                        <span class="rating-label">Rarely</span>
+                        <button class="rating-btn" data-section="soa" data-item="4" data-rating="1">1</button>
+                        <button class="rating-btn" data-section="soa" data-item="4" data-rating="2">2</button>
+                        <button class="rating-btn" data-section="soa" data-item="4" data-rating="3">3</button>
+                        <button class="rating-btn" data-section="soa" data-item="4" data-rating="4">4</button>
+                        <button class="rating-btn" data-section="soa" data-item="4" data-rating="5">5</button>
+                        <span class="rating-label">Consistently</span>
+                    </div>
+                </div>
+
+                <div class="assessment-item">
+                    <label class="assessment-label">I sense the emotional climate of a group or meeting</label>
+                    <p class="assessment-description">This attunement helps you navigate team dynamics effectively.</p>
+                    <div class="rating-scale">
+                        <span class="rating-label">Rarely</span>
+                        <button class="rating-btn" data-section="soa" data-item="5" data-rating="1">1</button>
+                        <button class="rating-btn" data-section="soa" data-item="5" data-rating="2">2</button>
+                        <button class="rating-btn" data-section="soa" data-item="5" data-rating="3">3</button>
+                        <button class="rating-btn" data-section="soa" data-item="5" data-rating="4">4</button>
+                        <button class="rating-btn" data-section="soa" data-item="5" data-rating="5">5</button>
+                        <span class="rating-label">Consistently</span>
+                    </div>
+                </div>
+            </div>
+
+            <div class="score-display">
+                <span class="score-label">Social Awareness Score</span>
+                <span class="score-value"><span id="soa-score">0</span>/25</span>
+            </div>
+        </div>
+
+        <div class="section">
+            <div class="section-header">
+                <span class="section-number">4</span>
+                <h2 class="section-title">Relationship Management: Lead With Impact</h2>
+            </div>
+            <p style="color: var(--text-light); margin-bottom: 20px; font-size: 14px;">The ability to use your EI to navigate relationships and influence others positively.</p>
+
+            <div class="assessment-grid">
+                <div class="assessment-item">
+                    <label class="assessment-label">I can stay composed and helpful when someone else is upset with me</label>
+                    <p class="assessment-description">This is the ultimate test of your composure leadership.</p>
+                    <div class="rating-scale">
+                        <span class="rating-label">Rarely</span>
+                        <button class="rating-btn" data-section="rm" data-item="1" data-rating="1">1</button>
+                        <button class="rating-btn" data-section="rm" data-item="1" data-rating="2">2</button>
+                        <button class="rating-btn" data-section="rm" data-item="1" data-rating="3">3</button>
+                        <button class="rating-btn" data-section="rm" data-item="1" data-rating="4">4</button>
+                        <button class="rating-btn" data-section="rm" data-item="1" data-rating="5">5</button>
+                        <span class="rating-label">Consistently</span>
+                    </div>
+                </div>
+
+                <div class="assessment-item">
+                    <label class="assessment-label">I can give feedback that people actually hear and learn from</label>
+                    <p class="assessment-description">This ability transforms your impact as a leader.</p>
+                    <div class="rating-scale">
+                        <span class="rating-label">Rarely</span>
+                        <button class="rating-btn" data-section="rm" data-item="2" data-rating="1">1</button>
+                        <button class="rating-btn" data-section="rm" data-item="2" data-rating="2">2</button>
+                        <button class="rating-btn" data-section="rm" data-item="2" data-rating="3">3</button>
+                        <button class="rating-btn" data-section="rm" data-item="2" data-rating="4">4</button>
+                        <button class="rating-btn" data-section="rm" data-item="2" data-rating="5">5</button>
+                        <span class="rating-label">Consistently</span>
+                    </div>
+                </div>
+
+                <div class="assessment-item">
+                    <label class="assessment-label">I build genuine rapport and trust with people across differences</label>
+                    <p class="assessment-description">Trust is the foundation of all composure-centered leadership.</p>
+                    <div class="rating-scale">
+                        <span class="rating-label">Rarely</span>
+                        <button class="rating-btn" data-section="rm" data-item="3" data-rating="1">1</button>
+                        <button class="rating-btn" data-section="rm" data-item="3" data-rating="2">2</button>
+                        <button class="rating-btn" data-section="rm" data-item="3" data-rating="3">3</button>
+                        <button class="rating-btn" data-section="rm" data-item="3" data-rating="4">4</button>
+                        <button class="rating-btn" data-section="rm" data-item="3" data-rating="5">5</button>
+                        <span class="rating-label">Consistently</span>
+                    </div>
+                </div>
+
+                <div class="assessment-item">
+                    <label class="assessment-label">I can influence and inspire others without being manipulative</label>
+                    <p class="assessment-description">Real influence is built on authenticity and respect.</p>
+                    <div class="rating-scale">
+                        <span class="rating-label">Rarely</span>
+                        <button class="rating-btn" data-section="rm" data-item="4" data-rating="1">1</button>
+                        <button class="rating-btn" data-section="rm" data-item="4" data-rating="2">2</button>
+                        <button class="rating-btn" data-section="rm" data-item="4" data-rating="3">3</button>
+                        <button class="rating-btn" data-section="rm" data-item="4" data-rating="4">4</button>
+                        <button class="rating-btn" data-section="rm" data-item="4" data-rating="5">5</button>
+                        <span class="rating-label">Consistently</span>
+                    </div>
+                </div>
+
+                <div class="assessment-item">
+                    <label class="assessment-label">I navigate conflict toward resolution rather than escalation</label>
+                    <p class="assessment-description">This is where your EI toolkit delivers the most value.</p>
+                    <div class="rating-scale">
+                        <span class="rating-label">Rarely</span>
+                        <button class="rating-btn" data-section="rm" data-item="5" data-rating="1">1</button>
+                        <button class="rating-btn" data-section="rm" data-item="5" data-rating="2">2</button>
+                        <button class="rating-btn" data-section="rm" data-item="5" data-rating="3">3</button>
+                        <button class="rating-btn" data-section="rm" data-item="5" data-rating="4">4</button>
+                        <button class="rating-btn" data-section="rm" data-item="5" data-rating="5">5</button>
+                        <span class="rating-label">Consistently</span>
+                    </div>
+                </div>
+            </div>
+
+            <div class="score-display">
+                <span class="score-label">Relationship Management Score</span>
+                <span class="score-value"><span id="rm-score">0</span>/25</span>
+            </div>
+        </div>
+
+        <div style="margin-top: 40px;">
+            <h3 style="font-family: 'Source Serif 4', serif; font-size: 20px; color: var(--primary); margin-bottom: 20px;">Your EI Profile</h3>
+            <div class="competency-grid">
+                <div class="competency-card">
+                    <div class="competency-name">Self-Awareness</div>
+                    <div class="competency-score" id="sa-final">0</div>
+                    <div class="competency-max">out of 25</div>
+                </div>
+                <div class="competency-card">
+                    <div class="competency-name">Self-Regulation</div>
+                    <div class="competency-score" id="sr-final">0</div>
+                    <div class="competency-max">out of 25</div>
+                </div>
+                <div class="competency-card">
+                    <div class="competency-name">Social Awareness</div>
+                    <div class="competency-score" id="soa-final">0</div>
+                    <div class="competency-max">out of 25</div>
+                </div>
+                <div class="competency-card">
+                    <div class="competency-name">Relationship Management</div>
+                    <div class="competency-score" id="rm-final">0</div>
+                    <div class="competency-max">out of 25</div>
+                </div>
+            </div>
+            <div class="score-display" style="margin-top: 20px; justify-content: center;">
+                <span class="score-label">Total EI Score</span>
+                <span class="score-value"><span id="total-score">0</span>/100</span>
+            </div>
+        </div>
+
+        <div class="reflection-section">
+            <div class="reflection-title">Reflection & Next Steps</div>
+
+            <div class="reflection-item">
+                <label class="reflection-label">Which competency is your strongest?</label>
+                <textarea class="reflection-input" id="strongest-competency" placeholder="Describe where you see yourself thriving..."></textarea>
+            </div>
+
+            <div class="reflection-item">
+                <label class="reflection-label">Which competency feels most challenging right now?</label>
+                <textarea class="reflection-input" id="challenging-competency" placeholder="Where do you want to focus your development..."></textarea>
+            </div>
+
+            <div class="reflection-item">
+                <label class="reflection-label">How does your EI profile show up in high-stakes moments? What patterns do you notice?</label>
+                <textarea class="reflection-input" id="patterns-moments" placeholder="Connect your scores to real situations..."></textarea>
+            </div>
+
+            <div class="reflection-item">
+                <label class="reflection-label">What's one specific EI practice you commit to this month?</label>
+                <textarea class="reflection-input" id="ei-practice" placeholder="Describe your targeted practice..."></textarea>
+            </div>
+        </div>
+
+        <div class="action-buttons">
+            <button class="btn btn-primary" id="save-btn">Save Assessment</button>
+            <button class="btn" id="clear-btn">Clear All</button>
+            <button class="btn" id="print-btn">Print Assessment</button>
+        </div>
+
+        <div class="status-message" id="status-msg"></div>
+
+        <div class="footer">
+            <p>© 2024 CWC Executive Leadership Lab | Module 4: Leadership Composure</p>
+            <p style="margin-top: 8px;">This assessment is part of your composure development journey. Return to it quarterly to track your growth.</p>
+        </div>
+    </div>
+
+    <script>
+        const STORAGE_KEY = 'cwc-ei-assessment';
+
+        // Rating button functionality
+        document.querySelectorAll('.rating-btn').forEach(btn => {
+            btn.addEventListener('click', function() {
+                const section = this.dataset.section;
+                const item = this.dataset.item;
+                const rating = this.dataset.rating;
+                
+                // Remove selected class from siblings
+                const parent = this.parentElement;
+                parent.querySelectorAll('.rating-btn').forEach(b => b.classList.remove('selected'));
+                
+                // Add selected class to clicked button
+                this.classList.add('selected');
+                
+                // Save data
+                saveAssessment();
+                updateScores();
+            });
+        });
+
+        // Calculate scores
+        function updateScores() {
+            const sections = ['sa', 'sr', 'soa', 'rm'];
+            let total = 0;
+
+            sections.forEach(section => {
+                let sectionScore = 0;
+                document.querySelectorAll(`.rating-btn[data-section="${section}"].selected`).forEach(btn => {
+                    sectionScore += parseInt(btn.dataset.rating);
+                });
+                
+                document.getElementById(`${section}-score`).textContent = sectionScore;
+                document.getElementById(`${section}-final`).textContent = sectionScore;
+                total += sectionScore;
+            });
+
+            document.getElementById('total-score').textContent = total;
+        }
+
+        // Save assessment
+        function saveAssessment() {
+            const data = {
+                ratings: {},
+                reflections: {
+                    strongest: document.getElementById('strongest-competency').value,
+                    challenging: document.getElementById('challenging-competency').value,
+                    patterns: document.getElementById('patterns-moments').value,
+                    practice: document.getElementById('ei-practice').value
+                },
+                timestamp: new Date().toISOString()
+            };
+
+            document.querySelectorAll('.rating-btn.selected').forEach(btn => {
+                const key = `${btn.dataset.section}-${btn.dataset.item}`;
+                data.ratings[key] = btn.dataset.rating;
+            });
+
+            localStorage.setItem(STORAGE_KEY, JSON.stringify(data));
+            showStatus('Assessment saved successfully!', 'success');
+        }
+
+        // Load assessment
+        function loadAssessment() {
+            const saved = localStorage.getItem(STORAGE_KEY);
+            if (!saved) return;
+
+            const data = JSON.parse(saved);
+
+            // Load ratings
+            Object.keys(data.ratings).forEach(key => {
+                const [section, item] = key.split('-');
+                const rating = data.ratings[key];
+                const btn = document.querySelector(`.rating-btn[data-section="${section}"][data-item="${item}"][data-rating="${rating}"]`);
+                if (btn) btn.classList.add('selected');
+            });
+
+            // Load reflections
+            document.getElementById('strongest-competency').value = data.reflections.strongest || '';
+            document.getElementById('challenging-competency').value = data.reflections.challenging || '';
+            document.getElementById('patterns-moments').value = data.reflections.patterns || '';
+            document.getElementById('ei-practice').value = data.reflections.practice || '';
+
+            updateScores();
+        }
+
+        // Show status message
+        function showStatus(message, type) {
+            const statusMsg = document.getElementById('status-msg');
+            statusMsg.textContent = message;
+            statusMsg.className = `status-message show ${type}`;
+            setTimeout(() => statusMsg.classList.remove('show'), 3000);
+        }
+
+        // Button handlers
+        document.getElementById('save-btn').addEventListener('click', () => {
+            saveAssessment();
+        });
+
+        document.getElementById('clear-btn').addEventListener('click', () => {
+            if (confirm('Clear all responses? This cannot be undone.')) {
+                document.querySelectorAll('.rating-btn.selected').forEach(btn => btn.classList.remove('selected'));
+                document.querySelectorAll('.reflection-input').forEach(input => input.value = '');
+                localStorage.removeItem(STORAGE_KEY);
+                updateScores();
+                showStatus('All responses cleared.', 'success');
+            }
+        });
+
+        document.getElementById('print-btn').addEventListener('click', () => {
+            window.print();
+        });
+
+        // Save reflections on input
+        document.querySelectorAll('.reflection-input').forEach(input => {
+            input.addEventListener('change', saveAssessment);
+        });
+
+        // Load on page load
+        window.addEventListener('load', loadAssessment);
+    </script>
+</body>
+</html>
