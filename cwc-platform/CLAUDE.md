@@ -2,6 +2,27 @@
 
 This file provides context for Claude Code sessions working on this project.
 
+## Read Order
+
+When starting work, read these files in this order:
+
+1. `CLAUDE.md`
+2. `PRD.md`
+3. `PENDING_ITEMS.md`
+4. `PLATFORM_IMPLEMENTATION_CHECKLIST.md`
+5. `PRIORITIZED_EXECUTION_PLAN.md`
+6. `docs/QA_STRATEGY.md`
+7. `docs/development/ARCHITECTURE.md`
+8. `docs/planning/FEATURE_BACKLOG.md`
+
+## Current Strategic Priorities
+
+- Get Wendy using the platform successfully in real operations
+- Replace fragmented scheduling tools with unified availability
+- Build Zoom/Fathom-driven coaching session intelligence
+- Build finance/bookkeeping readiness as a product differentiator
+- Preserve a path to white-label multi-tenant productization
+
 ## Project Overview
 
 CWC Platform is a unified business automation platform for "Coaching Women of Color" - a coaching and consulting business. It consolidates CRM, scheduling, invoicing, contracts, project management, and payments into a single application.

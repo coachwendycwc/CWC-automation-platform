@@ -4,6 +4,15 @@ from pydantic import BaseModel, Field, field_validator
 import re
 
 
+class IntakeQuestion(BaseModel):
+    id: str = Field(..., min_length=1, max_length=100)
+    label: str = Field(..., min_length=1, max_length=200)
+    question_type: str = Field(default="short_text", pattern=r"^(short_text|long_text|select|phone)$")
+    required: bool = False
+    placeholder: str | None = Field(default=None, max_length=200)
+    options: list[str] = Field(default_factory=list)
+
+
 class BookingTypeBase(BaseModel):
     name: str = Field(..., min_length=1, max_length=100)
     slug: str = Field(..., min_length=1, max_length=100)
@@ -11,6 +20,11 @@ class BookingTypeBase(BaseModel):
     duration_minutes: int = Field(default=60, ge=15, le=480)
     color: str = Field(default="#3B82F6", pattern=r"^#[0-9A-Fa-f]{6}$")
     price: Decimal | None = None
+    show_price_on_booking_page: bool = True
+    location_type: str = Field(default="zoom", pattern=r"^(zoom|google_meet|phone|in_person|custom)$")
+    location_details: str | None = None
+    post_booking_instructions: str | None = None
+    intake_questions: list[IntakeQuestion] = Field(default_factory=list)
     buffer_before: int = Field(default=0, ge=0, le=120)
     buffer_after: int = Field(default=15, ge=0, le=120)
     min_notice_hours: int = Field(default=24, ge=0, le=720)
@@ -38,6 +52,11 @@ class BookingTypeUpdate(BaseModel):
     duration_minutes: int | None = Field(default=None, ge=15, le=480)
     color: str | None = Field(default=None, pattern=r"^#[0-9A-Fa-f]{6}$")
     price: Decimal | None = None
+    show_price_on_booking_page: bool | None = None
+    location_type: str | None = Field(default=None, pattern=r"^(zoom|google_meet|phone|in_person|custom)$")
+    location_details: str | None = None
+    post_booking_instructions: str | None = None
+    intake_questions: list[IntakeQuestion] | None = None
     buffer_before: int | None = Field(default=None, ge=0, le=120)
     buffer_after: int | None = Field(default=None, ge=0, le=120)
     min_notice_hours: int | None = Field(default=None, ge=0, le=720)

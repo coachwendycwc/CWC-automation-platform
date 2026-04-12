@@ -1,18 +1,18 @@
 "use client";
 
 import { useEffect, useState } from "react";
-import { useParams, useRouter } from "next/navigation";
+import { useParams } from "next/navigation";
+import Link from "next/link";
 import { Card, CardContent, CardHeader, CardTitle, CardDescription } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Skeleton } from "@/components/ui/skeleton";
 import { publicBookingApi } from "@/lib/api";
-import { PublicBookingTypeInfo, TimeSlot } from "@/types";
-import { Clock, Calendar, ChevronLeft, ChevronRight, Check } from "lucide-react";
+import { PublicBookingResult, PublicBookingTypeInfo, TimeSlot } from "@/types";
+import { Clock, ChevronLeft, ChevronRight, Check } from "lucide-react";
 
 export default function PublicBookingPage() {
   const params = useParams();
-  const router = useRouter();
   const slug = params.slug as string;
 
   const [bookingType, setBookingType] = useState<PublicBookingTypeInfo | null>(null);
@@ -30,7 +30,7 @@ export default function PublicBookingPage() {
 
   // Form
   const [showForm, setShowForm] = useState(false);
-  const [formData, setFormData] = useState({
+  const [formData, setFormData] = useState<Record<string, string>>({
     first_name: "",
     last_name: "",
     email: "",
@@ -39,7 +39,16 @@ export default function PublicBookingPage() {
   });
   const [submitting, setSubmitting] = useState(false);
   const [success, setSuccess] = useState(false);
-  const [bookingToken, setBookingToken] = useState("");
+  const [paymentRedirecting, setPaymentRedirecting] = useState(false);
+  const [bookingResult, setBookingResult] = useState<PublicBookingResult | null>(null);
+
+  const brandColor = bookingType?.booking_page_brand_color || "#2A7B8C";
+  const bookingTitle = bookingType?.booking_page_title || bookingType?.name || "Book your session";
+  const bookingDescription = bookingType?.booking_page_description || bookingType?.description || "";
+  const bookingLogoUrl = bookingType?.booking_page_logo_url;
+  const bookingBannerUrl = bookingType?.booking_page_banner_url;
+  const hostName = bookingType?.host_name;
+  const hostAvatarUrl = bookingType?.host_avatar_url;
 
   useEffect(() => {
     loadBookingType();
@@ -84,15 +93,21 @@ export default function PublicBookingPage() {
     setError("");
 
     try {
-      const response = await publicBookingApi.createBooking(slug, {
+      const result: PublicBookingResult = await publicBookingApi.createBooking(slug, {
         start_time: selectedSlot.start_time,
+        intake_responses: Object.fromEntries(
+          (bookingType?.intake_questions || []).map((question) => [question.id, formData[question.id] || ""])
+        ),
         ...formData,
       });
-      setSuccess(true);
-      // Store token for manage page link
-      if (response.id) {
-        // We'd need to get the token from response
+
+      if (result.payment_required && result.payment_url) {
+        setPaymentRedirecting(true);
+        window.location.href = result.payment_url;
+        return;
       }
+      setBookingResult(result);
+      setSuccess(true);
     } catch (err: any) {
       setError(err.message || "Failed to create booking");
     } finally {
@@ -143,6 +158,13 @@ export default function PublicBookingPage() {
     });
   };
 
+  const selectedDateLabel = selectedDate?.toLocaleDateString("en-US", {
+    weekday: "long",
+    month: "long",
+    day: "numeric",
+  });
+  const selectedTimeLabel = selectedSlot ? formatTime(selectedSlot.start_time) : null;
+
   if (loading) {
     return (
       <div className="min-h-screen bg-muted flex items-center justify-center">
@@ -176,75 +198,166 @@ export default function PublicBookingPage() {
 
   if (success) {
     return (
-      <div className="min-h-screen bg-muted flex items-center justify-center p-4">
-        <Card className="max-w-md w-full">
-          <CardContent className="py-12 text-center">
-            <div className="w-16 h-16 bg-success/10 rounded-full flex items-center justify-center mx-auto mb-4">
-              <Check className="h-8 w-8 text-success" />
+      <div className="min-h-screen bg-[radial-gradient(circle_at_top_left,_rgba(255,255,255,0.92),_rgba(241,245,249,0.92)_48%,_rgba(233,241,244,0.96))] p-4">
+        <div className="mx-auto flex min-h-screen max-w-xl items-center justify-center">
+        <Card className="w-full rounded-[2rem] border-white/70 bg-white/92 shadow-[0_30px_90px_rgba(15,23,42,0.12)] backdrop-blur">
+          <CardContent className="px-8 py-12 text-center md:px-10">
+            <div
+              className="mx-auto mb-6 flex h-20 w-20 items-center justify-center rounded-full border border-white/70 shadow-[0_16px_36px_rgba(15,23,42,0.08)]"
+              style={{ backgroundColor: `${brandColor}1A` }}
+            >
+              <Check className="h-9 w-9 text-success" />
             </div>
-            <h2 className="text-2xl font-bold text-foreground mb-2">Booking Confirmed!</h2>
-            <p className="text-muted-foreground mb-4">
-              Your {bookingType?.name} has been scheduled for{" "}
-              {selectedDate?.toLocaleDateString("en-US", {
-                weekday: "long",
-                month: "long",
-                day: "numeric",
-              })}{" "}
-              at {selectedSlot && formatTime(selectedSlot.start_time)}.
+            <div className="mb-3 inline-flex rounded-full border border-slate-200/80 bg-slate-50 px-3 py-1 text-[11px] font-semibold uppercase tracking-[0.18em] text-slate-500">
+              Confirmed
+            </div>
+            <h2 className="mb-3 text-3xl font-semibold tracking-[-0.04em] text-slate-950">Booking confirmed</h2>
+            <p className="mx-auto mb-6 max-w-md text-[15px] leading-7 text-slate-600">
+              Your {bookingType?.name} is scheduled for {selectedDateLabel} at {selectedTimeLabel}.
             </p>
-            <p className="text-sm text-muted-foreground">
+            <div className="mb-6 rounded-[1.5rem] border border-slate-200/80 bg-slate-50/80 p-4 text-left">
+              <div className="mb-2 text-xs font-semibold uppercase tracking-[0.18em] text-slate-400">
+                Session details
+              </div>
+              <div className="space-y-2 text-sm text-slate-600">
+                <div className="flex items-center justify-between gap-4">
+                  <span>Date</span>
+                  <span className="font-medium text-slate-900">{selectedDateLabel}</span>
+                </div>
+                <div className="flex items-center justify-between gap-4">
+                  <span>Time</span>
+                  <span className="font-medium text-slate-900">{selectedTimeLabel}</span>
+                </div>
+                <div className="flex items-center justify-between gap-4">
+                  <span>Email</span>
+                  <span className="font-medium text-slate-900">{formData.email}</span>
+                </div>
+              </div>
+            </div>
+            <p className="text-sm text-slate-500">
               A confirmation email has been sent to {formData.email}.
             </p>
+            {bookingResult?.confirmation_token && (
+              <div className="mt-6">
+                <Button variant="outline" asChild className="w-full rounded-2xl">
+                  <Link href={`/book/manage/${bookingResult.confirmation_token}`}>
+                    Manage booking
+                  </Link>
+                </Button>
+              </div>
+            )}
           </CardContent>
         </Card>
+        </div>
       </div>
     );
   }
 
   return (
-    <div className="min-h-screen bg-muted py-8 px-4">
-      <div className="max-w-4xl mx-auto">
+    <div className="min-h-screen bg-[radial-gradient(circle_at_top_left,_rgba(255,255,255,0.92),_rgba(241,245,249,0.92)_48%,_rgba(233,241,244,0.96))] px-4 py-10">
+      <div className="mx-auto max-w-5xl">
         {/* Header */}
-        <div className="text-center mb-8">
-          <h1 className="text-3xl font-bold text-foreground">{bookingType?.name}</h1>
-          {bookingType?.description && (
-            <p className="text-muted-foreground mt-2">{bookingType.description}</p>
+        <div className="mb-8 overflow-hidden rounded-[2rem] border border-white/70 bg-background/90 shadow-[0_24px_80px_rgba(15,23,42,0.08)] backdrop-blur">
+          {bookingBannerUrl && (
+            <div className="relative h-56 w-full overflow-hidden">
+              <img
+                src={bookingBannerUrl}
+                alt={bookingTitle}
+                className="h-full w-full object-cover"
+              />
+              <div className="absolute inset-0 bg-[linear-gradient(180deg,rgba(15,23,42,0.08),rgba(15,23,42,0.34))]" />
+            </div>
           )}
-          <div className="flex items-center justify-center gap-4 mt-4 text-sm text-muted-foreground">
-            <span className="flex items-center gap-1">
-              <Clock className="h-4 w-4" />
-              {bookingType?.duration_minutes} minutes
-            </span>
-            {bookingType?.price && (
-              <span className="font-medium text-foreground">${bookingType.price}</span>
-            )}
+          <div className="p-8 md:p-10">
+          <div className="flex flex-col gap-6 md:flex-row md:items-center md:justify-between">
+            <div className="flex items-start gap-4 md:gap-5">
+              {hostAvatarUrl && (
+                <img
+                  src={hostAvatarUrl}
+                  alt={hostName ? `${hostName} profile photo` : "Host profile photo"}
+                  className="mt-1 h-14 w-14 flex-none rounded-full border border-white/80 object-cover shadow-[0_10px_30px_rgba(15,23,42,0.14)] md:h-16 md:w-16"
+                />
+              )}
+              <div className="text-center md:text-left">
+                {bookingLogoUrl && (
+                  <div className="mb-5 flex h-16 w-full max-w-[220px] items-center justify-center overflow-hidden rounded-2xl border border-slate-200/80 bg-white px-4 py-3 shadow-[0_12px_28px_rgba(15,23,42,0.06)] md:justify-start">
+                    <img
+                      src={bookingLogoUrl}
+                      alt={hostName ? `${hostName} logo` : "Booking logo"}
+                      className="max-h-full max-w-full object-contain"
+                    />
+                  </div>
+                )}
+                <div
+                  className="mb-4 inline-flex rounded-full border border-slate-200/70 bg-white/90 px-3 py-1 text-[11px] font-semibold uppercase tracking-[0.18em] text-slate-600"
+                >
+                  {bookingType?.name || "Booking page"}
+                </div>
+                <h1 className="max-w-2xl text-3xl font-semibold tracking-[-0.04em] text-slate-950 md:text-[2.6rem]">
+                  {bookingTitle}
+                </h1>
+                {bookingDescription && (
+                  <p className="mt-3 max-w-2xl text-[15px] leading-7 text-slate-600 md:text-base">
+                    {bookingDescription}
+                  </p>
+                )}
+                {bookingType?.post_booking_instructions && (
+                  <div className="mt-5 max-w-2xl rounded-2xl border border-slate-200/80 bg-slate-50/80 px-4 py-3 text-sm leading-6 text-slate-600">
+                    {bookingType.post_booking_instructions}
+                  </div>
+                )}
+                {hostName && (
+                  <p className="mt-4 text-sm font-medium text-slate-500">
+                    Meet with {hostName}
+                  </p>
+                )}
+              </div>
+            </div>
+            <div className="flex flex-wrap items-center gap-3 text-sm text-slate-600 md:max-w-[240px] md:justify-end">
+              <span className="inline-flex items-center gap-2 rounded-full border border-slate-200/80 bg-slate-50 px-3 py-2">
+                <Clock className="h-4 w-4" />
+                {bookingType?.duration_minutes} minutes
+              </span>
+              {bookingType?.show_price_on_booking_page && bookingType?.price !== null && (
+                <span
+                  className="inline-flex items-center rounded-full px-3 py-2 font-semibold text-white shadow-sm"
+                  style={{ backgroundColor: brandColor }}
+                >
+                  ${bookingType.price}
+                </span>
+              )}
+            </div>
+          </div>
           </div>
         </div>
 
-        <div className="grid gap-6 md:grid-cols-2">
+        <div className="grid gap-6 lg:grid-cols-[1.12fr_0.88fr]">
           {/* Calendar */}
-          <Card>
-            <CardHeader>
-              <CardTitle className="text-lg">Select a Date</CardTitle>
+          <Card className="rounded-[2rem] border-white/70 bg-white/85 shadow-[0_24px_80px_rgba(15,23,42,0.08)] backdrop-blur">
+            <CardHeader className="pb-4">
+              <CardTitle className="text-xl font-semibold tracking-[-0.02em] text-slate-950">Select a Date</CardTitle>
+              <CardDescription className="text-sm text-slate-500">
+                Choose a day that fits your schedule. Available times update automatically.
+              </CardDescription>
             </CardHeader>
-            <CardContent>
+            <CardContent className="space-y-5">
               {/* Month navigation */}
-              <div className="flex items-center justify-between mb-4">
+              <div className="flex items-center justify-between rounded-2xl border border-slate-200/80 bg-slate-50/90 px-3 py-2">
                 <Button
                   variant="ghost"
                   size="sm"
-                  className="cursor-pointer"
+                  className="cursor-pointer rounded-full text-slate-600 hover:bg-white hover:text-slate-950"
                   onClick={() => setCurrentMonth(new Date(currentMonth.setMonth(currentMonth.getMonth() - 1)))}
                 >
                   <ChevronLeft className="h-4 w-4" />
                 </Button>
-                <span className="font-medium">
+                <span className="text-sm font-semibold uppercase tracking-[0.16em] text-slate-500">
                   {currentMonth.toLocaleDateString("en-US", { month: "long", year: "numeric" })}
                 </span>
                 <Button
                   variant="ghost"
                   size="sm"
-                  className="cursor-pointer"
+                  className="cursor-pointer rounded-full text-slate-600 hover:bg-white hover:text-slate-950"
                   onClick={() => setCurrentMonth(new Date(currentMonth.setMonth(currentMonth.getMonth() + 1)))}
                 >
                   <ChevronRight className="h-4 w-4" />
@@ -252,17 +365,17 @@ export default function PublicBookingPage() {
               </div>
 
               {/* Day headers */}
-              <div className="grid grid-cols-7 gap-1 text-center text-sm font-medium text-muted-foreground mb-2">
+              <div className="mb-2 grid grid-cols-7 gap-2 text-center text-[11px] font-semibold uppercase tracking-[0.18em] text-slate-400">
                 {["Sun", "Mon", "Tue", "Wed", "Thu", "Fri", "Sat"].map((day) => (
                   <div key={day}>{day}</div>
                 ))}
               </div>
 
               {/* Calendar grid */}
-              <div className="grid grid-cols-7 gap-1">
+              <div className="grid grid-cols-7 gap-2">
                 {getDaysInMonth(currentMonth).map((date, i) => {
                   if (!date) {
-                    return <div key={i} className="h-10" />;
+                    return <div key={i} className="h-11" />;
                   }
 
                   const isSelectable = isDateSelectable(date);
@@ -274,13 +387,18 @@ export default function PublicBookingPage() {
                       key={i}
                       onClick={() => isSelectable && setSelectedDate(date)}
                       disabled={!isSelectable}
-                      className={`h-10 rounded-md text-sm font-medium transition-colors cursor-pointer ${
+                      className={`h-11 rounded-2xl text-sm font-semibold transition-all cursor-pointer ${
                         isSelected
-                          ? "bg-primary text-primary-foreground"
+                          ? "scale-[1.02] text-white shadow-sm"
                           : isSelectable
-                          ? "hover:bg-primary/10 text-foreground"
-                          : "text-muted-foreground/40 cursor-not-allowed"
-                      } ${isToday && !isSelected ? "border border-primary" : ""}`}
+                          ? "border border-slate-200/80 bg-white text-slate-900 hover:border-slate-300 hover:bg-slate-50"
+                          : "cursor-not-allowed text-slate-300"
+                      } ${isToday && !isSelected ? "ring-1 ring-offset-0" : ""}`}
+                      style={{
+                        backgroundColor: isSelected ? brandColor : undefined,
+                        borderColor: isToday && !isSelected ? brandColor : undefined,
+                        boxShadow: isToday && !isSelected ? `0 0 0 1px ${brandColor}22 inset` : undefined,
+                      }}
                     >
                       {date.getDate()}
                     </button>
@@ -291,11 +409,14 @@ export default function PublicBookingPage() {
           </Card>
 
           {/* Time slots or form */}
-          <Card>
+          <Card className="rounded-[2rem] border-white/70 bg-white/85 shadow-[0_24px_80px_rgba(15,23,42,0.08)] backdrop-blur">
             {!showForm ? (
               <>
-                <CardHeader>
-                  <CardTitle className="text-lg">
+                <CardHeader className="pb-4">
+                  <div className="mb-2 inline-flex rounded-full border border-slate-200/80 bg-slate-50 px-3 py-1 text-[11px] font-semibold uppercase tracking-[0.18em] text-slate-500">
+                    {selectedDate ? "Step 2" : "Step 1"}
+                  </div>
+                  <CardTitle className="text-xl font-semibold tracking-[-0.02em] text-slate-950">
                     {selectedDate
                       ? `Available Times for ${selectedDate.toLocaleDateString("en-US", {
                           weekday: "long",
@@ -305,25 +426,25 @@ export default function PublicBookingPage() {
                       : "Select a Time"}
                   </CardTitle>
                 </CardHeader>
-                <CardContent>
+                <CardContent className="space-y-4">
                   {!selectedDate ? (
-                    <p className="text-muted-foreground text-center py-8">
+                    <p className="rounded-2xl border border-dashed border-slate-200 bg-slate-50/80 py-10 text-center text-sm text-slate-500">
                       Please select a date to see available times
                     </p>
                   ) : loadingSlots ? (
-                    <div className="space-y-2 py-4">
-                      <div className="grid grid-cols-2 gap-2">
+                    <div className="space-y-2 py-2">
+                      <div className="grid grid-cols-2 gap-3">
                         {Array.from({ length: 6 }).map((_, i) => (
-                          <Skeleton key={i} className="h-10 rounded-md" />
+                          <Skeleton key={i} className="h-12 rounded-2xl" />
                         ))}
                       </div>
                     </div>
                   ) : slots.length === 0 ? (
-                    <p className="text-muted-foreground text-center py-8">
+                    <p className="rounded-2xl border border-dashed border-slate-200 bg-slate-50/80 py-10 text-center text-sm text-slate-500">
                       No available times for this date. Please select another date.
                     </p>
                   ) : (
-                    <div className="grid grid-cols-2 gap-2 max-h-80 overflow-y-auto">
+                    <div className="grid max-h-80 grid-cols-2 gap-3 overflow-y-auto pr-1">
                       {slots.map((slot, i) => (
                         <button
                           key={i}
@@ -331,11 +452,16 @@ export default function PublicBookingPage() {
                             setSelectedSlot(slot);
                             setShowForm(true);
                           }}
-                          className={`py-2 px-4 rounded-md text-sm font-medium border transition-colors cursor-pointer ${
+                          className={`rounded-2xl border px-4 py-3 text-sm font-semibold transition-all cursor-pointer ${
                             selectedSlot?.start_time === slot.start_time
-                              ? "bg-primary text-primary-foreground border-primary"
-                              : "border-border hover:border-primary hover:text-primary"
+                              ? "scale-[1.01] text-white shadow-sm"
+                              : "border-slate-200 bg-white text-slate-800 hover:border-slate-300 hover:bg-slate-50"
                           }`}
+                          style={{
+                            backgroundColor: selectedSlot?.start_time === slot.start_time ? brandColor : undefined,
+                            borderColor: selectedSlot?.start_time === slot.start_time ? brandColor : undefined,
+                            color: selectedSlot?.start_time === slot.start_time ? "#FFFFFF" : undefined,
+                          }}
                         >
                           {formatTime(slot.start_time)}
                         </button>
@@ -346,14 +472,19 @@ export default function PublicBookingPage() {
               </>
             ) : (
               <>
-                <CardHeader>
+                <CardHeader className="pb-4">
                   <div className="flex items-center gap-2">
-                    <Button variant="ghost" size="sm" className="cursor-pointer" onClick={() => setShowForm(false)}>
+                    <Button
+                      variant="ghost"
+                      size="sm"
+                      className="cursor-pointer rounded-full text-slate-600 hover:bg-slate-100 hover:text-slate-950"
+                      onClick={() => setShowForm(false)}
+                    >
                       <ChevronLeft className="h-4 w-4" />
                     </Button>
-                    <CardTitle className="text-lg">Enter Your Details</CardTitle>
+                    <CardTitle className="text-xl font-semibold tracking-[-0.02em] text-slate-950">Enter Your Details</CardTitle>
                   </div>
-                  <CardDescription>
+                  <CardDescription className="text-sm text-slate-500">
                     {selectedDate?.toLocaleDateString("en-US", {
                       weekday: "long",
                       month: "long",
@@ -368,12 +499,22 @@ export default function PublicBookingPage() {
                       <div className="rounded-md bg-destructive/10 border border-destructive/20 p-3 text-sm text-destructive">{error}</div>
                     )}
 
+                    {bookingType?.price !== null && bookingType?.price !== undefined && bookingType.price > 0 && (
+                      <div className="rounded-2xl border border-slate-200/80 bg-slate-50/80 p-4 text-sm text-slate-600">
+                        <p className="font-medium text-slate-900">Your time will be reserved after you continue to payment.</p>
+                        <p className="mt-1">
+                          Once payment is completed, your booking will be confirmed and your meeting details will be sent automatically.
+                        </p>
+                      </div>
+                    )}
+
                     <div className="grid grid-cols-2 gap-4">
-                      <div>
-                        <label className="block text-sm font-medium text-foreground mb-1">
+                      <div className="space-y-2">
+                        <label className="block text-sm font-medium text-slate-700">
                           First Name *
                         </label>
                         <Input
+                          className="h-12 rounded-2xl border-slate-200 bg-white px-4 text-slate-900 focus-visible:border-slate-300 focus-visible:ring-0 focus-visible:ring-offset-0"
                           value={formData.first_name}
                           onChange={(e) =>
                             setFormData({ ...formData, first_name: e.target.value })
@@ -381,11 +522,12 @@ export default function PublicBookingPage() {
                           required
                         />
                       </div>
-                      <div>
-                        <label className="block text-sm font-medium text-foreground mb-1">
+                      <div className="space-y-2">
+                        <label className="block text-sm font-medium text-slate-700">
                           Last Name
                         </label>
                         <Input
+                          className="h-12 rounded-2xl border-slate-200 bg-white px-4 text-slate-900 focus-visible:border-slate-300 focus-visible:ring-0 focus-visible:ring-offset-0"
                           value={formData.last_name}
                           onChange={(e) =>
                             setFormData({ ...formData, last_name: e.target.value })
@@ -394,11 +536,12 @@ export default function PublicBookingPage() {
                       </div>
                     </div>
 
-                    <div>
-                      <label className="block text-sm font-medium text-foreground mb-1">
+                    <div className="space-y-2">
+                      <label className="block text-sm font-medium text-slate-700">
                         Email *
                       </label>
                       <Input
+                        className="h-12 rounded-2xl border-slate-200 bg-white px-4 text-slate-900 focus-visible:border-slate-300 focus-visible:ring-0 focus-visible:ring-offset-0"
                         type="email"
                         value={formData.email}
                         onChange={(e) => setFormData({ ...formData, email: e.target.value })}
@@ -406,32 +549,96 @@ export default function PublicBookingPage() {
                       />
                     </div>
 
-                    <div>
-                      <label className="block text-sm font-medium text-foreground mb-1">
+                    <div className="space-y-2">
+                      <label className="block text-sm font-medium text-slate-700">
                         Phone
                       </label>
                       <Input
+                        className="h-12 rounded-2xl border-slate-200 bg-white px-4 text-slate-900 focus-visible:border-slate-300 focus-visible:ring-0 focus-visible:ring-offset-0"
                         type="tel"
                         value={formData.phone}
                         onChange={(e) => setFormData({ ...formData, phone: e.target.value })}
                       />
                     </div>
 
-                    <div>
-                      <label className="block text-sm font-medium text-foreground mb-1">
+                    {(bookingType?.intake_questions || []).map((question) => (
+                      <div key={question.id} className="space-y-2">
+                        <label className="block text-sm font-medium text-slate-700">
+                          {question.label}
+                          {question.required ? " *" : ""}
+                        </label>
+                        {question.question_type === "long_text" ? (
+                          <textarea
+                            className="w-full rounded-2xl border border-slate-200 px-3 py-3 text-sm text-slate-900 transition focus:border-slate-300 focus:outline-none focus:ring-0"
+                            value={formData[question.id] || ""}
+                            onChange={(e) =>
+                              setFormData((current) => ({ ...current, [question.id]: e.target.value }))
+                            }
+                            rows={4}
+                            placeholder={question.placeholder || ""}
+                            required={question.required}
+                          />
+                        ) : question.question_type === "select" ? (
+                          <select
+                            className="flex h-12 w-full rounded-2xl border border-slate-200 bg-white px-4 text-sm text-slate-900 focus:border-slate-300 focus:outline-none"
+                            value={formData[question.id] || ""}
+                            onChange={(e) =>
+                              setFormData((current) => ({ ...current, [question.id]: e.target.value }))
+                            }
+                            required={question.required}
+                          >
+                            <option value="">Select an option</option>
+                            {question.options.map((option) => (
+                              <option key={option} value={option}>
+                                {option}
+                              </option>
+                            ))}
+                          </select>
+                        ) : (
+                          <Input
+                            className="h-12 rounded-2xl border-slate-200 bg-white px-4 text-slate-900 focus-visible:border-slate-300 focus-visible:ring-0 focus-visible:ring-offset-0"
+                            type={question.question_type === "phone" ? "tel" : "text"}
+                            value={formData[question.id] || ""}
+                            onChange={(e) =>
+                              setFormData((current) => ({ ...current, [question.id]: e.target.value }))
+                            }
+                            placeholder={question.placeholder || ""}
+                            required={question.required}
+                          />
+                        )}
+                      </div>
+                    ))}
+
+                    <div className="space-y-2">
+                      <label className="block text-sm font-medium text-slate-700">
                         Notes (optional)
                       </label>
                       <textarea
-                        className="w-full rounded-md border border-border px-3 py-2 text-sm focus:border-primary focus:outline-none focus:ring-1 focus:ring-primary"
+                        className="w-full rounded-2xl border border-slate-200 px-3 py-3 text-sm text-slate-900 transition focus:border-slate-300 focus:outline-none focus:ring-0"
                         value={formData.notes}
                         onChange={(e) => setFormData({ ...formData, notes: e.target.value })}
                         rows={3}
                         placeholder="Anything you'd like us to know before the session..."
+                        style={{
+                          borderColor: undefined,
+                          boxShadow: "none",
+                        }}
                       />
                     </div>
 
-                    <Button type="submit" className="w-full cursor-pointer" disabled={submitting}>
-                      {submitting ? "Booking..." : "Confirm Booking"}
+                    <Button
+                      type="submit"
+                      className="h-12 w-full cursor-pointer rounded-2xl text-white shadow-[0_18px_40px_rgba(15,23,42,0.14)]"
+                      disabled={submitting || paymentRedirecting}
+                      style={{ backgroundColor: brandColor }}
+                    >
+                      {paymentRedirecting
+                        ? "Redirecting to payment..."
+                        : submitting
+                        ? "Booking..."
+                        : bookingType?.price && bookingType.price > 0
+                        ? "Continue to payment"
+                        : "Confirm booking"}
                     </Button>
                   </form>
                 </CardContent>

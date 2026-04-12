@@ -10,6 +10,7 @@ from sqlalchemy import select, and_
 from app.models.booking_type import BookingType
 from app.models.availability import Availability, AvailabilityOverride
 from app.models.booking import Booking
+from app.services.calendar_availability_service import CalendarAvailabilityService
 
 
 class SchedulingService:
@@ -96,6 +97,7 @@ class SchedulingService:
 
         # Get existing bookings for the day
         existing_bookings = await self._get_day_bookings(target_date)
+        external_busy_windows = await self._get_external_busy_windows(user_id, target_date)
 
         # Filter out slots that conflict with existing bookings
         available_slots = []
@@ -120,6 +122,16 @@ class SchedulingService:
 
                 # Check for overlap
                 if slot_start < booking_end and slot_end > booking_start:
+                    has_conflict = True
+                    break
+
+            if has_conflict:
+                continue
+
+            for busy_window in external_busy_windows:
+                busy_start = busy_window.start - buffer_before
+                busy_end = busy_window.end + buffer_after
+                if slot_start < busy_end and slot_end > busy_start:
                     has_conflict = True
                     break
 
@@ -221,6 +233,15 @@ class SchedulingService:
             )
         )
         return list(result.scalars().all())
+
+    async def _get_external_busy_windows(
+        self,
+        user_id: str,
+        target_date: date,
+    ):
+        """Get busy-time windows from active external calendar connections."""
+        calendar_service = CalendarAvailabilityService(self.db)
+        return await calendar_service.get_busy_windows_for_date(user_id, target_date)
 
     @staticmethod
     def _parse_time(time_str: str, target_date: date) -> datetime:

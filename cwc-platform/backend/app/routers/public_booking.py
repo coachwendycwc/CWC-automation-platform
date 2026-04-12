@@ -2,18 +2,26 @@
 Public booking endpoints - no authentication required.
 """
 from datetime import datetime, date, timedelta
+from decimal import Decimal
 
 from fastapi import APIRouter, Depends, HTTPException, status, Query
 from sqlalchemy.ext.asyncio import AsyncSession
 from sqlalchemy import select
 from sqlalchemy.orm import selectinload
 
+from app.config import get_settings
 from app.database import get_db
 from app.models.booking import Booking
 from app.models.booking_type import BookingType
 from app.models.contact import Contact
+from app.models.invoice import Invoice
 from app.models.user import User
+from app.schemas.invoice import LineItemCreate
+from app.services.booking_calendar_service import BookingCalendarService
+from app.services.email_service import email_service
+from app.services.invoice_service import InvoiceService
 from app.services.scheduling_service import SchedulingService
+from app.services.zoom_service import zoom_service
 from app.schemas.booking import (
     PublicBookingCreate,
     PublicBookingResponse,
@@ -25,6 +33,58 @@ from app.schemas.booking import (
 )
 
 router = APIRouter(prefix="/book", tags=["Public Booking"])
+settings = get_settings()
+
+
+async def create_zoom_meeting_for_public_booking(
+    user: User,
+    booking: Booking,
+    booking_type: BookingType,
+    contact: Contact,
+    db: AsyncSession,
+) -> None:
+    if booking_type.location_type != "zoom" or not user.zoom_token:
+        return
+
+    access_token = user.zoom_token.get("access_token")
+    if not access_token:
+        return
+
+    meeting = await zoom_service.create_meeting(
+        access_token=access_token,
+        topic=f"{booking_type.name} - {contact.full_name}",
+        start_time=booking.start_time,
+        duration_minutes=booking_type.duration_minutes,
+        agenda=f"Booking with {contact.full_name}",
+    )
+
+    booking.zoom_meeting_id = meeting["id"]
+    booking.zoom_meeting_url = meeting["join_url"]
+    booking.zoom_meeting_password = meeting.get("password", "")
+    booking.meeting_provider = "zoom"
+    booking.meeting_url = meeting["join_url"]
+    await db.commit()
+
+
+async def provision_public_booking_meeting(
+    user: User,
+    booking: Booking,
+    booking_type: BookingType,
+    contact: Contact,
+    db: AsyncSession,
+) -> None:
+    calendar_service = BookingCalendarService(db)
+    await calendar_service.create_booking_event(
+        user=user,
+        booking=booking,
+        booking_type=booking_type,
+        contact=contact,
+    )
+    await db.refresh(booking)
+
+    if booking_type.location_type == "zoom":
+        await create_zoom_meeting_for_public_booking(user, booking, booking_type, contact, db)
+        await db.refresh(booking)
 
 
 async def get_first_user(db: AsyncSession) -> User:
@@ -37,6 +97,56 @@ async def get_first_user(db: AsyncSession) -> User:
             detail="No users configured in the system",
         )
     return user
+
+
+async def get_first_user_or_none(db: AsyncSession) -> User | None:
+    """Get the first user when present without failing the request."""
+    result = await db.execute(select(User).limit(1))
+    return result.scalar_one_or_none()
+
+
+async def create_booking_invoice(
+    booking: Booking,
+    booking_type: BookingType,
+    contact: Contact,
+    db: AsyncSession,
+) -> Invoice:
+    """Create a payable invoice for a paid public booking."""
+    invoice_service = InvoiceService(db)
+    invoice_number = await invoice_service.generate_invoice_number()
+    line_item = LineItemCreate(
+        description=booking_type.name,
+        quantity=Decimal("1"),
+        unit_price=Decimal(str(booking_type.price)),
+        service_type="coaching",
+        booking_id=booking.id,
+    )
+    totals = invoice_service.calculate_totals([line_item])
+
+    invoice = Invoice(
+        invoice_number=invoice_number,
+        contact_id=contact.id,
+        line_items=invoice_service.prepare_line_items([line_item]),
+        subtotal=totals["subtotal"],
+        tax_amount=totals["tax_amount"],
+        total=totals["total"],
+        amount_paid=Decimal("0"),
+        balance_due=totals["total"],
+        payment_terms="due_on_receipt",
+        due_date=invoice_service.calculate_due_date("due_on_receipt"),
+        status="sent",
+        sent_at=datetime.now(),
+        memo=f"Payment for {booking_type.name} on {booking.start_time.strftime('%B %d, %Y at %I:%M %p')}",
+        notes="Generated from public booking flow",
+    )
+    db.add(invoice)
+    await db.commit()
+    await db.refresh(invoice)
+    return invoice
+
+
+def get_manage_booking_url(confirmation_token: str) -> str:
+    return f"{settings.frontend_url}/book/manage/{confirmation_token}"
 
 
 @router.get("/{slug}", response_model=PublicBookingTypeInfo)
@@ -59,12 +169,26 @@ async def get_public_booking_type(
             detail="Booking type not found",
         )
 
+    user = await get_first_user(db)
+
     return PublicBookingTypeInfo(
         name=booking_type.name,
         slug=booking_type.slug,
         description=booking_type.description,
+        host_name=user.name,
+        host_avatar_url=user.avatar_url,
+        booking_page_title=user.booking_page_title,
+        booking_page_description=user.booking_page_description,
+        booking_page_brand_color=user.booking_page_brand_color,
+        booking_page_logo_url=user.booking_page_logo_url,
+        booking_page_banner_url=user.booking_page_banner_url,
+        location_type=booking_type.location_type,
+        location_details=booking_type.location_details,
+        post_booking_instructions=booking_type.post_booking_instructions,
+        intake_questions=booking_type.intake_questions or [],
+        show_price_on_booking_page=booking_type.show_price_on_booking_page,
         duration_minutes=booking_type.duration_minutes,
-        price=float(booking_type.price) if booking_type.price else None,
+        price=float(booking_type.price) if booking_type.price is not None else None,
         min_notice_hours=booking_type.min_notice_hours,
         max_advance_days=booking_type.max_advance_days,
     )
@@ -188,6 +312,8 @@ async def create_public_booking(
 
     # Calculate end time
     end_time = data.start_time + timedelta(minutes=booking_type.duration_minutes)
+    payment_required = booking_type.price is not None and Decimal(str(booking_type.price)) > 0
+    should_auto_confirm = not payment_required and not booking_type.requires_confirmation
 
     # Create booking
     booking = Booking(
@@ -195,14 +321,35 @@ async def create_public_booking(
         contact_id=contact.id,
         start_time=data.start_time,
         end_time=end_time,
+        intake_responses=data.intake_responses,
         notes=data.notes,
-        status="confirmed" if not booking_type.requires_confirmation else "pending",
+        status="confirmed" if should_auto_confirm else "pending",
     )
     db.add(booking)
     await db.commit()
     await db.refresh(booking)
 
-    # TODO: Send confirmation email
+    invoice = None
+    payment_url = None
+    if payment_required:
+        invoice = await create_booking_invoice(booking, booking_type, contact, db)
+        payment_url = f"{settings.frontend_url}/pay/{invoice.view_token}"
+
+    if booking.status == "confirmed":
+        await provision_public_booking_meeting(user, booking, booking_type, contact, db)
+        await db.refresh(booking)
+
+    if booking.status == "confirmed" and contact.email:
+        await email_service.send_booking_confirmation(
+            to_email=contact.email,
+            contact_name=contact.full_name,
+            booking_type=booking_type.name,
+            booking_date=booking.start_time,
+            booking_duration=booking_type.duration_minutes,
+            meeting_link=booking.meeting_url or booking_type.location_details,
+            manage_booking_url=get_manage_booking_url(booking.confirmation_token),
+            instructions=booking_type.post_booking_instructions,
+        )
 
     can_modify = await scheduling.can_cancel(booking)
 
@@ -211,8 +358,17 @@ async def create_public_booking(
         start_time=booking.start_time,
         end_time=booking.end_time,
         status=booking.status,
+        confirmation_token=booking.confirmation_token,
         booking_type_name=booking_type.name,
+        booking_type_slug=booking_type.slug,
         booking_type_duration=booking_type.duration_minutes,
+        meeting_provider=booking.meeting_provider,
+        meeting_url=booking.meeting_url,
+        location_details=booking_type.location_details,
+        post_booking_instructions=booking_type.post_booking_instructions,
+        payment_required=payment_required,
+        payment_url=payment_url,
+        invoice_view_token=invoice.view_token if invoice else None,
         can_cancel=can_modify,
         can_reschedule=can_modify,
     )
@@ -229,7 +385,7 @@ async def get_booking_by_token(
     """Get booking details by confirmation token."""
     result = await db.execute(
         select(Booking)
-        .options(selectinload(Booking.booking_type))
+        .options(selectinload(Booking.booking_type), selectinload(Booking.contact))
         .where(Booking.confirmation_token == token)
     )
     booking = result.scalar_one_or_none()
@@ -248,8 +404,17 @@ async def get_booking_by_token(
         start_time=booking.start_time,
         end_time=booking.end_time,
         status=booking.status,
+        confirmation_token=booking.confirmation_token,
         booking_type_name=booking.booking_type.name,
+        booking_type_slug=booking.booking_type.slug,
         booking_type_duration=booking.booking_type.duration_minutes,
+        meeting_provider=booking.meeting_provider,
+        meeting_url=booking.meeting_url,
+        location_details=booking.booking_type.location_details,
+        post_booking_instructions=booking.booking_type.post_booking_instructions,
+        payment_required=False,
+        payment_url=None,
+        invoice_view_token=None,
         can_cancel=can_modify and booking.status not in ["cancelled", "completed"],
         can_reschedule=can_modify and booking.status not in ["cancelled", "completed"],
     )
@@ -264,7 +429,7 @@ async def reschedule_booking(
     """Reschedule a booking (self-service)."""
     result = await db.execute(
         select(Booking)
-        .options(selectinload(Booking.booking_type))
+        .options(selectinload(Booking.booking_type), selectinload(Booking.contact))
         .where(Booking.confirmation_token == token)
     )
     booking = result.scalar_one_or_none()
@@ -322,7 +487,27 @@ async def reschedule_booking(
     await db.commit()
     await db.refresh(booking)
 
-    # TODO: Send reschedule confirmation email
+    if booking.status == "confirmed" and booking.contact:
+        calendar_service = BookingCalendarService(db)
+        await calendar_service.update_booking_event(
+            user=user,
+            booking=booking,
+            booking_type=booking.booking_type,
+            contact=booking.contact,
+        )
+        await db.refresh(booking)
+
+    if booking.contact and booking.contact.email:
+        await email_service.send_booking_confirmation(
+            to_email=booking.contact.email,
+            contact_name=booking.contact.full_name,
+            booking_type=booking.booking_type.name,
+            booking_date=booking.start_time,
+            booking_duration=booking.booking_type.duration_minutes,
+            meeting_link=booking.meeting_url or booking.booking_type.location_details,
+            manage_booking_url=get_manage_booking_url(booking.confirmation_token),
+            instructions=booking.booking_type.post_booking_instructions,
+        )
 
     can_modify = await scheduling.can_cancel(booking)
 
@@ -331,8 +516,17 @@ async def reschedule_booking(
         start_time=booking.start_time,
         end_time=booking.end_time,
         status=booking.status,
+        confirmation_token=booking.confirmation_token,
         booking_type_name=booking.booking_type.name,
+        booking_type_slug=booking.booking_type.slug,
         booking_type_duration=booking.booking_type.duration_minutes,
+        meeting_provider=booking.meeting_provider,
+        meeting_url=booking.meeting_url,
+        location_details=booking.booking_type.location_details,
+        post_booking_instructions=booking.booking_type.post_booking_instructions,
+        payment_required=False,
+        payment_url=None,
+        invoice_view_token=None,
         can_cancel=can_modify,
         can_reschedule=can_modify,
     )
@@ -371,6 +565,7 @@ async def cancel_booking_self_service(
         )
 
     scheduling = SchedulingService(db)
+    booking_type = booking.booking_type
 
     # Check 24hr policy
     if not await scheduling.can_cancel(booking):
@@ -388,15 +583,36 @@ async def cancel_booking_self_service(
     await db.commit()
     await db.refresh(booking)
 
-    # TODO: Send cancellation confirmation email
+    user = await get_first_user_or_none(db)
+    if user:
+        calendar_service = BookingCalendarService(db)
+        await calendar_service.delete_booking_event(user=user, booking=booking)
+        await db.refresh(booking)
+
+    if booking.contact and booking.contact.email:
+        await email_service.send_booking_cancelled(
+            to_email=booking.contact.email,
+            contact_name=booking.contact.full_name,
+            booking_type=booking_type.name,
+            booking_date=booking.start_time,
+        )
 
     return PublicBookingResponse(
         id=booking.id,
         start_time=booking.start_time,
         end_time=booking.end_time,
         status=booking.status,
-        booking_type_name=booking.booking_type.name,
-        booking_type_duration=booking.booking_type.duration_minutes,
+        confirmation_token=booking.confirmation_token,
+        booking_type_name=booking_type.name,
+        booking_type_slug=booking_type.slug,
+        booking_type_duration=booking_type.duration_minutes,
+        meeting_provider=booking.meeting_provider,
+        meeting_url=booking.meeting_url,
+        location_details=booking_type.location_details,
+        post_booking_instructions=booking_type.post_booking_instructions,
+        payment_required=False,
+        payment_url=None,
+        invoice_view_token=None,
         can_cancel=False,
         can_reschedule=False,
     )

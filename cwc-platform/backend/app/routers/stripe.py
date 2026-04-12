@@ -5,6 +5,7 @@ Handles checkout sessions, webhooks, and payment processing.
 import os
 import logging
 from datetime import datetime
+from decimal import Decimal
 from typing import Optional
 
 from fastapi import APIRouter, Depends, HTTPException, Request, Header
@@ -18,12 +19,14 @@ from app.services.stripe_service import stripe_service
 from app.services.email_service import email_service
 from app.models.invoice import Invoice
 from app.models.payment import Payment
+from app.models.booking import Booking
 from app.models.contact import Contact
 from app.models.stripe_customer import StripeCustomer
 from app.models.subscription import Subscription
 from app.models.stripe_price import StripePrice
 from app.models.onboarding_assessment import OnboardingAssessment
 from app.config import get_settings
+from app.routers.public_booking import get_first_user, provision_public_booking_meeting, get_manage_booking_url
 
 settings = get_settings()
 
@@ -189,15 +192,16 @@ async def handle_checkout_completed(db: AsyncSession, session: dict):
         return
 
     # Calculate amount paid (Stripe returns in cents)
-    amount_paid = session.get("amount_total", 0) / 100
+    amount_paid = Decimal(str(session.get("amount_total", 0))) / Decimal("100")
 
     # Create payment record
     payment = Payment(
         invoice_id=invoice.id,
         amount=amount_paid,
         payment_method="stripe",
-        transaction_id=session.get("payment_intent"),
-        status="completed",
+        payment_date=datetime.utcnow().date(),
+        stripe_payment_intent_id=session.get("payment_intent"),
+        reference=session.get("id"),
         notes=f"Paid via Stripe Checkout (Session: {session.get('id')})",
     )
     db.add(payment)
@@ -213,6 +217,36 @@ async def handle_checkout_completed(db: AsyncSession, session: dict):
     await db.commit()
 
     logger.info(f"Recorded payment of ${amount_paid} for invoice {invoice.invoice_number}")
+
+    booking_ids = [
+        item.get("booking_id")
+        for item in (invoice.line_items or [])
+        if isinstance(item, dict) and item.get("booking_id")
+    ]
+    if booking_ids:
+        result = await db.execute(
+            select(Booking)
+            .options(selectinload(Booking.booking_type), selectinload(Booking.contact))
+            .where(Booking.id == booking_ids[0])
+        )
+        booking = result.scalar_one_or_none()
+        if booking and booking.status == "pending" and booking.contact and booking.booking_type:
+            booking.status = "confirmed"
+            await db.commit()
+            await db.refresh(booking)
+            user = await get_first_user(db)
+            await provision_public_booking_meeting(user, booking, booking.booking_type, booking.contact, db)
+            await db.refresh(booking)
+            await email_service.send_booking_confirmation(
+                to_email=booking.contact.email,
+                contact_name=booking.contact.full_name,
+                booking_type=booking.booking_type.name,
+                booking_date=booking.start_time,
+                booking_duration=booking.booking_type.duration_minutes,
+                meeting_link=booking.meeting_url or booking.booking_type.location_details,
+                manage_booking_url=get_manage_booking_url(booking.confirmation_token),
+                instructions=booking.booking_type.post_booking_instructions,
+            )
 
     # Send receipt email
     if invoice.contact and invoice.contact.email:
@@ -260,7 +294,7 @@ async def handle_payment_succeeded(db: AsyncSession, payment_intent: dict):
 
     # Check if already processed
     result = await db.execute(
-        select(Payment).where(Payment.transaction_id == payment_intent.get("id"))
+        select(Payment).where(Payment.stripe_payment_intent_id == payment_intent.get("id"))
     )
     existing = result.scalar_one_or_none()
 
@@ -280,15 +314,15 @@ async def handle_payment_succeeded(db: AsyncSession, payment_intent: dict):
         return
 
     # Calculate amount
-    amount_paid = payment_intent.get("amount_received", 0) / 100
+    amount_paid = Decimal(str(payment_intent.get("amount_received", 0))) / Decimal("100")
 
     # Create payment record
     payment = Payment(
         invoice_id=invoice.id,
         amount=amount_paid,
         payment_method="stripe",
-        transaction_id=payment_intent.get("id"),
-        status="completed",
+        payment_date=datetime.utcnow().date(),
+        stripe_payment_intent_id=payment_intent.get("id"),
         notes=f"Paid via Stripe (Payment Intent: {payment_intent.get('id')})",
     )
     db.add(payment)
@@ -323,10 +357,10 @@ async def handle_payment_failed(db: AsyncSession, payment_intent: dict):
     if invoice:
         payment = Payment(
             invoice_id=invoice.id,
-            amount=payment_intent.get("amount", 0) / 100,
+            amount=Decimal(str(payment_intent.get("amount", 0))) / Decimal("100"),
             payment_method="stripe",
-            transaction_id=payment_intent.get("id"),
-            status="failed",
+            payment_date=datetime.utcnow().date(),
+            stripe_payment_intent_id=payment_intent.get("id"),
             notes=f"Payment failed: {payment_intent.get('last_payment_error', {}).get('message', 'Unknown error')}",
         )
         db.add(payment)
@@ -343,7 +377,7 @@ async def handle_refund(db: AsyncSession, charge: dict):
     result = await db.execute(
         select(Payment)
         .options(selectinload(Payment.invoice))
-        .where(Payment.transaction_id == payment_intent_id)
+        .where(Payment.stripe_payment_intent_id == payment_intent_id)
     )
     original_payment = result.scalar_one_or_none()
 
@@ -352,15 +386,17 @@ async def handle_refund(db: AsyncSession, charge: dict):
         return
 
     # Calculate refund amount
-    refund_amount = charge.get("amount_refunded", 0) / 100
+    refund_amount = Decimal(str(charge.get("amount_refunded", 0))) / Decimal("100")
 
     # Create refund payment record (negative amount)
     refund_payment = Payment(
         invoice_id=original_payment.invoice_id,
         amount=-refund_amount,
         payment_method="stripe_refund",
-        transaction_id=f"refund_{charge.get('id')}",
-        status="completed",
+        payment_date=datetime.utcnow().date(),
+        reference=f"refund_{charge.get('id')}",
+        stripe_payment_intent_id=payment_intent_id,
+        stripe_charge_id=charge.get("id"),
         notes=f"Refund for payment {payment_intent_id}",
     )
     db.add(refund_payment)
@@ -545,7 +581,7 @@ async def handle_stripe_invoice_paid(db: AsyncSession, stripe_invoice: dict):
         return
 
     # Create a new invoice record for this subscription payment
-    amount = stripe_invoice.get("amount_paid", 0) / 100
+    amount = Decimal(str(stripe_invoice.get("amount_paid", 0))) / Decimal("100")
 
     invoice = Invoice(
         contact_id=subscription.contact_id,
@@ -572,8 +608,9 @@ async def handle_stripe_invoice_paid(db: AsyncSession, stripe_invoice: dict):
         invoice_id=invoice.id,
         amount=amount,
         payment_method="stripe_subscription",
-        transaction_id=stripe_invoice.get("payment_intent"),
-        status="completed",
+        payment_date=datetime.utcnow().date(),
+        stripe_payment_intent_id=stripe_invoice.get("payment_intent"),
+        reference=stripe_invoice_id,
         notes=f"Subscription payment (Invoice: {stripe_invoice_id})",
     )
     db.add(payment)

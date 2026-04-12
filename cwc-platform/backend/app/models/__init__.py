@@ -4,6 +4,7 @@ from app.models.contact import Contact
 from app.models.interaction import Interaction
 from app.models.fathom_webhook import FathomWebhook
 from app.models.booking_type import BookingType
+from app.models.calendar_connection import CalendarConnection
 from app.models.availability import Availability, AvailabilityOverride
 from app.models.booking import Booking
 from app.models.invoice import Invoice
@@ -47,6 +48,7 @@ __all__ = [
     "Interaction",
     "FathomWebhook",
     "BookingType",
+    "CalendarConnection",
     "Availability",
     "AvailabilityOverride",
     "Booking",

@@ -75,6 +75,10 @@ class InvoiceRead(BaseModel):
     sent_at: Optional[datetime] = None
     viewed_at: Optional[datetime] = None
     paid_at: Optional[datetime] = None
+    due_soon_reminder_sent_at: Optional[datetime] = None
+    overdue_reminder_sent_at: Optional[datetime] = None
+    final_notice_sent_at: Optional[datetime] = None
+    last_collection_email_sent_at: Optional[datetime] = None
     is_payment_plan: bool
     view_token: str
     notes: Optional[str] = None
@@ -95,6 +99,12 @@ class InvoiceList(BaseModel):
     balance_due: Decimal
     status: str
     due_date: date
+    due_soon_reminder_sent_at: Optional[datetime] = None
+    overdue_reminder_sent_at: Optional[datetime] = None
+    final_notice_sent_at: Optional[datetime] = None
+    last_collection_email_sent_at: Optional[datetime] = None
+    collection_stage: Optional[str] = None
+    needs_collection_attention: bool = False
     created_at: datetime
 
     model_config = ConfigDict(from_attributes=True)
@@ -102,6 +112,11 @@ class InvoiceList(BaseModel):
 
 class InvoiceSend(BaseModel):
     send_email: bool = True
+    email_message: Optional[str] = None
+
+
+class InvoiceReminderSend(BaseModel):
+    kind: Literal["due_soon", "overdue", "final_notice"] = "due_soon"
     email_message: Optional[str] = None
 
 
@@ -113,9 +128,23 @@ class InvoiceStats(BaseModel):
     paid_count: int
     pending_count: int
     overdue_count: int
+    collections_attention_count: int
 
 
 # Public invoice view (limited data)
+class InvoicePublicBooking(BaseModel):
+    id: str
+    status: str
+    start_time: datetime
+    end_time: datetime
+    booking_type_name: str
+    confirmation_token: str
+    meeting_provider: Optional[str] = None
+    meeting_url: Optional[str] = None
+    location_details: Optional[str] = None
+    post_booking_instructions: Optional[str] = None
+
+
 class InvoicePublic(BaseModel):
     invoice_number: str
     line_items: list[dict]
@@ -133,5 +162,6 @@ class InvoicePublic(BaseModel):
     contact_name: str
     organization_name: Optional[str] = None
     is_overdue: bool
+    booking: Optional[InvoicePublicBooking] = None
 
     model_config = ConfigDict(from_attributes=True)

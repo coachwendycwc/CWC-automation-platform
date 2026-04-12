@@ -14,6 +14,7 @@ class Settings(BaseSettings):
     # Google OAuth
     google_client_id: str = "stubbed-for-now"
     google_client_secret: str = "stubbed-for-now"
+    google_redirect_uri: str = "http://localhost:8001/api/integrations/google/callback"
 
     # Fathom
     fathom_webhook_secret: str = "stubbed-for-now"

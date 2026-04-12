@@ -32,7 +32,7 @@
                 padding: 40px 60px;
             }
             .slide::before { display: none; }
-            .nav-arrow, .slide-counter, .keyboard-hint, .progress-bar { display: none; }
+            .nav-controls, .keyboard-hint, .progress-bar { display: none; }
             .slide-title, .slide-dark { background: var(--primary) !important; -webkit-print-color-adjust: exact; print-color-adjust: exact; }
         }
 
@@ -464,49 +464,24 @@
             opacity: 0.3;
         }
 
-        /* Navigation - Gallery Style (M3 pattern) */
-        .nav-arrow {
-            position: fixed;
-            top: 50%;
-            transform: translateY(-50%);
-            width: 48px;
-            height: 48px;
-            border-radius: 50%;
-            border: 1px solid var(--border);
-            background: rgba(255,255,255,0.9);
-            color: var(--text);
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            cursor: pointer;
-            z-index: 100;
-            transition: all 0.2s ease;
-            backdrop-filter: blur(8px);
-        }
-        .nav-arrow:hover { background: white; border-color: var(--accent); color: var(--accent); }
-        .nav-arrow:disabled { opacity: 0.3; cursor: default; }
-        .nav-arrow:disabled:hover { background: rgba(255,255,255,0.9); border-color: var(--border); color: var(--text); }
-        .nav-arrow svg { width: 20px; height: 20px; }
-        .nav-arrow.prev { left: 24px; }
-        .nav-arrow.next { right: 24px; }
-
-        .nav-arrow.on-dark { border-color: rgba(255,255,255,0.2); background: rgba(255,255,255,0.1); color: white; }
-        .nav-arrow.on-dark:hover { background: rgba(255,255,255,0.2); border-color: rgba(255,255,255,0.4); }
-        .nav-arrow.on-dark:disabled { opacity: 0.2; }
-        .nav-arrow.on-dark:disabled:hover { background: rgba(255,255,255,0.1); border-color: rgba(255,255,255,0.2); color: white; }
-
-        .slide-counter {
-            position: fixed;
-            bottom: 32px;
-            left: 50%;
+        /* Navigation - Centered Controls (M5 pattern) */
+        .nav-controls {
+            position: fixed; bottom: 48px; left: 50%;
             transform: translateX(-50%);
-            font-size: 13px;
-            font-weight: 500;
-            color: var(--text-muted);
-            letter-spacing: 0.5px;
-            z-index: 1000;
+            display: flex; align-items: center; gap: 24px; z-index: 1000;
         }
-        .slide-counter.on-dark { color: rgba(255,255,255,0.4); }
+        .nav-btn {
+            width: 48px; height: 48px; border-radius: 50%;
+            border: 2px solid var(--primary); background: transparent;
+            color: var(--primary); cursor: pointer;
+            display: flex; align-items: center; justify-content: center;
+            transition: all 0.2s ease;
+        }
+        .nav-btn:hover { background: var(--primary); color: var(--bg); }
+        .nav-btn:disabled { border-color: var(--border); color: var(--text-muted); cursor: not-allowed; }
+        .nav-btn:disabled:hover { background: transparent; color: var(--text-muted); }
+        .nav-btn svg { width: 20px; height: 20px; }
+        .slide-counter { font-size: 13px; font-weight: 500; color: var(--text-muted); letter-spacing: 0.5px; }
 
 
         /* ========================================
@@ -552,11 +527,7 @@
             .simple-table { font-size: 14px; }
             .simple-table th, .simple-table td { padding: 12px 8px; }
             .formula-box { padding: 24px; }
-            .nav-arrow { width: 40px; height: 40px; }
-            .nav-arrow.prev { left: 16px; }
-            .nav-arrow.next { right: 16px; }
-            .nav-arrow svg { width: 18px; height: 18px; }
-            .slide-counter { bottom: 24px; font-size: 11px; }
+            .nav-controls { bottom: 24px; }
             .keyboard-hint { display: none; }
         }
 
@@ -604,11 +575,10 @@
             .activity-meta { padding: 8px 16px; font-size: 11px; margin-top: 24px; }
             .title-meta { margin-top: 32px; padding-top: 20px; gap: 24px; flex-wrap: wrap; justify-content: center; }
             .meta-item { font-size: 11px; }
-            .nav-arrow { width: 36px; height: 36px; }
-            .nav-arrow.prev { left: 10px; }
-            .nav-arrow.next { right: 10px; }
-            .nav-arrow svg { width: 16px; height: 16px; }
-            .slide-counter { bottom: 18px; font-size: 11px; }
+            .nav-controls { bottom: 10px; gap: 16px; }
+            .nav-btn { width: 36px; height: 36px; }
+            .nav-btn svg { width: 16px; height: 16px; }
+            .slide-counter { font-size: 11px; }
             .ell-mark { font-size: 11px; bottom: 24px; right: 12px; }
         }
     </style>
@@ -980,48 +950,44 @@
         </div>
     </div>
 
-    <button class="nav-arrow prev" id="prevBtn" disabled><svg viewBox="0 0 24 24" fill="currentColor"><path d="M15.41 7.41L14 6l-6 6 6 6 1.41-1.41L10.83 12z"/></svg></button>
-    <button class="nav-arrow next" id="nextBtn"><svg viewBox="0 0 24 24" fill="currentColor"><path d="M10 6L8.59 7.41 13.17 12l-4.58 4.59L10 18l6-6z"/></svg></button>
-    <span class="slide-counter"><span id="currentSlide">1</span> / <span id="totalSlides">23</span></span>
+    <!-- Navigation -->
+    <div class="nav-controls">
+        <button class="nav-btn" id="prev" onclick="navigate(-1)" disabled>
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="15 18 9 12 15 6"/></svg>
+        </button>
+        <span class="slide-counter" id="counter">1 / 23</span>
+        <button class="nav-btn" id="next" onclick="navigate(1)">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="9 18 15 12 9 6"/></svg>
+        </button>
+    </div>
 
     <script>
         const slides = document.querySelectorAll('.slide');
-        const totalSlides = slides.length;
-        let currentSlide = 1;
-        const prevBtn = document.getElementById('prevBtn');
-        const nextBtn = document.getElementById('nextBtn');
-        const currentSlideEl = document.getElementById('currentSlide');
-        const progressBar = document.getElementById('progress');
-        document.getElementById('totalSlides').textContent = totalSlides;
+        const total = slides.length;
+        let current = 0;
 
-        function updateProgress() { progressBar.style.width = (currentSlide / totalSlides) * 100 + '%'; }
-        function goToSlide(n) {
-            if (n < 1 || n > totalSlides) return;
-            slides[currentSlide - 1].classList.remove('active');
-            currentSlide = n;
-            slides[currentSlide - 1].classList.add('active');
-            currentSlideEl.textContent = currentSlide;
-            prevBtn.disabled = currentSlide === 1;
-            nextBtn.disabled = currentSlide === totalSlides;
-            updateProgress();
-            // Adapt arrow/counter colors for dark slides
-            const active = slides[currentSlide - 1];
-            const isDark = active.classList.contains('slide-title') || active.classList.contains('slide-dark');
-            document.querySelectorAll('.nav-arrow').forEach(btn => btn.classList.toggle('on-dark', isDark));
-            document.querySelector('.slide-counter').classList.toggle('on-dark', isDark);
+        function navigate(dir) {
+            slides[current].classList.remove('active');
+            current = Math.max(0, Math.min(total - 1, current + dir));
+            slides[current].classList.add('active');
+            document.getElementById('counter').textContent = (current + 1) + ' / ' + total;
+            document.getElementById('prev').disabled = current === 0;
+            document.getElementById('next').disabled = current === total - 1;
+            document.getElementById('progress').style.width = ((current + 1) / total * 100) + '%';
         }
-        function nextSlide() { if (currentSlide < totalSlides) goToSlide(currentSlide + 1); }
-        function prevSlide() { if (currentSlide > 1) goToSlide(currentSlide - 1); }
-        nextBtn.addEventListener('click', nextSlide);
-        prevBtn.addEventListener('click', prevSlide);
-        document.addEventListener('keydown', (e) => {
-            if (e.key === 'ArrowRight' || e.key === ' ') { e.preventDefault(); nextSlide(); }
-            else if (e.key === 'ArrowLeft') { e.preventDefault(); prevSlide(); }
+
+        document.addEventListener('keydown', e => {
+            if (e.key === 'ArrowRight' || e.key === 'ArrowDown') navigate(1);
+            if (e.key === 'ArrowLeft'  || e.key === 'ArrowUp')   navigate(-1);
         });
         let touchStartX = 0;
         document.addEventListener('touchstart', e => { touchStartX = e.changedTouches[0].screenX; });
-        document.addEventListener('touchend', e => { const diff = touchStartX - e.changedTouches[0].screenX; if (Math.abs(diff) > 50) { diff > 0 ? nextSlide() : prevSlide(); } });
-        updateProgress();
+        document.addEventListener('touchend', e => {
+            const diff = touchStartX - e.changedTouches[0].screenX;
+            if (Math.abs(diff) > 50) navigate(diff > 0 ? 1 : -1);
+        });
+
+        document.getElementById('progress').style.width = (1 / total * 100) + '%';
     </script>
 </body>
 </html>

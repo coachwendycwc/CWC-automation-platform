@@ -1,3 +1,5 @@
+import type { PublicBookingResult, PublicInvoice } from "@/types";
+
 const API_URL = process.env.NEXT_PUBLIC_API_URL || "http://localhost:8001";
 
 interface ApiOptions extends RequestInit {
@@ -82,6 +84,42 @@ export const authApi = {
       method: "POST",
       body: JSON.stringify({ access_token: accessToken }),
     }),
+};
+
+export const usersApi = {
+  getMe: (token: string) =>
+    fetchApi<any>("/api/users/me", { token }),
+
+  updateMe: (token: string, data: any) =>
+    fetchApi<any>("/api/users/me", {
+      method: "PUT",
+      body: JSON.stringify(data),
+      token,
+    }),
+
+  uploadImage: async (
+    token: string,
+    target: "avatar" | "booking_logo" | "booking_banner",
+    file: File
+  ): Promise<{ user: any; suggested_colors: string[] }> => {
+    const formData = new FormData();
+    formData.append("file", file);
+
+    const response = await fetch(`${API_URL}/api/users/me/upload-image?target=${target}`, {
+      method: "POST",
+      headers: {
+        Authorization: `Bearer ${token}`,
+      },
+      body: formData,
+    });
+
+    if (!response.ok) {
+      const error = await response.json().catch(() => ({ detail: "Upload failed" }));
+      throw new ApiError(response.status, error.detail || "Upload failed");
+    }
+
+    return response.json();
+  },
 };
 
 // Organizations API
@@ -233,6 +271,45 @@ export const availabilityApi = {
     }),
 };
 
+// Integrations API
+export const integrationsApi = {
+  getStatus: (token: string) =>
+    fetchApi<any>("/api/integrations/status", { token }),
+
+  listCalendarConnections: (token: string) =>
+    fetchApi<any[]>("/api/integrations/calendar-connections", { token }),
+
+  getGoogleAuthUrl: (token: string) =>
+    fetchApi<{ auth_url: string }>("/api/integrations/google/auth-url", { token }),
+
+  disconnectGoogle: (token: string) =>
+    fetchApi<{ message: string }>("/api/integrations/google/disconnect", {
+      method: "DELETE",
+      token,
+    }),
+
+  getZoomAuthUrl: (token: string) =>
+    fetchApi<{ auth_url: string }>("/api/integrations/zoom/auth-url", { token }),
+
+  disconnectZoom: (token: string) =>
+    fetchApi<{ message: string }>("/api/integrations/zoom/disconnect", {
+      method: "DELETE",
+      token,
+    }),
+
+  setPrimaryCalendarConnection: (token: string, connectionId: string) =>
+    fetchApi<any>(`/api/integrations/calendar-connections/${connectionId}/set-primary`, {
+      method: "POST",
+      token,
+    }),
+
+  disconnectCalendarConnection: (token: string, connectionId: string) =>
+    fetchApi<{ message: string }>(`/api/integrations/calendar-connections/${connectionId}`, {
+      method: "DELETE",
+      token,
+    }),
+};
+
 // Bookings API
 export const bookingsApi = {
   list: (token: string, params?: { status?: string; booking_type_id?: string; start_date?: string; end_date?: string; limit?: number; offset?: number }) => {
@@ -285,22 +362,22 @@ export const publicBookingApi = {
     fetchApi<any>(`/api/book/${slug}/slots?date=${date}`),
 
   createBooking: (slug: string, data: any) =>
-    fetchApi<any>(`/api/book/${slug}`, {
+    fetchApi<PublicBookingResult>(`/api/book/${slug}`, {
       method: "POST",
       body: JSON.stringify(data),
     }),
 
   getBookingByToken: (token: string) =>
-    fetchApi<any>(`/api/book/manage/${token}`),
+    fetchApi<PublicBookingResult>(`/api/book/manage/${token}`),
 
   rescheduleBooking: (token: string, newStartTime: string) =>
-    fetchApi<any>(`/api/book/manage/${token}/reschedule`, {
+    fetchApi<PublicBookingResult>(`/api/book/manage/${token}/reschedule`, {
       method: "POST",
       body: JSON.stringify({ new_start_time: newStartTime }),
     }),
 
   cancelBooking: (token: string, reason?: string) =>
-    fetchApi<any>(`/api/book/manage/${token}/cancel`, {
+    fetchApi<PublicBookingResult>(`/api/book/manage/${token}/cancel`, {
       method: "POST",
       body: JSON.stringify({ reason }),
     }),
@@ -346,6 +423,17 @@ export const invoicesApi = {
     fetchApi<any>(`/api/invoices/${id}/send`, {
       method: "POST",
       body: JSON.stringify(data || { send_email: true }),
+      token,
+    }),
+
+  sendReminder: (
+    token: string,
+    id: string,
+    data: { kind: "due_soon" | "overdue" | "final_notice"; email_message?: string }
+  ) =>
+    fetchApi<any>(`/api/invoices/${id}/send-reminder`, {
+      method: "POST",
+      body: JSON.stringify(data),
       token,
     }),
 
@@ -403,7 +491,7 @@ export const paymentPlansApi = {
 // Public Invoice API (no auth required)
 export const publicInvoiceApi = {
   get: (viewToken: string) =>
-    fetchApi<any>(`/api/invoice/${viewToken}`),
+    fetchApi<PublicInvoice>(`/api/invoice/${viewToken}`),
 
   pay: (viewToken: string) =>
     fetchApi<any>(`/api/invoice/${viewToken}/pay`, {

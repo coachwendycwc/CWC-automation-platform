@@ -111,6 +111,17 @@ class TestAuthEndpoints:
         assert "access_token" in data
         assert data["user"]["email"] == "dev@cwcplatform.com"
 
+    async def test_dev_login_with_json_email(self, client: AsyncClient):
+        """Test dev login accepts the JSON body sent by the frontend."""
+        response = await client.post(
+            "/api/auth/dev-login",
+            json={"email": "frontend-dev@example.com"},
+        )
+        assert response.status_code == 200
+        data = response.json()
+        assert "access_token" in data
+        assert data["user"]["email"] == "frontend-dev@example.com"
+
     async def test_forgot_password(self, client: AsyncClient, test_user):
         """Test forgot password returns success message."""
         response = await client.post(

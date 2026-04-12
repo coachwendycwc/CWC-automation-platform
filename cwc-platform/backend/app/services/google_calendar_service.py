@@ -2,7 +2,7 @@
 Google Calendar integration service.
 Handles OAuth flow and calendar event sync.
 """
-import os
+import uuid
 import logging
 from datetime import datetime, timedelta
 from typing import Optional
@@ -12,7 +12,10 @@ from google_auth_oauthlib.flow import Flow
 from googleapiclient.discovery import build
 from googleapiclient.errors import HttpError
 
+from app.config import get_settings
+
 logger = logging.getLogger(__name__)
+settings = get_settings()
 
 # Google Calendar API scopes
 SCOPES = [
@@ -25,16 +28,25 @@ class GoogleCalendarService:
     """Service for Google Calendar integration."""
 
     def __init__(self):
-        self.client_id = os.getenv("GOOGLE_CLIENT_ID")
-        self.client_secret = os.getenv("GOOGLE_CLIENT_SECRET")
-        self.redirect_uri = os.getenv("GOOGLE_REDIRECT_URI", "http://localhost:8001/api/integrations/google/callback")
+        self.client_id = settings.google_client_id
+        self.client_secret = settings.google_client_secret
+        self.redirect_uri = getattr(
+            settings,
+            "google_redirect_uri",
+            "http://localhost:8001/api/integrations/google/callback",
+        )
 
-        if not self.client_id or not self.client_secret:
+        if not self.is_configured():
             logger.warning("Google Calendar credentials not configured")
 
     def is_configured(self) -> bool:
         """Check if Google Calendar is configured."""
-        return bool(self.client_id and self.client_secret)
+        return bool(
+            self.client_id
+            and self.client_secret
+            and self.client_id != "stubbed-for-now"
+            and self.client_secret != "stubbed-for-now"
+        )
 
     def get_auth_url(self, state: Optional[str] = None) -> str:
         """
@@ -144,6 +156,7 @@ class GoogleCalendarService:
         description: Optional[str] = None,
         location: Optional[str] = None,
         attendees: Optional[list[str]] = None,
+        create_google_meet: bool = False,
         calendar_id: str = "primary",
     ) -> dict:
         """
@@ -186,11 +199,20 @@ class GoogleCalendarService:
         if attendees:
             event["attendees"] = [{"email": email} for email in attendees]
 
+        if create_google_meet:
+            event["conferenceData"] = {
+                "createRequest": {
+                    "requestId": str(uuid.uuid4()),
+                    "conferenceSolutionKey": {"type": "hangoutsMeet"},
+                }
+            }
+
         try:
             result = service.events().insert(
                 calendarId=calendar_id,
                 body=event,
                 sendUpdates="all" if attendees else "none",
+                conferenceDataVersion=1 if create_google_meet else 0,
             ).execute()
 
             logger.info(f"Created Google Calendar event: {result.get('id')}")
@@ -208,6 +230,7 @@ class GoogleCalendarService:
         end_time: Optional[datetime] = None,
         description: Optional[str] = None,
         location: Optional[str] = None,
+        create_google_meet: bool = False,
         calendar_id: str = "primary",
     ) -> dict:
         """Update an existing calendar event."""
@@ -235,11 +258,20 @@ class GoogleCalendarService:
         if location is not None:
             event["location"] = location
 
+        if create_google_meet and not event.get("conferenceData"):
+            event["conferenceData"] = {
+                "createRequest": {
+                    "requestId": str(uuid.uuid4()),
+                    "conferenceSolutionKey": {"type": "hangoutsMeet"},
+                }
+            }
+
         try:
             result = service.events().update(
                 calendarId=calendar_id,
                 eventId=event_id,
                 body=event,
+                conferenceDataVersion=1 if create_google_meet or event.get("conferenceData") else 0,
             ).execute()
 
             logger.info(f"Updated Google Calendar event: {event_id}")

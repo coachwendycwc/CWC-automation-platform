@@ -153,10 +153,10 @@ class ReminderService:
             return
 
         # Get meeting link from Google Calendar event if available
-        meeting_link = None
-        if booking.google_event_id:
-            # Could fetch from Google Calendar, but for now we'll skip
-            pass
+        meeting_link = booking.meeting_url or booking.zoom_meeting_url or (
+            booking.booking_type.location_details if booking.booking_type else None
+        )
+        manage_booking_url = f"{settings.frontend_url}/book/manage/{booking.confirmation_token}"
 
         await email_service.send_booking_reminder(
             to_email=contact.email,
@@ -165,6 +165,7 @@ class ReminderService:
             booking_date=booking.start_time,
             meeting_link=meeting_link,
             hours_until=hours_until,
+            manage_booking_url=manage_booking_url,
         )
 
     async def send_immediate_reminder(self, booking_id: str, hours_until: int = 24) -> bool:

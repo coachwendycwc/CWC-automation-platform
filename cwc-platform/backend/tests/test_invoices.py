@@ -2,6 +2,7 @@
 Tests for invoices endpoints.
 """
 import pytest
+from unittest.mock import AsyncMock, patch
 from httpx import AsyncClient
 from datetime import datetime, timedelta
 
@@ -32,6 +33,42 @@ class TestInvoicesEndpoints:
         data = response.json()
         assert len(data) >= 1
         assert data[0]["invoice_number"] == "INV-001"
+
+    @pytest.mark.anyio
+    async def test_list_invoices_includes_collection_visibility(
+        self, client: AsyncClient, auth_headers, test_invoice, db_session
+    ):
+        """Test invoice list includes collection-stage metadata."""
+        test_invoice.status = "overdue"
+        test_invoice.balance_due = test_invoice.total
+        test_invoice.due_date = (datetime.utcnow() - timedelta(days=2)).date()
+        test_invoice.overdue_reminder_sent_at = datetime.utcnow()
+        test_invoice.last_collection_email_sent_at = datetime.utcnow()
+        await db_session.commit()
+
+        response = await client.get("/api/invoices", headers=auth_headers)
+        assert response.status_code == 200
+        data = response.json()
+        assert len(data) >= 1
+        assert data[0]["collection_stage"] == "overdue"
+        assert data[0]["needs_collection_attention"] is True
+        assert data[0]["last_collection_email_sent_at"] is not None
+
+    @pytest.mark.anyio
+    async def test_invoice_stats_include_collections_attention_count(
+        self, client: AsyncClient, auth_headers, test_invoice, db_session
+    ):
+        """Test invoice stats expose follow-up workload."""
+        test_invoice.status = "sent"
+        test_invoice.balance_due = test_invoice.total
+        test_invoice.due_date = (datetime.utcnow() + timedelta(days=2)).date()
+        test_invoice.due_soon_reminder_sent_at = None
+        await db_session.commit()
+
+        response = await client.get("/api/invoices/stats", headers=auth_headers)
+        assert response.status_code == 200
+        data = response.json()
+        assert data["collections_attention_count"] >= 1
 
     async def test_create_invoice(
         self, client: AsyncClient, auth_headers, test_contact
@@ -132,6 +169,48 @@ class TestInvoicesEndpoints:
         assert response.status_code == 200
         data = response.json()
         assert len(data) >= 1
+
+    @pytest.mark.anyio
+    async def test_send_due_soon_reminder(
+        self, client: AsyncClient, auth_headers, test_invoice, db_session
+    ):
+        test_invoice.status = "sent"
+        test_invoice.balance_due = test_invoice.total
+        test_invoice.due_date = (datetime.utcnow() + timedelta(days=3)).date()
+        await db_session.commit()
+
+        with patch("app.routers.invoices.email_service.send_reminder_due_soon", new=AsyncMock(return_value=True)):
+            response = await client.post(
+                f"/api/invoices/{test_invoice.id}/send-reminder",
+                headers=auth_headers,
+                json={"kind": "due_soon"},
+            )
+
+        assert response.status_code == 200
+        data = response.json()
+        assert data["due_soon_reminder_sent_at"] is not None
+        assert data["last_collection_email_sent_at"] is not None
+
+    @pytest.mark.anyio
+    async def test_send_overdue_reminder_marks_invoice_overdue(
+        self, client: AsyncClient, auth_headers, test_invoice, db_session
+    ):
+        test_invoice.status = "sent"
+        test_invoice.balance_due = test_invoice.total
+        test_invoice.due_date = (datetime.utcnow() - timedelta(days=5)).date()
+        await db_session.commit()
+
+        with patch("app.routers.invoices.email_service.send_reminder_overdue", new=AsyncMock(return_value=True)):
+            response = await client.post(
+                f"/api/invoices/{test_invoice.id}/send-reminder",
+                headers=auth_headers,
+                json={"kind": "overdue"},
+            )
+
+        assert response.status_code == 200
+        data = response.json()
+        assert data["status"] == "overdue"
+        assert data["overdue_reminder_sent_at"] is not None
 
 
 class TestPublicInvoiceEndpoints:

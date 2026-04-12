@@ -328,6 +328,7 @@ CWC Coaching
         contact: Contact,
         base_url: str,
         days_until_due: int,
+        custom_message: Optional[str] = None,
     ) -> bool:
         """
         Send reminder for invoice due soon (e.g., 3 days before).
@@ -348,6 +349,8 @@ Invoice: #{invoice.invoice_number}
 Amount Due: ${invoice.balance_due:,.2f}
 Due Date: {invoice.due_date.strftime('%B %d, %Y')} ({days_until_due} days from now)
 
+{custom_message if custom_message else ''}
+
 Pay your invoice here:
 {view_url}
 
@@ -355,7 +358,35 @@ Best regards,
 CWC Coaching
 """
 
-        return await self._send_email(contact.email, subject, body)
+        custom_html = f"<p>{custom_message}</p>" if custom_message else ""
+        html_content = f'''
+            <p>This is a friendly reminder that your invoice is due soon.</p>
+            {custom_html}
+            <table style="width: 100%; margin: 20px 0; border-collapse: collapse;">
+                <tr>
+                    <td style="padding: 12px; border-bottom: 1px solid #e5e7eb;"><strong>Invoice</strong></td>
+                    <td style="padding: 12px; border-bottom: 1px solid #e5e7eb; text-align: right;">#{invoice.invoice_number}</td>
+                </tr>
+                <tr>
+                    <td style="padding: 12px; border-bottom: 1px solid #e5e7eb;"><strong>Amount Due</strong></td>
+                    <td style="padding: 12px; border-bottom: 1px solid #e5e7eb; text-align: right; font-weight: 700;">${invoice.balance_due:,.2f}</td>
+                </tr>
+                <tr>
+                    <td style="padding: 12px;"><strong>Due Date</strong></td>
+                    <td style="padding: 12px; text-align: right;">{invoice.due_date.strftime('%B %d, %Y')}</td>
+                </tr>
+            </table>
+        '''
+
+        html_body = _create_html_email(
+            title=subject,
+            greeting=f"Hi {contact.first_name},",
+            content=html_content,
+            cta_text="Pay Invoice",
+            cta_url=view_url,
+        )
+
+        return await self._send_email(contact.email, subject, body, html_body)
 
     async def send_reminder_overdue(
         self,
@@ -363,6 +394,8 @@ CWC Coaching
         contact: Contact,
         base_url: str,
         days_overdue: int,
+        stage: str = "overdue",
+        custom_message: Optional[str] = None,
     ) -> bool:
         """
         Send reminder for overdue invoice.
@@ -372,16 +405,23 @@ CWC Coaching
 
         view_url = f"{base_url}/pay/{invoice.view_token}"
 
-        subject = f"Payment Overdue: Invoice #{invoice.invoice_number}"
+        if stage == "final_notice":
+            subject = f"Final Notice: Invoice #{invoice.invoice_number}"
+            opener = "This is a final reminder that your invoice remains unpaid."
+        else:
+            subject = f"Payment Overdue: Invoice #{invoice.invoice_number}"
+            opener = f"Your invoice is now {days_overdue} day{'s' if days_overdue != 1 else ''} overdue."
 
         body = f"""
 Hi {contact.first_name},
 
-Your invoice is now {days_overdue} day{'s' if days_overdue != 1 else ''} overdue.
+{opener}
 
 Invoice: #{invoice.invoice_number}
 Amount Due: ${invoice.balance_due:,.2f}
 Original Due Date: {invoice.due_date.strftime('%B %d, %Y')}
+
+{custom_message if custom_message else ''}
 
 Please make your payment as soon as possible:
 {view_url}
@@ -392,7 +432,35 @@ Best regards,
 CWC Coaching
 """
 
-        return await self._send_email(contact.email, subject, body)
+        custom_html = f"<p>{custom_message}</p>" if custom_message else ""
+        html_content = f'''
+            <p>{opener}</p>
+            {custom_html}
+            <table style="width: 100%; margin: 20px 0; border-collapse: collapse;">
+                <tr>
+                    <td style="padding: 12px; border-bottom: 1px solid #e5e7eb;"><strong>Invoice</strong></td>
+                    <td style="padding: 12px; border-bottom: 1px solid #e5e7eb; text-align: right;">#{invoice.invoice_number}</td>
+                </tr>
+                <tr>
+                    <td style="padding: 12px; border-bottom: 1px solid #e5e7eb;"><strong>Amount Due</strong></td>
+                    <td style="padding: 12px; border-bottom: 1px solid #e5e7eb; text-align: right; font-weight: 700; color: #b91c1c;">${invoice.balance_due:,.2f}</td>
+                </tr>
+                <tr>
+                    <td style="padding: 12px;"><strong>Original Due Date</strong></td>
+                    <td style="padding: 12px; text-align: right;">{invoice.due_date.strftime('%B %d, %Y')}</td>
+                </tr>
+            </table>
+        '''
+
+        html_body = _create_html_email(
+            title=subject,
+            greeting=f"Hi {contact.first_name},",
+            content=html_content,
+            cta_text="Review Invoice",
+            cta_url=view_url,
+        )
+
+        return await self._send_email(contact.email, subject, body, html_body)
 
     # Contract email methods
 
@@ -539,11 +607,15 @@ CWC Coaching
         booking_date: "datetime",
         booking_duration: int,
         meeting_link: Optional[str] = None,
+        manage_booking_url: Optional[str] = None,
+        instructions: Optional[str] = None,
     ) -> bool:
         """Send booking confirmation to client."""
         subject = f"Booking Confirmed: {booking_type}"
 
         meeting_text = f"\n\nJoin here: {meeting_link}" if meeting_link else ""
+        manage_text = f"\nManage booking: {manage_booking_url}" if manage_booking_url else ""
+        instructions_text = f"\n\nWhat happens next:\n{instructions}" if instructions else ""
 
         body = f"""
 Hi {contact_name.split()[0] if contact_name else 'there'},
@@ -552,7 +624,7 @@ Your booking has been confirmed!
 
 What: {booking_type}
 When: {booking_date.strftime('%A, %B %d, %Y at %I:%M %p')}
-Duration: {booking_duration} minutes{meeting_text}
+Duration: {booking_duration} minutes{meeting_text}{manage_text}{instructions_text}
 
 Please add this to your calendar. If you need to reschedule or cancel, please let us know at least 24 hours in advance.
 
@@ -573,6 +645,24 @@ CWC Coaching
                     </td>
                 </tr>
         ''' if meeting_link else ""
+        manage_row = f'''
+                <tr>
+                    <td style="padding: 12px; border-bottom: 1px solid #e5e7eb;">
+                        <strong>Manage Booking</strong>
+                    </td>
+                    <td style="padding: 12px; border-bottom: 1px solid #e5e7eb; text-align: right;">
+                        <a href="{manage_booking_url}" style="color: #7c3aed;">Open Link</a>
+                    </td>
+                </tr>
+        ''' if manage_booking_url else ""
+        instructions_block = f'''
+            <div style="margin-top: 16px; border-radius: 8px; background-color: #f9fafb; padding: 16px;">
+                <p style="margin: 0 0 8px; font-size: 12px; font-weight: 700; letter-spacing: 0.08em; text-transform: uppercase; color: #6b7280;">
+                    What happens next
+                </p>
+                <p style="margin: 0; white-space: pre-wrap;">{instructions}</p>
+            </div>
+        ''' if instructions else ""
 
         html_content = f'''
             <p>Your booking has been confirmed!</p>
@@ -606,7 +696,9 @@ CWC Coaching
                     </td>
                 </tr>
                 {meeting_row}
+                {manage_row}
             </table>
+            {instructions_block}
             <p style="font-size: 13px; color: #6b7280;">
                 Please add this to your calendar. If you need to reschedule or cancel,
                 please let us know at least 24 hours in advance.
@@ -618,8 +710,8 @@ CWC Coaching
             title=subject,
             greeting=f"Hi {first_name},",
             content=html_content,
-            cta_text="Join Meeting" if meeting_link else None,
-            cta_url=meeting_link,
+            cta_text="Manage Booking" if manage_booking_url else ("Join Meeting" if meeting_link else None),
+            cta_url=manage_booking_url or meeting_link,
         )
 
         return await self._send_email(to_email, subject, body, html_body)
@@ -632,11 +724,13 @@ CWC Coaching
         booking_date: "datetime",
         meeting_link: Optional[str] = None,
         hours_until: int = 24,
+        manage_booking_url: Optional[str] = None,
     ) -> bool:
         """Send booking reminder to client."""
         subject = f"Reminder: {booking_type} in {hours_until} hours"
 
         meeting_text = f"\n\nJoin here: {meeting_link}" if meeting_link else ""
+        manage_text = f"\nManage booking: {manage_booking_url}" if manage_booking_url else ""
 
         body = f"""
 Hi {contact_name.split()[0] if contact_name else 'there'},
@@ -644,7 +738,7 @@ Hi {contact_name.split()[0] if contact_name else 'there'},
 This is a friendly reminder about your upcoming session.
 
 What: {booking_type}
-When: {booking_date.strftime('%A, %B %d, %Y at %I:%M %p')}{meeting_text}
+When: {booking_date.strftime('%A, %B %d, %Y at %I:%M %p')}{meeting_text}{manage_text}
 
 See you soon!
 
@@ -652,7 +746,28 @@ Best regards,
 CWC Coaching
 """
 
-        return await self._send_email(to_email, subject, body)
+        html_content = f'''
+            <p>This is a friendly reminder about your upcoming session.</p>
+            <table style="width: 100%; margin: 20px 0; border-collapse: collapse;">
+                <tr>
+                    <td style="padding: 12px; border-bottom: 1px solid #e5e7eb;"><strong>Session</strong></td>
+                    <td style="padding: 12px; border-bottom: 1px solid #e5e7eb; text-align: right;">{booking_type}</td>
+                </tr>
+                <tr>
+                    <td style="padding: 12px; border-bottom: 1px solid #e5e7eb;"><strong>When</strong></td>
+                    <td style="padding: 12px; border-bottom: 1px solid #e5e7eb; text-align: right;">{booking_date.strftime('%A, %B %d, %Y at %I:%M %p')}</td>
+                </tr>
+            </table>
+        '''
+        html_body = _create_html_email(
+            title=subject,
+            greeting=f"Hi {contact_name.split()[0] if contact_name else 'there'},",
+            content=html_content,
+            cta_text="Manage Booking" if manage_booking_url else ("Join Meeting" if meeting_link else None),
+            cta_url=manage_booking_url or meeting_link,
+        )
+
+        return await self._send_email(to_email, subject, body, html_body)
 
     async def send_booking_cancelled(
         self,

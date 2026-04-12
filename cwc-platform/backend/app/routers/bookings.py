@@ -8,8 +8,8 @@ from sqlalchemy.orm import selectinload
 
 from app.database import get_db
 from app.services.auth_service import get_current_user
+from app.services.booking_calendar_service import BookingCalendarService
 from app.services.email_service import email_service
-from app.services.google_calendar_service import google_calendar_service
 from app.services.zoom_service import zoom_service
 from app.models.user import User
 from app.models.booking import Booking
@@ -35,6 +35,8 @@ async def create_zoom_meeting_for_booking(
     user: User, booking: Booking, booking_type: BookingType, contact: Contact, db: AsyncSession
 ) -> None:
     """Create a Zoom meeting for a confirmed booking if user has Zoom connected."""
+    if booking_type.location_type != "zoom":
+        return
     if not user.zoom_token:
         return
 
@@ -54,6 +56,8 @@ async def create_zoom_meeting_for_booking(
         booking.zoom_meeting_id = meeting["id"]
         booking.zoom_meeting_url = meeting["join_url"]
         booking.zoom_meeting_password = meeting.get("password", "")
+        booking.meeting_provider = "zoom"
+        booking.meeting_url = meeting["join_url"]
         await db.commit()
 
         logger.info(f"Created Zoom meeting {meeting['id']} for booking {booking.id}")
@@ -80,6 +84,33 @@ async def delete_zoom_meeting_for_booking(user: User, booking: Booking, db: Asyn
         logger.info(f"Deleted Zoom meeting for booking {booking.id}")
     except Exception as e:
         logger.error(f"Failed to delete Zoom meeting for booking {booking.id}: {e}")
+
+
+async def provision_booking_meeting(
+    user: User,
+    booking: Booking,
+    booking_type: BookingType,
+    contact: Contact,
+    db: AsyncSession,
+) -> None:
+    """Provision the configured meeting experience for a confirmed booking."""
+    calendar_service = BookingCalendarService(db)
+    await calendar_service.create_booking_event(
+        user=user,
+        booking=booking,
+        booking_type=booking_type,
+        contact=contact,
+    )
+    await db.refresh(booking)
+
+    if booking_type.location_type == "zoom":
+        await create_zoom_meeting_for_booking(user, booking, booking_type, contact, db)
+        await db.refresh(booking)
+
+
+def get_manage_booking_url(confirmation_token: str) -> str:
+    from app.config import get_settings
+    return f"{get_settings().frontend_url}/book/manage/{confirmation_token}"
 
 
 @router.get("", response_model=BookingList)
@@ -140,6 +171,9 @@ async def list_bookings(
                 end_time=booking.end_time,
                 status=booking.status,
                 google_event_id=booking.google_event_id,
+                meeting_provider=booking.meeting_provider,
+                meeting_url=booking.meeting_url,
+                intake_responses=booking.intake_responses,
                 notes=booking.notes,
                 cancellation_reason=booking.cancellation_reason,
                 cancelled_at=booking.cancelled_at,
@@ -202,37 +236,19 @@ async def create_booking(
     await db.commit()
     await db.refresh(booking)
 
-    # Send confirmation email if auto-confirmed
-    if booking.status == "confirmed" and contact.email:
-        await email_service.send_booking_confirmation(
-            to_email=contact.email,
-            contact_name=contact.full_name,
-            booking_type=booking_type.name,
-            booking_date=booking.start_time,
-            booking_duration=booking_type.duration_minutes,
-            meeting_link=None,  # No location_details on BookingType
-        )
-
-    # Sync to Google Calendar if connected
-    if current_user.google_calendar_token and booking.status == "confirmed":
-        try:
-            event = google_calendar_service.create_event(
-                token_data=current_user.google_calendar_token,
-                summary=f"{booking_type.name} - {contact.full_name}",
-                start_time=booking.start_time,
-                end_time=end_time,
-                description=f"Booking with {contact.full_name}\n\n{data.notes or ''}",
-                location=booking_type.location_details,
-                attendees=[contact.email] if contact.email else None,
-            )
-            booking.google_event_id = event.get("id")
-            await db.commit()
-        except Exception as e:
-            logger.error(f"Failed to create Google Calendar event: {e}")
-
-    # Create Zoom meeting if connected and auto-confirmed
     if booking.status == "confirmed":
-        await create_zoom_meeting_for_booking(current_user, booking, booking_type, contact, db)
+        await provision_booking_meeting(current_user, booking, booking_type, contact, db)
+        if contact.email:
+            await email_service.send_booking_confirmation(
+                to_email=contact.email,
+                contact_name=contact.full_name,
+                booking_type=booking_type.name,
+                booking_date=booking.start_time,
+                booking_duration=booking_type.duration_minutes,
+                meeting_link=booking.meeting_url or booking_type.location_details,
+                manage_booking_url=get_manage_booking_url(booking.confirmation_token),
+                instructions=booking_type.post_booking_instructions,
+            )
 
     return BookingDetailResponse(
         id=booking.id,
@@ -242,6 +258,9 @@ async def create_booking(
         end_time=booking.end_time,
         status=booking.status,
         google_event_id=booking.google_event_id,
+        meeting_provider=booking.meeting_provider,
+        meeting_url=booking.meeting_url,
+        intake_responses=booking.intake_responses,
         notes=booking.notes,
         cancellation_reason=booking.cancellation_reason,
         cancelled_at=booking.cancelled_at,
@@ -284,6 +303,9 @@ async def get_booking(
         end_time=booking.end_time,
         status=booking.status,
         google_event_id=booking.google_event_id,
+        meeting_provider=booking.meeting_provider,
+        meeting_url=booking.meeting_url,
+        intake_responses=booking.intake_responses,
         notes=booking.notes,
         cancellation_reason=booking.cancellation_reason,
         cancelled_at=booking.cancelled_at,
@@ -335,6 +357,8 @@ async def update_booking(
         end_time=booking.end_time,
         status=booking.status,
         google_event_id=booking.google_event_id,
+        meeting_provider=booking.meeting_provider,
+        meeting_url=booking.meeting_url,
         notes=booking.notes,
         cancellation_reason=booking.cancellation_reason,
         cancelled_at=booking.cancelled_at,
@@ -380,7 +404,10 @@ async def confirm_booking(
     await db.refresh(booking)
 
     # Send confirmation email
-    meeting_link = booking.zoom_meeting_url or booking.booking_type.location_details
+    await provision_booking_meeting(current_user, booking, booking.booking_type, booking.contact, db)
+    await db.refresh(booking)
+
+    meeting_link = booking.meeting_url or booking.zoom_meeting_url or booking.booking_type.location_details
     if booking.contact and booking.contact.email:
         await email_service.send_booking_confirmation(
             to_email=booking.contact.email,
@@ -389,15 +416,9 @@ async def confirm_booking(
             booking_date=booking.start_time,
             booking_duration=booking.booking_type.duration_minutes,
             meeting_link=meeting_link,
+            manage_booking_url=get_manage_booking_url(booking.confirmation_token),
+            instructions=booking.booking_type.post_booking_instructions,
         )
-
-    # Create Zoom meeting if connected
-    await create_zoom_meeting_for_booking(
-        current_user, booking, booking.booking_type, booking.contact, db
-    )
-
-    # Refresh to get updated Zoom fields
-    await db.refresh(booking)
 
     return BookingDetailResponse(
         id=booking.id,
@@ -407,9 +428,12 @@ async def confirm_booking(
         end_time=booking.end_time,
         status=booking.status,
         google_event_id=booking.google_event_id,
+        meeting_provider=booking.meeting_provider,
+        meeting_url=booking.meeting_url,
         zoom_meeting_id=booking.zoom_meeting_id,
         zoom_meeting_url=booking.zoom_meeting_url,
         zoom_meeting_password=booking.zoom_meeting_password,
+        intake_responses=booking.intake_responses,
         notes=booking.notes,
         cancellation_reason=booking.cancellation_reason,
         cancelled_at=booking.cancelled_at,
@@ -475,16 +499,10 @@ async def cancel_booking(
         )
 
     # Delete from Google Calendar if synced
-    if current_user.google_calendar_token and booking.google_event_id:
-        try:
-            google_calendar_service.delete_event(
-                token_data=current_user.google_calendar_token,
-                event_id=booking.google_event_id,
-            )
-            booking.google_event_id = None
-            await db.commit()
-        except Exception as e:
-            logger.error(f"Failed to delete Google Calendar event: {e}")
+    if booking.google_event_id:
+        calendar_service = BookingCalendarService(db)
+        await calendar_service.delete_booking_event(user=current_user, booking=booking)
+        await db.refresh(booking)
 
     # Delete Zoom meeting if exists
     await delete_zoom_meeting_for_booking(current_user, booking, db)
@@ -497,6 +515,9 @@ async def cancel_booking(
         end_time=booking.end_time,
         status=booking.status,
         google_event_id=booking.google_event_id,
+        meeting_provider=booking.meeting_provider,
+        meeting_url=booking.meeting_url,
+        intake_responses=booking.intake_responses,
         notes=booking.notes,
         cancellation_reason=booking.cancellation_reason,
         cancelled_at=booking.cancelled_at,

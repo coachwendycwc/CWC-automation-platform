@@ -9,8 +9,9 @@ from sqlalchemy import select
 from sqlalchemy.orm import selectinload
 
 from app.database import get_db
+from app.models.booking import Booking
 from app.models.invoice import Invoice
-from app.schemas.invoice import InvoicePublic
+from app.schemas.invoice import InvoicePublic, InvoicePublicBooking
 
 router = APIRouter(prefix="/api/invoice", tags=["public-invoice"])
 
@@ -53,6 +54,36 @@ async def view_invoice(
         and invoice.status not in ["paid", "cancelled"]
     )
 
+    booking_summary = None
+    booking_id = next(
+        (
+            item.get("booking_id")
+            for item in (invoice.line_items or [])
+            if isinstance(item, dict) and item.get("booking_id")
+        ),
+        None,
+    )
+    if booking_id:
+        booking_result = await db.execute(
+            select(Booking)
+            .options(selectinload(Booking.booking_type))
+            .where(Booking.id == booking_id)
+        )
+        booking = booking_result.scalar_one_or_none()
+        if booking and booking.booking_type:
+            booking_summary = InvoicePublicBooking(
+                id=booking.id,
+                status=booking.status,
+                start_time=booking.start_time,
+                end_time=booking.end_time,
+                booking_type_name=booking.booking_type.name,
+                confirmation_token=booking.confirmation_token,
+                meeting_provider=booking.meeting_provider,
+                meeting_url=booking.meeting_url,
+                location_details=booking.booking_type.location_details,
+                post_booking_instructions=booking.booking_type.post_booking_instructions,
+            )
+
     return InvoicePublic(
         invoice_number=invoice.invoice_number,
         line_items=invoice.line_items,
@@ -70,6 +101,7 @@ async def view_invoice(
         contact_name=invoice.contact.full_name if invoice.contact else "Unknown",
         organization_name=invoice.organization.name if invoice.organization else None,
         is_overdue=is_overdue,
+        booking=booking_summary,
     )
 
 

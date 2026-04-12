@@ -74,6 +74,24 @@ async def get_dashboard_stats(
     )
     invoice_counts = {row[0]: row[1] for row in invoice_counts_result.fetchall()}
 
+    due_soon_date = today + timedelta(days=3)
+    collections_attention_result = await db.execute(
+        select(func.count(Invoice.id))
+        .where(
+            Invoice.user_id == current_user.id,
+            Invoice.status.in_(["sent", "partial", "overdue"]),
+            Invoice.balance_due > 0,
+            or_(
+                Invoice.due_date < today,
+                and_(
+                    Invoice.due_date <= due_soon_date,
+                    Invoice.due_soon_reminder_sent_at.is_(None),
+                ),
+            ),
+        )
+    )
+    collections_attention = collections_attention_result.scalar() or 0
+
     # Contact count
     contact_count_result = await db.execute(
         select(func.count(Contact.id))
@@ -125,6 +143,7 @@ async def get_dashboard_stats(
             "partial": invoice_counts.get("partial", 0),
             "paid": invoice_counts.get("paid", 0),
             "overdue": invoice_counts.get("overdue", 0),
+            "collections_attention": collections_attention,
         },
         "contacts": contact_count,
         "projects": {

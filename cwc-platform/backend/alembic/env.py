@@ -11,7 +11,7 @@ from alembic import context
 from app.database import Base
 from app.models import (
     User, Organization, Contact, Interaction, FathomWebhook,
-    BookingType, Availability, AvailabilityOverride, Booking,
+    BookingType, CalendarConnection, Availability, AvailabilityOverride, Booking,
     Invoice, Payment, PaymentPlan, FathomExtraction,
     ContractTemplate, Contract, SignatureAuditLog,
     ProjectTemplate, Project, Task, TimeEntry, ProjectActivityLog,

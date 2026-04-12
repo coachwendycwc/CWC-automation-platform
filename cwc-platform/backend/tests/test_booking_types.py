@@ -165,7 +165,7 @@ class TestCreateBookingType:
         )
         assert response.status_code == 401
 
-    @pytest.mark.asyncio
+    @pytest.mark.anyio
     async def test_create_booking_type_success(self, auth_client: AsyncClient):
         """Test successful booking type creation."""
         response = await auth_client.post(
@@ -180,6 +180,19 @@ class TestCreateBookingType:
                 "color": "#10b981",
                 "buffer_before": 10,
                 "buffer_after": 10,
+                "location_type": "custom",
+                "location_details": "Private office in Manhattan",
+                "post_booking_instructions": "Bring any goals you want to work through.",
+                "intake_questions": [
+                    {
+                        "id": "goal",
+                        "label": "What is your main goal for this session?",
+                        "question_type": "long_text",
+                        "required": True,
+                        "placeholder": "Share the goal you want to focus on",
+                        "options": [],
+                    }
+                ],
             }
         )
         assert response.status_code == 201
@@ -187,6 +200,8 @@ class TestCreateBookingType:
         assert data["name"] == "Coaching Session"
         assert data["duration_minutes"] == 60
         assert float(data["price"]) == 150.00
+        assert data["location_type"] == "custom"
+        assert data["intake_questions"][0]["id"] == "goal"
 
     @pytest.mark.asyncio
     async def test_create_booking_type_duplicate_slug(

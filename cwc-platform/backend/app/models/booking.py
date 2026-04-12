@@ -3,13 +3,14 @@ import secrets
 from datetime import datetime
 from typing import TYPE_CHECKING
 
-from sqlalchemy import String, DateTime, Text, ForeignKey, func
+from sqlalchemy import String, DateTime, Text, ForeignKey, JSON, func
 from sqlalchemy.orm import Mapped, mapped_column, relationship
 
 from app.database import Base
 
 if TYPE_CHECKING:
     from app.models.booking_type import BookingType
+    from app.models.calendar_connection import CalendarConnection
     from app.models.contact import Contact
     from app.models.fathom_webhook import FathomWebhook
 
@@ -33,10 +34,16 @@ class Booking(Base):
     status: Mapped[str] = mapped_column(
         String(20), nullable=False, default="pending"
     )  # pending, confirmed, completed, cancelled, no_show
+    calendar_connection_id: Mapped[str | None] = mapped_column(
+        String(36), ForeignKey("calendar_connections.id", ondelete="SET NULL"), nullable=True
+    )
     google_event_id: Mapped[str | None] = mapped_column(String(255), nullable=True)
+    meeting_provider: Mapped[str | None] = mapped_column(String(30), nullable=True)
+    meeting_url: Mapped[str | None] = mapped_column(String(500), nullable=True)
     zoom_meeting_id: Mapped[str | None] = mapped_column(String(100), nullable=True)
     zoom_meeting_url: Mapped[str | None] = mapped_column(String(500), nullable=True)
     zoom_meeting_password: Mapped[str | None] = mapped_column(String(50), nullable=True)
+    intake_responses: Mapped[dict | None] = mapped_column(JSON, nullable=True)
     notes: Mapped[str | None] = mapped_column(Text, nullable=True)
     cancellation_reason: Mapped[str | None] = mapped_column(Text, nullable=True)
     cancelled_at: Mapped[datetime | None] = mapped_column(DateTime, nullable=True)
@@ -66,6 +73,7 @@ class Booking(Base):
     booking_type: Mapped["BookingType"] = relationship(
         "BookingType", back_populates="bookings"
     )
+    calendar_connection: Mapped["CalendarConnection | None"] = relationship("CalendarConnection")
     contact: Mapped["Contact"] = relationship("Contact", back_populates="bookings")
     fathom_webhook: Mapped["FathomWebhook | None"] = relationship(
         "FathomWebhook", back_populates="bookings"

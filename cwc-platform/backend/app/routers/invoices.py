@@ -1,7 +1,7 @@
 """
 Invoice management router.
 """
-from datetime import datetime
+from datetime import datetime, date, timedelta
 from typing import Optional
 from decimal import Decimal
 
@@ -20,12 +20,37 @@ from app.schemas.invoice import (
     InvoiceRead,
     InvoiceList,
     InvoiceSend,
+    InvoiceReminderSend,
     InvoiceStats,
 )
 from app.services.invoice_service import InvoiceService
 from app.services.email_service import email_service
+from app.config import get_settings
 
 router = APIRouter(prefix="/api/invoices", tags=["invoices"])
+settings = get_settings()
+
+
+def get_collection_stage(invoice: Invoice) -> str | None:
+    if invoice.status == "paid" or invoice.balance_due <= 0:
+        return None
+    if invoice.final_notice_sent_at:
+        return "final_notice"
+    if invoice.overdue_reminder_sent_at or invoice.status == "overdue":
+        return "overdue"
+    if invoice.due_soon_reminder_sent_at:
+        return "due_soon"
+    return None
+
+
+def needs_collection_attention(invoice: Invoice) -> bool:
+    if invoice.status in ["draft", "paid", "cancelled"] or invoice.balance_due <= 0:
+        return False
+    today = date.today()
+    due_soon_date = today + timedelta(days=3)
+    if invoice.due_date < today:
+        return True
+    return invoice.due_date <= due_soon_date and invoice.due_soon_reminder_sent_at is None
 
 
 @router.get("", response_model=list[InvoiceList])
@@ -81,6 +106,12 @@ async def list_invoices(
             balance_due=inv.balance_due,
             status=inv.status,
             due_date=inv.due_date,
+            due_soon_reminder_sent_at=inv.due_soon_reminder_sent_at,
+            overdue_reminder_sent_at=inv.overdue_reminder_sent_at,
+            final_notice_sent_at=inv.final_notice_sent_at,
+            last_collection_email_sent_at=inv.last_collection_email_sent_at,
+            collection_stage=get_collection_stage(inv),
+            needs_collection_attention=needs_collection_attention(inv),
             created_at=inv.created_at,
         )
         for inv in invoices
@@ -334,12 +365,10 @@ async def send_invoice(
 
     # Send email if requested
     if data.send_email and invoice.contact:
-        # TODO: Get actual base_url from config
-        base_url = "http://localhost:3001"
         await email_service.send_invoice(
             invoice,
             invoice.contact,
-            base_url,
+            settings.frontend_url,
             data.email_message,
         )
 
@@ -347,6 +376,76 @@ async def send_invoice(
     invoice.status = "sent"
     invoice.sent_at = datetime.now()
 
+    await db.commit()
+    await db.refresh(invoice)
+
+    return InvoiceRead.model_validate(invoice)
+
+
+@router.post("/{invoice_id}/send-reminder", response_model=InvoiceRead)
+async def send_invoice_reminder(
+    invoice_id: str,
+    data: InvoiceReminderSend,
+    db: AsyncSession = Depends(get_db),
+) -> InvoiceRead:
+    """Send a manual invoice reminder or collections notice."""
+    result = await db.execute(
+        select(Invoice)
+        .options(selectinload(Invoice.contact))
+        .where(Invoice.id == invoice_id)
+    )
+    invoice = result.scalar_one_or_none()
+
+    if not invoice:
+        raise HTTPException(status_code=404, detail="Invoice not found")
+
+    if invoice.status in ["draft", "cancelled", "paid"]:
+        raise HTTPException(
+            status_code=400,
+            detail=f"Cannot send collections email for {invoice.status} invoice",
+        )
+
+    if invoice.balance_due <= 0:
+        raise HTTPException(status_code=400, detail="Invoice has no outstanding balance")
+
+    if not invoice.contact or not invoice.contact.email:
+        raise HTTPException(
+            status_code=400,
+            detail="Invoice contact does not have an email address",
+        )
+
+    today = date.today()
+    now = datetime.now()
+    days_until_due = max((invoice.due_date - today).days, 0)
+    days_overdue = max((today - invoice.due_date).days, 0)
+
+    if invoice.due_date < today and invoice.status in ["sent", "viewed", "partial"]:
+        invoice.status = "overdue"
+
+    if data.kind == "due_soon":
+        await email_service.send_reminder_due_soon(
+            invoice=invoice,
+            contact=invoice.contact,
+            base_url=settings.frontend_url,
+            days_until_due=days_until_due,
+            custom_message=data.email_message,
+        )
+        invoice.due_soon_reminder_sent_at = now
+    else:
+        await email_service.send_reminder_overdue(
+            invoice=invoice,
+            contact=invoice.contact,
+            base_url=settings.frontend_url,
+            days_overdue=max(days_overdue, 1),
+            stage=data.kind,
+            custom_message=data.email_message,
+        )
+        if data.kind == "final_notice":
+            invoice.final_notice_sent_at = now
+        else:
+            invoice.overdue_reminder_sent_at = now
+
+    invoice.last_collection_email_sent_at = now
     await db.commit()
     await db.refresh(invoice)
 

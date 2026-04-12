@@ -197,7 +197,7 @@ class TestInvoiceEmails:
 
             assert result is True
 
-    @pytest.mark.asyncio
+    @pytest.mark.anyio
     async def test_send_reminder_due_soon(self, test_contact: Contact, test_invoice: Invoice):
         """Test sending due soon reminder."""
         with patch("app.services.email_service.get_settings") as mock_settings:
@@ -214,7 +214,7 @@ class TestInvoiceEmails:
 
             assert result is True
 
-    @pytest.mark.asyncio
+    @pytest.mark.anyio
     async def test_send_reminder_overdue(self, test_contact: Contact, test_invoice: Invoice):
         """Test sending overdue reminder."""
         with patch("app.services.email_service.get_settings") as mock_settings:
@@ -292,7 +292,7 @@ class TestContractEmails:
 class TestBookingEmails:
     """Tests for booking-related emails."""
 
-    @pytest.mark.asyncio
+    @pytest.mark.anyio
     async def test_send_booking_confirmation(self):
         """Test sending booking confirmation."""
         with patch("app.services.email_service.get_settings") as mock_settings:
@@ -307,11 +307,13 @@ class TestBookingEmails:
                 booking_date=datetime.now() + timedelta(days=3),
                 booking_duration=30,
                 meeting_link="https://zoom.us/j/123456",
+                manage_booking_url="https://app.example.com/book/manage/token123",
+                instructions="Please complete the prep form before we meet.",
             )
 
             assert result is True
 
-    @pytest.mark.asyncio
+    @pytest.mark.anyio
     async def test_send_booking_reminder(self):
         """Test sending booking reminder."""
         with patch("app.services.email_service.get_settings") as mock_settings:
@@ -326,6 +328,7 @@ class TestBookingEmails:
                 booking_date=datetime.now() + timedelta(hours=24),
                 meeting_link="https://zoom.us/j/123456",
                 hours_until=24,
+                manage_booking_url="https://app.example.com/book/manage/token123",
             )
 
             assert result is True

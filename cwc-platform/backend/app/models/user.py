@@ -9,6 +9,7 @@ from app.database import Base
 
 if TYPE_CHECKING:
     from app.models.availability import Availability, AvailabilityOverride
+    from app.models.calendar_connection import CalendarConnection
 
 
 class User(Base):
@@ -22,6 +23,11 @@ class User(Base):
     password_hash: Mapped[str | None] = mapped_column(String(255), nullable=True)
     google_id: Mapped[str | None] = mapped_column(String(255), unique=True)
     avatar_url: Mapped[str | None] = mapped_column(String(500))
+    booking_page_title: Mapped[str | None] = mapped_column(String(255), nullable=True)
+    booking_page_description: Mapped[str | None] = mapped_column(String(1000), nullable=True)
+    booking_page_brand_color: Mapped[str] = mapped_column(String(7), nullable=False, default="#2A7B8C")
+    booking_page_logo_url: Mapped[str | None] = mapped_column(String(500), nullable=True)
+    booking_page_banner_url: Mapped[str | None] = mapped_column(String(500), nullable=True)
     role: Mapped[str] = mapped_column(String(20), default="user")  # admin, user
     is_active: Mapped[bool] = mapped_column(default=True)
     password_reset_token: Mapped[str | None] = mapped_column(String(255), nullable=True)
@@ -44,4 +50,7 @@ class User(Base):
     )
     availability_overrides: Mapped[list["AvailabilityOverride"]] = relationship(
         "AvailabilityOverride", back_populates="user", cascade="all, delete-orphan"
+    )
+    calendar_connections: Mapped[list["CalendarConnection"]] = relationship(
+        "CalendarConnection", back_populates="user", cascade="all, delete-orphan"
     )

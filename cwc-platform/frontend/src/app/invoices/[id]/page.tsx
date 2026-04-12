@@ -20,6 +20,7 @@ import {
 } from "lucide-react";
 import Link from "next/link";
 import { Skeleton } from "@/components/ui/skeleton";
+import { Textarea } from "@/components/ui/textarea";
 
 interface LineItem {
   description: string;
@@ -58,6 +59,10 @@ interface Invoice {
   sent_at: string | null;
   viewed_at: string | null;
   paid_at: string | null;
+  due_soon_reminder_sent_at: string | null;
+  overdue_reminder_sent_at: string | null;
+  final_notice_sent_at: string | null;
+  last_collection_email_sent_at: string | null;
   is_payment_plan: boolean;
   view_token: string;
   notes: string | null;
@@ -106,6 +111,8 @@ export default function InvoiceDetailPage() {
   const [payments, setPayments] = useState<Payment[]>([]);
   const [loading, setLoading] = useState(true);
   const [showPaymentModal, setShowPaymentModal] = useState(false);
+  const [sendingReminder, setSendingReminder] = useState(false);
+  const [reminderMessage, setReminderMessage] = useState("");
 
   // Payment form state
   const [paymentAmount, setPaymentAmount] = useState<string>("");
@@ -166,6 +173,58 @@ export default function InvoiceDetailPage() {
       router.push(`/invoices/${newInvoice.id}`);
     } catch (err: any) {
       toast.error(err.message || "Failed to duplicate invoice");
+    }
+  };
+
+  const getReminderKind = (currentInvoice: Invoice): "due_soon" | "overdue" | "final_notice" => {
+    const dueDate = new Date(currentInvoice.due_date);
+    const now = new Date();
+    const daysUntilDue = Math.ceil((dueDate.getTime() - now.getTime()) / (1000 * 60 * 60 * 24));
+    if (daysUntilDue < -14) {
+      return "final_notice";
+    }
+    if (daysUntilDue < 0) {
+      return "overdue";
+    }
+    return "due_soon";
+  };
+
+  const getReminderLabel = (currentInvoice: Invoice) => {
+    const kind = getReminderKind(currentInvoice);
+    if (kind === "final_notice") return "Send Final Notice";
+    if (kind === "overdue") return "Send Overdue Reminder";
+    return "Send Reminder";
+  };
+
+  const getReminderMessagePlaceholder = (currentInvoice: Invoice) => {
+    const kind = getReminderKind(currentInvoice);
+    if (kind === "final_notice") {
+      return "Add any final payment instructions, escalation language, or next steps for this client.";
+    }
+    if (kind === "overdue") {
+      return "Add a short overdue note, payment-plan option, or context for this client.";
+    }
+    return "Add an optional friendly note to include in the reminder email.";
+  };
+
+  const handleSendReminder = async () => {
+    if (!invoice) return;
+
+    try {
+      setSendingReminder(true);
+      const token = localStorage.getItem("token");
+      if (!token) return;
+      await invoicesApi.sendReminder(token, invoice.id, {
+        kind: getReminderKind(invoice),
+        email_message: reminderMessage.trim() || undefined,
+      });
+      toast.success("Collections email sent");
+      setReminderMessage("");
+      await loadInvoice(invoice.id);
+    } catch (err: any) {
+      toast.error(err.message || "Failed to send reminder");
+    } finally {
+      setSendingReminder(false);
     }
   };
 
@@ -341,6 +400,10 @@ export default function InvoiceDetailPage() {
                 }}>
                   <DollarSign className="h-4 w-4 mr-2" />
                   Record Payment
+                </Button>
+                <Button variant="outline" onClick={handleSendReminder} disabled={sendingReminder}>
+                  <Send className="h-4 w-4 mr-2" />
+                  {sendingReminder ? "Sending..." : getReminderLabel(invoice)}
                 </Button>
                 <Button variant="outline" onClick={handleCancel}>
                   <X className="h-4 w-4 mr-2" />
@@ -577,6 +640,58 @@ export default function InvoiceDetailPage() {
                   <span className="font-medium">Balance Due</span>
                   <span className="font-bold text-lg">{formatCurrency(invoice.balance_due)}</span>
                 </div>
+              </CardContent>
+            </Card>
+
+            <Card>
+              <CardHeader>
+                <CardTitle>Collections</CardTitle>
+              </CardHeader>
+              <CardContent className="space-y-4">
+                <div className="flex justify-between">
+                  <span className="text-muted-foreground">Last email</span>
+                  <span className="font-medium">
+                    {invoice.last_collection_email_sent_at ? formatDate(invoice.last_collection_email_sent_at) : "Not sent"}
+                  </span>
+                </div>
+                <div className="flex justify-between">
+                  <span className="text-muted-foreground">Due soon reminder</span>
+                  <span className="font-medium">
+                    {invoice.due_soon_reminder_sent_at ? formatDate(invoice.due_soon_reminder_sent_at) : "Not sent"}
+                  </span>
+                </div>
+                <div className="flex justify-between">
+                  <span className="text-muted-foreground">Overdue reminder</span>
+                  <span className="font-medium">
+                    {invoice.overdue_reminder_sent_at ? formatDate(invoice.overdue_reminder_sent_at) : "Not sent"}
+                  </span>
+                </div>
+                <div className="flex justify-between">
+                  <span className="text-muted-foreground">Final notice</span>
+                  <span className="font-medium">
+                    {invoice.final_notice_sent_at ? formatDate(invoice.final_notice_sent_at) : "Not sent"}
+                  </span>
+                </div>
+                {invoice.balance_due > 0 && !["draft", "paid", "cancelled"].includes(invoice.status) && (
+                  <div className="space-y-3 border-t pt-4">
+                    <div>
+                      <p className="text-sm font-medium text-foreground">Custom message</p>
+                      <p className="text-xs text-muted-foreground">
+                        This note will be appended to the next collections email for this invoice.
+                      </p>
+                    </div>
+                    <Textarea
+                      value={reminderMessage}
+                      onChange={(event) => setReminderMessage(event.target.value)}
+                      placeholder={getReminderMessagePlaceholder(invoice)}
+                      className="min-h-[110px]"
+                    />
+                    <Button variant="outline" onClick={handleSendReminder} disabled={sendingReminder}>
+                      <Send className="h-4 w-4 mr-2" />
+                      {sendingReminder ? "Sending..." : getReminderLabel(invoice)}
+                    </Button>
+                  </div>
+                )}
               </CardContent>
             </Card>
           </div>
