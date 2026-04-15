@@ -32,7 +32,7 @@
                 padding: 40px 60px;
             }
             .slide::before { display: none; }
-            .nav-arrow, .slide-counter, .keyboard-hint, .progress-bar { display: none; }
+            .nav-controls, .keyboard-hint, .progress-bar { display: none; }
             .slide-title, .slide-dark { background: var(--primary) !important; -webkit-print-color-adjust: exact; print-color-adjust: exact; }
         }
 
@@ -464,49 +464,24 @@
             opacity: 0.3;
         }
 
-        /* Navigation - Gallery Style (M3 pattern) */
-        .nav-arrow {
-            position: fixed;
-            top: 50%;
-            transform: translateY(-50%);
-            width: 48px;
-            height: 48px;
-            border-radius: 50%;
-            border: 1px solid var(--border);
-            background: rgba(255,255,255,0.9);
-            color: var(--text);
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            cursor: pointer;
-            z-index: 100;
-            transition: all 0.2s ease;
-            backdrop-filter: blur(8px);
-        }
-        .nav-arrow:hover { background: white; border-color: var(--accent); color: var(--accent); }
-        .nav-arrow:disabled { opacity: 0.3; cursor: default; }
-        .nav-arrow:disabled:hover { background: rgba(255,255,255,0.9); border-color: var(--border); color: var(--text); }
-        .nav-arrow svg { width: 20px; height: 20px; }
-        .nav-arrow.prev { left: 24px; }
-        .nav-arrow.next { right: 24px; }
-
-        .nav-arrow.on-dark { border-color: rgba(255,255,255,0.2); background: rgba(255,255,255,0.1); color: white; }
-        .nav-arrow.on-dark:hover { background: rgba(255,255,255,0.2); border-color: rgba(255,255,255,0.4); }
-        .nav-arrow.on-dark:disabled { opacity: 0.2; }
-        .nav-arrow.on-dark:disabled:hover { background: rgba(255,255,255,0.1); border-color: rgba(255,255,255,0.2); color: white; }
-
-        .slide-counter {
-            position: fixed;
-            bottom: 32px;
-            left: 50%;
+        /* Navigation - Centered Controls (M5 pattern) */
+        .nav-controls {
+            position: fixed; bottom: 48px; left: 50%;
             transform: translateX(-50%);
-            font-size: 13px;
-            font-weight: 500;
-            color: var(--text-muted);
-            letter-spacing: 0.5px;
-            z-index: 1000;
+            display: flex; align-items: center; gap: 24px; z-index: 1000;
         }
-        .slide-counter.on-dark { color: rgba(255,255,255,0.4); }
+        .nav-btn {
+            width: 48px; height: 48px; border-radius: 50%;
+            border: 2px solid var(--primary); background: transparent;
+            color: var(--primary); cursor: pointer;
+            display: flex; align-items: center; justify-content: center;
+            transition: all 0.2s ease;
+        }
+        .nav-btn:hover { background: var(--primary); color: var(--bg); }
+        .nav-btn:disabled { border-color: var(--border); color: var(--text-muted); cursor: not-allowed; }
+        .nav-btn:disabled:hover { background: transparent; color: var(--text-muted); }
+        .nav-btn svg { width: 20px; height: 20px; }
+        .slide-counter { font-size: 13px; font-weight: 500; color: var(--text-muted); letter-spacing: 0.5px; }
 
 
         /* ========================================
@@ -552,11 +527,7 @@
             .simple-table { font-size: 14px; }
             .simple-table th, .simple-table td { padding: 12px 8px; }
             .formula-box { padding: 24px; }
-            .nav-arrow { width: 40px; height: 40px; }
-            .nav-arrow.prev { left: 16px; }
-            .nav-arrow.next { right: 16px; }
-            .nav-arrow svg { width: 18px; height: 18px; }
-            .slide-counter { bottom: 24px; font-size: 11px; }
+            .nav-controls { bottom: 24px; }
             .keyboard-hint { display: none; }
         }
 
@@ -604,11 +575,10 @@
             .activity-meta { padding: 8px 16px; font-size: 11px; margin-top: 24px; }
             .title-meta { margin-top: 32px; padding-top: 20px; gap: 24px; flex-wrap: wrap; justify-content: center; }
             .meta-item { font-size: 11px; }
-            .nav-arrow { width: 36px; height: 36px; }
-            .nav-arrow.prev { left: 10px; }
-            .nav-arrow.next { right: 10px; }
-            .nav-arrow svg { width: 16px; height: 16px; }
-            .slide-counter { bottom: 18px; font-size: 11px; }
+            .nav-controls { bottom: 10px; gap: 16px; }
+            .nav-btn { width: 36px; height: 36px; }
+            .nav-btn svg { width: 16px; height: 16px; }
+            .slide-counter { font-size: 11px; }
             .ell-mark { font-size: 11px; bottom: 24px; right: 12px; }
         }
     </style>
@@ -710,7 +680,7 @@
                 <h2>Emotional Intelligence:<br>Your Leadership Foundation</h2>
                 <p>EI explains roughly 67% of a leader&rsquo;s effectiveness. It&rsquo;s not a personality trait&mdash;it&rsquo;s a skill set you can build.</p>
                 <div class="two-column">
-                    <div class="column"><h4>Signs You Need This</h4><ul><li>You react before you can think&mdash;then regret it</li><li>You shut down completely when triggered</li><li>You absorb other people&rsquo;s emotions and carry them home</li><li>You avoid conflict even when it costs you</li></ul></div>
+                    <div class="column"><h4>Signs You Need to Build Your EI</h4><ul><li>You react before you can think&mdash;then regret it</li><li>You shut down completely when triggered</li><li>You absorb other people&rsquo;s emotions and carry them home</li><li>You avoid conflict even when it costs you</li></ul></div>
                     <div class="column"><h4>The Breakthrough</h4><ul><li>Name what you&rsquo;re feeling in real-time (emotional literacy)</li><li>Create space between stimulus and response</li><li>Read the room without losing yourself in it</li><li>Choose your response based on strategy, not survival</li></ul></div>
                 </div>
                 <p style="font-size: 11px; color: var(--text-muted); margin-top: 24px;">Source: Frontiers in Psychology, &ldquo;The Emotional Recession&rdquo; (2025) &middot; Six Seconds, State of the Heart (2024)</p>
@@ -747,15 +717,34 @@
         </div>
 
         <!-- Slide 9: Quote -->
-        <div class="slide slide-quote" data-slide="9" style="background: linear-gradient(rgba(245,242,237,0.92), rgba(245,242,237,0.92)), url('https://images.unsplash.com/photo-1506126613408-eca07ce68773?w=1200&q=80') center/cover no-repeat;">
+        <!-- Slide 9: Reference - Microaggression Types -->
+        <div class="slide" data-slide="9">
+            <div class="slide-header"><img src="https://coachingwomenofcolor.com/logo.webp" alt="CWC" class="logo"><span class="module-label">Module 4</span></div>
+            <div class="slide-content">
+                <span class="section-label">Reference</span>
+                <h2>Microaggression Types:<br>Know What You're Facing</h2>
+                <table class="simple-table" style="margin-top: 24px;">
+                    <tr><th>Type</th><th>Common Examples</th><th>Why It Triggers</th></tr>
+                    <tr><td><strong>Assumption of Incompetence</strong></td><td>"You're so articulate." "Are you a summer intern?" "Let me help you with that."</td><td>Assumes lower competence based on identity. Denies your expertise.</td></tr>
+                    <tr><td><strong>Belonging Denial</strong></td><td>"Where are you really from?" "You don't look like an engineer." "Who are you here with?"</td><td>Suggests you don't belong in the space, organization, or profession.</td></tr>
+                    <tr><td><strong>Emotion Policing</strong></td><td>"You're so angry." "You seem upset." "Smile more."</td><td>Your emotional response is judged differently. Your authority is questioned.</td></tr>
+                    <tr><td><strong>Tokenization</strong></td><td>"We want the Black woman perspective." Placed on diversity task forces. Solo representation.</td><td>You are present for your identity, not your expertise.</td></tr>
+                    <tr><td><strong>Stereotype Confirmation</strong></td><td>"You're one of the good ones." "I don't see color." Achievements attributed to "diverse hiring."</td><td>Your accomplishments are questioned. Your success is undermined by group stereotypes.</td></tr>
+                </table>
+                <p style="font-size: 11px; color: var(--text-muted); margin-top: 16px;">Source: Derald Wing Sue, Columbia University (2010)</p>
+            </div>
+        </div>
+
+        <!-- Slide 10: Quote -->
+        <div class="slide slide-quote" data-slide="10" style="background: linear-gradient(rgba(245,242,237,0.92), rgba(245,242,237,0.92)), url('https://images.unsplash.com/photo-1506126613408-eca07ce68773?w=1200&q=80') center/cover no-repeat;">
             <div class="slide-header"><img src="https://coachingwomenofcolor.com/logo.webp" alt="CWC" class="logo"><span class="module-label">Reflection</span></div>
             <div class="slide-content">
                 <p class="quote-text">Composure is not silence. It is choosing when and how to use your voice for maximum impact.</p>
             </div>
         </div>
 
-        <!-- Slide 10: Root Causes -->
-        <div class="slide" data-slide="10">
+        <!-- Slide 11: Root Causes -->
+        <div class="slide" data-slide="11">
             <div class="slide-header"><img src="https://coachingwomenofcolor.com/logo.webp" alt="CWC" class="logo"><span class="module-label">Module 4</span></div>
             <div class="slide-content">
                 <span class="section-label">Root Causes</span>
@@ -763,17 +752,17 @@
                 <div class="cards-grid two-col" style="margin-top: 40px;">
                     <div class="card"><h4>Stereotype Threat</h4><p>The awareness that your reaction will be filtered through racial stereotypes adds a layer of cognitive load that others don&rsquo;t carry</p></div>
                     <div class="card"><h4>Hypervisibility</h4><p>Being &ldquo;the only&rdquo; means every reaction is noticed, remembered, and generalized to your entire group</p></div>
-                    <div class="card"><h4>The Emotional Tax</h4><p>58% of Black women report feeling perpetually &ldquo;on guard&rdquo; at work&mdash;a constant state of heightened alertness</p></div>
-                    <div class="card"><h4>Code-Switching Fatigue</h4><p>Black women are 3x more likely to code-switch at work, spending energy on performance that could go toward actual performance</p></div>
-                    <div class="card"><h4>Racial Trauma Load</h4><p>Over 60% of Black women have been personally affected by racial trauma in the past year&mdash;and they carry that into the office</p></div>
+                    <div class="card"><h4>The Emotional Tax</h4><p>58% of Black women report feeling perpetually &ldquo;on guard&rdquo; at work&mdash;a constant state of heightened alertness <em>(Catalyst, 2018)</em></p></div>
+                    <div class="card"><h4>Code-Switching Fatigue</h4><p>64% of Latinas say they feel pressure to adjust their communication style or personality at work to avoid being stereotyped <em>(McKinsey &amp; LeanIn.Org, 2023)</em></p></div>
+                    <div class="card"><h4>Racial Trauma Load</h4><p>57% of Latina adults report experiencing discrimination based on their ethnicity&mdash;a burden of chronic stress carried into every professional setting <em>(Harvard School of Public Health / NPR / RWJF, 2017)</em></p></div>
                     <div class="card"><h4>Isolation</h4><p>Without peers who share your experience, there&rsquo;s no safe space to process what just happened before moving to the next meeting</p></div>
                 </div>
-                <p style="font-size: 11px; color: var(--text-muted); margin-top: 24px;">Sources: Catalyst, &ldquo;Emotional Tax&rdquo; (2018) &middot; LeanIn.Org, State of Black Women (2024)</p>
+                <p style="font-size: 11px; color: var(--text-muted); margin-top: 24px;">Sources: Catalyst, &ldquo;Emotional Tax&rdquo; (2018) &middot; LeanIn.Org, State of Black Women (2024) &middot; McKinsey &amp; LeanIn.Org, Women in the Workplace (2023) &middot; Harvard School of Public Health / NPR / Robert Wood Johnson Foundation, &ldquo;Discrimination in America&rdquo; (2017)</p>
             </div>
         </div>
 
-        <!-- Slide 11: Activity - EI Self-Assessment -->
-        <div class="slide" data-slide="11">
+        <!-- Slide 12: Activity - EI Self-Assessment -->
+        <div class="slide" data-slide="12">
             <div class="slide-header"><img src="https://coachingwomenofcolor.com/logo.webp" alt="CWC" class="logo"><span class="module-label">Activity</span></div>
             <div class="slide-content">
                 <span class="section-label">Self-Assessment</span>
@@ -789,8 +778,8 @@
             </div>
         </div>
 
-        <!-- Slide 12: Framework - The Trigger Map -->
-        <div class="slide" data-slide="12">
+        <!-- Slide 13: Framework - The Trigger Map -->
+        <div class="slide" data-slide="13">
             <div class="slide-header"><img src="https://coachingwomenofcolor.com/logo.webp" alt="CWC" class="logo"><span class="module-label">Module 4</span></div>
             <div class="slide-content">
                 <span class="section-label">Framework</span>
@@ -807,8 +796,8 @@
             </div>
         </div>
 
-        <!-- Slide 13: Activity - Map Your Triggers -->
-        <div class="slide" data-slide="13">
+        <!-- Slide 14: Activity - Map Your Triggers -->
+        <div class="slide" data-slide="14">
             <div class="slide-header"><img src="https://coachingwomenofcolor.com/logo.webp" alt="CWC" class="logo"><span class="module-label">Activity</span></div>
             <div class="slide-content">
                 <span class="section-label">Deep Work</span>
@@ -824,8 +813,8 @@
             </div>
         </div>
 
-        <!-- Slide 14: Tool - The Response Continuum -->
-        <div class="slide" data-slide="14">
+        <!-- Slide 15: Tool - The Response Continuum -->
+        <div class="slide" data-slide="15">
             <div class="slide-header"><img src="https://coachingwomenofcolor.com/logo.webp" alt="CWC" class="logo"><span class="module-label">Module 4</span></div>
             <div class="slide-content">
                 <span class="section-label">Tool</span>
@@ -836,11 +825,12 @@
                     <div class="card"><h4>Address Later</h4><p><strong>When:</strong> The audience is wrong, emotions are too hot, or you need time to choose your words.<br><br><strong>How:</strong> Follow up 1-on-1 within 48 hours. &ldquo;I wanted to circle back on something from yesterday&rsquo;s meeting.&rdquo;</p></div>
                     <div class="card"><h4>Document &amp; Release</h4><p><strong>When:</strong> The cost of addressing outweighs the benefit, but you need a record for patterns.<br><br><strong>How:</strong> Log it in your Incident Documentation. Release the emotional charge through your Composure Toolkit.</p></div>
                 </div>
+                <div class="activity-meta" style="margin-top: 28px;">📋 <strong>Post-Session:</strong> Complete the <strong>Response Continuum Tool</strong> in your module materials &mdash; apply these three options to a real situation from your own professional life.</div>
             </div>
         </div>
 
-        <!-- Slide 15: Tool - Microaggression Response Scripts -->
-        <div class="slide" data-slide="15">
+        <!-- Slide 16: Tool - Microaggression Response Scripts -->
+        <div class="slide" data-slide="16">
             <div class="slide-header"><img src="https://coachingwomenofcolor.com/logo.webp" alt="CWC" class="logo"><span class="module-label">Module 4</span></div>
             <div class="slide-content">
                 <span class="section-label">Tool</span>
@@ -855,8 +845,8 @@
             </div>
         </div>
 
-        <!-- Slide 16: Practice - Microaggression Scenarios -->
-        <div class="slide" data-slide="16" style="padding-top: 60px; padding-bottom: 80px;">
+        <!-- Slide 17: Practice - Microaggression Scenarios -->
+        <div class="slide" data-slide="17" style="padding-top: 60px; padding-bottom: 80px;">
             <div class="slide-header"><img src="https://coachingwomenofcolor.com/logo.webp" alt="CWC" class="logo"><span class="module-label">Activity</span></div>
             <div class="slide-content">
                 <span class="section-label">Practice</span>
@@ -864,7 +854,7 @@
                 <p style="font-size: 16px;">Rehearsal builds muscle memory. Practice these scenarios so your response is ready when the moment arrives.</p>
                 <div class="cards-grid two-col" style="margin-top: 28px; gap: 20px;">
                     <div class="card" style="padding: 24px;"><h4>Scenario 1: The Credit Thief</h4><p>In a meeting, a colleague restates your idea and receives praise for it. Your manager nods along without acknowledging you.<br><strong>Your move:</strong> Use Ask or Redirect to reclaim your contribution without escalating.</p></div>
-                    <div class="card" style="padding: 24px;"><h4>Scenario 2: The Tone Police</h4><p>&ldquo;You seem really passionate about this. Maybe take a breath?&rdquo; &mdash;said to you, not to your white male colleague who made the same argument.<br><strong>Your move:</strong> Use Name to call out the double standard calmly.</p></div>
+                    <div class="card" style="padding: 24px;"><h4>Scenario 2: The Tone Police</h4><p>&ldquo;I&rsquo;ve gotten some feedback that your communication style can be a lot. You might want to think about your delivery.&rdquo; &mdash;No specific incident. No examples. Just coded language.<br><strong>Your move:</strong> Use Ask to make the vagueness visible: &ldquo;Can you be specific? What behavior are you referring to?&rdquo;</p></div>
                     <div class="card" style="padding: 24px;"><h4>Scenario 3: The Surprise Compliment</h4><p>&ldquo;Wow, you&rsquo;re so articulate! Where did you go to school?&rdquo;<br><strong>Your move:</strong> Use Ask to surface the assumption. Or Redirect to move past it with your dignity intact.</p></div>
                     <div class="card" style="padding: 24px;"><h4>Scenario 4: The Exclusion</h4><p>You discover a decision about your project was made in a meeting you weren&rsquo;t invited to. Again.<br><strong>Your move:</strong> Use Boundary with your manager. Document the pattern. Escalate if it continues.</p></div>
                 </div>
@@ -872,8 +862,8 @@
             </div>
         </div>
 
-        <!-- Slide 17: Tool - The Composure Toolkit -->
-        <div class="slide" data-slide="17">
+        <!-- Slide 18: Tool - The Composure Toolkit -->
+        <div class="slide" data-slide="18">
             <div class="slide-header"><img src="https://coachingwomenofcolor.com/logo.webp" alt="CWC" class="logo"><span class="module-label">Module 4</span></div>
             <div class="slide-content">
                 <span class="section-label">Tool</span>
@@ -888,8 +878,8 @@
             </div>
         </div>
 
-        <!-- Slide 18: Tool - Incident Documentation -->
-        <div class="slide" data-slide="18">
+        <!-- Slide 19: Tool - Incident Documentation -->
+        <div class="slide" data-slide="19">
             <div class="slide-header"><img src="https://coachingwomenofcolor.com/logo.webp" alt="CWC" class="logo"><span class="module-label">Module 4</span></div>
             <div class="slide-content">
                 <span class="section-label">Tool</span>
@@ -909,8 +899,8 @@
             </div>
         </div>
 
-        <!-- Slide 19: Momentum -->
-        <div class="slide" data-slide="19">
+        <!-- Slide 20: Momentum -->
+        <div class="slide" data-slide="20">
             <div class="slide-header"><img src="https://coachingwomenofcolor.com/logo.webp" alt="CWC" class="logo"><span class="module-label">Module 4</span></div>
             <div class="slide-content">
                 <span class="section-label">Action Plan</span>
@@ -924,16 +914,16 @@
             </div>
         </div>
 
-        <!-- Slide 20: Quote -->
-        <div class="slide slide-quote" data-slide="20" style="background: linear-gradient(rgba(245,242,237,0.92), rgba(245,242,237,0.92)), url('https://images.unsplash.com/photo-1499750310107-5fef28a66643?w=1200&q=80') center/cover no-repeat;">
+        <!-- Slide 21: Quote -->
+        <div class="slide slide-quote" data-slide="21" style="background: linear-gradient(rgba(245,242,237,0.92), rgba(245,242,237,0.92)), url('https://images.unsplash.com/photo-1499750310107-5fef28a66643?w=1200&q=80') center/cover no-repeat;">
             <div class="slide-header"><img src="https://coachingwomenofcolor.com/logo.webp" alt="CWC" class="logo"><span class="module-label">Reflection</span></div>
             <div class="slide-content">
                 <p class="quote-text">You don&rsquo;t owe anyone your composure. But you owe yourself strategic choices.</p>
             </div>
         </div>
 
-        <!-- Slide 21: Summary -->
-        <div class="slide" data-slide="21">
+        <!-- Slide 22: Summary -->
+        <div class="slide" data-slide="22">
             <div class="slide-header"><img src="https://coachingwomenofcolor.com/logo.webp" alt="CWC" class="logo"><span class="module-label">Module 4</span></div>
             <div class="slide-content">
                 <span class="section-label">Summary</span>
@@ -948,8 +938,8 @@
             </div>
         </div>
 
-        <!-- Slide 22: Homework -->
-        <div class="slide" data-slide="22">
+        <!-- Slide 23: Homework -->
+        <div class="slide" data-slide="23">
             <div class="slide-header"><img src="https://coachingwomenofcolor.com/logo.webp" alt="CWC" class="logo"><span class="module-label">Module 4</span></div>
             <div class="slide-content">
                 <span class="section-label">Before Next Module</span>
@@ -959,13 +949,14 @@
                     <div class="feature-item"><div class="feature-number">2</div><div class="feature-text"><h4>Build Your Full Trigger Map</h4><p>Map 3&ndash;5 triggers with body signals, automatic thoughts, and chosen responses. Script them out.</p></div></div>
                     <div class="feature-item"><div class="feature-number">3</div><div class="feature-text"><h4>Practice 3 Microaggression Responses</h4><p>Use the Response Cards with a partner, the Skool community, or a mirror. Record yourself if possible.</p></div></div>
                     <div class="feature-item"><div class="feature-number">4</div><div class="feature-text"><h4>Build Your Personal Composure Toolkit</h4><p>Choose 2 grounding practices and commit to using them daily for 14 days.</p></div></div>
-                    <div class="feature-item"><div class="feature-number">5</div><div class="feature-text"><h4>Share One Insight in the Skool Community</h4><p>A trigger you mapped, a response you practiced, or a moment where composure made a difference&mdash;sharing creates accountability.</p></div></div>
+                    <div class="feature-item"><div class="feature-number">5</div><div class="feature-text"><h4>Complete the Response Continuum Tool</h4><p>Choose a real situation from the last 30 days. Map it across all four response options and identify what you would choose differently now.</p></div></div>
+                    <div class="feature-item"><div class="feature-number">6</div><div class="feature-text"><h4>Share One Insight in the Skool Community</h4><p>A trigger you mapped, a response you practiced, or a moment where composure made a difference&mdash;sharing creates accountability.</p></div></div>
                 </div>
             </div>
         </div>
 
-        <!-- Slide 23: Close -->
-        <div class="slide slide-dark" data-slide="23" style="background: linear-gradient(rgba(26,26,26,0.85), rgba(26,26,26,0.85)), url('images/0B1A7947.jpg') center/cover no-repeat;">
+        <!-- Slide 24: Close -->
+        <div class="slide slide-dark" data-slide="24" style="background: linear-gradient(rgba(26,26,26,0.85), rgba(26,26,26,0.85)), url('images/0B1A7947.jpg') center/cover no-repeat;">
             <div class="slide-header"><img src="https://coachingwomenofcolor.com/logo.webp" alt="CWC" class="logo" style="filter: brightness(0) invert(1);"><span class="module-label" style="color: rgba(255,255,255,0.5);">Module 4 Complete</span></div>
             <div class="slide-content">
                 <span class="section-label">Executive Leadership Lab</span>
@@ -980,48 +971,44 @@
         </div>
     </div>
 
-    <button class="nav-arrow prev" id="prevBtn" disabled><svg viewBox="0 0 24 24" fill="currentColor"><path d="M15.41 7.41L14 6l-6 6 6 6 1.41-1.41L10.83 12z"/></svg></button>
-    <button class="nav-arrow next" id="nextBtn"><svg viewBox="0 0 24 24" fill="currentColor"><path d="M10 6L8.59 7.41 13.17 12l-4.58 4.59L10 18l6-6z"/></svg></button>
-    <span class="slide-counter"><span id="currentSlide">1</span> / <span id="totalSlides">23</span></span>
+    <!-- Navigation -->
+    <div class="nav-controls">
+        <button class="nav-btn" id="prev" onclick="navigate(-1)" disabled>
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="15 18 9 12 15 6"/></svg>
+        </button>
+        <span class="slide-counter" id="counter">1 / 23</span>
+        <button class="nav-btn" id="next" onclick="navigate(1)">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="9 18 15 12 9 6"/></svg>
+        </button>
+    </div>
 
     <script>
         const slides = document.querySelectorAll('.slide');
-        const totalSlides = slides.length;
-        let currentSlide = 1;
-        const prevBtn = document.getElementById('prevBtn');
-        const nextBtn = document.getElementById('nextBtn');
-        const currentSlideEl = document.getElementById('currentSlide');
-        const progressBar = document.getElementById('progress');
-        document.getElementById('totalSlides').textContent = totalSlides;
+        const total = slides.length;
+        let current = 0;
 
-        function updateProgress() { progressBar.style.width = (currentSlide / totalSlides) * 100 + '%'; }
-        function goToSlide(n) {
-            if (n < 1 || n > totalSlides) return;
-            slides[currentSlide - 1].classList.remove('active');
-            currentSlide = n;
-            slides[currentSlide - 1].classList.add('active');
-            currentSlideEl.textContent = currentSlide;
-            prevBtn.disabled = currentSlide === 1;
-            nextBtn.disabled = currentSlide === totalSlides;
-            updateProgress();
-            // Adapt arrow/counter colors for dark slides
-            const active = slides[currentSlide - 1];
-            const isDark = active.classList.contains('slide-title') || active.classList.contains('slide-dark');
-            document.querySelectorAll('.nav-arrow').forEach(btn => btn.classList.toggle('on-dark', isDark));
-            document.querySelector('.slide-counter').classList.toggle('on-dark', isDark);
+        function navigate(dir) {
+            slides[current].classList.remove('active');
+            current = Math.max(0, Math.min(total - 1, current + dir));
+            slides[current].classList.add('active');
+            document.getElementById('counter').textContent = (current + 1) + ' / ' + total;
+            document.getElementById('prev').disabled = current === 0;
+            document.getElementById('next').disabled = current === total - 1;
+            document.getElementById('progress').style.width = ((current + 1) / total * 100) + '%';
         }
-        function nextSlide() { if (currentSlide < totalSlides) goToSlide(currentSlide + 1); }
-        function prevSlide() { if (currentSlide > 1) goToSlide(currentSlide - 1); }
-        nextBtn.addEventListener('click', nextSlide);
-        prevBtn.addEventListener('click', prevSlide);
-        document.addEventListener('keydown', (e) => {
-            if (e.key === 'ArrowRight' || e.key === ' ') { e.preventDefault(); nextSlide(); }
-            else if (e.key === 'ArrowLeft') { e.preventDefault(); prevSlide(); }
+
+        document.addEventListener('keydown', e => {
+            if (e.key === 'ArrowRight' || e.key === 'ArrowDown') navigate(1);
+            if (e.key === 'ArrowLeft'  || e.key === 'ArrowUp')   navigate(-1);
         });
         let touchStartX = 0;
         document.addEventListener('touchstart', e => { touchStartX = e.changedTouches[0].screenX; });
-        document.addEventListener('touchend', e => { const diff = touchStartX - e.changedTouches[0].screenX; if (Math.abs(diff) > 50) { diff > 0 ? nextSlide() : prevSlide(); } });
-        updateProgress();
+        document.addEventListener('touchend', e => {
+            const diff = touchStartX - e.changedTouches[0].screenX;
+            if (Math.abs(diff) > 50) navigate(diff > 0 ? 1 : -1);
+        });
+
+        document.getElementById('progress').style.width = (1 / total * 100) + '%';
     </script>
 </body>
 </html>

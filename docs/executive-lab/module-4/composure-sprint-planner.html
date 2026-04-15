@@ -1,0 +1,873 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>CWC Module 4 — 14-Day Composure Sprint Planner</title>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Source+Serif+4:wght@400;600&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --primary: #1A1A1A;
+            --accent: #2A7B8C;
+            --accent-warm: #D4A574;
+            --bg: #FAF8F5;
+            --bg-warm: #F5F2ED;
+            --border: #E5E0D8;
+            --success: #4A9B7F;
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Inter', sans-serif;
+            color: var(--primary);
+            background-color: var(--bg);
+            padding: 40px 20px;
+            line-height: 1.6;
+        }
+
+        .container {
+            max-width: 960px;
+            margin: 0 auto;
+            background-color: white;
+            border: 1px solid var(--border);
+            border-radius: 8px;
+            overflow: hidden;
+            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.08);
+        }
+
+        header {
+            background-color: var(--primary);
+            color: white;
+            padding: 40px;
+            text-align: center;
+        }
+
+        header h1 {
+            font-family: 'Source Serif 4', serif;
+            font-size: 32px;
+            font-weight: 600;
+            margin-bottom: 8px;
+        }
+
+        header p {
+            font-size: 16px;
+            font-weight: 400;
+            opacity: 0.9;
+        }
+
+        .instructions-box {
+            background-color: var(--bg-warm);
+            border-left: 4px solid var(--accent);
+            padding: 24px;
+            margin: 32px;
+            border-radius: 4px;
+        }
+
+        .instructions-box h2 {
+            font-family: 'Source Serif 4', serif;
+            font-size: 18px;
+            font-weight: 600;
+            margin-bottom: 12px;
+            color: var(--primary);
+        }
+
+        .instructions-box p {
+            font-size: 14px;
+            line-height: 1.7;
+            color: var(--primary);
+            opacity: 0.85;
+        }
+
+        .content {
+            padding: 32px;
+        }
+
+        .section {
+            margin-bottom: 40px;
+        }
+
+        .section-header {
+            display: flex;
+            align-items: center;
+            margin-bottom: 24px;
+            gap: 16px;
+        }
+
+        .step-number {
+            background-color: var(--accent);
+            color: white;
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: 600;
+            font-size: 18px;
+            flex-shrink: 0;
+        }
+
+        .section-title {
+            font-family: 'Source Serif 4', serif;
+            font-size: 24px;
+            font-weight: 600;
+            color: var(--primary);
+        }
+
+        .week-container {
+            background-color: var(--bg);
+            border: 1px solid var(--border);
+            border-radius: 8px;
+            padding: 28px;
+            margin-bottom: 24px;
+        }
+
+        .week-header {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            margin-bottom: 20px;
+            padding-bottom: 16px;
+            border-bottom: 2px solid var(--border);
+        }
+
+        .week-header h3 {
+            font-family: 'Source Serif 4', serif;
+            font-size: 20px;
+            font-weight: 600;
+            color: var(--primary);
+            flex: 1;
+        }
+
+        .week-focus {
+            display: inline-block;
+            background-color: var(--accent-warm);
+            color: white;
+            padding: 6px 12px;
+            border-radius: 4px;
+            font-size: 12px;
+            font-weight: 600;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+        }
+
+        .daily-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(140px, 1fr));
+            gap: 12px;
+            margin-bottom: 24px;
+        }
+
+        .day-card {
+            background-color: white;
+            border: 1px solid var(--border);
+            border-radius: 6px;
+            padding: 16px;
+            text-align: center;
+            transition: all 0.2s ease;
+        }
+
+        .day-card:hover {
+            border-color: var(--accent);
+            box-shadow: 0 2px 6px rgba(42, 123, 140, 0.1);
+        }
+
+        .day-number {
+            font-family: 'Source Serif 4', serif;
+            font-size: 18px;
+            font-weight: 600;
+            color: var(--accent);
+            margin-bottom: 12px;
+        }
+
+        .day-focus {
+            font-size: 12px;
+            color: var(--primary);
+            opacity: 0.7;
+            margin-bottom: 12px;
+            line-height: 1.5;
+        }
+
+        .day-checkbox {
+            width: 20px;
+            height: 20px;
+            cursor: pointer;
+            accent-color: var(--success);
+        }
+
+        .checkbox-wrapper {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 8px;
+            margin-top: 12px;
+        }
+
+        .checkbox-label {
+            font-size: 12px;
+            color: var(--primary);
+            opacity: 0.7;
+            cursor: pointer;
+        }
+
+        .day-card input[type="checkbox"]:checked + .checkbox-label {
+            color: var(--success);
+            font-weight: 600;
+        }
+
+        .reflection-section {
+            background-color: var(--bg-warm);
+            border-left: 4px solid var(--accent-warm);
+            border-radius: 4px;
+            padding: 20px;
+        }
+
+        .reflection-section h4 {
+            font-family: 'Source Serif 4', serif;
+            font-size: 16px;
+            font-weight: 600;
+            color: var(--primary);
+            margin-bottom: 12px;
+        }
+
+        .reflection-prompt {
+            font-size: 13px;
+            color: var(--primary);
+            opacity: 0.8;
+            margin-bottom: 12px;
+            line-height: 1.6;
+        }
+
+        .reflection-input {
+            width: 100%;
+            min-height: 100px;
+            padding: 12px;
+            border: 1px solid var(--border);
+            border-radius: 4px;
+            font-family: 'Inter', sans-serif;
+            font-size: 14px;
+            color: var(--primary);
+            resize: vertical;
+        }
+
+        .reflection-input:focus {
+            outline: none;
+            border-color: var(--accent);
+            box-shadow: 0 0 0 3px rgba(42, 123, 140, 0.1);
+        }
+
+        .motivational-bar {
+            background: linear-gradient(135deg, var(--accent) 0%, var(--accent-warm) 100%);
+            color: white;
+            padding: 28px;
+            margin: 32px;
+            border-radius: 8px;
+            text-align: center;
+        }
+
+        .motivational-bar p {
+            font-family: 'Source Serif 4', serif;
+            font-size: 20px;
+            font-weight: 600;
+            line-height: 1.7;
+            margin-bottom: 12px;
+        }
+
+        .motivational-bar .attribution {
+            font-size: 13px;
+            opacity: 0.9;
+            font-style: italic;
+        }
+
+        .commitment-section {
+            background-color: var(--primary);
+            color: white;
+            padding: 28px;
+            border-radius: 8px;
+            margin-top: 32px;
+        }
+
+        .commitment-section h3 {
+            font-family: 'Source Serif 4', serif;
+            font-size: 18px;
+            font-weight: 600;
+            margin-bottom: 16px;
+        }
+
+        .commitment-textarea {
+            width: 100%;
+            min-height: 100px;
+            padding: 12px;
+            border: 1px solid rgba(255, 255, 255, 0.3);
+            border-radius: 4px;
+            font-family: 'Inter', sans-serif;
+            font-size: 14px;
+            color: var(--primary);
+            background-color: white;
+            resize: vertical;
+            margin-bottom: 12px;
+        }
+
+        .commitment-textarea:focus {
+            outline: none;
+            border-color: var(--accent-warm);
+            box-shadow: 0 0 0 3px rgba(212, 165, 116, 0.2);
+        }
+
+        .commitment-textarea:last-child {
+            margin-bottom: 0;
+        }
+
+        .button-row {
+            display: flex;
+            justify-content: center;
+            gap: 12px;
+            flex-wrap: wrap;
+            padding: 0 32px 32px;
+        }
+
+        .btn {
+            padding: 12px 24px;
+            border: 1px solid var(--border);
+            border-radius: 4px;
+            font-family: 'Inter', sans-serif;
+            font-size: 14px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.2s ease;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+        }
+
+        .btn-primary {
+            background-color: var(--accent);
+            color: white;
+            border-color: var(--accent);
+        }
+
+        .btn-primary:hover {
+            background-color: #1f6578;
+            border-color: #1f6578;
+        }
+
+        .btn-secondary {
+            background-color: white;
+            color: var(--primary);
+            border-color: var(--border);
+        }
+
+        .btn-secondary:hover {
+            background-color: var(--bg);
+            border-color: var(--accent);
+            color: var(--accent);
+        }
+
+        .modal {
+            display: none;
+            position: fixed;
+            z-index: 1000;
+            left: 0;
+            top: 0;
+            width: 100%;
+            height: 100%;
+            background-color: rgba(0, 0, 0, 0.5);
+        }
+
+        .modal-content {
+            background-color: white;
+            margin: 15% auto;
+            padding: 32px;
+            border-radius: 8px;
+            width: 90%;
+            max-width: 400px;
+            text-align: center;
+        }
+
+        .modal-content h2 {
+            font-family: 'Source Serif 4', serif;
+            font-size: 20px;
+            font-weight: 600;
+            color: var(--primary);
+            margin-bottom: 12px;
+        }
+
+        .modal-content p {
+            font-size: 14px;
+            color: var(--primary);
+            opacity: 0.8;
+            margin-bottom: 24px;
+        }
+
+        .modal-buttons {
+            display: flex;
+            gap: 12px;
+            justify-content: center;
+        }
+
+        .modal-buttons .btn {
+            flex: 1;
+        }
+
+        footer {
+            background-color: var(--bg-warm);
+            border-top: 1px solid var(--border);
+            padding: 24px;
+            text-align: center;
+            font-size: 13px;
+            color: var(--primary);
+            opacity: 0.7;
+        }
+
+        footer a {
+            color: var(--accent);
+            text-decoration: none;
+            font-weight: 600;
+        }
+
+        footer a:hover {
+            text-decoration: underline;
+        }
+
+        @media (max-width: 768px) {
+            body {
+                padding: 20px 12px;
+            }
+
+            header {
+                padding: 28px 20px;
+            }
+
+            header h1 {
+                font-size: 24px;
+            }
+
+            .instructions-box {
+                margin: 20px;
+                padding: 16px;
+            }
+
+            .content {
+                padding: 20px;
+            }
+
+            .daily-grid {
+                grid-template-columns: repeat(auto-fit, minmax(100px, 1fr));
+            }
+
+            .motivational-bar {
+                margin: 20px;
+                padding: 20px;
+            }
+
+            .motivational-bar p {
+                font-size: 16px;
+            }
+
+            .button-row {
+                padding: 0 20px 20px;
+            }
+        }
+
+        @media (max-width: 480px) {
+            header h1 {
+                font-size: 20px;
+            }
+
+            .section-title {
+                font-size: 20px;
+            }
+
+            .daily-grid {
+                grid-template-columns: repeat(auto-fit, minmax(80px, 1fr));
+                gap: 8px;
+            }
+
+            .day-card {
+                padding: 12px;
+            }
+
+            .day-number {
+                font-size: 16px;
+            }
+
+            .day-focus {
+                font-size: 11px;
+            }
+
+            .button-row {
+                flex-direction: column;
+            }
+
+            .btn {
+                width: 100%;
+            }
+        }
+
+        @media print {
+            body {
+                padding: 0;
+            }
+
+            .container {
+                box-shadow: none;
+                border: none;
+            }
+
+            .button-row {
+                display: none;
+            }
+
+            .day-card {
+                break-inside: avoid;
+            }
+
+            .week-container {
+                break-inside: avoid;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <header>
+            <h1>Module 4 — April</h1>
+            <p>14-Day Composure Sprint Planner</p>
+        </header>
+
+        <div class="instructions-box">
+            <h2>Your Two-Week Commitment</h2>
+            <p>This sprint is designed to build composure through consistent daily practice. Week 1 focuses on awareness—noticing your triggers and recognizing patterns in how you respond. Week 2 moves into strategy—developing and practicing new responses that feel authentic and grounded. Each day includes a specific focus area and a simple checkbox to track your practice. At the end of each week, you'll reflect on what you've learned and what's shifting for you.</p>
+        </div>
+
+        <div class="content">
+            <div class="section">
+                <div class="section-header">
+                    <div class="step-number">1</div>
+                    <h2 class="section-title">Week 1: Awareness & Recognition</h2>
+                </div>
+
+                <div class="week-container">
+                    <div class="week-header">
+                        <h3>Week 1 Focus</h3>
+                        <span class="week-focus">Awareness</span>
+                    </div>
+
+                    <div class="daily-grid">
+                        <div class="day-card">
+                            <div class="day-number">Day 1</div>
+                            <div class="day-focus">Identify your top 3 triggers</div>
+                            <div class="checkbox-wrapper">
+                                <input type="checkbox" class="day-checkbox" id="day1">
+                                <label for="day1" class="checkbox-label">Completed</label>
+                            </div>
+                        </div>
+
+                        <div class="day-card">
+                            <div class="day-number">Day 2</div>
+                            <div class="day-focus">Notice physical sensations when triggered</div>
+                            <div class="checkbox-wrapper">
+                                <input type="checkbox" class="day-checkbox" id="day2">
+                                <label for="day2" class="checkbox-label">Completed</label>
+                            </div>
+                        </div>
+
+                        <div class="day-card">
+                            <div class="day-number">Day 3</div>
+                            <div class="day-focus">Track your default reaction pattern</div>
+                            <div class="checkbox-wrapper">
+                                <input type="checkbox" class="day-checkbox" id="day3">
+                                <label for="day3" class="checkbox-label">Completed</label>
+                            </div>
+                        </div>
+
+                        <div class="day-card">
+                            <div class="day-number">Day 4</div>
+                            <div class="day-focus">Identify the stories you tell yourself</div>
+                            <div class="checkbox-wrapper">
+                                <input type="checkbox" class="day-checkbox" id="day4">
+                                <label for="day4" class="checkbox-label">Completed</label>
+                            </div>
+                        </div>
+
+                        <div class="day-card">
+                            <div class="day-number">Day 5</div>
+                            <div class="day-focus">Notice when you're most reactive</div>
+                            <div class="checkbox-wrapper">
+                                <input type="checkbox" class="day-checkbox" id="day5">
+                                <label for="day5" class="checkbox-label">Completed</label>
+                            </div>
+                        </div>
+
+                        <div class="day-card">
+                            <div class="day-number">Day 6</div>
+                            <div class="day-focus">Reflect on your trigger origins</div>
+                            <div class="checkbox-wrapper">
+                                <input type="checkbox" class="day-checkbox" id="day6">
+                                <label for="day6" class="checkbox-label">Completed</label>
+                            </div>
+                        </div>
+
+                        <div class="day-card">
+                            <div class="day-number">Day 7</div>
+                            <div class="day-focus">Celebrate your awareness growth</div>
+                            <div class="checkbox-wrapper">
+                                <input type="checkbox" class="day-checkbox" id="day7">
+                                <label for="day7" class="checkbox-label">Completed</label>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="reflection-section">
+                        <h4>Week 1 Reflection</h4>
+                        <div class="reflection-prompt">What patterns did you notice about your triggers and reactions? What surprised you about how you show up in high-stakes moments?</div>
+                        <textarea class="reflection-input" id="week1-reflection" placeholder="Write your reflection here..."></textarea>
+                    </div>
+                </div>
+            </div>
+
+            <div class="section">
+                <div class="section-header">
+                    <div class="step-number">2</div>
+                    <h2 class="section-title">Week 2: Strategy & Practice</h2>
+                </div>
+
+                <div class="week-container">
+                    <div class="week-header">
+                        <h3>Week 2 Focus</h3>
+                        <span class="week-focus">Strategy</span>
+                    </div>
+
+                    <div class="daily-grid">
+                        <div class="day-card">
+                            <div class="day-number">Day 8</div>
+                            <div class="day-focus">Design your breathing practice</div>
+                            <div class="checkbox-wrapper">
+                                <input type="checkbox" class="day-checkbox" id="day8">
+                                <label for="day8" class="checkbox-label">Completed</label>
+                            </div>
+                        </div>
+
+                        <div class="day-card">
+                            <div class="day-number">Day 9</div>
+                            <div class="day-focus">Practice your grounding technique</div>
+                            <div class="checkbox-wrapper">
+                                <input type="checkbox" class="day-checkbox" id="day9">
+                                <label for="day9" class="checkbox-label">Completed</label>
+                            </div>
+                        </div>
+
+                        <div class="day-card">
+                            <div class="day-number">Day 10</div>
+                            <div class="day-focus">Craft your response script</div>
+                            <div class="checkbox-wrapper">
+                                <input type="checkbox" class="day-checkbox" id="day10">
+                                <label for="day10" class="checkbox-label">Completed</label>
+                            </div>
+                        </div>
+
+                        <div class="day-card">
+                            <div class="day-number">Day 11</div>
+                            <div class="day-focus">Rehearse your response aloud</div>
+                            <div class="checkbox-wrapper">
+                                <input type="checkbox" class="day-checkbox" id="day11">
+                                <label for="day11" class="checkbox-label">Completed</label>
+                            </div>
+                        </div>
+
+                        <div class="day-card">
+                            <div class="day-number">Day 12</div>
+                            <div class="day-focus">Practice with a trusted person</div>
+                            <div class="checkbox-wrapper">
+                                <input type="checkbox" class="day-checkbox" id="day12">
+                                <label for="day12" class="checkbox-label">Completed</label>
+                            </div>
+                        </div>
+
+                        <div class="day-card">
+                            <div class="day-number">Day 13</div>
+                            <div class="day-focus">Build your composure toolkit</div>
+                            <div class="checkbox-wrapper">
+                                <input type="checkbox" class="day-checkbox" id="day13">
+                                <label for="day13" class="checkbox-label">Completed</label>
+                            </div>
+                        </div>
+
+                        <div class="day-card">
+                            <div class="day-number">Day 14</div>
+                            <div class="day-focus">Commit to ongoing practice</div>
+                            <div class="checkbox-wrapper">
+                                <input type="checkbox" class="day-checkbox" id="day14">
+                                <label for="day14" class="checkbox-label">Completed</label>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="reflection-section">
+                        <h4>Week 2 Reflection</h4>
+                        <div class="reflection-prompt">What shifts have you noticed in how you respond? What tools or strategies feel most natural for you? How will you continue this practice beyond the sprint?</div>
+                        <textarea class="reflection-input" id="week2-reflection" placeholder="Write your reflection here..."></textarea>
+                    </div>
+                </div>
+            </div>
+
+            <div class="motivational-bar">
+                <p>Composure is not about suppressing your emotions. It's about choosing how you respond when it matters most—to yourself, to your values, and to the women and communities you lead.</p>
+                <div class="attribution">— Wendy Perdomo, CWC Executive Leadership</div>
+            </div>
+
+            <div class="section">
+                <div class="section-header">
+                    <div class="step-number">3</div>
+                    <h2 class="section-title">Your Composure Commitment</h2>
+                </div>
+
+                <div class="commitment-section">
+                    <h3>What will you commit to beyond this sprint?</h3>
+                    <textarea class="commitment-textarea" id="commitment-1" placeholder="My daily practice will be..."></textarea>
+                    <textarea class="commitment-textarea" id="commitment-2" placeholder="The situations where I most need composure are..."></textarea>
+                    <textarea class="commitment-textarea" id="commitment-3" placeholder="My composure non-negotiables moving forward..."></textarea>
+                </div>
+            </div>
+        </div>
+
+        <div class="button-row">
+            <button class="btn btn-primary" onclick="window.print()">Print / PDF</button>
+            <button class="btn btn-secondary" onclick="openClearModal()">Clear All Data</button>
+        </div>
+
+        <footer>
+            <p>CWC Executive Leadership Lab — Module 4 Worksheet | Created by <a href="https://www.wendyperdomo.com/" target="_blank">Wendy Perdomo & CWC®</a></p>
+        </footer>
+    </div>
+
+    <div id="clearModal" class="modal">
+        <div class="modal-content">
+            <h2>Clear All Data?</h2>
+            <p>This will permanently delete all your responses and reflections. This action cannot be undone.</p>
+            <div class="modal-buttons">
+                <button class="btn btn-secondary" onclick="closeClearModal()">Cancel</button>
+                <button class="btn btn-primary" onclick="clearAllData()">Clear All</button>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        const STORAGE_KEY = 'cwc-composure-sprint-planner-v1';
+
+        function saveData() {
+            const data = {
+                checkboxes: {},
+                reflections: {},
+                commitments: {}
+            };
+
+            // Save all day checkboxes
+            for (let i = 1; i <= 14; i++) {
+                const checkbox = document.getElementById(`day${i}`);
+                if (checkbox) {
+                    data.checkboxes[`day${i}`] = checkbox.checked;
+                }
+            }
+
+            // Save reflections
+            const week1 = document.getElementById('week1-reflection');
+            const week2 = document.getElementById('week2-reflection');
+            if (week1) data.reflections.week1 = week1.value;
+            if (week2) data.reflections.week2 = week2.value;
+
+            // Save commitments
+            for (let i = 1; i <= 3; i++) {
+                const commitment = document.getElementById(`commitment-${i}`);
+                if (commitment) {
+                    data.commitments[`commitment${i}`] = commitment.value;
+                }
+            }
+
+            localStorage.setItem(STORAGE_KEY, JSON.stringify(data));
+        }
+
+        function loadData() {
+            const saved = localStorage.getItem(STORAGE_KEY);
+            if (!saved) return;
+
+            const data = JSON.parse(saved);
+
+            // Load checkboxes
+            if (data.checkboxes) {
+                Object.keys(data.checkboxes).forEach(key => {
+                    const checkbox = document.getElementById(key);
+                    if (checkbox) {
+                        checkbox.checked = data.checkboxes[key];
+                    }
+                });
+            }
+
+            // Load reflections
+            if (data.reflections) {
+                if (data.reflections.week1) {
+                    const week1 = document.getElementById('week1-reflection');
+                    if (week1) week1.value = data.reflections.week1;
+                }
+                if (data.reflections.week2) {
+                    const week2 = document.getElementById('week2-reflection');
+                    if (week2) week2.value = data.reflections.week2;
+                }
+            }
+
+            // Load commitments
+            if (data.commitments) {
+                for (let i = 1; i <= 3; i++) {
+                    if (data.commitments[`commitment${i}`]) {
+                        const commitment = document.getElementById(`commitment-${i}`);
+                        if (commitment) {
+                            commitment.value = data.commitments[`commitment${i}`];
+                        }
+                    }
+                }
+            }
+        }
+
+        function openClearModal() {
+            document.getElementById('clearModal').style.display = 'block';
+        }
+
+        function closeClearModal() {
+            document.getElementById('clearModal').style.display = 'none';
+        }
+
+        function clearAllData() {
+            localStorage.removeItem(STORAGE_KEY);
+            // Clear all form fields
+            for (let i = 1; i <= 14; i++) {
+                const checkbox = document.getElementById(`day${i}`);
+                if (checkbox) checkbox.checked = false;
+            }
+            const week1 = document.getElementById('week1-reflection');
+            const week2 = document.getElementById('week2-reflection');
+            if (week1) week1.value = '';
+            if (week2) week2.value = '';
+            for (let i = 1; i <= 3; i++) {
+                const commitment = document.getElementById(`commitment-${i}`);
+                if (commitment) commitment.value = '';
+            }
+            closeClearModal();
+        }
+
+        window.addEventListener('beforeunload', () => {
+            saveData();
+        });
+
+        // Save on any input change
+        document.addEventListener('change', saveData);
+        document.addEventListener('input', saveData);
+
+        // Load on page load
+        window.addEventListener('load', loadData);
+    </script>
+</body>
+</html>

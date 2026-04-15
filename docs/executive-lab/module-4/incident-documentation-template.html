@@ -1,0 +1,1027 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Incident Documentation Template - CWC Executive Leadership Lab</title>
+    
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Source+Serif+4:wght@400;600&display=swap" rel="stylesheet">
+    
+    <style>
+        /* CSS Custom Properties - Design System */
+        :root {
+            --primary: #1A1A1A;
+            --accent: #2A7B8C;
+            --accent-warm: #D4A574;
+            --bg: #FAF8F5;
+            --bg-warm: #F5F2ED;
+            --border: #E5E0D8;
+            --success: #4A9B7F;
+            --text-primary: #1A1A1A;
+            --text-secondary: #666666;
+            --error: #D85858;
+            --spacing-xs: 8px;
+            --spacing-sm: 12px;
+            --spacing-md: 16px;
+            --spacing-lg: 24px;
+            --spacing-xl: 32px;
+            --border-radius: 8px;
+            --shadow-light: 0 2px 8px rgba(0, 0, 0, 0.08);
+            --shadow-md: 0 4px 16px rgba(0, 0, 0, 0.12);
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+            background-color: var(--bg);
+            color: var(--text-primary);
+            line-height: 1.6;
+            padding: var(--spacing-lg);
+        }
+
+        .container {
+            max-width: 900px;
+            margin: 0 auto;
+            background: white;
+            border-radius: var(--border-radius);
+            box-shadow: var(--shadow-light);
+            overflow: hidden;
+        }
+
+        /* Header Section */
+        .header {
+            background: linear-gradient(135deg, var(--primary) 0%, var(--accent) 100%);
+            color: white;
+            padding: var(--spacing-xl) var(--spacing-lg);
+            text-align: center;
+        }
+
+        .header h1 {
+            font-family: 'Source Serif 4', serif;
+            font-size: 32px;
+            font-weight: 600;
+            margin-bottom: var(--spacing-sm);
+            letter-spacing: -0.5px;
+        }
+
+        .header p {
+            font-size: 14px;
+            opacity: 0.95;
+            max-width: 500px;
+            margin: 0 auto;
+        }
+
+        /* Module Badge */
+        .module-badge {
+            display: inline-block;
+            background: rgba(255, 255, 255, 0.2);
+            color: white;
+            padding: 4px 12px;
+            border-radius: 20px;
+            font-size: 12px;
+            font-weight: 600;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+            margin-bottom: var(--spacing-md);
+        }
+
+        /* Instructions Box */
+        .instructions-box {
+            background: var(--bg-warm);
+            border-left: 4px solid var(--accent-warm);
+            padding: var(--spacing-lg);
+            margin: var(--spacing-lg);
+            border-radius: var(--border-radius);
+            font-size: 14px;
+            line-height: 1.7;
+        }
+
+        .instructions-box h3 {
+            font-family: 'Source Serif 4', serif;
+            font-size: 16px;
+            margin-bottom: var(--spacing-sm);
+            color: var(--primary);
+        }
+
+        .instructions-box p {
+            margin-bottom: var(--spacing-sm);
+            color: var(--text-secondary);
+        }
+
+        .instructions-box p:last-child {
+            margin-bottom: 0;
+        }
+
+        /* Content Wrapper */
+        .content {
+            padding: var(--spacing-lg);
+        }
+
+        /* Section Styles */
+        .section {
+            margin-bottom: var(--spacing-xl);
+            padding: var(--spacing-lg);
+            background: var(--bg);
+            border-radius: var(--border-radius);
+            border: 1px solid var(--border);
+        }
+
+        .section:last-child {
+            margin-bottom: 0;
+        }
+
+        .section-header {
+            display: flex;
+            align-items: center;
+            margin-bottom: var(--spacing-lg);
+        }
+
+        .step-number {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            width: 36px;
+            height: 36px;
+            background: var(--accent);
+            color: white;
+            border-radius: 50%;
+            font-weight: 700;
+            font-size: 16px;
+            margin-right: var(--spacing-md);
+            flex-shrink: 0;
+        }
+
+        .section h2 {
+            font-family: 'Source Serif 4', serif;
+            font-size: 20px;
+            font-weight: 600;
+            color: var(--primary);
+            margin: 0;
+        }
+
+        .section-subtitle {
+            font-size: 13px;
+            color: var(--text-secondary);
+            font-style: italic;
+            margin-top: var(--spacing-sm);
+        }
+
+        /* Field Group */
+        .field-group {
+            margin-bottom: var(--spacing-lg);
+        }
+
+        .field-group:last-child {
+            margin-bottom: 0;
+        }
+
+        label {
+            display: block;
+            font-weight: 600;
+            font-size: 14px;
+            margin-bottom: var(--spacing-sm);
+            color: var(--primary);
+        }
+
+        .label-hint {
+            font-weight: 400;
+            font-size: 13px;
+            color: var(--text-secondary);
+            margin-top: 2px;
+        }
+
+        input[type="text"],
+        input[type="date"],
+        input[type="time"],
+        textarea,
+        select {
+            width: 100%;
+            padding: var(--spacing-sm) var(--spacing-md);
+            border: 1px solid var(--border);
+            border-radius: var(--border-radius);
+            font-family: 'Inter', sans-serif;
+            font-size: 14px;
+            background: white;
+            color: var(--text-primary);
+            transition: border-color 0.2s ease, box-shadow 0.2s ease;
+        }
+
+        input[type="text"]:focus,
+        input[type="date"]:focus,
+        input[type="time"]:focus,
+        textarea:focus,
+        select:focus {
+            outline: none;
+            border-color: var(--accent);
+            box-shadow: 0 0 0 3px rgba(42, 123, 140, 0.1);
+        }
+
+        textarea {
+            resize: vertical;
+            min-height: 100px;
+            font-family: 'Inter', sans-serif;
+        }
+
+        /* Two Column Layout */
+        .two-column {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: var(--spacing-lg);
+        }
+
+        /* Data Table Styles */
+        .data-table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-top: var(--spacing-md);
+            background: white;
+            border: 1px solid var(--border);
+            border-radius: var(--border-radius);
+            overflow: hidden;
+        }
+
+        .data-table thead {
+            background: var(--bg);
+            border-bottom: 2px solid var(--border);
+        }
+
+        .data-table th {
+            padding: var(--spacing-md);
+            text-align: left;
+            font-weight: 600;
+            font-size: 13px;
+            color: var(--primary);
+            text-transform: uppercase;
+            letter-spacing: 0.3px;
+        }
+
+        .data-table td {
+            padding: var(--spacing-md);
+            border-bottom: 1px solid var(--border);
+            font-size: 14px;
+        }
+
+        .data-table tbody tr:hover {
+            background: var(--bg);
+        }
+
+        .data-table input[type="text"],
+        .data-table textarea {
+            width: 100%;
+            border: 1px solid var(--border);
+            padding: var(--spacing-sm);
+            font-size: 13px;
+        }
+
+        /* Checklist Styles */
+        .checklist-items {
+            list-style: none;
+            margin-top: var(--spacing-md);
+        }
+
+        .checklist-item {
+            display: flex;
+            align-items: flex-start;
+            padding: var(--spacing-md);
+            background: white;
+            border: 1px solid var(--border);
+            border-radius: var(--border-radius);
+            margin-bottom: var(--spacing-sm);
+            cursor: pointer;
+            transition: background-color 0.2s ease, border-color 0.2s ease;
+        }
+
+        .checklist-item:hover {
+            border-color: var(--accent);
+            background: rgba(42, 123, 140, 0.02);
+        }
+
+        .checklist-item input[type="checkbox"] {
+            width: 20px;
+            height: 20px;
+            margin-right: var(--spacing-md);
+            margin-top: 2px;
+            cursor: pointer;
+            flex-shrink: 0;
+            accent-color: var(--accent);
+        }
+
+        .checklist-item label {
+            margin: 0;
+            cursor: pointer;
+            flex-grow: 1;
+            font-weight: 400;
+        }
+
+        .checklist-item input[type="checkbox"]:checked ~ label {
+            color: var(--success);
+            text-decoration: line-through;
+        }
+
+        /* Button Row */
+        .button-row {
+            display: flex;
+            gap: var(--spacing-md);
+            margin-top: var(--spacing-xl);
+            padding-top: var(--spacing-xl);
+            border-top: 1px solid var(--border);
+            flex-wrap: wrap;
+        }
+
+        .btn {
+            padding: 10px 20px;
+            border: none;
+            border-radius: var(--border-radius);
+            font-weight: 600;
+            font-size: 14px;
+            cursor: pointer;
+            transition: all 0.2s ease;
+            font-family: 'Inter', sans-serif;
+        }
+
+        .btn-primary {
+            background: var(--accent);
+            color: white;
+        }
+
+        .btn-primary:hover {
+            background: #235566;
+            box-shadow: var(--shadow-md);
+        }
+
+        .btn-secondary {
+            background: var(--bg-warm);
+            color: var(--primary);
+            border: 1px solid var(--border);
+        }
+
+        .btn-secondary:hover {
+            border-color: var(--accent-warm);
+            background: #FFFAF7;
+        }
+
+        .btn-danger {
+            background: var(--error);
+            color: white;
+        }
+
+        .btn-danger:hover {
+            background: #c94848;
+            box-shadow: var(--shadow-md);
+        }
+
+        /* Footer */
+        .footer {
+            background: var(--bg-warm);
+            border-top: 1px solid var(--border);
+            padding: var(--spacing-lg);
+            text-align: center;
+            font-size: 12px;
+            color: var(--text-secondary);
+        }
+
+        .footer a {
+            color: var(--accent);
+            text-decoration: none;
+        }
+
+        .footer a:hover {
+            text-decoration: underline;
+        }
+
+        /* Modal/Dialog Styles */
+        .modal {
+            display: none;
+            position: fixed;
+            z-index: 1000;
+            left: 0;
+            top: 0;
+            width: 100%;
+            height: 100%;
+            background-color: rgba(0, 0, 0, 0.5);
+            align-items: center;
+            justify-content: center;
+        }
+
+        .modal.active {
+            display: flex;
+        }
+
+        .modal-content {
+            background: white;
+            padding: var(--spacing-xl);
+            border-radius: var(--border-radius);
+            max-width: 400px;
+            box-shadow: var(--shadow-md);
+        }
+
+        .modal-content h3 {
+            font-family: 'Source Serif 4', serif;
+            font-size: 18px;
+            margin-bottom: var(--spacing-md);
+            color: var(--primary);
+        }
+
+        .modal-content p {
+            margin-bottom: var(--spacing-lg);
+            color: var(--text-secondary);
+        }
+
+        .modal-buttons {
+            display: flex;
+            gap: var(--spacing-md);
+            justify-content: flex-end;
+        }
+
+        /* Print Styles */
+        @media print {
+            body {
+                padding: 0;
+                background: white;
+            }
+
+            .container {
+                box-shadow: none;
+                border-radius: 0;
+            }
+
+            .button-row {
+                display: none;
+            }
+
+            input[type="text"],
+            input[type="date"],
+            input[type="time"],
+            textarea,
+            select {
+                border: 1px solid #ccc;
+                background: white;
+            }
+
+            .section {
+                page-break-inside: avoid;
+            }
+        }
+
+        /* Responsive Design */
+        @media (max-width: 768px) {
+            body {
+                padding: var(--spacing-md);
+            }
+
+            .header h1 {
+                font-size: 24px;
+            }
+
+            .header {
+                padding: var(--spacing-lg) var(--spacing-md);
+            }
+
+            .two-column {
+                grid-template-columns: 1fr;
+            }
+
+            .content {
+                padding: var(--spacing-md);
+            }
+
+            .section {
+                padding: var(--spacing-md);
+            }
+
+            .button-row {
+                flex-direction: column;
+            }
+
+            .btn {
+                width: 100%;
+            }
+
+            .data-table {
+                font-size: 12px;
+            }
+
+            .data-table th,
+            .data-table td {
+                padding: var(--spacing-sm);
+            }
+        }
+
+        @media (max-width: 480px) {
+            body {
+                padding: var(--spacing-sm);
+            }
+
+            .header h1 {
+                font-size: 20px;
+            }
+
+            .header {
+                padding: var(--spacing-lg) var(--spacing-sm);
+            }
+
+            .instructions-box {
+                margin: var(--spacing-md);
+            }
+
+            .section-header {
+                flex-direction: column;
+                align-items: flex-start;
+            }
+
+            .step-number {
+                margin-right: var(--spacing-md);
+                margin-bottom: var(--spacing-sm);
+            }
+
+            .content {
+                padding: var(--spacing-sm);
+            }
+
+            .section {
+                padding: var(--spacing-sm);
+                margin-bottom: var(--spacing-md);
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <!-- Header -->
+        <div class="header">
+            <div class="module-badge">Module 4 — April</div>
+            <h1>Incident Documentation Template</h1>
+            <p>Transform difficult moments into strategic data. This template helps you document incidents with clarity, identify patterns, and build a evidence record for constructive action.</p>
+        </div>
+
+        <!-- Instructions Box -->
+        <div class="instructions-box">
+            <h3>How to Use This Template</h3>
+            <p>Documenting incidents—whether microaggressions, exclusionary behavior, or moments where bias impacted your experience—is not about dwelling on negativity. It's about building evidence that informs your strategy and protects your record.</p>
+            <p><strong>Complete each section thoroughly:</strong> Capture factual details, context, impact, and your response. Save entries regularly for your own records. Use patterns to inform conversations, boundary-setting, and escalations. Your data, your story, your power.</p>
+            <p><em>All information is saved locally in your browser. This is your private record.</em></p>
+        </div>
+
+        <!-- Main Content -->
+        <div class="content">
+
+            <!-- Section 1: Incident Details -->
+            <div class="section">
+                <div class="section-header">
+                    <div class="step-number">1</div>
+                    <div>
+                        <h2>Incident Details</h2>
+                        <p class="section-subtitle">Capture the factual who, what, when, and where</p>
+                    </div>
+                </div>
+
+                <div class="two-column">
+                    <div class="field-group">
+                        <label for="incident-date">Date of Incident</label>
+                        <input type="date" id="incident-date" placeholder="YYYY-MM-DD">
+                    </div>
+                    <div class="field-group">
+                        <label for="incident-time">Time (if known)</label>
+                        <input type="time" id="incident-time">
+                    </div>
+                </div>
+
+                <div class="field-group">
+                    <label for="incident-location">Location</label>
+                    <div class="label-hint">Office, meeting room, Zoom, etc.</div>
+                    <input type="text" id="incident-location" placeholder="e.g., Conference Room B, Zoom video call">
+                </div>
+
+                <div class="field-group">
+                    <label for="involved-parties">Who Was Involved</label>
+                    <div class="label-hint">Names/titles of people present or involved</div>
+                    <textarea id="involved-parties" placeholder="List names and roles. Specify who said/did what, if relevant."></textarea>
+                </div>
+
+                <div class="field-group">
+                    <label for="what-happened">What Happened (Factual Description)</label>
+                    <div class="label-hint">Stick to observable facts—what was said, done, or happened. Avoid interpretation.</div>
+                    <textarea id="what-happened" placeholder="Example: In the 2pm team meeting, Sarah said 'You're so articulate for someone from your background.' When I asked her to rephrase, she said 'I just meant it as a compliment.'"></textarea>
+                </div>
+            </div>
+
+            <!-- Section 2: Context & Pattern -->
+            <div class="section">
+                <div class="section-header">
+                    <div class="step-number">2</div>
+                    <div>
+                        <h2>Context & Pattern</h2>
+                        <p class="section-subtitle">Understand if this is part of a larger dynamic</p>
+                    </div>
+                </div>
+
+                <div class="field-group">
+                    <label for="is-first-time">Is This the First Time With This Person?</label>
+                    <select id="is-first-time">
+                        <option value="">-- Select --</option>
+                        <option value="yes">Yes, first incident with this person</option>
+                        <option value="no">No, this has happened before with this person</option>
+                        <option value="similar">Similar incidents with different people</option>
+                    </select>
+                </div>
+
+                <div class="field-group">
+                    <label for="previous-incidents">Previous Incidents With This Person/Situation</label>
+                    <div class="label-hint">If this is a pattern, describe the previous incidents</div>
+                    <textarea id="previous-incidents" placeholder="Example: This person made a similar comment 3 weeks ago in a one-on-one meeting. They also interrupted me twice in last week's standup."></textarea>
+                </div>
+
+                <div class="field-group">
+                    <label for="larger-pattern">Part of a Larger Pattern?</label>
+                    <div class="label-hint">Does this fit a broader pattern in your team, department, or organization?</div>
+                    <textarea id="larger-pattern" placeholder="Example: This aligns with a broader pattern of women of color being spoken over in meetings and having our ideas attributed to white colleagues."></textarea>
+                </div>
+            </div>
+
+            <!-- Section 3: Impact -->
+            <div class="section">
+                <div class="section-header">
+                    <div class="step-number">3</div>
+                    <div>
+                        <h2>Impact</h2>
+                        <p class="section-subtitle">Document how this affected you and your work</p>
+                    </div>
+                </div>
+
+                <div class="field-group">
+                    <label for="professional-impact">Professional Impact</label>
+                    <div class="label-hint">How did this affect your work, visibility, or opportunities?</div>
+                    <textarea id="professional-impact" placeholder="Example: I was visibly flustered in the meeting, which may have undermined my credibility. I didn't speak for the rest of the conversation, so my ideas on the project timeline didn't get heard."></textarea>
+                </div>
+
+                <div class="field-group">
+                    <label for="personal-impact">Personal Impact</label>
+                    <div class="label-hint">How did this affect you emotionally or mentally?</div>
+                    <textarea id="personal-impact" placeholder="Example: I felt humiliated and angry. I kept replaying the comment throughout the day and had trouble focusing on my work. I felt isolated and questioning whether I belong here."></textarea>
+                </div>
+
+                <div class="field-group">
+                    <label for="reputation-impact">Reputation/Relationship Impact</label>
+                    <div class="label-hint">How might this affect how others perceive you or your relationship with this person?</div>
+                    <textarea id="reputation-impact" placeholder="Example: The comment made me look like I need special praise. I'm concerned about how other colleagues will interact with me now."></textarea>
+                </div>
+            </div>
+
+            <!-- Section 4: Your Response -->
+            <div class="section">
+                <div class="section-header">
+                    <div class="step-number">4</div>
+                    <div>
+                        <h2>Your Response</h2>
+                        <p class="section-subtitle">What you did in the moment and what you wish you'd done</p>
+                    </div>
+                </div>
+
+                <div class="field-group">
+                    <label for="in-moment-action">What You Did in the Moment</label>
+                    <div class="label-hint">How did you respond or not respond?</div>
+                    <textarea id="in-moment-action" placeholder="Example: I said 'That comment doesn't feel good. Can you say what you mean differently?' She said it was just a compliment and moved on."></textarea>
+                </div>
+
+                <div class="field-group">
+                    <label for="wished-you-said">What You Wish You'd Said or Done</label>
+                    <div class="label-hint">Reflections on a response that might have felt more aligned with you</div>
+                    <textarea id="wished-you-said" placeholder="Example: I wish I'd said 'That's a stereotype. Women of color are common in my field, and I'm no exception. Let's move forward.'"></textarea>
+                </div>
+
+                <div class="field-group">
+                    <label for="was-addressed">Has This Been Addressed Since?</label>
+                    <select id="was-addressed">
+                        <option value="">-- Select --</option>
+                        <option value="no">No, it hasn't been addressed</option>
+                        <option value="informally">Yes, I addressed it informally with the person</option>
+                        <option value="formally">Yes, I've reported it formally or escalated it</option>
+                    </select>
+                </div>
+
+                <div class="field-group">
+                    <label for="follow-up-details">Follow-Up Details (if applicable)</label>
+                    <textarea id="follow-up-details" placeholder="What happened next? How did they respond? Has the behavior changed?"></textarea>
+                </div>
+            </div>
+
+            <!-- Section 5: Next Steps -->
+            <div class="section">
+                <div class="section-header">
+                    <div class="step-number">5</div>
+                    <div>
+                        <h2>Next Steps</h2>
+                        <p class="section-subtitle">Your action plan going forward</p>
+                    </div>
+                </div>
+
+                <p style="margin-bottom: var(--spacing-lg); color: var(--text-secondary); font-size: 14px;">
+                    Choose the actions that feel right for you. Not every incident requires escalation—some need conversation, some need a boundary, some need documentation and time.
+                </p>
+
+                <ul class="checklist-items">
+                    <li class="checklist-item">
+                        <input type="checkbox" id="action-1">
+                        <label for="action-1">Have a direct conversation with this person</label>
+                    </li>
+                    <li class="checklist-item">
+                        <input type="checkbox" id="action-2">
+                        <label for="action-2">Set a boundary for future interactions</label>
+                    </li>
+                    <li class="checklist-item">
+                        <input type="checkbox" id="action-3">
+                        <label for="action-3">Escalate to manager or HR</label>
+                    </li>
+                    <li class="checklist-item">
+                        <input type="checkbox" id="action-4">
+                        <label for="action-4">Build coalition with colleagues who've experienced similar incidents</label>
+                    </li>
+                    <li class="checklist-item">
+                        <input type="checkbox" id="action-5">
+                        <label for="action-5">Gather supporting documentation or witnesses</label>
+                    </li>
+                </ul>
+
+                <div class="field-group" style="margin-top: var(--spacing-lg);">
+                    <label for="action-timeline">When Will You Take Action?</label>
+                    <input type="date" id="action-timeline" placeholder="Target date to move forward">
+                </div>
+
+                <div class="field-group">
+                    <label for="action-notes">Additional Notes</label>
+                    <textarea id="action-notes" placeholder="Any other thoughts, concerns, or context for your next steps?"></textarea>
+                </div>
+            </div>
+
+            <!-- Section 6: Evidence Log -->
+            <div class="section">
+                <div class="section-header">
+                    <div class="step-number">6</div>
+                    <div>
+                        <h2>Evidence Log</h2>
+                        <p class="section-subtitle">Maintain a record of supporting documentation or evidence</p>
+                    </div>
+                </div>
+
+                <p style="margin-bottom: var(--spacing-lg); color: var(--text-secondary); font-size: 14px;">
+                    If you're building a case for escalation or documentation, track what evidence you have. This might include emails, messages, notes from witnesses, previous complaints, or recordings (where legal).
+                </p>
+
+                <table class="data-table">
+                    <thead>
+                        <tr>
+                            <th style="width: 15%;">Date</th>
+                            <th style="width: 15%;">Evidence Type</th>
+                            <th style="width: 35%;">Description</th>
+                            <th style="width: 35%;">Where Saved</th>
+                        </tr>
+                    </thead>
+                    <tbody id="evidence-tbody">
+                        <tr>
+                            <td><input type="date" class="evidence-date"></td>
+                            <td><select class="evidence-type" style="width: 100%;">
+                                <option value="">-- Select --</option>
+                                <option value="email">Email</option>
+                                <option value="message">Message/Slack</option>
+                                <option value="notes">My Notes</option>
+                                <option value="witness">Witness Account</option>
+                                <option value="recording">Recording</option>
+                                <option value="other">Other</option>
+                            </select></td>
+                            <td><textarea class="evidence-description" placeholder="What is this evidence?" style="min-height: 60px;"></textarea></td>
+                            <td><input type="text" class="evidence-location" placeholder="e.g., Gmail, Slack thread, backup drive, OneNote"></td>
+                        </tr>
+                        <tr>
+                            <td><input type="date" class="evidence-date"></td>
+                            <td><select class="evidence-type" style="width: 100%;">
+                                <option value="">-- Select --</option>
+                                <option value="email">Email</option>
+                                <option value="message">Message/Slack</option>
+                                <option value="notes">My Notes</option>
+                                <option value="witness">Witness Account</option>
+                                <option value="recording">Recording</option>
+                                <option value="other">Other</option>
+                            </select></td>
+                            <td><textarea class="evidence-description" placeholder="What is this evidence?" style="min-height: 60px;"></textarea></td>
+                            <td><input type="text" class="evidence-location" placeholder="e.g., Gmail, Slack thread, backup drive, OneNote"></td>
+                        </tr>
+                        <tr>
+                            <td><input type="date" class="evidence-date"></td>
+                            <td><select class="evidence-type" style="width: 100%;">
+                                <option value="">-- Select --</option>
+                                <option value="email">Email</option>
+                                <option value="message">Message/Slack</option>
+                                <option value="notes">My Notes</option>
+                                <option value="witness">Witness Account</option>
+                                <option value="recording">Recording</option>
+                                <option value="other">Other</option>
+                            </select></td>
+                            <td><textarea class="evidence-description" placeholder="What is this evidence?" style="min-height: 60px;"></textarea></td>
+                            <td><input type="text" class="evidence-location" placeholder="e.g., Gmail, Slack thread, backup drive, OneNote"></td>
+                        </tr>
+                        <tr>
+                            <td><input type="date" class="evidence-date"></td>
+                            <td><select class="evidence-type" style="width: 100%;">
+                                <option value="">-- Select --</option>
+                                <option value="email">Email</option>
+                                <option value="message">Message/Slack</option>
+                                <option value="notes">My Notes</option>
+                                <option value="witness">Witness Account</option>
+                                <option value="recording">Recording</option>
+                                <option value="other">Other</option>
+                            </select></td>
+                            <td><textarea class="evidence-description" placeholder="What is this evidence?" style="min-height: 60px;"></textarea></td>
+                            <td><input type="text" class="evidence-location" placeholder="e.g., Gmail, Slack thread, backup drive, OneNote"></td>
+                        </tr>
+                        <tr>
+                            <td><input type="date" class="evidence-date"></td>
+                            <td><select class="evidence-type" style="width: 100%;">
+                                <option value="">-- Select --</option>
+                                <option value="email">Email</option>
+                                <option value="message">Message/Slack</option>
+                                <option value="notes">My Notes</option>
+                                <option value="witness">Witness Account</option>
+                                <option value="recording">Recording</option>
+                                <option value="other">Other</option>
+                            </select></td>
+                            <td><textarea class="evidence-description" placeholder="What is this evidence?" style="min-height: 60px;"></textarea></td>
+                            <td><input type="text" class="evidence-location" placeholder="e.g., Gmail, Slack thread, backup drive, OneNote"></td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+
+            <!-- Button Row -->
+            <div class="button-row">
+                <button class="btn btn-primary" onclick="printDocument()">
+                    Print / Save as PDF
+                </button>
+                <button class="btn btn-secondary" onclick="openClearModal()">
+                    Clear All
+                </button>
+            </div>
+
+        </div>
+
+        <!-- Footer -->
+        <div class="footer">
+            <p>CWC Executive Leadership Lab — Module 4: Leadership Composure. Created with care for women of color navigating complex workplaces.</p>
+            <p style="margin-top: var(--spacing-sm);">© CWC® | <a href="https://coachingwomenofcolor.com" target="_blank">Learn more</a></p>
+        </div>
+    </div>
+
+    <!-- Clear Confirmation Modal -->
+    <div id="clearModal" class="modal">
+        <div class="modal-content">
+            <h3>Clear All Data?</h3>
+            <p>This will delete all entries in this template. This action cannot be undone.</p>
+            <div class="modal-buttons">
+                <button class="btn btn-secondary" onclick="closeClearModal()">Cancel</button>
+                <button class="btn btn-danger" onclick="clearAllData()">Clear All</button>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // Storage Configuration
+        const STORAGE_KEY = 'cwc-incident-documentation-v1';
+
+        // Save Data Function
+        function saveData() {
+            const data = {
+                'incident-date': document.getElementById('incident-date').value,
+                'incident-time': document.getElementById('incident-time').value,
+                'incident-location': document.getElementById('incident-location').value,
+                'involved-parties': document.getElementById('involved-parties').value,
+                'what-happened': document.getElementById('what-happened').value,
+                'is-first-time': document.getElementById('is-first-time').value,
+                'previous-incidents': document.getElementById('previous-incidents').value,
+                'larger-pattern': document.getElementById('larger-pattern').value,
+                'professional-impact': document.getElementById('professional-impact').value,
+                'personal-impact': document.getElementById('personal-impact').value,
+                'reputation-impact': document.getElementById('reputation-impact').value,
+                'in-moment-action': document.getElementById('in-moment-action').value,
+                'wished-you-said': document.getElementById('wished-you-said').value,
+                'was-addressed': document.getElementById('was-addressed').value,
+                'follow-up-details': document.getElementById('follow-up-details').value,
+                'action-1': document.getElementById('action-1').checked,
+                'action-2': document.getElementById('action-2').checked,
+                'action-3': document.getElementById('action-3').checked,
+                'action-4': document.getElementById('action-4').checked,
+                'action-5': document.getElementById('action-5').checked,
+                'action-timeline': document.getElementById('action-timeline').value,
+                'action-notes': document.getElementById('action-notes').value,
+                'timestamp': new Date().toISOString()
+            };
+
+            // Save evidence rows
+            const evidenceRows = [];
+            document.querySelectorAll('#evidence-tbody tr').forEach(row => {
+                evidenceRows.push({
+                    date: row.querySelector('.evidence-date').value,
+                    type: row.querySelector('.evidence-type').value,
+                    description: row.querySelector('.evidence-description').value,
+                    location: row.querySelector('.evidence-location').value
+                });
+            });
+            data.evidenceRows = evidenceRows;
+
+            localStorage.setItem(STORAGE_KEY, JSON.stringify(data));
+        }
+
+        // Load Data Function
+        function loadData() {
+            const saved = localStorage.getItem(STORAGE_KEY);
+            if (saved) {
+                const data = JSON.parse(saved);
+                
+                document.getElementById('incident-date').value = data['incident-date'] || '';
+                document.getElementById('incident-time').value = data['incident-time'] || '';
+                document.getElementById('incident-location').value = data['incident-location'] || '';
+                document.getElementById('involved-parties').value = data['involved-parties'] || '';
+                document.getElementById('what-happened').value = data['what-happened'] || '';
+                document.getElementById('is-first-time').value = data['is-first-time'] || '';
+                document.getElementById('previous-incidents').value = data['previous-incidents'] || '';
+                document.getElementById('larger-pattern').value = data['larger-pattern'] || '';
+                document.getElementById('professional-impact').value = data['professional-impact'] || '';
+                document.getElementById('personal-impact').value = data['personal-impact'] || '';
+                document.getElementById('reputation-impact').value = data['reputation-impact'] || '';
+                document.getElementById('in-moment-action').value = data['in-moment-action'] || '';
+                document.getElementById('wished-you-said').value = data['wished-you-said'] || '';
+                document.getElementById('was-addressed').value = data['was-addressed'] || '';
+                document.getElementById('follow-up-details').value = data['follow-up-details'] || '';
+                document.getElementById('action-1').checked = data['action-1'] || false;
+                document.getElementById('action-2').checked = data['action-2'] || false;
+                document.getElementById('action-3').checked = data['action-3'] || false;
+                document.getElementById('action-4').checked = data['action-4'] || false;
+                document.getElementById('action-5').checked = data['action-5'] || false;
+                document.getElementById('action-timeline').value = data['action-timeline'] || '';
+                document.getElementById('action-notes').value = data['action-notes'] || '';
+
+                // Load evidence rows
+                if (data.evidenceRows && data.evidenceRows.length > 0) {
+                    const tbody = document.getElementById('evidence-tbody');
+                    tbody.innerHTML = '';
+                    data.evidenceRows.forEach(row => {
+                        const tr = document.createElement('tr');
+                        tr.innerHTML = `
+                            <td><input type="date" class="evidence-date" value="${row.date || ''}"></td>
+                            <td><select class="evidence-type" style="width: 100%;">
+                                <option value="">-- Select --</option>
+                                <option value="email" ${row.type === 'email' ? 'selected' : ''}>Email</option>
+                                <option value="message" ${row.type === 'message' ? 'selected' : ''}>Message/Slack</option>
+                                <option value="notes" ${row.type === 'notes' ? 'selected' : ''}>My Notes</option>
+                                <option value="witness" ${row.type === 'witness' ? 'selected' : ''}>Witness Account</option>
+                                <option value="recording" ${row.type === 'recording' ? 'selected' : ''}>Recording</option>
+                                <option value="other" ${row.type === 'other' ? 'selected' : ''}>Other</option>
+                            </select></td>
+                            <td><textarea class="evidence-description" placeholder="What is this evidence?" style="min-height: 60px;">${row.description || ''}</textarea></td>
+                            <td><input type="text" class="evidence-location" placeholder="e.g., Gmail, Slack thread, backup drive, OneNote" value="${row.location || ''}"></td>
+                        `;
+                        tbody.appendChild(tr);
+                    });
+                }
+            }
+        }
+
+        // Auto-save on input
+        document.addEventListener('change', saveData);
+        document.addEventListener('input', saveData);
+
+        // Clear All Modal
+        function openClearModal() {
+            document.getElementById('clearModal').classList.add('active');
+        }
+
+        function closeClearModal() {
+            document.getElementById('clearModal').classList.remove('active');
+        }
+
+        function clearAllData() {
+            localStorage.removeItem(STORAGE_KEY);
+            location.reload();
+        }
+
+        // Print Function
+        function printDocument() {
+            saveData();
+            window.print();
+        }
+
+        // Load data on page load
+        document.addEventListener('DOMContentLoaded', loadData);
+
+        // Close modal on Escape key
+        document.addEventListener('keydown', (e) => {
+            if (e.key === 'Escape') {
+                closeClearModal();
+            }
+        });
+    </script>
+</body>
+</html>

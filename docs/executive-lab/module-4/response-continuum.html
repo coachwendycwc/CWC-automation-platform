@@ -1,0 +1,1030 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Response Continuum Tool - CWC Executive Leadership Lab Module 4</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Source+Serif+4:ital,opsz,wght@0,8..60,400;0,8..60,600;1,8..60,400&family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --primary: #1A1A1A;
+            --accent: #2A7B8C;
+            --accent-warm: #D4A574;
+            --bg: #FAF8F5;
+            --bg-warm: #F5F2ED;
+            --border: #E5E0D8;
+            --success: #4A9B7F;
+            --text-primary: #1A1A1A;
+            --text-secondary: #666666;
+            --text-light: #999999;
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        html, body {
+            height: 100%;
+            width: 100%;
+        }
+
+        body {
+            font-family: 'Inter', sans-serif;
+            color: var(--text-primary);
+            background-color: var(--bg);
+            line-height: 1.6;
+            padding: 40px 20px;
+        }
+
+        .container {
+            max-width: 900px;
+            margin: 0 auto;
+            background-color: #FFFFFF;
+            padding: 60px 40px;
+            box-shadow: 0 2px 8px rgba(26, 26, 26, 0.08);
+            border-radius: 4px;
+        }
+
+        .header {
+            margin-bottom: 50px;
+            border-bottom: 3px solid var(--accent);
+            padding-bottom: 30px;
+        }
+
+        .header h1 {
+            font-family: 'Source Serif 4', serif;
+            font-size: 32px;
+            font-weight: 600;
+            margin-bottom: 15px;
+            color: var(--primary);
+            line-height: 1.3;
+        }
+
+        .header .subtitle {
+            font-size: 16px;
+            color: var(--text-secondary);
+            font-style: italic;
+        }
+
+        .header .module-info {
+            font-size: 14px;
+            color: var(--text-light);
+            margin-top: 12px;
+        }
+
+        .instructions-box {
+            background-color: var(--bg-warm);
+            border-left: 4px solid var(--accent-warm);
+            padding: 20px;
+            margin-bottom: 40px;
+            border-radius: 2px;
+        }
+
+        .instructions-box h3 {
+            font-family: 'Source Serif 4', serif;
+            font-size: 16px;
+            font-weight: 600;
+            color: var(--primary);
+            margin-bottom: 10px;
+        }
+
+        .instructions-box p {
+            font-size: 14px;
+            color: var(--text-secondary);
+            line-height: 1.8;
+        }
+
+        .section {
+            margin-bottom: 50px;
+        }
+
+        .section-header {
+            display: flex;
+            align-items: center;
+            margin-bottom: 25px;
+            gap: 15px;
+        }
+
+        .section-number {
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            background-color: var(--accent);
+            color: #FFFFFF;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: 600;
+            font-size: 18px;
+            flex-shrink: 0;
+        }
+
+        .section-header h2 {
+            font-family: 'Source Serif 4', serif;
+            font-size: 24px;
+            font-weight: 600;
+            color: var(--primary);
+            margin: 0;
+        }
+
+        .section-description {
+            font-size: 14px;
+            color: var(--text-secondary);
+            margin-bottom: 20px;
+            line-height: 1.8;
+        }
+
+        .continuum-grid {
+            display: grid;
+            grid-template-columns: repeat(4, 1fr);
+            gap: 20px;
+            margin-bottom: 30px;
+        }
+
+        .continuum-box {
+            background-color: var(--bg-warm);
+            border: 2px solid var(--border);
+            padding: 20px;
+            border-radius: 4px;
+            text-align: center;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            position: relative;
+        }
+
+        .continuum-box:hover {
+            border-color: var(--accent);
+            background-color: #F0ECE6;
+            transform: translateY(-2px);
+        }
+
+        .continuum-box.selected {
+            background-color: var(--accent);
+            border-color: var(--accent);
+            color: #FFFFFF;
+        }
+
+        .continuum-box.selected .label {
+            color: #FFFFFF;
+        }
+
+        .continuum-box.selected .description {
+            color: rgba(255, 255, 255, 0.95);
+        }
+
+        .continuum-box.selected .when-text {
+            color: rgba(255, 255, 255, 0.9);
+        }
+
+        .continuum-box.selected .icon {
+            background-color: rgba(255, 255, 255, 0.2);
+        }
+
+        .icon {
+            font-size: 32px;
+            margin-bottom: 12px;
+            display: inline-block;
+            background-color: var(--bg);
+            width: 50px;
+            height: 50px;
+            border-radius: 4px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin-left: auto;
+            margin-right: auto;
+            margin-bottom: 12px;
+        }
+
+        .label {
+            font-family: 'Source Serif 4', serif;
+            font-size: 18px;
+            font-weight: 600;
+            color: var(--primary);
+            margin-bottom: 8px;
+        }
+
+        .description {
+            font-size: 13px;
+            color: var(--text-secondary);
+            margin-bottom: 10px;
+            line-height: 1.6;
+        }
+
+        .when-text {
+            font-size: 12px;
+            color: var(--text-light);
+            font-style: italic;
+            line-height: 1.5;
+        }
+
+        .response-scenarios {
+            background-color: var(--bg);
+            padding: 25px;
+            border-radius: 4px;
+            margin-bottom: 30px;
+            border: 1px solid var(--border);
+        }
+
+        .response-scenarios h4 {
+            font-family: 'Source Serif 4', serif;
+            font-size: 16px;
+            font-weight: 600;
+            color: var(--primary);
+            margin-bottom: 15px;
+        }
+
+        .scenario-list {
+            list-style: none;
+        }
+
+        .scenario-item {
+            padding: 12px 0;
+            border-bottom: 1px solid var(--border);
+            font-size: 14px;
+            color: var(--text-secondary);
+        }
+
+        .scenario-item:last-child {
+            border-bottom: none;
+        }
+
+        .scenario-item strong {
+            color: var(--primary);
+            font-weight: 600;
+        }
+
+        .scenario-item .continuum-tag {
+            display: inline-block;
+            background-color: var(--accent);
+            color: #FFFFFF;
+            padding: 4px 10px;
+            border-radius: 3px;
+            font-size: 12px;
+            font-weight: 600;
+            margin-left: 8px;
+        }
+
+        .decision-framework {
+            background-color: var(--bg-warm);
+            padding: 25px;
+            border-radius: 4px;
+            margin-bottom: 30px;
+            border-left: 4px solid var(--accent-warm);
+        }
+
+        .decision-framework h4 {
+            font-family: 'Source Serif 4', serif;
+            font-size: 16px;
+            font-weight: 600;
+            color: var(--primary);
+            margin-bottom: 15px;
+        }
+
+        .decision-flow {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 20px;
+        }
+
+        .decision-step {
+            padding: 15px;
+            background-color: #FFFFFF;
+            border: 1px solid var(--border);
+            border-radius: 4px;
+        }
+
+        .decision-step h5 {
+            font-family: 'Source Serif 4', serif;
+            font-size: 14px;
+            font-weight: 600;
+            color: var(--accent);
+            margin-bottom: 10px;
+        }
+
+        .decision-step p {
+            font-size: 13px;
+            color: var(--text-secondary);
+            line-height: 1.7;
+        }
+
+        .practical-application {
+            background-color: var(--bg);
+            padding: 25px;
+            border-radius: 4px;
+            border: 1px solid var(--border);
+            margin-bottom: 30px;
+        }
+
+        .practical-application h4 {
+            font-family: 'Source Serif 4', serif;
+            font-size: 16px;
+            font-weight: 600;
+            color: var(--primary);
+            margin-bottom: 15px;
+        }
+
+        .application-table {
+            width: 100%;
+            border-collapse: collapse;
+            font-size: 14px;
+        }
+
+        .application-table thead {
+            background-color: var(--accent);
+            color: #FFFFFF;
+        }
+
+        .application-table th {
+            padding: 12px;
+            text-align: left;
+            font-weight: 600;
+            border: 1px solid var(--border);
+        }
+
+        .application-table td {
+            padding: 12px;
+            border: 1px solid var(--border);
+            color: var(--text-secondary);
+        }
+
+        .application-table tbody tr:nth-child(even) {
+            background-color: var(--bg-warm);
+        }
+
+        .application-table tbody tr:hover {
+            background-color: #F0ECE6;
+        }
+
+        .my-situation {
+            background-color: var(--bg-warm);
+            padding: 25px;
+            border-radius: 4px;
+            border-left: 4px solid var(--accent);
+            margin-bottom: 30px;
+        }
+
+        .my-situation h4 {
+            font-family: 'Source Serif 4', serif;
+            font-size: 16px;
+            font-weight: 600;
+            color: var(--primary);
+            margin-bottom: 15px;
+        }
+
+        .form-group {
+            margin-bottom: 20px;
+        }
+
+        .form-group label {
+            display: block;
+            font-weight: 600;
+            color: var(--primary);
+            margin-bottom: 8px;
+            font-size: 14px;
+        }
+
+        .form-group textarea {
+            width: 100%;
+            padding: 12px;
+            border: 1px solid var(--border);
+            border-radius: 4px;
+            font-family: 'Inter', sans-serif;
+            font-size: 14px;
+            color: var(--text-primary);
+            resize: vertical;
+            min-height: 100px;
+            background-color: #FFFFFF;
+        }
+
+        .form-group textarea:focus {
+            outline: none;
+            border-color: var(--accent);
+            box-shadow: 0 0 0 3px rgba(42, 123, 140, 0.1);
+        }
+
+        .commitment-section {
+            background-color: var(--bg);
+            padding: 25px;
+            border-radius: 4px;
+            border: 1px solid var(--border);
+            margin-bottom: 30px;
+        }
+
+        .commitment-section h4 {
+            font-family: 'Source Serif 4', serif;
+            font-size: 16px;
+            font-weight: 600;
+            color: var(--primary);
+            margin-bottom: 15px;
+        }
+
+        .commitment-option {
+            margin-bottom: 15px;
+            padding: 15px;
+            background-color: var(--bg-warm);
+            border-radius: 4px;
+            cursor: pointer;
+            border: 2px solid transparent;
+            transition: all 0.2s ease;
+        }
+
+        .commitment-option:hover {
+            border-color: var(--accent);
+            background-color: #F0ECE6;
+        }
+
+        .commitment-option input[type="radio"] {
+            margin-right: 10px;
+            cursor: pointer;
+        }
+
+        .commitment-option label {
+            cursor: pointer;
+            margin: 0;
+            font-weight: 500;
+        }
+
+        .commitment-description {
+            font-size: 13px;
+            color: var(--text-secondary);
+            margin-top: 8px;
+            margin-left: 24px;
+            line-height: 1.6;
+        }
+
+        .action-buttons {
+            display: flex;
+            gap: 15px;
+            margin-top: 40px;
+            padding-top: 30px;
+            border-top: 2px solid var(--border);
+            flex-wrap: wrap;
+        }
+
+        button {
+            padding: 12px 24px;
+            border: none;
+            border-radius: 4px;
+            font-family: 'Inter', sans-serif;
+            font-size: 14px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+
+        .btn-primary {
+            background-color: var(--accent);
+            color: #FFFFFF;
+        }
+
+        .btn-primary:hover {
+            background-color: #1F5A6B;
+            transform: translateY(-2px);
+            box-shadow: 0 4px 12px rgba(42, 123, 140, 0.3);
+        }
+
+        .btn-secondary {
+            background-color: var(--bg);
+            color: var(--primary);
+            border: 2px solid var(--border);
+        }
+
+        .btn-secondary:hover {
+            border-color: var(--accent);
+            background-color: var(--bg-warm);
+        }
+
+        .btn-success {
+            background-color: var(--success);
+            color: #FFFFFF;
+        }
+
+        .btn-success:hover {
+            background-color: #3A8A6F;
+            transform: translateY(-2px);
+            box-shadow: 0 4px 12px rgba(74, 155, 127, 0.3);
+        }
+
+        .status-message {
+            padding: 12px 16px;
+            border-radius: 4px;
+            font-size: 13px;
+            margin-bottom: 15px;
+            display: none;
+        }
+
+        .status-message.show {
+            display: block;
+        }
+
+        .status-message.success {
+            background-color: #E8F5F0;
+            color: #2D7A6B;
+            border-left: 4px solid var(--success);
+        }
+
+        .status-message.info {
+            background-color: #E8F1F8;
+            color: #1F5A7B;
+            border-left: 4px solid var(--accent);
+        }
+
+        @media (max-width: 768px) {
+            .container {
+                padding: 40px 25px;
+            }
+
+            .header h1 {
+                font-size: 26px;
+            }
+
+            .continuum-grid {
+                grid-template-columns: 1fr 1fr;
+                gap: 15px;
+            }
+
+            .decision-flow {
+                grid-template-columns: 1fr;
+            }
+
+            .application-table {
+                font-size: 13px;
+            }
+
+            .application-table th,
+            .application-table td {
+                padding: 10px 8px;
+            }
+
+            .action-buttons {
+                flex-direction: column;
+            }
+
+            button {
+                width: 100%;
+            }
+        }
+
+        @media (max-width: 480px) {
+            body {
+                padding: 20px 15px;
+            }
+
+            .container {
+                padding: 30px 20px;
+            }
+
+            .header h1 {
+                font-size: 22px;
+            }
+
+            .section-header h2 {
+                font-size: 20px;
+            }
+
+            .continuum-grid {
+                grid-template-columns: 1fr;
+            }
+
+            .continuum-box {
+                padding: 15px;
+            }
+
+            .label {
+                font-size: 16px;
+            }
+
+            .description {
+                font-size: 12px;
+            }
+
+            .application-table {
+                font-size: 12px;
+            }
+
+            .application-table th,
+            .application-table td {
+                padding: 8px;
+            }
+        }
+
+        @media print {
+            body {
+                background-color: #FFFFFF;
+                padding: 0;
+            }
+
+            .container {
+                box-shadow: none;
+                padding: 40px;
+            }
+
+            .action-buttons,
+            button {
+                display: none;
+            }
+
+            .status-message {
+                display: none !important;
+            }
+
+            .continuum-box {
+                page-break-inside: avoid;
+            }
+
+            .section {
+                page-break-inside: avoid;
+            }
+
+            .header {
+                page-break-after: avoid;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="header">
+            <h1>Response Continuum Tool</h1>
+            <p class="subtitle">Mastering the art and science of choosing the right response in high-stakes moments</p>
+            <p class="module-info">CWC Executive Leadership Lab — Module 4: Leadership Composure</p>
+        </div>
+
+        <div class="instructions-box">
+            <h3>How to Use This Tool</h3>
+            <p>In moments of activation, we have choices about how to respond. This tool helps you recognize the four primary decision points on the response continuum: Address, Defer, Document, and Release. Each represents a distinct strategy for managing your composure while honoring what's happening in the room. Use this worksheet to identify your natural tendencies, practice new possibilities, and build skill in choosing responses that align with your leadership values. Your work here strengthens your capacity to lead strategically in moments when things matter most.</p>
+        </div>
+
+        <div class="section">
+            <div class="section-header">
+                <div class="section-number">1</div>
+                <h2>The Four Points on the Response Continuum</h2>
+            </div>
+
+            <p class="section-description">Each point represents a different decision and different skill. All four are legitimate leadership moves. The work is building fluency across all of them so you can choose consciously based on context, not react automatically from pattern.</p>
+
+            <div class="continuum-grid">
+                <div class="continuum-box" data-response="address">
+                    <div class="icon">🔴</div>
+                    <div class="label">Address</div>
+                    <div class="description">Name it directly in the moment with the person(s) involved</div>
+                    <div class="when-text">When: High trust, low stakes escalation, direct feedback serves the relationship</div>
+                </div>
+
+                <div class="continuum-box" data-response="defer">
+                    <div class="icon">⏸️</div>
+                    <div class="label">Address Later</div>
+                    <div class="description">Pause the conversation; address it later in a private, planned setting</div>
+                    <div class="when-text">When: You're activated, emotions are high, or the group setting isn't right</div>
+                </div>
+
+                <div class="continuum-box" data-response="document">
+                    <div class="icon">📝</div>
+                    <div class="label">Document</div>
+                    <div class="description">Record what happened; follow organizational protocols or legal requirements</div>
+                    <div class="when-text">When: Pattern behavior, performance issue, or compliance requirement exists</div>
+                </div>
+
+                <div class="continuum-box" data-response="release">
+                    <div class="icon">🌊</div>
+                    <div class="label">Release</div>
+                    <div class="description">Let it go; recognize it as their stuff, not yours to carry or fix</div>
+                    <div class="when-text">When: You can't influence it, it's not your role, or engaging costs more than it's worth</div>
+                </div>
+            </div>
+
+            <div class="response-scenarios">
+                <h4>Real Scenarios on the Continuum</h4>
+                <ul class="scenario-list">
+                    <li class="scenario-item"><strong>A team member's comment feels dismissive of your idea:</strong> <span class="continuum-tag">Address</span> it in real-time if the relationship is strong ("I felt shut down just now; tell me what you heard"); <span class="continuum-tag">Address Later</span> if emotions are high; <span class="continuum-tag">Release</span> if it's a pattern of defensiveness you can't shift.</li>
+                    <li class="scenario-item"><strong>A leader makes a decision you disagree with:</strong> <span class="continuum-tag">Address</span> if they've explicitly asked for pushback; <span class="continuum-tag">Address Later</span> to a 1-on-1 conversation to explore their thinking; <span class="continuum-tag">Release</span> if it's their call to make.</li>
+                    <li class="scenario-item"><strong>Someone misses a deadline without explanation:</strong> <span class="continuum-tag">Address</span> if you need to understand the impact; <span class="continuum-tag">Document</span> if performance is a pattern; <span class="continuum-tag">Address Later</span> if you're frustrated and need to separate your response from the person.</li>
+                    <li class="scenario-item"><strong>A peer makes a comment that feels personally attacking:</strong> <span class="continuum-tag">Address Later</span> and check if you're reading into it; <span class="continuum-tag">Address</span> once you're calm if a direct conversation serves the relationship; <span class="continuum-tag">Release</span> if their perception of you is not your job to manage.</li>
+                    <li class="scenario-item"><strong>A team member shares a concern in a meeting that embarrasses you:</strong> <span class="continuum-tag">Address</span> it transparently in the moment if you can stay regulated; <span class="continuum-tag">Address Later</span> to a private conversation to hear them fully; <span class="continuum-tag">Document</span> if it's a performance or conduct issue; <span class="continuum-tag">Release</span> if their need to speak up is more important than your discomfort.</li>
+                </ul>
+            </div>
+        </div>
+
+        <div class="section">
+            <div class="section-header">
+                <div class="section-number">2</div>
+                <h2>Decision Framework for Each Response</h2>
+            </div>
+
+            <p class="section-description">Use these questions to guide your choice in the moment. This is not a formula—it's a thinking map to help you move from automatic reaction to conscious choice.</p>
+
+            <div class="decision-framework">
+                <h4>Before You Respond: Ask Yourself</h4>
+                <div class="decision-flow">
+                    <div class="decision-step">
+                        <h5>Am I regulated enough?</h5>
+                        <p>Can you access your thinking brain, or are you flooded? If flooded, Address Later is almost always the right call. Composure comes first.</p>
+                    </div>
+                    <div class="decision-step">
+                        <h5>What's the pattern?</h5>
+                        <p>Is this a one-time thing or a recurring situation? Patterns often signal Document. One-time moments signal Address Later or Address Now.</p>
+                    </div>
+                    <div class="decision-step">
+                        <h5>What's my role here?</h5>
+                        <p>Do I have standing to say something? Can I influence it? If no, Release might be the move. If yes, what approach serves my leadership?</p>
+                    </div>
+                    <div class="decision-step">
+                        <h5>What does the relationship need?</h5>
+                        <p>Strong relationships can hold direct Address. New relationships might need Address Later to build trust first. Some relationships need Release to survive.</p>
+                    </div>
+                    <div class="decision-step">
+                        <h5>What's the context?</h5>
+                        <p>Is the group setting right for a direct conversation? Are there power dynamics at play? Is legal or compliance involved? Context shapes everything.</p>
+                    </div>
+                    <div class="decision-step">
+                        <h5>What outcome am I trying to create?</h5>
+                        <p>Understanding what win looks like to you helps you choose the response most likely to get there. Address Now for relationship repair. Address Later for safety. Document for accountability. Release for peace.</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="section">
+            <div class="section-header">
+                <div class="section-number">3</div>
+                <h2>Practical Application: Know Your Tendencies</h2>
+            </div>
+
+            <p class="section-description">Most of us have a default response—the one we reach for automatically. The work is building flexibility so you can choose based on context, not habit. What's your go-to move when you're activated?</p>
+
+            <div class="practical-application">
+                <h4>Response Tendencies & What They Cost</h4>
+                <table class="application-table">
+                    <thead>
+                        <tr>
+                            <th>Your Default</th>
+                            <th>What It Looks Like</th>
+                            <th>The Strength</th>
+                            <th>The Cost</th>
+                            <th>When It Works Best</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td><strong>Address-First</strong></td>
+                            <td>You jump in immediately with feedback or correction</td>
+                            <td>Direct, transparent, seeks quick resolution</td>
+                            <td>Can damage relationships; may escalate when safety is needed; misses timing</td>
+                            <td>High-trust teams; when quick clarity prevents bigger issues; cultures that value transparency</td>
+                        </tr>
+                        <tr>
+                            <td><strong>Address Later-First</strong></td>
+                            <td>You step back and plan to talk about it later</td>
+                            <td>Thoughtful, creates space for regulation, allows for private conversations</td>
+                            <td>Can lead to avoidance; person never knows what happened; issues fester unresolved</td>
+                            <td>When you need to regulate first; complex situations that require planning; protecting vulnerable team members</td>
+                        </tr>
+                        <tr>
+                            <td><strong>Document-First</strong></td>
+                            <td>You immediately create a record or activate protocols</td>
+                            <td>Protects accountability; creates clear record; ensures consistency</td>
+                            <td>Can feel punitive; damages trust; bypasses relationship repair; feels bureaucratic</td>
+                            <td>Performance patterns; conduct issues; when legal or compliance requires it; systemic problems</td>
+                        </tr>
+                        <tr>
+                            <td><strong>Release-First</strong></td>
+                            <td>You let it go, mentally move on, say nothing</td>
+                            <td>Protects your peace; avoids conflict; doesn't carry others' stuff</td>
+                            <td>Can enable poor behavior; leaves team confused; creates distance; abandons people who need support</td>
+                            <td>When you truly have no standing; boundaries that aren't yours to enforce; preserving your mental health</td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+        </div>
+
+        <div class="section">
+            <div class="section-header">
+                <div class="section-number">4</div>
+                <h2>My Situation: Practicing the Continuum</h2>
+            </div>
+
+            <p class="section-description">Choose a real situation from your recent experience—something that activated you, where you had to make a choice about how to respond. Map it across all four points on the continuum. What did you actually choose? What else was possible?</p>
+
+            <div class="my-situation">
+                <h4>Describe Your Situation</h4>
+                <div class="form-group">
+                    <label for="situation-description">What happened? Who was involved? What triggered you?</label>
+                    <textarea id="situation-description" placeholder="Example: In our leadership meeting, a peer dismissed my proposal in front of the team. I felt humiliated and my initial reaction was to defend myself aggressively."></textarea>
+                </div>
+
+                <h4>Analyze the Continuum</h4>
+                <div class="form-group">
+                    <label for="address-analysis">If I had chosen ADDRESS, I would have...</label>
+                    <textarea id="address-analysis" placeholder="Named it directly in the moment: 'I felt dismissed just now. Help me understand what you meant by that comment.'"></textarea>
+                </div>
+
+                <div class="form-group">
+                    <label for="defer-analysis">If I had chosen ADDRESS LATER, I would have...</label>
+                    <textarea id="defer-analysis" placeholder="Stepped back in the moment, then scheduled a private conversation: 'I want to understand what you meant. Can we talk after this meeting?'"></textarea>
+                </div>
+
+                <div class="form-group">
+                    <label for="document-analysis">If I had chosen DOCUMENT, I would have...</label>
+                    <textarea id="document-analysis" placeholder="Recorded the behavior as a pattern, followed up with HR or my own manager about how this impacts team dynamics."></textarea>
+                </div>
+
+                <div class="form-group">
+                    <label for="release-analysis">If I had chosen RELEASE, I would have...</label>
+                    <textarea id="release-analysis" placeholder="Recognized that this is likely about their insecurity, not about me or my idea. Let it go and moved on in the meeting."></textarea>
+                </div>
+
+                <h4>What Actually Happened</h4>
+                <div class="form-group">
+                    <label for="what-happened">What did you actually choose? What was the result?</label>
+                    <textarea id="what-happened" placeholder="I defended myself aggressively in the moment. The conversation escalated and derailed the rest of the meeting. Afterward I felt embarrassed and withdrawn."></textarea>
+                </div>
+
+                <h4>Learning & Next Time</h4>
+                <div class="form-group">
+                    <label for="learning">What did you learn from this situation? What would you choose differently?</label>
+                    <textarea id="learning" placeholder="I learned that my automatic response is to Address aggressively when I'm triggered. Next time I'll use Address Later—step back in the moment, regulate, and plan a private conversation where I can think clearly."></textarea>
+                </div>
+            </div>
+        </div>
+
+        <div class="section">
+            <div class="section-header">
+                <div class="section-number">5</div>
+                <h2>Building Flexibility: Your Skill Development</h2>
+            </div>
+
+            <p class="section-description">Composure isn't about having one perfect response. It's about having all four available and knowing which one to choose based on what the situation actually needs. Where is your edge right now?</p>
+
+            <div class="commitment-section">
+                <h4>Which response do you most need to develop?</h4>
+
+                <div class="commitment-option">
+                    <input type="radio" id="commit-address" name="commitment" value="address">
+                    <label for="commit-address"><strong>ADDRESS with confidence and clarity</strong></label>
+                    <div class="commitment-description">I tend to avoid direct conversations. I need to practice naming things in the moment with less activation and more curiosity. I want to build trust through transparency.</div>
+                </div>
+
+                <div class="commitment-option">
+                    <input type="radio" id="commit-defer" name="commitment" value="defer">
+                    <label for="commit-defer"><strong>ADDRESS LATER without avoidance</strong></label>
+                    <div class="commitment-description">I tend to jump in too fast when activated. I need to practice pausing, regulating, and planning a more strategic conversation. I want to slow down my reactivity.</div>
+                </div>
+
+                <div class="commitment-option">
+                    <input type="radio" id="commit-document" name="commitment" value="document">
+                    <label for="commit-document"><strong>DOCUMENT with accountability and care</strong></label>
+                    <div class="commitment-description">I tend to avoid the uncomfortable conversations that need to happen. I need to practice creating clear records and following through with necessary accountability structures.</div>
+                </div>
+
+                <div class="commitment-option">
+                    <input type="radio" id="commit-release" name="commitment" value="release">
+                    <label for="commit-release"><strong>RELEASE and let go</strong></label>
+                    <div class="commitment-description">I tend to hold on to things that aren't mine to carry. I need to practice distinguishing what I can influence from what I can't, and build peace with what I can't control.</div>
+                </div>
+            </div>
+
+            <div class="my-situation">
+                <h4>How Will You Practice This?</h4>
+                <div class="form-group">
+                    <label for="practice-commitment">Describe one specific practice commitment for the next two weeks. What will you do differently?</label>
+                    <textarea id="practice-commitment" placeholder="Example: When I feel activation in a meeting, I will pause for 10 seconds before responding. I will ask one clarifying question before defending my position. I'll practice using Address Later in at least one situation where my immediate reaction would have been to address in the moment."></textarea>
+                </div>
+
+                <div class="form-group">
+                    <label for="support-needed">What support do you need to follow through on this commitment? Who should you tell?</label>
+                    <textarea id="support-needed" placeholder="Example: I'll tell my peer mentor about this commitment. We'll check in weekly. I might ask my team to give me feedback if they notice me practicing this skill."></textarea>
+                </div>
+            </div>
+        </div>
+
+        <div class="status-message" id="status-message"></div>
+
+        <div class="action-buttons">
+            <button class="btn-primary" onclick="saveForm()">Save My Work</button>
+            <button class="btn-success" onclick="window.print()">Print This Worksheet</button>
+            <button class="btn-secondary" onclick="clearForm()">Clear All Responses</button>
+        </div>
+    </div>
+
+    <script>
+        const STORAGE_KEY = 'cwc-response-continuum';
+
+        // Initialize continuum boxes
+        document.querySelectorAll('.continuum-box').forEach(box => {
+            box.addEventListener('click', function() {
+                document.querySelectorAll('.continuum-box').forEach(b => b.classList.remove('selected'));
+                this.classList.add('selected');
+                const response = this.dataset.response;
+                localStorage.setItem(`${STORAGE_KEY}-selected`, response);
+            });
+        });
+
+        // Initialize commitment radio buttons
+        document.querySelectorAll('input[name="commitment"]').forEach(radio => {
+            radio.addEventListener('change', function() {
+                localStorage.setItem(`${STORAGE_KEY}-commitment`, this.value);
+            });
+        });
+
+        // Auto-save textareas
+        const textareaIds = [
+            'situation-description',
+            'address-analysis',
+            'defer-analysis',
+            'document-analysis',
+            'release-analysis',
+            'what-happened',
+            'learning',
+            'practice-commitment',
+            'support-needed'
+        ];
+
+        textareaIds.forEach(id => {
+            const textarea = document.getElementById(id);
+            if (textarea) {
+                textarea.addEventListener('blur', function() {
+                    localStorage.setItem(`${STORAGE_KEY}-${id}`, this.value);
+                });
+                textarea.addEventListener('input', function() {
+                    localStorage.setItem(`${STORAGE_KEY}-${id}`, this.value);
+                });
+            }
+        });
+
+        // Load saved data
+        function loadForm() {
+            // Load selected continuum box
+            const selectedResponse = localStorage.getItem(`${STORAGE_KEY}-selected`);
+            if (selectedResponse) {
+                const box = document.querySelector(`[data-response="${selectedResponse}"]`);
+                if (box) {
+                    box.classList.add('selected');
+                }
+            }
+
+            // Load commitment radio
+            const selectedCommitment = localStorage.getItem(`${STORAGE_KEY}-commitment`);
+            if (selectedCommitment) {
+                const radio = document.getElementById(`commit-${selectedCommitment}`);
+                if (radio) {
+                    radio.checked = true;
+                }
+            }
+
+            // Load textarea values
+            textareaIds.forEach(id => {
+                const textarea = document.getElementById(id);
+                const saved = localStorage.getItem(`${STORAGE_KEY}-${id}`);
+                if (textarea && saved) {
+                    textarea.value = saved;
+                }
+            });
+        }
+
+        function saveForm() {
+            // All data is auto-saved, just show confirmation
+            const messageEl = document.getElementById('status-message');
+            messageEl.className = 'status-message show success';
+            messageEl.textContent = '✓ Your work has been saved. All changes are stored automatically.';
+            setTimeout(() => {
+                messageEl.classList.remove('show');
+            }, 3000);
+        }
+
+        function clearForm() {
+            if (confirm('Are you sure you want to clear all your responses? This cannot be undone.')) {
+                // Clear all localStorage for this worksheet
+                textareaIds.forEach(id => {
+                    localStorage.removeItem(`${STORAGE_KEY}-${id}`);
+                    const textarea = document.getElementById(id);
+                    if (textarea) {
+                        textarea.value = '';
+                    }
+                });
+                localStorage.removeItem(`${STORAGE_KEY}-selected`);
+                localStorage.removeItem(`${STORAGE_KEY}-commitment`);
+
+                // Clear UI
+                document.querySelectorAll('.continuum-box').forEach(box => box.classList.remove('selected'));
+                document.querySelectorAll('input[name="commitment"]').forEach(radio => radio.checked = false);
+
+                const messageEl = document.getElementById('status-message');
+                messageEl.className = 'status-message show info';
+                messageEl.textContent = 'All responses cleared. You're starting fresh.';
+                setTimeout(() => {
+                    messageEl.classList.remove('show');
+                }, 3000);
+            }
+        }
+
+        // Load form on page load
+        window.addEventListener('load', loadForm);
+    </script>
+</body>
+</html>
