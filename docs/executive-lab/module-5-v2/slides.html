@@ -1,0 +1,1132 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Advocacy &amp; Negotiation | Executive Leadership Lab</title>
+    <link href="https://fonts.googleapis.com/css2?family=Source+Serif+4:wght@400;500;600;700&family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --ink: #0F1419;
+            --ink-soft: #1F262E;
+            --paper: #FAF7F2;
+            --paper-warm: #F2EDE4;
+            --rule: #D9D2C5;
+            --text: #2D343C;
+            --text-2: #5C6772;
+            --text-3: #8B95A1;
+            --teal: #1F6B7A;
+            --teal-deep: #134450;
+            --gold: #B8894A;
+        }
+
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+
+        body {
+            font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
+            background: var(--ink);
+            color: var(--text);
+            overflow: hidden;
+            height: 100vh;
+            -webkit-font-smoothing: antialiased;
+            -moz-osx-font-smoothing: grayscale;
+        }
+
+        .presentation { position: relative; width: 100vw; height: 100vh; }
+
+        .slide {
+            position: absolute; inset: 0;
+            display: flex; flex-direction: column;
+            opacity: 0; visibility: hidden;
+            transition: opacity 0.45s ease, transform 0.45s ease;
+            transform: translateY(12px);
+            background: var(--paper);
+            padding: 88px 120px 96px;
+        }
+        .slide.active { opacity: 1; visibility: visible; transform: none; }
+
+        .slide-header {
+            position: absolute; top: 40px; left: 60px; right: 60px;
+            display: flex; justify-content: space-between; align-items: center;
+            z-index: 5;
+        }
+        .slide-header .logo { height: 56px; }
+        .module-label {
+            font-family: 'Inter', sans-serif;
+            font-size: 11px; font-weight: 600; letter-spacing: 2.5px;
+            text-transform: uppercase; color: var(--text-3);
+        }
+
+        .ell-mark {
+            position: absolute; bottom: 36px; right: 60px;
+            font-family: 'Source Serif 4', serif;
+            font-size: 13px; font-weight: 600; letter-spacing: 4px;
+            color: var(--gold); opacity: 0.5;
+        }
+        .page-meta {
+            position: absolute; bottom: 40px; left: 60px;
+            font-family: 'Inter', sans-serif;
+            font-size: 10px; font-weight: 600; letter-spacing: 2px;
+            text-transform: uppercase; color: var(--text-3);
+            font-feature-settings: "tnum";
+        }
+
+        h1 {
+            font-family: 'Source Serif 4', Georgia, serif;
+            font-size: 60px; font-weight: 700; line-height: 1.05;
+            letter-spacing: -1.5px; color: var(--ink);
+            margin-bottom: 24px;
+        }
+        h2 {
+            font-family: 'Source Serif 4', Georgia, serif;
+            font-size: 42px; font-weight: 600; line-height: 1.15;
+            letter-spacing: -0.8px; color: var(--ink);
+            margin-bottom: 22px;
+        }
+        h3 {
+            font-family: 'Source Serif 4', Georgia, serif;
+            font-size: 22px; font-weight: 600; line-height: 1.3;
+            color: var(--ink); margin-bottom: 10px;
+        }
+        h4 {
+            font-family: 'Inter', sans-serif;
+            font-size: 14px; font-weight: 600; line-height: 1.4;
+            color: var(--ink); text-transform: uppercase; letter-spacing: 0.8px;
+            margin-bottom: 12px;
+        }
+        .section-label {
+            font-family: 'Inter', sans-serif;
+            font-size: 11px; font-weight: 600; letter-spacing: 2.5px;
+            text-transform: uppercase; color: var(--teal);
+            display: block; margin-bottom: 22px;
+        }
+        .section-label.gold { color: var(--gold); }
+        p, .lead {
+            font-size: 17px; line-height: 1.6; color: var(--text-2);
+            max-width: 640px;
+        }
+        .lead { font-size: 21px; line-height: 1.5; color: var(--text); font-weight: 400; }
+
+        .body {
+            flex: 1; display: flex; flex-direction: column;
+            justify-content: center; max-width: 1100px; margin: 0 auto;
+            width: 100%; padding-top: 24px;
+        }
+        .body.left { text-align: left; align-items: flex-start; max-width: 1080px; }
+        .body.center { text-align: center; align-items: center; }
+        .body p, .body .lead { max-width: 680px; }
+        .body.left p, .body.left .lead { margin-left: 0; }
+
+        /* COVER */
+        .slide-cover { padding: 0; background: var(--ink); }
+        .cover-bg {
+            position: absolute; inset: 0;
+            background:
+              linear-gradient(135deg, rgba(15,20,25,0.92) 0%, rgba(15,20,25,0.78) 50%, rgba(31,107,122,0.45) 100%),
+              radial-gradient(circle at 75% 30%, rgba(184,137,74,0.18) 0%, transparent 55%);
+        }
+        .cover-bg::after {
+            content: ''; position: absolute; inset: 0;
+            background-image: radial-gradient(circle at 1px 1px, rgba(255,255,255,0.04) 1px, transparent 0);
+            background-size: 28px 28px;
+        }
+        .cover-content {
+            position: relative; z-index: 2;
+            display: flex; flex-direction: column; justify-content: space-between;
+            height: 100%; padding: 64px 120px 80px;
+        }
+        .cover-top { display: flex; justify-content: space-between; align-items: center; }
+        .cover-top .logo { height: 44px; filter: brightness(0) invert(1); opacity: 0.85; }
+        .cover-top .label { font-size: 11px; letter-spacing: 3px; text-transform: uppercase; color: rgba(255,255,255,0.6); font-weight: 500; }
+        .cover-mid h1 {
+            color: white; font-size: 88px; max-width: 1000px;
+            font-weight: 600; letter-spacing: -2px; line-height: 1.02;
+            margin-bottom: 32px;
+        }
+        .cover-mid h1 em { font-style: italic; font-weight: 400; color: var(--gold); }
+        .cover-mid p { color: rgba(255,255,255,0.7); font-size: 21px; max-width: 720px; line-height: 1.5; }
+        .cover-bot { display: flex; justify-content: space-between; align-items: flex-end; }
+        .cover-meta { display: flex; gap: 48px; }
+        .cover-meta .item .k { font-size: 10px; letter-spacing: 2.5px; text-transform: uppercase; color: rgba(255,255,255,0.45); display: block; margin-bottom: 6px; }
+        .cover-meta .item .v { font-family: 'Source Serif 4', serif; font-size: 18px; font-weight: 500; color: white; }
+        .cover-stamp { font-family: 'Source Serif 4', serif; letter-spacing: 6px; font-size: 13px; color: rgba(255,255,255,0.4); font-weight: 600; }
+
+        /* HERO STAT */
+        .slide-stat { background: var(--ink); color: white; padding: 0; }
+        .stat-wrap {
+            position: relative; z-index: 2; height: 100%;
+            display: flex; flex-direction: column; justify-content: space-between;
+            padding: 64px 120px 80px;
+        }
+        .stat-bg {
+            position: absolute; inset: 0;
+            background: linear-gradient(180deg, rgba(15,20,25,1) 0%, rgba(19,68,80,0.7) 60%, rgba(15,20,25,1) 100%);
+        }
+        .stat-bg::after {
+            content: ''; position: absolute; inset: 0;
+            background-image: radial-gradient(circle at 1px 1px, rgba(255,255,255,0.04) 1px, transparent 0);
+            background-size: 28px 28px;
+        }
+        .stat-top { display: flex; justify-content: space-between; align-items: center; }
+        .stat-top .logo { height: 44px; filter: brightness(0) invert(1); opacity: 0.7; }
+        .stat-top .meta { font-size: 11px; letter-spacing: 3px; text-transform: uppercase; color: rgba(255,255,255,0.4); }
+        .stat-hero { display: flex; flex-direction: column; align-items: flex-start; gap: 12px; }
+        .stat-eyebrow { font-size: 12px; letter-spacing: 3.5px; text-transform: uppercase; color: var(--gold); font-weight: 600; }
+        .stat-number {
+            font-family: 'Source Serif 4', serif;
+            font-size: 220px; font-weight: 600; line-height: 0.85;
+            color: white; letter-spacing: -7px;
+        }
+        .stat-number .unit { font-size: 88px; vertical-align: 56px; font-weight: 400; color: var(--gold); letter-spacing: 0; margin-left: 8px; }
+        .stat-line { font-family: 'Source Serif 4', serif; font-size: 30px; line-height: 1.3; max-width: 720px; color: white; font-weight: 400; margin-top: 12px; }
+        .stat-source { font-size: 12px; letter-spacing: 1px; color: rgba(255,255,255,0.45); font-style: italic; }
+
+        /* DATA SLIDE (two big stats) */
+        .data-row { display: grid; grid-template-columns: 1fr 1fr; gap: 80px; margin-top: 28px; width: 100%; max-width: 1000px; align-items: start; }
+        .data-stat { padding-top: 24px; border-top: 2px solid var(--ink); }
+        .data-stat .label { font-size: 11px; font-weight: 600; letter-spacing: 2.5px; text-transform: uppercase; color: var(--teal); display: block; margin-bottom: 16px; }
+        .data-stat .big { font-family: 'Source Serif 4', serif; font-size: 124px; line-height: 0.9; font-weight: 600; color: var(--ink); letter-spacing: -3px; font-feature-settings: "tnum"; margin-bottom: 18px; }
+        .data-stat .desc { font-family: 'Source Serif 4', serif; font-size: 20px; line-height: 1.35; color: var(--text); font-weight: 400; }
+        .data-stat .src { margin-top: 14px; font-size: 11px; color: var(--text-3); letter-spacing: 0.4px; font-style: italic; }
+
+        /* FEATURE LIST */
+        .feature-list { display: flex; flex-direction: column; gap: 0; max-width: 760px; margin: 28px 0 0; width: 100%; }
+        .feature-item {
+            display: grid; grid-template-columns: 56px 1fr; gap: 28px;
+            padding: 22px 0; border-bottom: 1px solid var(--rule);
+            align-items: start;
+        }
+        .feature-item:last-child { border-bottom: none; }
+        .feature-num {
+            font-family: 'Source Serif 4', serif; font-size: 34px; line-height: 1; font-weight: 500;
+            color: var(--teal); font-feature-settings: "tnum"; letter-spacing: -1px;
+        }
+        .feature-body h3 { font-size: 19px; margin-bottom: 8px; }
+        .feature-body p { font-size: 15px; line-height: 1.6; color: var(--text-2); margin: 0; }
+
+        /* TWO-COLUMN COMPARE */
+        .compare { display: grid; grid-template-columns: 1fr 1fr; gap: 0; margin-top: 28px; width: 100%; max-width: 1000px; }
+        .compare > div { padding: 28px 36px; }
+        .compare > div:first-child { border-right: 1px solid var(--rule); }
+        .compare h4 { color: var(--text-3); margin-bottom: 16px; }
+        .compare .col-b h4 { color: var(--teal); }
+        .compare ul { list-style: none; }
+        .compare li { font-size: 15px; line-height: 1.55; color: var(--text); padding: 10px 0; padding-left: 24px; position: relative; border-bottom: 1px dotted var(--rule); }
+        .compare li:last-child { border-bottom: none; }
+        .compare .col-a li::before { content: '\2014'; position: absolute; left: 0; color: var(--text-3); }
+        .compare .col-b li::before { content: '\2192'; position: absolute; left: 0; color: var(--teal); font-weight: 600; }
+
+        /* INSIGHT CARDS */
+        .insights { display: grid; grid-template-columns: repeat(3, 1fr); gap: 44px; margin-top: 28px; width: 100%; }
+        .insight { text-align: left; padding-top: 22px; border-top: 2px solid var(--ink); }
+        .insight .label {
+            font-family: 'Inter', sans-serif;
+            font-size: 10px; font-weight: 700; letter-spacing: 2.5px;
+            text-transform: uppercase; color: var(--teal);
+            display: block; margin-bottom: 12px;
+        }
+        .insight h3 { font-size: 21px; margin-bottom: 10px; line-height: 1.25; }
+        .insight p { font-size: 14.5px; line-height: 1.6; color: var(--text-2); margin: 0; }
+
+        /* DATA TABLE */
+        .dt-wrap { margin-top: 28px; width: 100%; }
+        .dt { width: 100%; border-collapse: collapse; font-feature-settings: "tnum"; }
+        .dt thead th {
+            background: var(--ink); color: white;
+            font-size: 11px; font-weight: 600; letter-spacing: 1.5px; text-transform: uppercase;
+            padding: 16px 22px; text-align: left;
+        }
+        .dt thead th:first-child { width: 36%; }
+        .dt thead th.narrow { width: 22%; }
+        .dt tbody tr:nth-child(even) { background: var(--paper-warm); }
+        .dt tbody td {
+            padding: 18px 22px; font-size: 15px; line-height: 1.5;
+            color: var(--text); vertical-align: top;
+            border-bottom: 1px solid var(--rule);
+        }
+        .dt tbody td:first-child {
+            font-family: 'Source Serif 4', serif; font-weight: 600; font-size: 16px;
+            color: var(--ink);
+        }
+        .dt tbody tr:last-child td { border-bottom: 2px solid var(--ink); }
+        .dt .check { font-size: 18px; color: var(--text-3); font-family: 'Source Serif 4', serif; }
+
+        /* SCRIPT BOX */
+        .script-box {
+            background: var(--ink); color: white;
+            padding: 44px 52px; border-radius: 2px;
+            margin-top: 28px; max-width: 880px; width: 100%;
+        }
+        .script-box .step { padding: 16px 0; border-bottom: 1px solid rgba(255,255,255,0.08); display: grid; grid-template-columns: 140px 1fr; gap: 32px; align-items: start; }
+        .script-box .step:last-child { border-bottom: none; }
+        .script-box .step:first-child { padding-top: 0; }
+        .script-box .step .k { font-family: 'Source Serif 4', serif; font-size: 18px; font-weight: 600; color: var(--gold); letter-spacing: 0.3px; }
+        .script-box .step .k .num { font-size: 11px; letter-spacing: 2px; color: rgba(255,255,255,0.4); display: block; margin-bottom: 4px; font-family: 'Inter', sans-serif; font-weight: 600; text-transform: uppercase; }
+        .script-box .step .v { font-family: 'Source Serif 4', serif; font-size: 16px; line-height: 1.55; color: rgba(255,255,255,0.85); font-style: italic; }
+
+        /* CALLOUT */
+        .callout {
+            background: var(--paper-warm); border-left: 3px solid var(--gold);
+            padding: 20px 28px; margin-top: 28px;
+            max-width: 720px; width: 100%;
+        }
+        .callout p { font-size: 15px; color: var(--text); margin: 0; line-height: 1.6; }
+        .callout strong { color: var(--ink); font-weight: 600; }
+
+        /* ACTIVITY META */
+        .activity-meta {
+            display: inline-flex; align-items: center; gap: 12px;
+            margin-top: 22px; padding: 9px 16px;
+            border: 1px solid var(--rule); border-radius: 2px;
+            font-size: 11.5px; letter-spacing: 1px; color: var(--text-3); text-transform: uppercase; font-weight: 500;
+        }
+        .activity-meta .pill { display: inline-block; width: 6px; height: 6px; background: var(--gold); border-radius: 50%; }
+
+        /* QUOTE SLIDE */
+        .slide-quote { background: var(--paper-warm); }
+        .quote-wrap { max-width: 920px; text-align: left; }
+        .quote-mark { font-family: 'Source Serif 4', serif; font-size: 120px; line-height: 0.6; color: var(--gold); margin-bottom: 24px; display: block; }
+        .quote-text { font-family: 'Source Serif 4', serif; font-size: 36px; font-weight: 400; line-height: 1.35; color: var(--ink); letter-spacing: -0.3px; }
+        .quote-attr { margin-top: 32px; font-size: 13px; letter-spacing: 2.5px; text-transform: uppercase; color: var(--text-3); font-weight: 600; }
+
+        /* DARK CLOSE */
+        .slide-dark { background: var(--ink); color: white; }
+        .slide-dark h1, .slide-dark h2, .slide-dark h3 { color: white; }
+        .slide-dark p, .slide-dark .lead { color: rgba(255,255,255,0.7); }
+        .slide-dark .section-label { color: var(--gold); }
+        .slide-dark .module-label { color: rgba(255,255,255,0.4); }
+        .slide-dark .slide-header .logo { filter: brightness(0) invert(1); opacity: 0.7; }
+        .slide-dark .feature-item { border-bottom-color: rgba(255,255,255,0.1); }
+        .slide-dark .feature-num { color: var(--gold); }
+        .slide-dark .feature-body h3 { color: white; }
+        .slide-dark .feature-body p { color: rgba(255,255,255,0.6); }
+        .slide-dark .page-meta { color: rgba(255,255,255,0.4); }
+        .slide-dark .ell-mark { color: rgba(255,255,255,0.2); }
+
+        /* OUTCOMES (Yes/Not Yet/No) */
+        .outcomes { display: grid; grid-template-columns: repeat(3, 1fr); gap: 0; margin-top: 28px; width: 100%; max-width: 1080px; }
+        .outcome { padding: 28px; border-left: 1px solid var(--rule); }
+        .outcome:first-child { border-left: none; }
+        .outcome .verdict {
+            font-family: 'Source Serif 4', serif; font-size: 21px; font-weight: 600;
+            color: var(--teal); margin-bottom: 14px; padding-bottom: 10px;
+            border-bottom: 2px solid var(--teal);
+            display: inline-block;
+        }
+        .outcome:nth-child(2) .verdict { color: var(--gold); border-bottom-color: var(--gold); }
+        .outcome:nth-child(3) .verdict { color: var(--ink); border-bottom-color: var(--ink); }
+        .outcome p { font-size: 14.5px; line-height: 1.6; color: var(--text-2); margin: 0; }
+
+        /* FRAMES */
+        .frames { display: grid; grid-template-columns: repeat(3, 1fr); gap: 52px; margin-top: 28px; width: 100%; max-width: 1100px; }
+        .frame .seq { font-family: 'Source Serif 4', serif; font-size: 14px; letter-spacing: 4px; color: var(--gold); font-weight: 600; margin-bottom: 12px; }
+        .frame h3 { font-size: 19px; margin-bottom: 10px; }
+        .frame p { font-size: 14.5px; line-height: 1.6; color: var(--text-2); margin: 0; }
+
+        /* EQUATION */
+        .eq { display: flex; align-items: stretch; gap: 0; margin-top: 28px; width: 100%; max-width: 1080px; border: 1px solid var(--rule); }
+        .eq-part {
+            flex: 1; padding: 24px 20px;
+            font-family: 'Source Serif 4', serif; font-size: 17px; font-weight: 600;
+            color: var(--ink); text-align: center;
+            background: var(--paper); border-right: 1px solid var(--rule);
+            display: flex; align-items: center; justify-content: center;
+        }
+        .eq-part:last-child { border-right: none; }
+        .eq-part.op { flex: 0 0 56px; background: transparent; color: var(--teal); font-size: 22px; }
+        .eq-part.sum { flex: 1.4; background: var(--ink); color: white; font-size: 15px; line-height: 1.4; }
+        .eq-part.sum span { font-style: italic; color: var(--gold); }
+
+        /* ROLE PLAY */
+        .roles { display: grid; grid-template-columns: repeat(3, 1fr); gap: 22px; margin-top: 28px; width: 100%; }
+        .role { padding: 26px; background: var(--paper-warm); border-top: 3px solid var(--teal); }
+        .role .role-num { font-family: 'Source Serif 4', serif; font-size: 13px; color: var(--teal); font-weight: 700; letter-spacing: 3px; margin-bottom: 10px; }
+        .role h3 { font-size: 18px; margin-bottom: 10px; }
+        .role p { font-size: 14px; line-height: 1.55; color: var(--text-2); margin: 0; }
+
+        /* ROOT CAUSES — 2x3 grid */
+        .causes { display: grid; grid-template-columns: repeat(3, 1fr); gap: 32px 44px; margin-top: 24px; width: 100%; }
+        .cause { }
+        .cause .ix { font-family: 'Source Serif 4', serif; font-size: 13px; font-weight: 700; color: var(--gold); letter-spacing: 3px; margin-bottom: 10px; }
+        .cause h3 { font-size: 17px; margin-bottom: 8px; line-height: 1.3; }
+        .cause p { font-size: 13.5px; line-height: 1.55; color: var(--text-2); margin: 0; }
+
+        /* NAV */
+        .progress-bar {
+            position: fixed; top: 0; left: 0; height: 2px;
+            background: var(--teal); transition: width 0.4s ease; z-index: 1001;
+        }
+        .nav {
+            position: fixed; bottom: 24px; right: 36px;
+            display: flex; align-items: center; gap: 16px; z-index: 1000;
+            background: rgba(255,255,255,0.85); backdrop-filter: blur(10px);
+            padding: 8px 12px; border-radius: 100px; border: 1px solid var(--rule);
+        }
+        .nav-btn {
+            width: 36px; height: 36px; border-radius: 50%;
+            border: none; background: transparent; color: var(--ink);
+            cursor: pointer; display: flex; align-items: center; justify-content: center;
+            transition: background 0.2s ease;
+        }
+        .nav-btn:hover:not(:disabled) { background: var(--paper-warm); }
+        .nav-btn:disabled { color: var(--text-3); cursor: not-allowed; }
+        .nav-btn svg { width: 16px; height: 16px; }
+        .nav-counter { font-size: 12px; font-weight: 600; color: var(--text-2); font-feature-settings: "tnum"; letter-spacing: 1px; min-width: 50px; text-align: center; }
+
+        @media print {
+            body { overflow: visible; height: auto; background: white; }
+            .presentation { height: auto; }
+            .slide { position: relative; opacity: 1; visibility: visible; transform: none; page-break-after: always; height: 100vh; padding: 60px 80px; }
+            .nav, .progress-bar { display: none; }
+            .slide-cover, .slide-stat, .slide-dark { -webkit-print-color-adjust: exact; print-color-adjust: exact; }
+        }
+
+        @media (max-width: 1200px) {
+            .slide { padding: 80px 80px 88px; }
+            .slide-header { left: 40px; right: 40px; }
+            .page-meta { left: 40px; } .ell-mark { right: 40px; }
+            h1 { font-size: 50px; } h2 { font-size: 36px; }
+            .cover-mid h1 { font-size: 68px; }
+            .stat-number { font-size: 170px; } .stat-number .unit { font-size: 68px; }
+            .data-stat .big { font-size: 96px; }
+            .stat-line { font-size: 24px; }
+            .insights { gap: 28px; } .frames { gap: 32px; }
+        }
+        @media (max-width: 900px) {
+            .slide { padding: 80px 40px; }
+            .slide-header { left: 24px; right: 24px; }
+            .page-meta { left: 24px; } .ell-mark { right: 24px; }
+            h1 { font-size: 36px; } h2 { font-size: 26px; }
+            .cover-content, .stat-wrap { padding: 48px 40px; }
+            .cover-mid h1 { font-size: 44px; }
+            .stat-number { font-size: 110px; } .stat-number .unit { font-size: 44px; vertical-align: 32px; }
+            .stat-line { font-size: 18px; }
+            .insights, .frames, .roles, .outcomes, .causes, .data-row { grid-template-columns: 1fr; gap: 24px; }
+            .outcome { border-left: none; border-top: 1px solid var(--rule); padding-left: 0; padding-right: 0; }
+            .compare { grid-template-columns: 1fr; }
+            .compare > div:first-child { border-right: none; border-bottom: 1px solid var(--rule); }
+            .eq { flex-direction: column; }
+            .eq-part { border-right: none; border-bottom: 1px solid var(--rule); }
+            .eq-part.op { padding: 8px; }
+            .script-box { padding: 28px 24px; }
+            .script-box .step { grid-template-columns: 1fr; gap: 8px; padding: 14px 0; }
+            .dt thead th, .dt tbody td { padding: 12px 14px; font-size: 13.5px; }
+        }
+    </style>
+</head>
+<body>
+    <div class="progress-bar" id="progress"></div>
+    <div class="presentation" id="presentation">
+
+        <!-- ============ SLIDE 1: COVER ============ -->
+        <section class="slide slide-cover active" data-slide="1">
+            <div class="cover-bg"></div>
+            <div class="cover-content">
+                <div class="cover-top">
+                    <img src="https://coachingwomenofcolor.com/logo.webp" alt="CWC" class="logo">
+                    <span class="label">Executive Leadership Lab &nbsp;|&nbsp; Module 05 &mdash; May</span>
+                </div>
+                <div class="cover-mid">
+                    <h1>Advocacy &amp;<br><em>Negotiation:</em><br>Ask For What You've Earned</h1>
+                    <p>Promotions, raises, equity, titles, and opportunities&mdash;learn the mechanics of asking, the strategy behind framing, and how to handle every objection they throw at you.</p>
+                </div>
+                <div class="cover-bot">
+                    <div class="cover-meta">
+                        <div class="item"><span class="k">Program</span><span class="v">12-Month Executive Lab</span></div>
+                        <div class="item"><span class="k">Module</span><span class="v">05</span></div>
+                        <div class="item"><span class="k">Delivery</span><span class="v">May</span></div>
+                    </div>
+                    <span class="cover-stamp">ELL</span>
+                </div>
+            </div>
+        </section>
+
+        <!-- ============ SLIDE 2: HERO STAT — 54¢ ============ -->
+        <section class="slide slide-stat" data-slide="2">
+            <div class="stat-bg"></div>
+            <div class="stat-wrap">
+                <div class="stat-top">
+                    <img src="https://coachingwomenofcolor.com/logo.webp" alt="CWC" class="logo">
+                    <span class="meta">The Wage Gap &nbsp;&middot;&nbsp; 02 of 21</span>
+                </div>
+                <div class="stat-hero">
+                    <span class="stat-eyebrow">For every $1 white men earn</span>
+                    <div class="stat-number">54<span class="unit">&cent;</span></div>
+                    <div class="stat-line">is what Black women earn.</div>
+                </div>
+                <div class="stat-source">Source: National Women's Law Center (2024)</div>
+            </div>
+        </section>
+
+        <!-- ============ SLIDE 3: DATA — THE OTHER TWO STATS ============ -->
+        <section class="slide" data-slide="3">
+            <div class="slide-header">
+                <img src="https://coachingwomenofcolor.com/logo.webp" alt="CWC" class="logo">
+                <span class="module-label">Module 5 &nbsp;&middot;&nbsp; May</span>
+            </div>
+            <div class="body left">
+                <span class="section-label">The Data</span>
+                <h2>Asking works.<br>Most women don't ask.</h2>
+                <div class="data-row">
+                    <div class="data-stat">
+                        <span class="label">When women asked</span>
+                        <div class="big">85%</div>
+                        <div class="desc">got some or all of what they requested.</div>
+                        <div class="src">Source: Salary.com (2023)</div>
+                    </div>
+                    <div class="data-stat">
+                        <span class="label">Who always negotiates</span>
+                        <div class="big">12%</div>
+                        <div class="desc">of women, compared with 34% of men.</div>
+                        <div class="src">Source: Glassdoor Economic Research (2023)</div>
+                    </div>
+                </div>
+            </div>
+            <div class="page-meta">03 / 21</div>
+            <div class="ell-mark">ELL</div>
+        </section>
+
+        <!-- ============ SLIDE 4: WELCOME ============ -->
+        <section class="slide" data-slide="4">
+            <div class="slide-header">
+                <img src="https://coachingwomenofcolor.com/logo.webp" alt="CWC" class="logo">
+                <span class="module-label">Module 5 &nbsp;&middot;&nbsp; May</span>
+            </div>
+            <div class="body left">
+                <span class="section-label">Welcome</span>
+                <h1>Closed Mouths<br>Don't Get Fed.</h1>
+                <p class="lead">You've been delivering. You've been tracking your wins. You've been building composure. This month, we put all of it to work.</p>
+            </div>
+            <div class="page-meta">04 / 21</div>
+            <div class="ell-mark">ELL</div>
+        </section>
+
+        <!-- ============ SLIDE 5: OBJECTIVES (v1 phrasing) ============ -->
+        <section class="slide" data-slide="5">
+            <div class="slide-header">
+                <img src="https://coachingwomenofcolor.com/logo.webp" alt="CWC" class="logo">
+                <span class="module-label">Module 5 &nbsp;&middot;&nbsp; May</span>
+            </div>
+            <div class="body left">
+                <span class="section-label">Module 5 Objectives</span>
+                <h2>What You'll Gain</h2>
+                <div class="feature-list">
+                    <div class="feature-item">
+                        <div class="feature-num">01</div>
+                        <div class="feature-body">
+                            <h3>Know Your Market Value</h3>
+                            <p>Research your compensation benchmarks and build an evidence-based case for what you're worth&mdash;before you walk into any room.</p>
+                        </div>
+                    </div>
+                    <div class="feature-item">
+                        <div class="feature-num">02</div>
+                        <div class="feature-body">
+                            <h3>Script Every Version of the Ask</h3>
+                            <p>Develop word-for-word scripts for salary, title, scope, equity, and opportunities&mdash;so you're never searching for words in the moment.</p>
+                        </div>
+                    </div>
+                    <div class="feature-item">
+                        <div class="feature-num">03</div>
+                        <div class="feature-body">
+                            <h3>Handle Every Objection With Confidence</h3>
+                            <p>Prepare strategic responses to "budget freeze," "not the right time," and "let's revisit next cycle"&mdash;so pushback doesn't stop you.</p>
+                        </div>
+                    </div>
+                    <div class="feature-item">
+                        <div class="feature-num">04</div>
+                        <div class="feature-body">
+                            <h3>Leave With a Scheduled Conversation</h3>
+                            <p>Build your complete negotiation package and book the meeting before the module ends. The goal is a real conversation&mdash;not just a plan.</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="page-meta">05 / 21</div>
+            <div class="ell-mark">ELL</div>
+        </section>
+
+        <!-- ============ SLIDE 6: THE CHALLENGE (restored "isn't about confidence—it's about preparation") ============ -->
+        <section class="slide" data-slide="6">
+            <div class="slide-header">
+                <img src="https://coachingwomenofcolor.com/logo.webp" alt="CWC" class="logo">
+                <span class="module-label">Module 5 &nbsp;&middot;&nbsp; May</span>
+            </div>
+            <div class="body left">
+                <span class="section-label">The Challenge</span>
+                <h2>The Ask Is the Gap Between<br>What You Have and What You've Earned</h2>
+                <div class="insights">
+                    <div class="insight">
+                        <span class="label">The Silence Tax</span>
+                        <h3>Every year you don't negotiate is a year of compounding loss.</h3>
+                        <p>Un-asked-for raises, titles that don't match your scope, and equity left on the table add up over a career to hundreds of thousands of dollars.</p>
+                    </div>
+                    <div class="insight">
+                        <span class="label">The Negotiation Penalty</span>
+                        <h3>Research shows WOC face more pushback.</h3>
+                        <p>Less goodwill and harsher assessments when they negotiate the same things their white male peers negotiate routinely&mdash;and without consequence.</p>
+                    </div>
+                    <div class="insight">
+                        <span class="label">The Script Gap</span>
+                        <h3>That gap isn't about confidence&mdash;it's about preparation.</h3>
+                        <p>Most women know they should ask. Very few know exactly what to say, how to frame it, or what to do when the first answer is no.</p>
+                    </div>
+                </div>
+            </div>
+            <div class="page-meta">06 / 21</div>
+            <div class="ell-mark">ELL</div>
+        </section>
+
+        <!-- ============ SLIDE 7: FRAMEWORK — THE ADVOCACY EQUATION ============ -->
+        <section class="slide" data-slide="7">
+            <div class="slide-header">
+                <img src="https://coachingwomenofcolor.com/logo.webp" alt="CWC" class="logo">
+                <span class="module-label">Module 5 &nbsp;&middot;&nbsp; May</span>
+            </div>
+            <div class="body center">
+                <span class="section-label">Module 5 Framework</span>
+                <h2>The Advocacy Equation</h2>
+                <p class="lead" style="text-align: center; margin: 0 auto;">Negotiation isn't a personality trait. It's a skill set. And like any skill, it's built through preparation, not confidence.</p>
+                <div class="eq">
+                    <div class="eq-part">Know Your Worth</div>
+                    <div class="eq-part op">+</div>
+                    <div class="eq-part">Script Your Ask</div>
+                    <div class="eq-part op">+</div>
+                    <div class="eq-part">Own the Objection</div>
+                    <div class="eq-part op">=</div>
+                    <div class="eq-part sum">The Compensation, Title &amp; Scope <span>You've Earned</span></div>
+                </div>
+                <div class="callout" style="margin-top: 36px;">
+                    <p><strong>From Module 2:</strong> Your win log is your evidence. <strong>From Module 4:</strong> Your composure is your advantage. This month, we combine both into a complete negotiation package.</p>
+                </div>
+            </div>
+            <div class="page-meta">07 / 21</div>
+            <div class="ell-mark">ELL</div>
+        </section>
+
+        <!-- ============ SLIDE 8: DEEP DIVE — KNOW YOUR WORTH (v1 phrasing) ============ -->
+        <section class="slide" data-slide="8">
+            <div class="slide-header">
+                <img src="https://coachingwomenofcolor.com/logo.webp" alt="CWC" class="logo">
+                <span class="module-label">Know Your Worth &nbsp;&middot;&nbsp; Deep Dive</span>
+            </div>
+            <div class="body left">
+                <span class="section-label">Deep Dive</span>
+                <h2>You Can't Negotiate What<br>You Haven't Researched</h2>
+                <div class="compare">
+                    <div class="col-a">
+                        <h4>Signs You're Flying Blind</h4>
+                        <ul>
+                            <li>You don't know your market rate</li>
+                            <li>You've never asked peers what they earn</li>
+                            <li>You're guessing at the range in your field</li>
+                            <li>You're anchoring on your current salary instead of market data</li>
+                        </ul>
+                    </div>
+                    <div class="col-b">
+                        <h4>The Breakthrough</h4>
+                        <ul>
+                            <li>Research 3 salary data sources (Levels.fyi, Glassdoor, LinkedIn, BLS)</li>
+                            <li>Build a range: floor, target, and aspirational</li>
+                            <li>Account for your geography, industry, and level</li>
+                            <li>Add your total comp lens: equity, bonus, benefits, flexibility</li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+            <div class="page-meta">08 / 21</div>
+            <div class="ell-mark">ELL</div>
+        </section>
+
+        <!-- ============ SLIDE 9: BEYOND SALARY — HERO TABLE (v1 phrasing restored) ============ -->
+        <section class="slide" data-slide="9">
+            <div class="slide-header">
+                <img src="https://coachingwomenofcolor.com/logo.webp" alt="CWC" class="logo">
+                <span class="module-label">Beyond the Raise &nbsp;&middot;&nbsp; Deep Dive</span>
+            </div>
+            <div class="body left">
+                <span class="section-label">Deep Dive</span>
+                <h2>Salary Is Just One Line Item</h2>
+                <p>Negotiation is bigger than base pay. Every one of these is on the table&mdash;if you know to ask.</p>
+                <div class="dt-wrap">
+                    <table class="dt">
+                        <thead>
+                            <tr>
+                                <th>What to Negotiate</th>
+                                <th>Why It Matters</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr><td>Title &amp; Level</td><td>Affects your next offer, your perceived seniority, and your long-term trajectory.</td></tr>
+                            <tr><td>Equity &amp; Stock Options</td><td>Often the largest wealth-building opportunity&mdash;especially in tech and startups.</td></tr>
+                            <tr><td>Scope &amp; Decision Authority</td><td>More influence without more pay is still more career capital.</td></tr>
+                            <tr><td>Flexibility &amp; Remote Work</td><td>Has real dollar value&mdash;calculate commute cost, childcare, and time.</td></tr>
+                            <tr><td>Professional Development</td><td>Conferences, coaching, certifications, MBA support&mdash;all negotiable.</td></tr>
+                            <tr><td>Signing Bonus / Relocation</td><td>Available at more organizations than advertised&mdash;ask for it.</td></tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+            <div class="page-meta">09 / 21</div>
+            <div class="ell-mark">ELL</div>
+        </section>
+
+        <!-- ============ SLIDE 10: ROOT CAUSES (restored) ============ -->
+        <section class="slide" data-slide="10">
+            <div class="slide-header">
+                <img src="https://coachingwomenofcolor.com/logo.webp" alt="CWC" class="logo">
+                <span class="module-label">Module 5 &nbsp;&middot;&nbsp; May</span>
+            </div>
+            <div class="body left">
+                <span class="section-label">Module 5 Root Causes</span>
+                <h2>Why Women of Color Don't Ask&mdash;<br>And Why That Needs to Change</h2>
+                <div class="causes">
+                    <div class="cause">
+                        <div class="ix">01</div>
+                        <h3>Socialized to Be Grateful</h3>
+                        <p>"You should be glad to have a seat at the table." This narrative is handed to WOC early and often&mdash;and it is costing you real money every single year.</p>
+                    </div>
+                    <div class="cause">
+                        <div class="ix">02</div>
+                        <h3>No Role Models for This</h3>
+                        <p>If you've never seen someone who looks like you negotiate successfully, you have no script to follow. The absence of representation is a real skills barrier.</p>
+                    </div>
+                    <div class="cause">
+                        <div class="ix">03</div>
+                        <h3>Fear of the Relationship</h3>
+                        <p>Worried that the ask will damage trust or make you seem ungrateful. Research is clear: most managers respect employees who know their worth and communicate it professionally.</p>
+                    </div>
+                    <div class="cause">
+                        <div class="ix">04</div>
+                        <h3>Grateful Does Not Mean Aligned</h3>
+                        <p>You can be genuinely grateful for your role and still know that your compensation doesn't match your contribution. Both things can be true. The ask is not a betrayal.</p>
+                    </div>
+                    <div class="cause">
+                        <div class="ix">05</div>
+                        <h3>Waiting for Permission</h3>
+                        <p>Waiting for your manager to "notice" and reward you without a conversation is not a strategy. It is hope. And hope is not a career plan.</p>
+                    </div>
+                    <div class="cause">
+                        <div class="ix">06</div>
+                        <h3>The Script Gap</h3>
+                        <p>Knowing you should ask and knowing what to say are two different things. This module closes that gap&mdash;permanently.</p>
+                    </div>
+                </div>
+            </div>
+            <div class="page-meta">10 / 21</div>
+            <div class="ell-mark">ELL</div>
+        </section>
+
+        <!-- ============ SLIDE 11: THE FOUR-PART SCRIPT ============ -->
+        <section class="slide" data-slide="11">
+            <div class="slide-header">
+                <img src="https://coachingwomenofcolor.com/logo.webp" alt="CWC" class="logo">
+                <span class="module-label">Script Your Ask</span>
+            </div>
+            <div class="body left">
+                <span class="section-label">Module 5 Framework</span>
+                <h2>The Four-Part Negotiation Script</h2>
+                <p>Every effective negotiation conversation follows the same structure. This is yours.</p>
+                <div class="script-box">
+                    <div class="step">
+                        <div class="k"><span class="num">Step 01</span>Open</div>
+                        <div class="v">"I'd like to have a conversation about my compensation. I've done my research and I believe there's an opportunity for alignment."</div>
+                    </div>
+                    <div class="step">
+                        <div class="k"><span class="num">Step 02</span>The Case</div>
+                        <div class="v">"Over the past [timeframe], I've [2&ndash;3 wins with metrics]. My work has directly contributed to [business outcome]."</div>
+                    </div>
+                    <div class="step">
+                        <div class="k"><span class="num">Step 03</span>The Ask</div>
+                        <div class="v">"Based on my track record and current market benchmarks of [$X&ndash;$Y], I'm requesting [specific number/title/scope]."</div>
+                    </div>
+                    <div class="step">
+                        <div class="k"><span class="num">Step 04</span>The Close</div>
+                        <div class="v">"I'm committed to this organization and want to continue growing here. How can we make this work?"</div>
+                    </div>
+                </div>
+            </div>
+            <div class="page-meta">11 / 21</div>
+            <div class="ell-mark">ELL</div>
+        </section>
+
+        <!-- ============ SLIDE 12: STRATEGY — FRAME IT RIGHT (v1 phrasing) ============ -->
+        <section class="slide" data-slide="12">
+            <div class="slide-header">
+                <img src="https://coachingwomenofcolor.com/logo.webp" alt="CWC" class="logo">
+                <span class="module-label">Strategy</span>
+            </div>
+            <div class="body left">
+                <span class="section-label">Strategy</span>
+                <h2>Frame It Right. Change the Outcome.</h2>
+                <p>How you position the ask matters as much as what you ask for. These framing strategies reduce the likability penalty without diluting the ask.</p>
+                <div class="frames">
+                    <div class="frame">
+                        <div class="seq">01</div>
+                        <h3>Lead with Contribution, Not Need</h3>
+                        <p>"Based on the impact I've delivered" lands better than "I need more money." Anchor the ask to your value&mdash;not your circumstances.</p>
+                    </div>
+                    <div class="frame">
+                        <div class="seq">02</div>
+                        <h3>Use Market Data as Cover</h3>
+                        <p>"My research shows the market range for this role is $X&ndash;$Y." External data depersonalizes the conversation and makes the ask about facts, not emotions.</p>
+                    </div>
+                    <div class="frame">
+                        <div class="seq">03</div>
+                        <h3>Name Your Commitment</h3>
+                        <p>"I'm invested in the work here and want to continue growing with this team." This reduces the fear that the conversation signals flight risk.</p>
+                    </div>
+                </div>
+            </div>
+            <div class="page-meta">12 / 21</div>
+            <div class="ell-mark">ELL</div>
+        </section>
+
+        <!-- ============ SLIDE 13: OBJECTION RESPONSES ============ -->
+        <section class="slide" data-slide="13">
+            <div class="slide-header">
+                <img src="https://coachingwomenofcolor.com/logo.webp" alt="CWC" class="logo">
+                <span class="module-label">Own the Objection</span>
+            </div>
+            <div class="body left">
+                <span class="section-label">Tool &nbsp;&middot;&nbsp; Objection Responses</span>
+                <h2>Four Responses to the Four Things They Always Say</h2>
+                <div class="dt-wrap">
+                    <table class="dt">
+                        <thead>
+                            <tr>
+                                <th>What They Say</th>
+                                <th>What You Say</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr>
+                                <td>"The budget is frozen."</td>
+                                <td>"I understand. Can we agree on a number in principle and set a date for when the budget opens? I want to make sure we're aligned on the path forward."</td>
+                            </tr>
+                            <tr>
+                                <td>"Let's revisit next cycle."</td>
+                                <td>"I'd like to do that. Can we schedule that conversation now and document what I need to accomplish to get there? I want to come back with clear evidence."</td>
+                            </tr>
+                            <tr>
+                                <td>"You're already at the top of your band."</td>
+                                <td>"That tells me the conversation may also be about a title and level change. I'd like to talk about what that path looks like and what the timeline is."</td>
+                            </tr>
+                            <tr>
+                                <td>"We give everyone the same increase."</td>
+                                <td>"I appreciate that. I'd like to discuss a merit adjustment based on specific contributions outside of the standard cycle. Here's what I've delivered&hellip;"</td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+            <div class="page-meta">13 / 21</div>
+            <div class="ell-mark">ELL</div>
+        </section>
+
+        <!-- ============ SLIDE 14: ACTIVITY — BUILD YOUR CASE ============ -->
+        <section class="slide" data-slide="14">
+            <div class="slide-header">
+                <img src="https://coachingwomenofcolor.com/logo.webp" alt="CWC" class="logo">
+                <span class="module-label">Module 5 &nbsp;&middot;&nbsp; May</span>
+            </div>
+            <div class="body left">
+                <span class="section-label gold">Activity &nbsp;&middot;&nbsp; Deep Work</span>
+                <h2>Build Your Negotiation Case</h2>
+                <p>Using your win log from Module 2, build the evidence that makes your ask undeniable.</p>
+                <div class="dt-wrap">
+                    <table class="dt">
+                        <thead>
+                            <tr>
+                                <th>Section</th>
+                                <th>Your Draft</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr><td>Market Range</td><td>Floor $______ &nbsp; Target $______ &nbsp; Aspirational $______</td></tr>
+                            <tr><td>Win #1</td><td>What + So What (metrics) + Why it matters to the org</td></tr>
+                            <tr><td>Win #2</td><td>What + So What (metrics) + Why it matters to the org</td></tr>
+                            <tr><td>Win #3</td><td>What + So What (metrics) + Why it matters to the org</td></tr>
+                            <tr><td>The Ask</td><td>Specific number, title, or scope&mdash;be precise.</td></tr>
+                            <tr><td>Beyond Salary</td><td>What else is on the table for you?</td></tr>
+                        </tbody>
+                    </table>
+                </div>
+                <span class="activity-meta"><span class="pill"></span>Time: 20&ndash;25 minutes &nbsp;&middot;&nbsp; Use the Negotiation Scripts worksheet</span>
+            </div>
+            <div class="page-meta">14 / 21</div>
+            <div class="ell-mark">ELL</div>
+        </section>
+
+        <!-- ============ SLIDE 15: EQUITY (v1 phrasing) ============ -->
+        <section class="slide" data-slide="15">
+            <div class="slide-header">
+                <img src="https://coachingwomenofcolor.com/logo.webp" alt="CWC" class="logo">
+                <span class="module-label">Beyond Salary</span>
+            </div>
+            <div class="body left">
+                <span class="section-label">Beyond Salary</span>
+                <h2>Negotiating Equity Is<br>Where Wealth Happens</h2>
+                <p>For many roles&mdash;especially in tech and high-growth companies&mdash;equity is where the real money is. Most women don't negotiate it. That gap is generational.</p>
+                <div class="insights" style="grid-template-columns: 1fr 1fr; gap: 52px;">
+                    <div class="insight">
+                        <span class="label">What to Ask About Equity</span>
+                        <h3>The questions that change the package.</h3>
+                        <p>What's the vesting schedule? What's the strike price vs. fair market value? Is there a refresh grant policy? Can I negotiate more equity in lieu of a higher base? What's the liquidity timeline?</p>
+                    </div>
+                    <div class="insight">
+                        <span class="label">How to Frame It</span>
+                        <h3>The script that lands without flagging risk.</h3>
+                        <p>"I'm very excited about this role. I'd like to explore whether there's flexibility in the equity component. I'm thinking long-term here&mdash;can we talk about what a stronger equity package would look like?"</p>
+                    </div>
+                </div>
+                <div class="callout">
+                    <p><strong>Remember:</strong> You can negotiate equity at a new offer, at annual review, and proactively after a major win. Refresh grants are standard at many companies&mdash;but only if you ask.</p>
+                </div>
+            </div>
+            <div class="page-meta">15 / 21</div>
+            <div class="ell-mark">ELL</div>
+        </section>
+
+        <!-- ============ SLIDE 16: ROLE-PLAY (restored "Use Negotiation Scripts worksheet") ============ -->
+        <section class="slide" data-slide="16">
+            <div class="slide-header">
+                <img src="https://coachingwomenofcolor.com/logo.webp" alt="CWC" class="logo">
+                <span class="module-label">Module 5 &nbsp;&middot;&nbsp; May</span>
+            </div>
+            <div class="body left">
+                <span class="section-label gold">Activity &nbsp;&middot;&nbsp; Practice</span>
+                <h2>Practice: Negotiation Role-Play Scenarios</h2>
+                <p>Confidence comes from rehearsal. Practice these before the real conversation.</p>
+                <div class="roles">
+                    <div class="role">
+                        <div class="role-num">Scenario 01</div>
+                        <h3>The Annual Review</h3>
+                        <p>Your manager offers the standard 3% increase. You've exceeded every goal. Your move: deliver your four-part script and make the case for a merit-based adjustment.</p>
+                    </div>
+                    <div class="role">
+                        <div class="role-num">Scenario 02</div>
+                        <h3>The New Offer</h3>
+                        <p>You've received an offer at 10% above your current salary. You know the market range is higher. Your move: counter with data, name your target, and hold silence after the ask.</p>
+                    </div>
+                    <div class="role">
+                        <div class="role-num">Scenario 03</div>
+                        <h3>The Promotion Without the Raise</h3>
+                        <p>You're doing the work of the next level but your title and pay haven't caught up. Your move: surface the gap, name what you need, and get a timeline in writing.</p>
+                    </div>
+                </div>
+                <span class="activity-meta"><span class="pill"></span>Time: 20&ndash;25 minutes &nbsp;&middot;&nbsp; Use the Negotiation Scripts worksheet &amp; practice with a partner</span>
+            </div>
+            <div class="page-meta">16 / 21</div>
+            <div class="ell-mark">ELL</div>
+        </section>
+
+        <!-- ============ SLIDE 17: ACTION PLAN — NEGOTIATION PACKAGE (restored) ============ -->
+        <section class="slide" data-slide="17">
+            <div class="slide-header">
+                <img src="https://coachingwomenofcolor.com/logo.webp" alt="CWC" class="logo">
+                <span class="module-label">Action Plan</span>
+            </div>
+            <div class="body left">
+                <span class="section-label">Action Plan</span>
+                <h2>Your Negotiation Package</h2>
+                <p>Leave this module with a complete, ready-to-use advocacy package. This is your deliverable.</p>
+                <div class="dt-wrap">
+                    <table class="dt">
+                        <thead>
+                            <tr>
+                                <th>Element</th>
+                                <th>Details</th>
+                                <th class="narrow">Status</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr><td>Market Research</td><td>3 data sources, floor/target/aspirational range</td><td><span class="check">&#9744;</span> Complete</td></tr>
+                            <tr><td>Win Evidence</td><td>3 wins with metrics from your Module 2 win log</td><td><span class="check">&#9744;</span> Complete</td></tr>
+                            <tr><td>Negotiation Script</td><td>All four parts drafted and practiced out loud</td><td><span class="check">&#9744;</span> Complete</td></tr>
+                            <tr><td>Objection Responses</td><td>4 responses prepared for common pushback</td><td><span class="check">&#9744;</span> Complete</td></tr>
+                            <tr><td>Beyond-Salary List</td><td>What else you're negotiating (equity, title, scope)</td><td><span class="check">&#9744;</span> Complete</td></tr>
+                            <tr><td>The Meeting</td><td><strong>Scheduled date and time for the conversation</strong></td><td><span class="check">&#9744;</span> Booked</td></tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+            <div class="page-meta">17 / 21</div>
+            <div class="ell-mark">ELL</div>
+        </section>
+
+        <!-- ============ SLIDE 18: AFTER THE CONVERSATION ============ -->
+        <section class="slide" data-slide="18">
+            <div class="slide-header">
+                <img src="https://coachingwomenofcolor.com/logo.webp" alt="CWC" class="logo">
+                <span class="module-label">After the Conversation</span>
+            </div>
+            <div class="body left">
+                <span class="section-label">After the Conversation</span>
+                <h2>The Ask Doesn't End<br>When the Meeting Does</h2>
+                <div class="outcomes">
+                    <div class="outcome">
+                        <span class="verdict">If they say yes</span>
+                        <p>Get it in writing. Send a follow-up email the same day: "Thank you for today's conversation. I'm confirming our agreement to [specific terms] effective [date]." Paper trail is protection.</p>
+                    </div>
+                    <div class="outcome">
+                        <span class="verdict">If they say not yet</span>
+                        <p>Get clarity on what "not yet" means. What do you need to accomplish? What is the timeline? Get milestones in writing. "Not yet" without a clear path is "no."</p>
+                    </div>
+                    <div class="outcome">
+                        <span class="verdict">If they say no</span>
+                        <p>This is data, not rejection. Ask what would need to change. Then decide: Is this an organization that values you? The answer to that question may be the most important one of your career.</p>
+                    </div>
+                </div>
+            </div>
+            <div class="page-meta">18 / 21</div>
+            <div class="ell-mark">ELL</div>
+        </section>
+
+        <!-- ============ SLIDE 19: WOC FOCUS (restored v1 you/your) ============ -->
+        <section class="slide" data-slide="19">
+            <div class="slide-header">
+                <img src="https://coachingwomenofcolor.com/logo.webp" alt="CWC" class="logo">
+                <span class="module-label">Module 5 &nbsp;&middot;&nbsp; May</span>
+            </div>
+            <div class="body left">
+                <span class="section-label">WOC Focus</span>
+                <h2>Negotiation Is Wealth-Building.<br>The Wealth Gap Is Real.</h2>
+                <p>Black women have the largest wealth gap of any group in the United States. That gap is not an accident&mdash;it is the compounded result of structural inequity and decades of un-negotiated opportunity.</p>
+                <div class="insights" style="grid-template-columns: 1fr 1fr; margin-top: 36px;">
+                    <div class="insight">
+                        <span class="label">This Is Bigger Than One Conversation</span>
+                        <h3>Every salary negotiation, every equity grant, every title bump is a wealth-building moment.</h3>
+                        <p>The ask isn't aggressive. The ask is financial literacy. The ask is your future.</p>
+                    </div>
+                    <div class="insight">
+                        <span class="label">Negotiate for the Next Woman Too</span>
+                        <h3>When you negotiate and succeed, you shift the range upward for everyone who follows.</h3>
+                        <p>Your ask has collective impact. What you build for yourself, you build for the women coming behind you.</p>
+                    </div>
+                </div>
+            </div>
+            <div class="page-meta">19 / 21</div>
+            <div class="ell-mark">ELL</div>
+        </section>
+
+        <!-- ============ SLIDE 20: QUOTE / REFLECTION ============ -->
+        <section class="slide slide-quote" data-slide="20">
+            <div class="slide-header">
+                <img src="https://coachingwomenofcolor.com/logo.webp" alt="CWC" class="logo">
+                <span class="module-label">Reflection</span>
+            </div>
+            <div class="body left">
+                <div class="quote-wrap">
+                    <span class="quote-mark">&ldquo;</span>
+                    <p class="quote-text">Grateful does not always mean aligned. You can love your work, respect your organization, and still know that your compensation doesn't match your contribution. The ask is not a betrayal. It's a boundary.</p>
+                    <div class="quote-attr">Executive Leadership Lab &nbsp;&middot;&nbsp; Module 05 Reflection</div>
+                </div>
+            </div>
+            <div class="page-meta">20 / 21</div>
+            <div class="ell-mark">ELL</div>
+        </section>
+
+        <!-- ============ SLIDE 21: HOMEWORK + CLOSE (restored "Record yourself if possible", "Research Guide") ============ -->
+        <section class="slide slide-dark" data-slide="21">
+            <div class="slide-header">
+                <img src="https://coachingwomenofcolor.com/logo.webp" alt="CWC" class="logo">
+                <span class="module-label">Before Next Module</span>
+            </div>
+            <div class="body left">
+                <span class="section-label">Your Homework</span>
+                <h2>The 14-Day Advocacy Sprint</h2>
+                <p class="lead">The goal of this module is not a plan. The goal is a conversation. Start here.</p>
+                <div class="feature-list" style="max-width: 760px;">
+                    <div class="feature-item">
+                        <div class="feature-num">01</div>
+                        <div class="feature-body">
+                            <h3>Complete Your Market Research</h3>
+                            <p>Pull salary data from 3 sources. Build your floor, target, and aspirational range in writing.</p>
+                        </div>
+                    </div>
+                    <div class="feature-item">
+                        <div class="feature-num">02</div>
+                        <div class="feature-body">
+                            <h3>Write and Practice Your Full Script</h3>
+                            <p>Draft all four parts. Say it out loud at least 3 times. Record yourself if possible.</p>
+                        </div>
+                    </div>
+                    <div class="feature-item">
+                        <div class="feature-num">03</div>
+                        <div class="feature-body">
+                            <h3>Book the Conversation</h3>
+                            <p>Schedule the meeting with your decision-maker before the end of the month. Put it on the calendar.</p>
+                        </div>
+                    </div>
+                    <div class="feature-item">
+                        <div class="feature-num">04</div>
+                        <div class="feature-body">
+                            <h3>Debrief in the Community</h3>
+                            <p>Share your negotiation win, your objection response that worked, or a breakthrough moment. Accountability creates results.</p>
+                        </div>
+                    </div>
+                    <div class="feature-item">
+                        <div class="feature-num">05</div>
+                        <div class="feature-body">
+                            <h3>Complete All 6 Tools</h3>
+                            <p>Preparation Worksheet, Research Guide, Scripts, Objection Cards, Meeting Plan, and Follow-Up Template. Your package should be complete before the conversation.</p>
+                        </div>
+                    </div>
+                </div>
+                <p style="margin-top: 32px; font-size: 13px; letter-spacing: 1.5px; text-transform: uppercase; color: rgba(255,255,255,0.4);">Next Module &nbsp;&middot;&nbsp; Executive Storytelling &mdash; Master Your Narrative &nbsp;&middot;&nbsp; June ELL</p>
+            </div>
+            <div class="page-meta">21 / 21</div>
+            <div class="ell-mark">ELL</div>
+        </section>
+
+    </div><!-- /presentation -->
+
+    <div class="nav">
+        <button class="nav-btn" id="prev" onclick="navigate(-1)" disabled aria-label="Previous slide">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2"><polyline points="15 18 9 12 15 6"/></svg>
+        </button>
+        <span class="nav-counter" id="counter">01 / 21</span>
+        <button class="nav-btn" id="next" onclick="navigate(1)" aria-label="Next slide">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2"><polyline points="9 18 15 12 9 6"/></svg>
+        </button>
+    </div>
+
+    <script>
+        const slides = document.querySelectorAll('.slide');
+        const total = slides.length;
+        let current = 0;
+
+        function pad(n) { return String(n).padStart(2, '0'); }
+
+        function navigate(dir) {
+            const next = Math.max(0, Math.min(total - 1, current + dir));
+            if (next === current) return;
+            slides[current].classList.remove('active');
+            current = next;
+            slides[current].classList.add('active');
+            document.getElementById('counter').textContent = pad(current + 1) + ' / ' + pad(total);
+            document.getElementById('prev').disabled = current === 0;
+            document.getElementById('next').disabled = current === total - 1;
+            document.getElementById('progress').style.width = ((current + 1) / total * 100) + '%';
+            window.scrollTo(0, 0);
+        }
+
+        document.addEventListener('keydown', e => {
+            if (e.key === 'ArrowRight' || e.key === 'ArrowDown' || e.key === ' ') { e.preventDefault(); navigate(1); }
+            if (e.key === 'ArrowLeft' || e.key === 'ArrowUp') { e.preventDefault(); navigate(-1); }
+            if (e.key === 'Home') { while (current > 0) navigate(-1); }
+            if (e.key === 'End') { while (current < total - 1) navigate(1); }
+        });
+
+        let touchStartX = 0;
+        document.addEventListener('touchstart', e => { touchStartX = e.changedTouches[0].screenX; }, { passive: true });
+        document.addEventListener('touchend', e => {
+            const diff = touchStartX - e.changedTouches[0].screenX;
+            if (Math.abs(diff) > 50) navigate(diff > 0 ? 1 : -1);
+        }, { passive: true });
+
+        document.getElementById('progress').style.width = (1 / total * 100) + '%';
+        document.getElementById('counter').textContent = '01 / ' + pad(total);
+    </script>
+</body>
+</html>

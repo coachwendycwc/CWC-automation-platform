@@ -1,0 +1,677 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Module 5 Talking Points (v2.2) — Advocacy & Negotiation</title>
+    <link href="https://fonts.googleapis.com/css2?family=Source+Serif+4:wght@400;500;600;700&family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --ink: #0F1419;
+            --paper: #FAF7F2;
+            --paper-warm: #F2EDE4;
+            --rule: #D9D2C5;
+            --text: #2D343C;
+            --text-2: #5C6772;
+            --teal: #1F6B7A;
+            --gold: #B8894A;
+        }
+
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+
+        body {
+            font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
+            background: var(--paper);
+            color: var(--text);
+            line-height: 1.65;
+            -webkit-font-smoothing: antialiased;
+        }
+
+        /* Download bar */
+        .download-bar {
+            position: fixed; top: 0; left: 0; right: 0;
+            background: var(--ink); color: white;
+            padding: 14px 32px;
+            display: flex; justify-content: space-between; align-items: center;
+            z-index: 100;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+        }
+        .download-bar h1 {
+            font-family: 'Source Serif 4', serif;
+            font-size: 17px; font-weight: 600; color: white;
+            margin: 0; padding: 0; border: none;
+        }
+        .download-btn {
+            background: var(--gold); color: white;
+            border: none; padding: 8px 18px;
+            font-family: 'Inter', sans-serif;
+            font-size: 13px; font-weight: 600;
+            letter-spacing: 0.5px;
+            border-radius: 4px;
+            cursor: pointer;
+            transition: background 0.2s;
+        }
+        .download-btn:hover { background: #a37a40; }
+        .spacer { height: 60px; }
+
+        /* Document container */
+        body > *:not(.download-bar) {
+            max-width: 880px;
+            margin: 0 auto;
+            padding: 0 32px;
+        }
+
+        /* Header */
+        .header {
+            text-align: center;
+            padding: 48px 0 40px;
+            border-bottom: 2px solid var(--ink);
+            margin-bottom: 40px;
+        }
+        .header .logo { height: 64px; margin-bottom: 20px; }
+        .header h1 {
+            font-family: 'Source Serif 4', serif;
+            font-size: 36px; font-weight: 700;
+            color: var(--ink); margin-bottom: 8px;
+            letter-spacing: -0.5px;
+        }
+        .header p {
+            font-size: 14px; color: var(--text-2);
+            letter-spacing: 1.5px; text-transform: uppercase;
+            font-weight: 500;
+        }
+        .header .version {
+            display: inline-block;
+            margin-top: 12px; padding: 4px 12px;
+            background: var(--paper-warm);
+            border: 1px solid var(--rule);
+            border-radius: 100px;
+            font-size: 11px; font-weight: 600;
+            letter-spacing: 1.5px; text-transform: uppercase;
+            color: var(--teal);
+        }
+
+        /* Section headings */
+        h1 {
+            font-family: 'Source Serif 4', serif;
+            font-size: 26px; font-weight: 700;
+            color: var(--ink); margin: 48px 0 12px;
+            padding-bottom: 12px;
+            border-bottom: 1px solid var(--rule);
+            letter-spacing: -0.3px;
+        }
+        h1.page-break {
+            page-break-before: always;
+        }
+        h3 {
+            font-family: 'Inter', sans-serif;
+            font-size: 14px; font-weight: 600;
+            color: var(--teal);
+            margin: 20px 0 10px;
+            letter-spacing: 1px; text-transform: uppercase;
+        }
+        p { margin-bottom: 14px; font-size: 15px; color: var(--text); line-height: 1.7; }
+
+        /* Time badge */
+        .time-badge {
+            display: inline-block;
+            background: var(--teal); color: white;
+            padding: 4px 12px;
+            border-radius: 4px;
+            font-size: 12px; font-weight: 600;
+            letter-spacing: 0.5px;
+            margin-bottom: 8px;
+        }
+
+        /* Script box */
+        .script-box {
+            background: white;
+            border-left: 4px solid var(--teal);
+            padding: 22px 28px;
+            margin: 16px 0 24px;
+            border-radius: 0 4px 4px 0;
+            box-shadow: 0 1px 3px rgba(0,0,0,0.04);
+        }
+        .script-box p {
+            font-family: 'Source Serif 4', serif;
+            font-size: 15.5px; line-height: 1.7;
+            color: var(--text);
+            margin-bottom: 14px;
+        }
+        .script-box p:last-child { margin-bottom: 0; }
+        .script-box strong { color: var(--ink); font-weight: 600; }
+        .script-box em { color: var(--ink); }
+
+        /* Engagement box */
+        .engagement-box {
+            background: var(--paper-warm);
+            border-left: 4px solid var(--gold);
+            padding: 18px 24px;
+            margin: 16px 0 24px;
+            border-radius: 0 4px 4px 0;
+        }
+        .engagement-box strong { color: var(--ink); font-weight: 600; }
+        .engagement-box p {
+            font-size: 14px;
+            line-height: 1.65;
+            margin-bottom: 10px;
+        }
+
+        /* WOC note */
+        .woc-note {
+            background: #FBF4E8;
+            border-left: 4px solid var(--gold);
+            padding: 16px 22px;
+            margin: 16px 0 24px;
+            border-radius: 0 4px 4px 0;
+            font-size: 14px; font-style: italic;
+        }
+        .woc-note strong {
+            color: var(--ink); font-weight: 600;
+            font-style: normal;
+        }
+
+        /* Transition note */
+        .transition-note {
+            background: #F0F4F5;
+            border-left: 4px solid #FF9800;
+            padding: 12px 18px;
+            margin: 16px 0 24px;
+            border-radius: 0 4px 4px 0;
+            font-size: 14px;
+            font-style: italic;
+        }
+        .transition-note strong {
+            color: var(--ink); font-weight: 600;
+            font-style: normal;
+        }
+
+        /* Checklist */
+        .checklist {
+            background: white;
+            border: 1px solid var(--rule);
+            border-radius: 4px;
+            padding: 22px 28px;
+            margin: 16px 0 32px;
+        }
+        .checklist ul {
+            list-style: none;
+        }
+        .checklist > ul > li {
+            padding: 8px 0 8px 28px;
+            position: relative;
+            font-size: 15px;
+            line-height: 1.6;
+        }
+        .checklist > ul > li::before {
+            content: '\2610';
+            position: absolute; left: 0;
+            font-size: 18px; color: var(--teal);
+            line-height: 1.2;
+        }
+        .checklist ul ul li {
+            padding: 4px 0;
+            font-size: 14px;
+            color: var(--text-2);
+        }
+        .checklist strong { color: var(--ink); font-weight: 600; }
+
+        /* Tables */
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin: 16px 0 24px;
+            font-size: 14px;
+        }
+        thead th {
+            background: var(--ink); color: white;
+            font-weight: 600; letter-spacing: 0.5px;
+            text-transform: uppercase; font-size: 11px;
+            padding: 12px 16px; text-align: left;
+        }
+        tbody td {
+            padding: 12px 16px;
+            border-bottom: 1px solid var(--rule);
+            vertical-align: top;
+        }
+        tbody tr:nth-child(even) { background: var(--paper-warm); }
+
+        /* Footer */
+        .footer {
+            margin-top: 64px; padding: 32px 0;
+            text-align: center;
+            border-top: 1px solid var(--rule);
+            font-size: 12px; color: var(--text-2);
+        }
+        .footer p { margin-bottom: 6px; font-size: 12px; }
+
+        /* Print */
+        @media print {
+            .download-bar, .spacer.no-print, .no-print { display: none !important; }
+            body { background: white; }
+            body > *:not(.download-bar) { max-width: 100%; padding: 0; }
+            h1.page-break { page-break-before: always; }
+            .script-box, .engagement-box, .woc-note, .transition-note {
+                break-inside: avoid; page-break-inside: avoid;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="download-bar no-print">
+        <h1>Module 5 Talking Points (v2.2) — Detailed Script</h1>
+        <button class="download-btn" onclick="window.print()">Download / Print PDF</button>
+    </div>
+
+    <div class="spacer no-print"></div>
+
+    <div class="header">
+        <img src="https://coachingwomenofcolor.com/logo.webp" alt="CWC" class="logo">
+        <h1>Module 5: Advocacy &amp; Negotiation</h1>
+        <p>Detailed Script for Recorded Module</p>
+        <span class="version">v2.2 &nbsp;&middot;&nbsp; 21-Slide Deck</span>
+    </div>
+
+    <h1>Pre-Recording Checklist</h1>
+    <div class="checklist">
+        <ul>
+            <li>Test screen share with presentation (do a dry run before recording)</li>
+            <li>Ensure all handouts are uploaded to Skool platform:
+                <ul style="margin-top: 8px; margin-left: 20px; list-style: disc;">
+                    <li>Negotiation Preparation Worksheet</li>
+                    <li>Compensation Research Guide</li>
+                    <li>Negotiation Scripts (by scenario)</li>
+                    <li>Objection Response Cards</li>
+                    <li>Meeting Plan Template</li>
+                    <li>Post-Negotiation Follow-Up Template</li>
+                </ul>
+            </li>
+            <li>Quiet recording environment with good lighting</li>
+            <li>Water and notes within reach</li>
+            <li>Timer ready for activity sections (to guide pacing)</li>
+        </ul>
+    </div>
+
+    <!-- ==================== SLIDE 1: COVER ==================== -->
+    <h1 class="page-break">Slide 1: Title — Advocacy &amp; Negotiation</h1>
+    <div class="time-badge">3–4 minutes</div>
+
+    <h3>Complete Opening Script</h3>
+    <div class="script-box">
+        <p>"Welcome, welcome, welcome to Module 5 of the Executive Leadership Lab. I am so glad you are here. And I want to say something before we even begin &mdash; getting here is an act of advocacy. You showed up. You carved out time in your schedule, in your life, to invest in yourself. That is not small. That is leadership."</p>
+
+        <p>"This month we are talking about something that makes a lot of us uncomfortable. We are talking about advocacy. We are talking about negotiation. We are talking about asking &mdash; clearly, directly, and without apology &mdash; for what we have earned."</p>
+
+        <p>"I want to acknowledge something. For many women of color, asking feels dangerous. It feels like too much. Like you might be seen as ungrateful, aggressive, or out of line. And that fear is not irrational &mdash; it is a response to real experiences in real workplaces. But I need you to hear me: staying silent has a cost too. And that cost is compounding every single year."</p>
+
+        <p>"So this month, we are not just learning negotiation tactics. We are unlearning the silence. We are building the script, the strategy, and the confidence to ask for what you've earned. Let's get into it."</p>
+    </div>
+
+    <!-- ==================== SLIDE 2: HERO STAT 54¢ ==================== -->
+    <h1>Slide 2: The Wage Gap — 54¢ on the Dollar</h1>
+    <div class="time-badge">2–3 minutes</div>
+
+    <h3>Anchoring the Data</h3>
+    <div class="script-box">
+        <p>"Let's start with the reality on the ground. Because before we talk about strategy, I need you to understand what is actually happening &mdash; not as a depressing exercise, but as fuel."</p>
+
+        <p>"54 cents on the dollar. That is what Black women earn compared to white men. Not 80 cents. Not 90 cents. <strong>54.</strong> Over a 40-year career, that gap doesn't just add up &mdash; it compounds. It affects your retirement, your home equity, your ability to build generational wealth."</p>
+
+        <p>"I'm not putting this number on the wall to make you angry. I'm putting it here because this is the math behind every conversation we're going to have for the next hour. Every script. Every framing strategy. Every objection response. All of it is in service of closing that gap &mdash; one ask at a time."</p>
+    </div>
+
+    <div class="woc-note">
+        <strong>Pause Note:</strong> Sit on this slide longer than feels comfortable. Let the number land. The 54¢ is the hero stat of the entire module &mdash; if participants only remember one thing from this hour, it should be this number and what it represents over a career.
+    </div>
+
+    <!-- ==================== SLIDE 3: DATA — 85% + 12% ==================== -->
+    <h1>Slide 3: The Data — Asking Works. Most Women Don't Ask.</h1>
+    <div class="time-badge">3–4 minutes</div>
+
+    <h3>The Other Two Numbers</h3>
+    <div class="script-box">
+        <p>"Here is the number I want you to hold onto: <strong>85%.</strong> Studies show that 85% of people who asked for what they wanted &mdash; in a negotiation &mdash; got at least some of what they asked for. Not everything. But something. The ask worked. The silence didn't."</p>
+
+        <p>"And this one: only <strong>12% of women</strong> negotiate their compensation, compared to <strong>34% of men.</strong> That gap is not about capability. It is about conditioning. We have been taught &mdash; directly and indirectly &mdash; that asking is risky. Today we are changing that."</p>
+
+        <p>"Put those two numbers together and you have the whole argument: most of us don't ask. The ones who do ask, win. That is the entire game. The work this month is closing the gap between knowing it and doing it."</p>
+    </div>
+
+    <div class="engagement-box">
+        <strong>Chat Prompt:</strong> In the chat, drop a number from 1 to 3. 1 = I have never negotiated. 2 = I negotiated once and it felt awkward. 3 = I negotiate and I'm ready to get better at it. No judgment. Just awareness.
+    </div>
+
+    <!-- ==================== SLIDE 4: WELCOME ==================== -->
+    <h1 class="page-break">Slide 4: Welcome — Closed Mouths Don't Get Fed</h1>
+    <div class="time-badge">2–3 minutes</div>
+
+    <h3>Setting the Frame</h3>
+    <div class="script-box">
+        <p>"There is a phrase you've probably heard your whole life: closed mouths don't get fed. I want you to sit with that this month. Because it captures exactly what we are doing here."</p>
+
+        <p>"You have been delivering. You have been tracking your wins &mdash; we built that system together in Module 2. You have been building composure for the high-stakes moments &mdash; we built that in Module 4. This month, we put all of it to work."</p>
+
+        <p>"Every system you have been building was preparing you for this conversation. Module 5 is where the work shows up in your paycheck. Where it shows up in your title. Where it shows up in your scope, your equity, your future. The asks you make this month compound for the rest of your career."</p>
+    </div>
+
+    <!-- ==================== SLIDE 5: OBJECTIVES ==================== -->
+    <h1>Slide 5: Module Objectives — What You'll Gain</h1>
+    <div class="time-badge">2–3 minutes</div>
+
+    <h3>Framing the Learning Journey</h3>
+    <div class="script-box">
+        <p>"Here is what we are going to accomplish together today. By the time we are done, you will understand exactly why advocacy is harder for women of color &mdash; and why that is not a personal failure. You will know how to research your market value so you walk into any conversation with data, not just feelings. You will have a four-part script that you can use in any negotiation scenario. And you will know exactly what to do whether the answer is yes, not yet, or no."</p>
+
+        <p>"We are also going to practice. This is not a passive module. I want you to write, I want you to try, I want you to feel a little uncomfortable &mdash; because that discomfort is where the growth lives."</p>
+    </div>
+
+    <!-- ==================== SLIDE 6: THE CHALLENGE ==================== -->
+    <h1>Slide 6: The Challenge — Silence Tax, Negotiation Penalty, Script Gap</h1>
+    <div class="time-badge">6–8 minutes</div>
+
+    <h3>Teaching the Three Challenges</h3>
+    <div class="script-box">
+        <p>"Before we get to the solution, I want to name the problem clearly. Because too many women of color have internalized these barriers as personal failures. They are not. They are systemic. And naming them is the first step to dismantling them."</p>
+
+        <p>"The first barrier is what I call the <strong>Silence Tax</strong>. Every time you don't ask, you pay a price. You accept the number they offer you. You wait to be recognized. You hope someone will notice. And the silence compounds. Year after year, review after review. The Silence Tax is real &mdash; and it is expensive."</p>
+
+        <p>"The second barrier is the <strong>Negotiation Penalty</strong>. Research is clear: when women negotiate, they are often perceived differently than when men do the same exact thing. Studies show women are 25% less likely to receive a raise when they ask than male counterparts asking in the same way. That is not in your head. That is documented. And knowing it exists means you can prepare for it &mdash; which is exactly what we're going to do."</p>
+
+        <p>"The third barrier is the <strong>Script Gap</strong>. Most of us were never taught how to negotiate. We watched the men around us do it with apparent ease &mdash; and assumed they had something we didn't. They didn't have more talent. They had more practice and fewer consequences for asking. <em>That gap isn't about confidence &mdash; it's about preparation.</em> And we are going to close it today."</p>
+    </div>
+
+    <div class="woc-note">
+        <strong>WOC Context:</strong> Pause here and acknowledge that these barriers intersect. For Black women especially, the negotiation penalty is compounded by racial bias. The ask is not just gendered &mdash; it is racialized. Name that directly and with compassion.
+    </div>
+
+    <!-- ==================== SLIDE 7: ADVOCACY EQUATION ==================== -->
+    <h1>Slide 7: The Advocacy Equation Framework</h1>
+    <div class="time-badge">4–5 minutes</div>
+
+    <h3>Introducing the Framework</h3>
+    <div class="script-box">
+        <p>"Here is the framework we are building toward this month. I call it the Advocacy Equation."</p>
+
+        <p><strong>"Know Your Worth + Script Your Ask + Own the Objection = The compensation, title, and scope you've earned."</strong></p>
+
+        <p>"Three components. Three practices. And when you put them together &mdash; when you know what the market says you're worth, when you have a script that is clear and professional and human, and when you are ready for the pushback &mdash; you stop hoping for recognition and you start creating it."</p>
+
+        <p>"And I want to make this explicit before we go further. From Module 2: your win log is your evidence. From Module 4: your composure is your advantage. This month, we combine both into a complete negotiation package. Nothing we have built together is wasted. It all compounds."</p>
+
+        <p>"Let's break down each part."</p>
+    </div>
+
+    <div class="transition-note">
+        <strong>Transition:</strong> "The first pillar is Know Your Worth &mdash; and that starts with research."
+    </div>
+
+    <!-- ==================== SLIDE 8: KNOW YOUR WORTH ==================== -->
+    <h1 class="page-break">Slide 8: Know Your Worth — Market Research Deep Dive</h1>
+    <div class="time-badge">6–7 minutes</div>
+
+    <h3>Teaching Market Research</h3>
+    <div class="script-box">
+        <p>"The first pillar of the Advocacy Equation is knowing your worth &mdash; and I mean that specifically. Not generally 'I know I'm valuable.' I mean: you have done the research. You know what the market pays for someone with your skills, your experience, your scope of work, in your geography or industry."</p>
+
+        <p>"Here is where you start. Pull data from at least three sources: Glassdoor, LinkedIn Salary, Levels.fyi if you're in tech, Payscale, or the Bureau of Labor Statistics Occupational Outlook. Look for people with your title, your years of experience, your metro area. Write down the range &mdash; not just the median. Understand where you sit in that range and why."</p>
+
+        <p>"Then layer in your impact. This is not just about what the market pays &mdash; it is about what you specifically bring. Go back to your win-tracking template from Module 2. Pull your top three to five contributions from the last year. Quantify them where you can. Revenue influenced. Costs saved. Efficiency gained. People developed. That is your evidence."</p>
+
+        <p>"Market data tells them what the job is worth. Your impact data tells them what <em>you</em> are worth. You need both."</p>
+
+        <p>"On this slide, you'll see two columns &mdash; Signs You're Flying Blind and The Breakthrough. The first column is the diagnostic. If any of those four signs describe where you are right now, you have homework before the conversation. The second column is your map: three sources, a floor-target-aspirational range, geography and industry adjustments, total comp lens. That is what walking in prepared looks like."</p>
+    </div>
+
+    <div class="engagement-box">
+        <strong>Activity Pause (2 min):</strong> Pull up your Compensation Research Guide. Spend two minutes identifying which data sources you will use and where you already have impact data from Module 2.
+    </div>
+
+    <!-- ==================== SLIDE 9: BEYOND SALARY ==================== -->
+    <h1>Slide 9: Salary Is Just One Line Item</h1>
+    <div class="time-badge">4–5 minutes</div>
+
+    <h3>Expanding the Conversation</h3>
+    <div class="script-box">
+        <p>"Before we get into the script, I want to expand your thinking about what negotiation even is. Most people think negotiation means asking for more money. And yes, we are absolutely going to do that. But the table is bigger."</p>
+
+        <p>"You can negotiate your <strong>title</strong>. You can negotiate your <strong>scope</strong> &mdash; the size and visibility of what you're responsible for. You can negotiate <strong>flexibility</strong>: remote work, schedule, location. You can negotiate <strong>professional development</strong>: conferences, coaching, certifications. You can negotiate your <strong>start date</strong>. Your <strong>PTO</strong>. Your <strong>equity</strong>. Your <strong>signing bonus</strong>."</p>
+
+        <p>"Every single one of those is negotiable. And some of them &mdash; especially scope and title &mdash; have downstream effects on your earning power that are bigger than a 5% raise. A title change from Manager to Director changes your benchmark for every future negotiation you will ever have."</p>
+
+        <p>"So as you're thinking about your ask, don't just think about salary. Think about <em>total package</em>. Think about <em>positioning</em>. Think about what gets you where you want to be in three to five years. The table on this slide is your menu. Don't walk in having pre-selected only one item."</p>
+    </div>
+
+    <!-- ==================== SLIDE 10: ROOT CAUSES ==================== -->
+    <h1>Slide 10: Root Causes — Why We Don't Ask</h1>
+    <div class="time-badge">6–7 minutes</div>
+
+    <h3>Going Deeper on the Psychology</h3>
+    <div class="script-box">
+        <p>"Let's talk about the deeper reasons we don't ask. Because if it were just a skills gap, you could take a negotiation course and be done. But for women of color, especially, there are layers here. Six of them, and I want to walk through each."</p>
+
+        <p>"<strong>One: Socialized to be grateful.</strong> Many of us grew up being told, 'You should be glad to have a seat at the table.' That narrative is handed to WOC early and often &mdash; and it is costing you real money every single year. Gratitude is a value. It is not a salary strategy."</p>
+
+        <p>"<strong>Two: No role models for this.</strong> If you've never seen someone who looks like you negotiate successfully, you have no script to follow. The absence of representation is a real skills barrier &mdash; not a personal one. We are building the role model in this room today."</p>
+
+        <p>"<strong>Three: Fear of the relationship.</strong> You're worried that the ask will damage trust with your manager, or make you seem ungrateful. That's valid. And research is clear: most managers respect employees who know their worth and communicate it professionally. A well-executed negotiation increases respect, not decreases it."</p>
+
+        <p>"<strong>Four: Grateful does not mean aligned.</strong> You can be genuinely grateful for your role and still know that your compensation doesn't match your contribution. Both things can be true. The ask is not a betrayal. It is alignment."</p>
+
+        <p>"<strong>Five: Waiting for permission.</strong> Waiting for your manager to 'notice' and reward you without a conversation is not a strategy. It is hope. And &mdash; I need you to hear this &mdash; <em>hope is not a career plan.</em>"</p>
+
+        <p>"<strong>Six: The script gap.</strong> Knowing you should ask and knowing what to say are two different things. This module closes that gap &mdash; permanently. By the end of this hour, the script will exist on paper, in your voice, in your inbox. No more 'I'll figure it out when I get there.'"</p>
+    </div>
+
+    <div class="engagement-box">
+        <strong>Reflection Prompt:</strong> Which of these six root causes resonates most with you right now? Name it &mdash; even just to yourself. Awareness is the first move. We don't dismantle what we won't name.
+    </div>
+
+    <!-- ==================== SLIDE 11: FOUR-PART SCRIPT ==================== -->
+    <h1 class="page-break">Slide 11: The Four-Part Negotiation Script</h1>
+    <div class="time-badge">8–10 minutes</div>
+
+    <h3>Teaching the Script — Your Core Framework</h3>
+    <div class="script-box">
+        <p>"Now we build the script. I want you to write this down &mdash; all four parts. Because the goal is not that you memorize these exact words. The goal is that you internalize the structure so you can use it in any negotiation, in any context."</p>
+
+        <p>"<strong>Part One: The Open.</strong> Set the context for the conversation. Don't ambush anyone. Request the meeting in advance, and when you're in the room, start by anchoring to the relationship and the forward momentum. Something like: <em>'I'd like to have a conversation about my compensation. I've done my research and I believe there's an opportunity for alignment.'</em> Clean. Clear. No apology."</p>
+
+        <p>"<strong>Part Two: The Case.</strong> This is where your research lives. <em>'Over the past [timeframe], I've delivered [two to three wins with metrics]. My work has directly contributed to [business outcome].'</em> You are not making an emotional appeal. You are presenting evidence. The win log from Module 2 is what makes this part credible."</p>
+
+        <p>"<strong>Part Three: The Ask.</strong> This is the part people rush past or mumble through. Don't. State it clearly. <em>'Based on my track record and current market benchmarks of [$X &ndash; $Y], I'm requesting [specific number, title, or scope].'</em> Use specific numbers. Research shows that people who make specific asks get closer to their number than those who give ranges. Your number should be at the top of your acceptable range &mdash; because they will counter."</p>
+
+        <p>"<strong>Part Four: The Close.</strong> You are not begging. You are closing a professional conversation. <em>'I'm committed to this organization and want to continue growing here. How can we make this work?'</em> Then &mdash; and this is important &mdash; you stop talking. Let them respond. Silence after an ask is not awkward. It is power."</p>
+    </div>
+
+    <div class="woc-note">
+        <strong>Delivery Note:</strong> Walk through this script slowly. Many participants have never heard these words modeled out loud. Consider saying the full script aloud yourself before breaking it down &mdash; let them hear it in your voice first. The voice of someone who has asked, and gotten, what she's worth.
+    </div>
+
+    <!-- ==================== SLIDE 12: FRAME IT RIGHT ==================== -->
+    <h1>Slide 12: Frame It Right — Change the Outcome</h1>
+    <div class="time-badge">5–6 minutes</div>
+
+    <h3>Teaching the Three Framing Strategies</h3>
+    <div class="script-box">
+        <p>"How you position the ask matters as much as what you ask for. Research shows that specific framing strategies reduce the likability penalty for women of color &mdash; without diluting the ask. There are three I want you to know."</p>
+
+        <p>"<strong>Lead with contribution, not need.</strong> The line <em>'Based on the impact I've delivered'</em> lands better than <em>'I need more money.'</em> Anchor the ask to your value &mdash; not your circumstances. The minute the ask becomes about what you need, it becomes about you. The minute it stays about contribution, it becomes about value to the organization."</p>
+
+        <p>"<strong>Use market data as cover.</strong> The line <em>'My research shows the market range for this role is $X to $Y'</em> does something powerful. External data depersonalizes the conversation and makes the ask about facts, not emotions. You are not asking for special treatment. You are asking for alignment with the market &mdash; which is a much easier yes."</p>
+
+        <p>"<strong>Name your commitment.</strong> The line <em>'I'm invested in the work here and want to continue growing with this team'</em> does critical work. It reduces the fear that the conversation signals flight risk. Most managers, when they hear a comp conversation, think 'is she looking elsewhere?' Naming your commitment up front takes that question off the table."</p>
+
+        <p>"You don't have to pick one. The strongest asks layer all three. Lead with contribution. Anchor on market data. Close with commitment. That's the formula."</p>
+    </div>
+
+    <!-- ==================== SLIDE 13: OBJECTIONS ==================== -->
+    <h1>Slide 13: Own the Objection — The Four Responses</h1>
+    <div class="time-badge">8–10 minutes</div>
+
+    <h3>Teaching the Objection Responses</h3>
+    <div class="script-box">
+        <p>"Let's talk about the pushback. Because it will come. And most people crumble here &mdash; not because they don't have a strong case, but because they haven't prepared for the response. We are preparing today."</p>
+
+        <p>"<strong>Objection 1: 'The budget is frozen.'</strong> Your response: <em>'I understand. Can we agree on a number in principle and set a date for when the budget opens? I want to make sure we're aligned on the path forward.'</em> You are not accepting no. You are managing the timeline. A frozen budget today does not mean a frozen budget in 90 days &mdash; and you want to be first in line when it thaws."</p>
+
+        <p>"<strong>Objection 2: 'Let's revisit next cycle.'</strong> Your response: <em>'I'd like to do that. Can we schedule that conversation now and document what I need to accomplish to get there? I want to come back with clear evidence.'</em> You are converting vagueness into accountability. A 'next cycle' without a date is a 'next cycle' that never comes."</p>
+
+        <p>"<strong>Objection 3: 'You're already at the top of your band.'</strong> Your response: <em>'That tells me the conversation may also be about a title and level change. I'd like to talk about what that path looks like and what the timeline is.'</em> You are not accepting the ceiling. You are asking about the next band &mdash; which is where the real growth lives."</p>
+
+        <p>"<strong>Objection 4: 'We give everyone the same increase.'</strong> Your response: <em>'I appreciate that. I'd like to discuss a merit adjustment based on specific contributions outside of the standard cycle. Here's what I've delivered.'</em> You are not asking to skip the process. You are asking to make sure the process accounts for impact. There is a difference."</p>
+    </div>
+
+    <div class="engagement-box">
+        <strong>Role Play Prompt:</strong> Get into pairs in your breakout rooms. One person delivers the ask (use the script we just built). The other person delivers one of the four objections. The asker responds. Switch. Five minutes per round.
+    </div>
+
+    <!-- ==================== SLIDE 14: BUILD YOUR CASE ==================== -->
+    <h1 class="page-break">Slide 14: Activity — Build Your Negotiation Case</h1>
+    <div class="time-badge">8–10 minutes</div>
+
+    <h3>Facilitation Guide</h3>
+    <div class="script-box">
+        <p>"Now it is your turn to build it. Open your Negotiation Preparation Worksheet to the case-building section. I'm going to give you eight to ten minutes to fill in your own version of the four-part script."</p>
+
+        <p>"Start with your market range &mdash; floor, target, aspirational. Then drop in your top three wins from the past year, each using the format from Module 2: what you did, the metric, why it mattered to the business. Then state your ask &mdash; specific, at the top of your range. Then identify what else is on the table beyond salary &mdash; pick two from the menu we just walked through."</p>
+
+        <p>"Don't aim for perfect. Aim for real. You will refine this later. Right now I just want to see the skeleton of your ask exist on paper. Because an ask on paper is ten times more likely to become an ask out loud."</p>
+    </div>
+
+    <div class="engagement-box">
+        <strong>Debrief:</strong> Ask 1&ndash;2 volunteers to share their ask number &mdash; not the whole script, just the number. Normalize saying the number out loud. It is often the single hardest part for participants.
+    </div>
+
+    <!-- ==================== SLIDE 15: EQUITY ==================== -->
+    <h1>Slide 15: Negotiating Equity — Where Wealth Happens</h1>
+    <div class="time-badge">5–6 minutes</div>
+
+    <h3>Teaching Equity-Specific Negotiation</h3>
+    <div class="script-box">
+        <p>"I want to spend a few minutes on equity &mdash; because for those of you at startups, in tech, or in organizations that offer equity as part of compensation, this is often the least negotiated and most misunderstood element of a package. And the gap there is generational. Most women don't negotiate equity at all. That single fact represents an enormous amount of wealth left on the table over a career."</p>
+
+        <p>"Equity has real value &mdash; but only if you understand what you're getting. Before you can negotiate equity, you need to ask the right questions. What's the vesting schedule? What's the strike price vs. fair market value? Is there a refresh grant policy? Can I negotiate more equity in lieu of a higher base? What's the liquidity timeline? Those are the questions that change the package."</p>
+
+        <p>"And here is how you frame it: <em>'I'm very excited about this role. I'd like to explore whether there's flexibility in the equity component. I'm thinking long-term here &mdash; can we talk about what a stronger equity package would look like?'</em> Notice what that does. It signals commitment. It signals long-term thinking. And it opens the door for a conversation that most candidates never have."</p>
+
+        <p>"Remember: you can negotiate equity at a new offer, at annual review, and proactively after a major win. Refresh grants are standard at many companies &mdash; but only if you ask."</p>
+    </div>
+
+    <!-- ==================== SLIDE 16: ROLE-PLAY ==================== -->
+    <h1>Slide 16: Practice — Three Role-Play Scenarios</h1>
+    <div class="time-badge">10–12 minutes</div>
+
+    <h3>Facilitation Notes for Role Play</h3>
+    <div class="script-box">
+        <p>"Confidence comes from rehearsal. We are going to practice these three scenarios in pairs. Pull up your Negotiation Scripts worksheet, find a partner, and run each one for five to seven minutes."</p>
+
+        <p>"<strong>Scenario One: The Annual Review.</strong> Your manager offers the standard 3% increase. You've exceeded every goal. Your move: deliver your four-part script and make the case for a merit-based adjustment."</p>
+
+        <p>"<strong>Scenario Two: The New Offer.</strong> You've received an offer at 10% above your current salary. You know the market range is higher. Your move: counter with data, name your target, and hold silence after the ask."</p>
+
+        <p>"<strong>Scenario Three: The Promotion Without the Raise.</strong> You're doing the work of the next level but your title and pay haven't caught up. Your move: surface the gap, name what you need, and get a timeline in writing."</p>
+
+        <p>"After each round, pause and debrief. What landed? What felt hard? What surprised you? The discomfort you feel in the practice is a fraction of the discomfort you'd feel without it in the real conversation."</p>
+    </div>
+
+    <div class="engagement-box">
+        <strong>Group Debrief:</strong> After the role play, ask 2&ndash;3 participants what came up. Affirm specifically &mdash; not just "great" but "I hear you saying the objection felt personal &mdash; that's important to notice." Then remind them: <em>the discomfort you felt is normal. But notice that you didn't fall apart. You responded. That is the muscle we are building.</em>
+    </div>
+
+    <!-- ==================== SLIDE 17: ACTION PLAN ==================== -->
+    <h1 class="page-break">Slide 17: Your Full Negotiation Package</h1>
+    <div class="time-badge">5–6 minutes</div>
+
+    <h3>Pulling the Package Together</h3>
+    <div class="script-box">
+        <p>"Let's build your complete negotiation package &mdash; everything you are going to walk in with. Think of this as your briefcase for the conversation. The checklist on this slide is what you're tracking toward."</p>
+
+        <p>"Your package should include: your <strong>market research</strong> data (salary range for your role and region, sourced from at least three places). Your <strong>win evidence</strong> (three to five wins from the past year with numbers attached where possible). Your full <strong>negotiation script</strong> (all four parts, drafted and practiced out loud). Your <strong>objection responses</strong> (the top two or three you're likely to hear, with your planned response for each). Your <strong>beyond-salary list</strong> (what else you're negotiating &mdash; equity, title, scope, flexibility). And the most important box on this entire slide: <strong>the meeting itself, booked.</strong>"</p>
+
+        <p>"When you walk in with all six of those components, you are not hoping. You are prepared. And that preparation is felt on the other side of the table."</p>
+
+        <p>"This slide is also your accountability framework. Every checkbox is something you can mark off as you go. By the time all six are checked, the conversation is happening &mdash; not in theory, but on the calendar."</p>
+    </div>
+
+    <!-- ==================== SLIDE 18: AFTER THE CONVERSATION ==================== -->
+    <h1>Slide 18: After the Ask — Yes, Not Yet, and No</h1>
+    <div class="time-badge">5–6 minutes</div>
+
+    <h3>Teaching What Happens Next</h3>
+    <div class="script-box">
+        <p>"Let's talk about what happens after the conversation, because most people only prepare for the ask and forget to plan for the response."</p>
+
+        <p>"<strong>If it's a yes</strong> &mdash; get it in writing before you say thank you. Not because you don't trust them, but because memories fade and people change roles. Send a follow-up email the same day: <em>'Thank you for today's conversation. I'm confirming our agreement to [specific terms] effective [date].'</em> Paper trail is protection. That's not pushy. That's professional."</p>
+
+        <p>"<strong>If it's a 'not yet'</strong> &mdash; do not leave without defining what 'not yet' means. <em>'I appreciate you being direct. What does ready look like? Can we put a 90-day timeline on this?'</em> Turn the vague into the specific. Get milestones in writing. A 'not yet' with clear milestones is an investment. A 'not yet' without milestones is a slow no."</p>
+
+        <p>"<strong>If it's a no</strong> &mdash; this is data, not rejection. Ask what would need to change. Then decide: is this an organization that values you? The answer to that question may be the most important one of your career. A well-framed, evidence-based ask that is met with a flat no, no explanation, no path forward &mdash; that tells you something about the ceiling in that space. And it may be time to look at what doors are open elsewhere."</p>
+    </div>
+
+    <!-- ==================== SLIDE 19: WOC FOCUS ==================== -->
+    <h1>Slide 19: WOC Focus — Wealth-Building Is the Real Stakes</h1>
+    <div class="time-badge">4–5 minutes</div>
+
+    <h3>Grounding in Lived Reality</h3>
+    <div class="script-box">
+        <p>"I want to stop here and say something that I need you to hear in your bones: Black women have the largest wealth gap of any group in the United States. That gap is not an accident &mdash; it is the compounded result of structural inequity and decades of un-negotiated opportunity."</p>
+
+        <p>"Every salary negotiation, every equity grant, every title bump is a wealth-building moment. The ask isn't aggressive. The ask is financial literacy. The ask is your future. When you don't negotiate, you are not just accepting a smaller check. You are accepting a smaller future. And the compound interest on that decision follows you for decades."</p>
+
+        <p>"And there's a second piece I need you to hold onto. When you negotiate and succeed, you shift the range upward for everyone who follows. Your ask has collective impact. What you build for yourself, you build for the women coming behind you. The next Black woman, the next Latina, the next Asian woman who sits in that role inherits the range you helped reset."</p>
+
+        <p>"I am not saying this to burden you. I am saying it because you deserve to understand the full weight of the silence &mdash; and the full weight of the ask. Advocacy is not a nice-to-have. For us, it is a financial imperative. It is also an act of solidarity."</p>
+    </div>
+
+    <!-- ==================== SLIDE 20: QUOTE / REFLECTION ==================== -->
+    <h1>Slide 20: Reflection — Grateful Does Not Always Mean Aligned</h1>
+    <div class="time-badge">2–3 minutes</div>
+
+    <h3>Delivering the Reflection</h3>
+    <div class="script-box">
+        <p>"I want to leave you with this before we go to your homework. Sit with it."</p>
+
+        <p>"<em>Grateful does not always mean aligned. You can love your work, respect your organization, and still know that your compensation doesn't match your contribution. The ask is not a betrayal. It's a boundary.</em>"</p>
+
+        <p>"I have heard so many women of color say they feel guilty for wanting more because they are grateful. And I need you to hear me: gratitude and advocacy are not opposites. You can be grateful for your job and still expect to be paid fairly. Those two things can coexist. In fact, they must coexist &mdash; because if your gratitude keeps you quiet, it is costing you your future."</p>
+    </div>
+
+    <!-- ==================== SLIDE 21: HOMEWORK + CLOSE ==================== -->
+    <h1 class="page-break">Slide 21: The 14-Day Advocacy Sprint &amp; Closing</h1>
+    <div class="time-badge">5–6 minutes</div>
+
+    <h3>Closing Action Commitment</h3>
+    <div class="script-box">
+        <p>"Every module ends with action. Not reflection &mdash; action. Because reflection without commitment changes nothing. Here is your homework for this month. Five things."</p>
+
+        <p>"<strong>One: Complete your market research.</strong> Pull salary data from three sources. Build your floor, target, and aspirational range. In writing. By end of this week."</p>
+
+        <p>"<strong>Two: Write and practice your full script.</strong> Draft all four parts. Say it out loud at least three times. Record yourself if possible. Hearing your own voice say the number matters. That's not a metaphor. That's the actual rehearsal."</p>
+
+        <p>"<strong>Three: Book the conversation.</strong> Schedule the meeting with your decision-maker before the end of the month. Put it on the calendar. Even if the meeting is three weeks away &mdash; the fact that it's scheduled changes everything about how you prepare."</p>
+
+        <p>"<strong>Four: Debrief in the community.</strong> Share your negotiation win, your objection response that worked, or a breakthrough moment in the Skool community. Accountability creates results. The cohort is rooting for you &mdash; let them."</p>
+
+        <p>"<strong>Five: Complete all six tools.</strong> Preparation Worksheet, Research Guide, Scripts, Objection Cards, Meeting Plan, Follow-Up Template. Your package should be complete before the conversation, not after."</p>
+
+        <p>"I know what some of you are thinking. 'This isn't the right time.' 'Things are uncertain right now.' 'I'll do it after [thing that will not actually happen].' I've heard all of it. And I want to say this clearly: there is no perfect time. The right time is when you are prepared. The 14-Day Sprint is designed to get you prepared and in motion &mdash; not perfect, just moving."</p>
+    </div>
+
+    <div class="engagement-box">
+        <strong>Accountability Prompt:</strong> Ask participants to type the name of the person they will have the negotiation conversation with in the chat. Or, if they're job searching &mdash; the company they'll send the counteroffer to. Public commitment increases follow-through.
+    </div>
+
+    <h3>Closing the Module</h3>
+    <div class="script-box">
+        <p>"Next month, we shift from asking to storytelling. In June, we are going to tackle <strong>Executive Storytelling &mdash; Master Your Narrative</strong>. How to communicate your value in a way that moves people, not just informs them. We will work on your executive presence on paper, in rooms, and in the digital spaces where decisions get made about your career."</p>
+
+        <p>"I am so proud of the work you are doing. Every month, you are showing up, doing the hard thing, and building the version of yourself that has been waiting to emerge. This month &mdash; ask for what you've earned. I'll see you in June."</p>
+    </div>
+
+    <div class="footer">
+        <p>Module 5: Advocacy &amp; Negotiation &mdash; Executive Leadership Lab (v2.2 / 21-Slide Deck)</p>
+        <p>Coaching Women of Color&reg; &nbsp;|&nbsp; coachingwomenofcolor.com &nbsp;|&nbsp; wendy@coachingwomenofcolor.com</p>
+        <p>Confidential &mdash; For Facilitator Use Only</p>
+    </div>
+</body>
+</html>
