@@ -1,0 +1,360 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Module 6: Build Your Board of Advisors - Facilitator Talking Points</title>
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Source+Serif+4:wght@400;600;700&family=Inter:wght@400;500;600&display=swap');
+
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+
+        body {
+            font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
+            line-height: 1.7; color: #333; background: #fff;
+            padding: 40px; max-width: 900px; margin: 0 auto;
+        }
+
+        @media print {
+            body { padding: 20px; font-size: 11pt; }
+            .no-print { display: none; }
+            .page-break { page-break-before: always; }
+            h1 { font-size: 24pt; } h2 { font-size: 16pt; } h3 { font-size: 13pt; }
+        }
+        @media screen and (max-width: 768px) {
+            body { padding: 20px; }
+            .download-bar { padding: 12px 20px; flex-direction: column; gap: 10px; }
+            .download-bar h1 { font-size: 14px; text-align: center; }
+            .spacer { height: 100px; }
+            .header h1 { font-size: 26px; } .header p { font-size: 16px; }
+            h1 { font-size: 22px; margin: 32px 0 16px; } h2 { font-size: 18px; }
+            .script-box { padding: 16px 20px; } .script-box p { font-size: 15px; }
+            .key-points { padding: 16px; } .engagement-box { padding: 14px 16px; } .checklist { padding: 16px; }
+        }
+        @media screen and (max-width: 480px) {
+            body { padding: 12px; }
+            .download-bar { padding: 10px 12px; } .download-bar h1 { font-size: 12px; }
+            .download-btn { padding: 8px 16px; font-size: 12px; }
+            .spacer { height: 90px; }
+            .header { margin-bottom: 32px; padding-bottom: 24px; } .header h1 { font-size: 22px; } .logo { height: 50px; }
+            h1 { font-size: 20px; margin: 24px 0 12px; padding-top: 16px; } h2 { font-size: 16px; margin: 24px 0 12px; } h3 { font-size: 13px; }
+            .script-box { padding: 12px 14px; } .script-box p { font-size: 14px; line-height: 1.6; }
+            .time-badge { font-size: 11px; padding: 3px 10px; }
+        }
+
+        .download-bar { position: fixed; top: 0; left: 0; right: 0; background: #1A1A1A; color: #fff; padding: 16px 40px; display: flex; justify-content: space-between; align-items: center; z-index: 1000; }
+        .download-bar h1 { font-size: 18px; font-weight: 600; }
+        .download-btn { background: #2A7B8C; color: #fff; border: none; padding: 10px 24px; border-radius: 4px; font-size: 14px; font-weight: 600; cursor: pointer; font-family: inherit; }
+        .download-btn:hover { background: #236573; }
+        .spacer { height: 80px; }
+
+        .header { text-align: center; margin-bottom: 48px; padding-bottom: 32px; border-bottom: 3px solid #1A1A1A; }
+        .logo { height: 60px; margin-bottom: 24px; }
+        .header h1 { font-family: 'Source Serif 4', Georgia, serif; font-size: 32px; color: #1A1A1A; margin-bottom: 8px; }
+        .header p { font-size: 18px; color: #666; }
+
+        h1 { font-family: 'Source Serif 4', Georgia, serif; font-size: 26px; color: #1A1A1A; margin: 40px 0 8px; }
+        h3 { font-size: 14px; text-transform: uppercase; letter-spacing: 1px; color: #2A7B8C; margin: 20px 0 8px; }
+
+        .time-badge { display: inline-block; background: #2A7B8C; color: #fff; padding: 4px 12px; border-radius: 20px; font-size: 12px; font-weight: 600; margin-bottom: 8px; }
+
+        .script-box { background: #FAF8F5; border-left: 4px solid #D4A574; padding: 24px 28px; margin: 16px 0; border-radius: 0 6px 6px 0; }
+        .script-box p { margin-bottom: 16px; line-height: 1.8; }
+        .script-box p:last-child { margin-bottom: 0; }
+        .src { font-size: 12px; color: #999; }
+
+        .key-points { background: #f5f5f5; padding: 20px 24px; margin: 16px 0; border-radius: 8px; }
+        .key-points ul { margin-left: 20px; }
+        .key-points li { margin-bottom: 8px; }
+
+        .engagement-box { background: #E8F4F6; border: 1px solid #2A7B8C; padding: 16px 20px; margin: 16px 0; border-radius: 6px; }
+        .engagement-box strong { color: #2A7B8C; }
+
+        .woc-note { background: #F3E5F5; border-left: 4px solid #9C27B0; padding: 16px 20px; margin: 16px 0; font-size: 14px; border-radius: 0 6px 6px 0; }
+        .woc-note strong { color: #7B1FA2; }
+
+        .delivery-note { background: #FFF9F0; border-left: 4px solid #D4A574; padding: 16px 20px; margin: 16px 0; font-size: 14px; border-radius: 0 6px 6px 0; }
+        .delivery-note strong { color: #B8893F; }
+
+        .checklist { background: #FFF9F5; border: 1px solid #D4A574; padding: 20px 24px; margin: 16px 0; border-radius: 8px; }
+        .checklist ul { list-style: none; margin: 0; }
+        .checklist li { padding: 8px 0; padding-left: 28px; position: relative; border-bottom: 1px solid #F0EBE5; }
+        .checklist li:last-child { border-bottom: none; }
+        .checklist li::before { content: '\2610'; position: absolute; left: 0; color: #D4A574; font-size: 18px; }
+
+        .footer { margin-top: 60px; padding-top: 32px; border-top: 2px solid #E5E0D8; text-align: center; font-size: 13px; color: #999; }
+        .footer p { margin-bottom: 4px; }
+    </style>
+</head>
+<body>
+    <div class="download-bar no-print">
+        <h1>Module 6 Talking Points - Detailed Script</h1>
+        <button class="download-btn" onclick="window.print()">Download / Print PDF</button>
+    </div>
+
+    <div class="spacer no-print"></div>
+
+    <div class="header">
+        <img src="https://coachingwomenofcolor.com/logo.webp" alt="CWC" class="logo">
+        <h1>Module 6: Build Your Board of Advisors</h1>
+        <p>The People in the Room When Decisions About You Get Made</p>
+        <p style="font-size: 14px; margin-top: 12px; color: #999;">Detailed Script for Recorded Module &middot; 22-Slide Deck</p>
+    </div>
+
+    <h1>Pre-Recording Checklist</h1>
+    <div class="checklist">
+        <ul>
+            <li>Screen share tested with the slide deck open and full-screen</li>
+            <li>All four worksheets uploaded to the Skool platform:
+                <ul style="margin-top: 8px; margin-left: 20px; list-style: disc;">
+                    <li>Advisor Map / Gap Analysis</li>
+                    <li>Mentor vs. Sponsor vs. Advocate Sorter</li>
+                    <li>Outreach &amp; Ask Script Template</li>
+                    <li>Relationship-Nurture Tracker</li>
+                </ul>
+            </li>
+            <li>Quiet recording environment with good lighting</li>
+            <li>Water and notes within reach</li>
+            <li>Timer ready for the four activity sections (to guide pacing)</li>
+        </ul>
+    </div>
+
+    <!-- ==================== SLIDE 1 ==================== -->
+    <h1>Slide 1: Title &mdash; Build Your Board of Advisors</h1>
+    <div class="time-badge">2&ndash;3 minutes</div>
+    <h3>Opening Script</h3>
+    <div class="script-box">
+        <p>"Welcome back to the Executive Leadership Lab. This is Module 6, and today we are building something I believe is the single highest-leverage asset in your career &mdash; and it is not on your r&eacute;sum&eacute;. It is the people in the room when decisions about you get made."</p>
+        <p>"Take a breath with me before we start. Because this month is not about working harder. You already work hard. This month is about making sure the right people know it, are talking about it, and are opening doors because of it. That is what a board of advisors does."</p>
+    </div>
+    <div class="delivery-note"><strong>Delivery note:</strong> No statistics on this slide &mdash; this is a warm open. Let the breath be real. Set the tone that this is strategic, not self-promotional.</div>
+
+    <!-- ==================== SLIDE 2 ==================== -->
+    <h1>Slide 2: Why This Module &mdash; Hard Work Alone Doesn't Open the Next Door</h1>
+    <div class="time-badge">4&ndash;5 minutes</div>
+    <h3>Framing the Gap with the Data</h3>
+    <div class="script-box">
+        <p>"Let me show you why this matters, with real numbers. The first one is a gender gap: only 31% of entry-level women have a sponsor, compared to 45% of men at the same level. That gap is at the very beginning of the career &mdash; before most of us even know what a sponsor is." <span class="src">(All women vs. all men &middot; McKinsey &amp; LeanIn, Women in the Workplace, 2025)</span></p>
+        <p>"The second number is the 'broken rung' &mdash; the first step up to manager &mdash; and I want to read all of it, because the story is in the spread. For every 100 men promoted to manager: 93 women overall are promoted. For Asian women and Latinas, it is 82. For Black women, it is 60." <span class="src">(McKinsey &amp; LeanIn, Women in the Workplace, 2025)</span></p>
+        <p>"Hear what that is and what it is not. It is not a performance gap. It is a structural gap in access and advocacy. And a board of advisors is exactly how you close it &mdash; on purpose, not by luck."</p>
+    </div>
+    <div class="delivery-note"><strong>Delivery note:</strong> Read all three broken-rung numbers separately &mdash; 93, 82, 60. Do not collapse them into one. The 31%/45% stat is all women vs. all men, not race-specific; say so plainly.</div>
+
+    <!-- ==================== SLIDE 3 ==================== -->
+    <h1>Slide 3: What You'll Gain</h1>
+    <div class="time-badge">3 minutes</div>
+    <h3>Walking the Four Outcomes</h3>
+    <div class="script-box">
+        <p>"Here is exactly what you will walk away with this month &mdash; four things, each tied to a worksheet you will actually fill in."</p>
+        <p>"<strong>One: clarity on roles.</strong> You will be able to tell a mentor from a sponsor from an advocate &mdash; and you will understand why that difference decides careers."</p>
+        <p>"<strong>Two: your current map.</strong> You will map the board you already have, and just as importantly, find the empty seats."</p>
+        <p>"<strong>Three: a specific ask.</strong> You will write outreach and a request that is easy for someone to say yes to."</p>
+        <p>"<strong>Four: a system to sustain it.</strong> Because a board you build and abandon is worth nothing. You will leave with a rhythm to keep it alive."</p>
+    </div>
+
+    <!-- ==================== SLIDE 4 ==================== -->
+    <h1>Slide 4: The Core Idea &mdash; A Board, Not a Person</h1>
+    <div class="time-badge">4 minutes</div>
+    <h3>Teaching the Central Shift</h3>
+    <div class="script-box">
+        <p>"Here is the mindset shift the whole module rests on. Stop looking for one mentor. No single person can be your strategist, your advocate, your connector, and your truth-teller all at once. When you pin all your hopes on one person, you are fragile &mdash; if they leave, change roles, or simply get busy, your support disappears."</p>
+        <p>"Instead, build a board. The idea of a personal board of directors &mdash; rather than one all-purpose mentor &mdash; was popularized by Priscilla Claman in the Harvard Business Review back in 2010. I want to be precise here: the concept is hers. The specific roles we are about to define are this program's framework, not hers." <span class="src">(Priscilla Claman, &ldquo;Forget Mentors: Employ a Personal Board of Directors,&rdquo; HBR, 2010)</span></p>
+    </div>
+    <div class="delivery-note"><strong>Delivery note:</strong> Attribute only the <em>concept</em> to Claman. Do not attribute the five-seat framework to her &mdash; that is ours.</div>
+
+    <!-- ==================== SLIDE 5 ==================== -->
+    <h1>Slide 5: Mentor &middot; Sponsor &middot; Advocate</h1>
+    <div class="time-badge">5&ndash;6 minutes</div>
+    <h3>The Distinction That Changes Careers</h3>
+    <div class="script-box">
+        <p>"Three roles, and the difference between them is everything. Look at the three cards."</p>
+        <p>"<strong>A mentor talks to you.</strong> They give advice, perspective, guidance. They help you think. But a mentor does not move the decision."</p>
+        <p>"<strong>A sponsor talks about you.</strong> They advocate for you when you are not in the room, and they create opportunities for you. Here is the exact definition the research uses: a sponsor is &lsquo;someone other than your direct manager who actively advocates for your career advancement and/or creates opportunities for you.&rsquo;" <span class="src">(Definition: McKinsey &amp; LeanIn, Women in the Workplace, 2025)</span></p>
+        <p>"<strong>An advocate, or connector, opens the network.</strong> They vouch for you laterally and connect you to rooms you cannot reach alone."</p>
+        <p>"Say this with me: mentorship is advice. Sponsorship is action. You need both &mdash; but if you only have mentors, you will be the most well-advised person who never gets promoted."</p>
+    </div>
+
+    <!-- ==================== SLIDE 6 ==================== -->
+    <h1>Slide 6: Sponsorship Has a Measurable Effect</h1>
+    <div class="time-badge">4 minutes</div>
+    <h3>Proving Sponsorship Moves Promotions</h3>
+    <div class="script-box">
+        <p>"This is not a soft idea. Sponsorship has a measured effect on whether you get promoted. Sylvia Ann Hewlett's research found that protege&#769;s with a sponsor are more likely to get the next promotion &mdash; for men, 23% more likely; for women, 19% more likely." <span class="src">(Sylvia Ann Hewlett, The Sponsor Effect, 2010)</span></p>
+        <p>"Now sit with the gap inside that number. Women get a real bump from sponsorship &mdash; but a smaller one than men do. The benefit itself is unequal. And that is precisely why you cannot leave this to chance. You have to build your board deliberately, because the system will not hand it to you evenly."</p>
+    </div>
+    <div class="delivery-note"><strong>Delivery note:</strong> The point is not just that sponsorship works &mdash; it is that the payoff is uneven, which is the argument for being intentional. Don't skip the second half.</div>
+
+    <!-- ==================== SLIDE 7 ==================== -->
+    <h1>Slide 7: Reflection</h1>
+    <div class="time-badge">2 minutes</div>
+    <h3>A Beat to Let It Land</h3>
+    <div class="script-box">
+        <p>"I want to read you the words on the screen and then give you a moment of quiet."</p>
+        <p>"&lsquo;The most important conversations about your career happen when you are not in the room. A board makes sure someone in that room is for you.&rsquo;"</p>
+        <p>"Pause the video if you need to. Ask yourself honestly: in the rooms where decisions about me get made &mdash; who is speaking for me right now? If the answer is &lsquo;no one,&rsquo; that is not a failure. That is the work of this month."</p>
+    </div>
+
+    <!-- ==================== SLIDE 8 ==================== -->
+    <h1>Slide 8: The Barrier Isn't the Same for Everyone</h1>
+    <div class="time-badge">5&ndash;6 minutes</div>
+    <h3>An Honest, Disaggregated Look</h3>
+    <div class="script-box">
+        <p>"I want to be honest with you about the data, because &lsquo;women of color&rsquo; is not one experience &mdash; it is many, and the barriers differ by group."</p>
+        <p>"For AAPI women: 80% say the &lsquo;bamboo ceiling&rsquo; is real, and 62% say it hit them hardest beyond the junior level. I have to flag the scope on this one: that study surveyed professionals in investment management, not all AAPI women everywhere. The number is real; the context matters." <span class="src">(Scope: investment-management professionals &middot; AAAIM, Beyond the Glass Ceiling, 2022)</span></p>
+        <p>"For Native and Alaska Native women: just 0.4% of executives are Native women. Again, scope &mdash; that figure is the U.S. federal sector in fiscal year 2020. It is a narrow window, and it still tells you something stark." <span class="src">(Scope: U.S. federal sector, FY2020 &middot; EEOC)</span></p>
+        <p>"And the term itself &mdash; &lsquo;bamboo ceiling&rsquo; &mdash; was coined by Jane Hyun in her 2005 book Breaking the Bamboo Ceiling." <span class="src">(Jane Hyun, Breaking the Bamboo Ceiling, 2005)</span></p>
+        <p>"Now the part most programs skip: I could not find comparable sponsorship data, separately reported, for MENA women or Pacific Islander women. I am not going to invent a number to fill that gap. The absence of data is not the absence of the barrier. The board you build works regardless of which dataset happens to exist."</p>
+    </div>
+    <div class="woc-note"><strong>WOC Context:</strong> This is the inclusive, honest slide. Read each statistic WITH its scope caveat &mdash; never present one group's number as if it covers all women of color. Name the MENA / Pacific Islander data gap out loud. That honesty is the credibility of the whole module.</div>
+
+    <!-- ==================== SLIDE 9 ==================== -->
+    <h1>Slide 9: What a Strong Board Looks Like &mdash; The Five Seats</h1>
+    <div class="time-badge">5 minutes</div>
+    <h3>Defining the Five Roles</h3>
+    <div class="script-box">
+        <p>"A complete board has five seats. As I name them, start thinking about who in your life might fill each."</p>
+        <p>"<strong>The Sponsor</strong> &mdash; advocates for you in rooms you are not in. <strong>The Skill Mentor</strong> &mdash; helps you grow one specific capability. <strong>The Insider</strong> &mdash; reads the politics and tells you how things really work. <strong>The Connector</strong> &mdash; opens doors and makes introductions. And <strong>The Truth-Teller</strong> &mdash; a peer who is honest with you when no one else will be."</p>
+        <p>"One person can hold two seats &mdash; your sponsor might also be your insider. What matters is not that you have five people. It is that every seat is filled."</p>
+    </div>
+
+    <!-- ==================== SLIDE 10 ==================== -->
+    <h1>Slide 10: Activity &mdash; Map Your Board</h1>
+    <div class="time-badge">12&ndash;15 minutes</div>
+    <h3>Worksheet 1: Advisor Map / Gap Analysis</h3>
+    <div class="script-box">
+        <p>"Time to make this real. Open the Advisor Map / Gap Analysis worksheet. Pause the video and do this now &mdash; do not just watch."</p>
+        <p>"List the people you currently have against each of the five seats. Some seats will have a name. Some will be blank. Circle the blank ones. Those empty seats are your outreach targets for the rest of this module &mdash; we will come back to them on the very next worksheets."</p>
+    </div>
+    <div class="engagement-box"><strong>Activity prompt:</strong> Which seat was hardest to fill? Drop it in the chat or the community &mdash; most people are missing the same one or two, and naming it is the first step to filling it.</div>
+
+    <!-- ==================== SLIDE 11 ==================== -->
+    <h1>Slide 11: Who's a Mentor? Who's Actually a Sponsor?</h1>
+    <div class="time-badge">4 minutes</div>
+    <h3>Setting Up the Honesty</h3>
+    <div class="script-box">
+        <p>"Before the next worksheet, a warning: most people overcount their sponsors. There is a friendly senior colleague who grabs coffee with you, gives great advice, says they believe in you. We assume that person is sponsoring us. But until they advocate for you when you are not in the room, they are a mentor &mdash; not a sponsor."</p>
+        <p>"The honesty in the next worksheet is the entire point. You are going to name, plainly, who is not yet advocating for you. That is not a criticism of them. It is clarity for you."</p>
+    </div>
+
+    <!-- ==================== SLIDE 12 ==================== -->
+    <h1>Slide 12: Activity &mdash; Sort Your Network</h1>
+    <div class="time-badge">10&ndash;12 minutes</div>
+    <h3>Worksheet 2: Mentor / Sponsor / Advocate Sorter</h3>
+    <div class="script-box">
+        <p>"Open the Mentor vs. Sponsor vs. Advocate Sorter. Go through the people in your network and, for each one, decide which role they actually play right now &mdash; not what you hope, what is true."</p>
+        <p>"Then mark which relationship you want to deepen. You cannot deepen all of them at once. Pick the ones with the most potential to move from mentor to sponsor."</p>
+    </div>
+
+    <!-- ==================== SLIDE 13 ==================== -->
+    <h1>Slide 13: From Mentor to Sponsor</h1>
+    <div class="time-badge">5 minutes</div>
+    <h3>The Conversion Path</h3>
+    <div class="script-box">
+        <p>"So how does a mentor become a sponsor? Not by you asking &lsquo;will you sponsor me.&rsquo; That puts the burden on them to figure out what you need. You earn sponsorship by making advocacy easy and specific."</p>
+        <p>"Three steps, on your screen. <strong>One: deliver visible wins</strong> &mdash; give them something concrete to point to. <strong>Two: make the ask specific</strong> &mdash; name the role, the room, or the opportunity. <strong>Three: make it easy to say yes</strong> &mdash; hand them the words and the why."</p>
+        <p>"A sponsor needs ammunition. Your job is to load it for them."</p>
+    </div>
+
+    <!-- ==================== SLIDE 14 ==================== -->
+    <h1>Slide 14: The Specific Ask</h1>
+    <div class="time-badge">5 minutes</div>
+    <h3>The Four-Part Ask Formula</h3>
+    <div class="script-box">
+        <p>"Here is the formula for an ask people actually act on: Context, plus a Specific Request, plus Why You, plus an Easy Out."</p>
+        <p>"Context sets the stage. The specific request is the heart &mdash; &lsquo;would you put my name forward for the X project?&rsquo; lands; &lsquo;do you have any advice?&rsquo; does not. Why You gives them the reason to say yes. And the Easy Out &mdash; &lsquo;no pressure if the timing is wrong&rsquo; &mdash; lowers the stakes and, counterintuitively, makes a yes more likely."</p>
+        <p>"Specific beats vague every single time. Vague asks feel polite. Specific asks get results."</p>
+    </div>
+
+    <!-- ==================== SLIDE 15 ==================== -->
+    <h1>Slide 15: Activity &mdash; Write Your Outreach &amp; Ask</h1>
+    <div class="time-badge">10&ndash;12 minutes</div>
+    <h3>Worksheet 3: Outreach &amp; Ask Script Template</h3>
+    <div class="script-box">
+        <p>"Open the Outreach &amp; Ask Script Template. Pick a real empty seat from your Advisor Map &mdash; a specific person you would reach out to &mdash; and draft two things: one outreach message, and one specific ask built from the four-part formula."</p>
+        <p>"Write it for a real person, not a hypothetical. The whole point is that you can send it this week."</p>
+    </div>
+
+    <!-- ==================== SLIDE 16 ==================== -->
+    <h1>Slide 16: Building Your Board as a Woman of Color</h1>
+    <div class="time-badge">5 minutes</div>
+    <h3>Naming the Realities and the Moves</h3>
+    <div class="script-box">
+        <p>"Let me speak directly to the realities, and then to the moves. On the realities side: the &lsquo;prove-it-again&rsquo; tax means your wins have to be documented and visible &mdash; you do not get the benefit of the doubt others get. Visibility is not the same as advocacy; being seen in a meeting is not the same as being championed in a decision. And as the data earlier showed, access to senior leaders is uneven."</p>
+        <p>"Now the moves. First, bring receipts &mdash; pair every ask with a documented win. Second, build both cross-racial sponsors and in-community advocates; you need people with positional power and people who understand your lived experience. Third, convert visibility into advocacy by making a specific ask &mdash; do not wait to be noticed; direct the noticing."</p>
+    </div>
+    <div class="woc-note"><strong>WOC Context:</strong> Strengths-based and structural &mdash; the barriers are real and external, the moves are within the participant's control. No new statistics here; reference the verified ones already shown rather than introducing numbers.</div>
+
+    <!-- ==================== SLIDE 17 ==================== -->
+    <h1>Slide 17: A Board Is a Relationship, Not a Transaction</h1>
+    <div class="time-badge">4 minutes</div>
+    <h3>Why Nurture Matters</h3>
+    <div class="script-box">
+        <p>"A board is not a list of contacts you call when you need something. It is a set of relationships, and relationships need maintenance. Three habits keep it alive."</p>
+        <p>"<strong>Give value back</strong> &mdash; offer help, introductions, recognition, not just asks. <strong>Stay in contact</strong> &mdash; regular, light touches beat a flurry of attention only when you need a favor. And <strong>close the loop</strong> &mdash; when someone helps you win, tell them about the win they helped create."</p>
+        <p>"The most common mistake is going silent until you need something. Reciprocity is what keeps people willing to advocate for you."</p>
+    </div>
+
+    <!-- ==================== SLIDE 18 ==================== -->
+    <h1>Slide 18: Activity &mdash; Set Your Nurture Rhythm</h1>
+    <div class="time-badge">8&ndash;10 minutes</div>
+    <h3>Worksheet 4: Relationship-Nurture Tracker</h3>
+    <div class="script-box">
+        <p>"Open the Relationship-Nurture Tracker. For each advisor, set a contact cadence &mdash; monthly, quarterly, whatever is realistic &mdash; and one value-back idea: something you could do for them."</p>
+        <p>"Remember: cadence beats intensity. A steady, sustainable rhythm will outlast an enthusiastic burst that you cannot keep up."</p>
+    </div>
+
+    <!-- ==================== SLIDE 19 ==================== -->
+    <h1>Slide 19: The 14-Day Board Sprint</h1>
+    <div class="time-badge">4 minutes</div>
+    <h3>Three Concrete Actions</h3>
+    <div class="script-box">
+        <p>"Knowledge without action changes nothing, so here is your sprint &mdash; three moves in the next two weeks."</p>
+        <p>"<strong>One: fill one seat.</strong> Send outreach for one empty seat this week. <strong>Two: give value back.</strong> Send one value-back message to an advisor you already have. <strong>Three: convert a mentor.</strong> Make one specific ask that nudges a mentor toward sponsorship."</p>
+        <p>"Three actions. Two weeks. That is how a board gets built &mdash; not in a burst, but in deliberate moves."</p>
+    </div>
+
+    <!-- ==================== SLIDE 20 ==================== -->
+    <h1>Slide 20: Reflection</h1>
+    <div class="time-badge">2 minutes</div>
+    <h3>Reframing the Ask</h3>
+    <div class="script-box">
+        <p>"Before we close, the words on the screen: &lsquo;You are not asking for a favor. You are building the infrastructure your career deserves.&rsquo;"</p>
+        <p>"If asking feels uncomfortable &mdash; and for many of us it does &mdash; reframe it. You are not begging. You are constructing the support system that every advanced career runs on. Men have been doing this openly for generations. It is your turn, and you have earned it."</p>
+    </div>
+
+    <!-- ==================== SLIDE 21 ==================== -->
+    <h1>Slide 21: Key Takeaways</h1>
+    <div class="time-badge">3 minutes</div>
+    <h3>What to Remember</h3>
+    <div class="script-box">
+        <p>"Five things to carry with you. <strong>One:</strong> a board beats a single mentor &mdash; diversify your guidance and your advocacy. <strong>Two:</strong> a sponsor is not a mentor &mdash; advice helps you think, advocacy moves the decision. <strong>Three:</strong> map first, then fill the gaps &mdash; know your empty seats. <strong>Four:</strong> the ask is specific &mdash; make it easy to say yes. <strong>Five:</strong> nurture it or it dies &mdash; cadence and reciprocity keep the board alive."</p>
+        <p>"Each of those maps to a worksheet you now have. The work is in front of you."</p>
+    </div>
+
+    <!-- ==================== SLIDE 22 ==================== -->
+    <h1>Slide 22: Homework &amp; Close &mdash; Build Your Board. Own the Room.</h1>
+    <div class="time-badge">3 minutes</div>
+    <h3>Assigning the Work and Closing</h3>
+    <div class="script-box">
+        <p>"Your homework, four parts. Complete all four worksheets &mdash; Map, Sorter, Outreach &amp; Ask, and Nurture Tracker. Send one real outreach to a real empty seat. Book one nurture conversation with an advisor you already have. And post your biggest gap in the community, so we can hold you to filling it."</p>
+        <p>"Next month we keep building on this. For now &mdash; build your board, and own the room. The most important conversations about your career are going to keep happening whether or not you are there. This month, you make sure someone in that room is for you. I will see you next time."</p>
+    </div>
+    <div class="key-points">
+        <strong>Sources cited in this module:</strong>
+        <ul>
+            <li>McKinsey &amp; LeanIn, <em>Women in the Workplace 2025</em></li>
+            <li>AAAIM &amp; Backstop, <em>Beyond the Glass Ceiling</em> (2022)</li>
+            <li>EEOC, <em>American Indian &amp; Alaska Native Women in the Federal Sector</em> (FY2020)</li>
+            <li>Jane Hyun, <em>Breaking the Bamboo Ceiling</em> (2005)</li>
+            <li>Priscilla Claman, &ldquo;Forget Mentors: Employ a Personal Board of Directors,&rdquo; HBR (2010)</li>
+            <li>Sylvia Ann Hewlett, <em>The Sponsor Effect</em> (2010)</li>
+        </ul>
+    </div>
+
+    <div class="footer">
+        <p>Module 6: Build Your Board of Advisors &mdash; Executive Leadership Lab</p>
+        <p>Coaching Women of Color&reg; | coachingwomenofcolor.com | wendy@coachingwomenofcolor.com</p>
+        <p>Confidential &mdash; For Facilitator Use Only</p>
+    </div>
+</body>
+</html>

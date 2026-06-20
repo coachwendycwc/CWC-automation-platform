@@ -1,0 +1,148 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Relationship-Nurture Tracker | Executive Leadership Lab</title>
+    <link href="https://fonts.googleapis.com/css2?family=Source+Serif+4:wght@400;600;700&family=Inter:wght@400;500;600&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --primary: #1A1A1A; --accent: #2A7B8C; --accent-warm: #D4A574;
+            --text: #333333; --text-light: #666666; --text-muted: #999999;
+            --bg: #FAF8F5; --bg-warm: #F5F2ED; --border: #E5E0D8; --success: #4A9B7F;
+        }
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        body { font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif; background: var(--bg); color: var(--text); line-height: 1.6; min-height: 100vh; }
+        .container { max-width: 900px; margin: 0 auto; padding: 40px 24px; }
+        header { text-align: center; margin-bottom: 48px; padding-bottom: 32px; border-bottom: 1px solid var(--border); }
+        .logo { height: 80px; margin-bottom: 24px; }
+        .module-label { font-size: 11px; font-weight: 600; color: var(--accent); text-transform: uppercase; letter-spacing: 2.5px; margin-bottom: 12px; display: block; }
+        h1 { font-family: 'Source Serif 4', Georgia, serif; font-size: 36px; font-weight: 700; color: var(--primary); margin-bottom: 12px; }
+        .subtitle { font-size: 18px; color: var(--text-light); max-width: 640px; margin: 0 auto; }
+        .instructions { background: var(--bg-warm); border-left: 3px solid var(--accent-warm); padding: 20px 24px; margin-bottom: 40px; border-radius: 0 4px 4px 0; }
+        .instructions h3 { font-family: 'Source Serif 4', Georgia, serif; font-size: 16px; font-weight: 600; color: var(--primary); margin-bottom: 8px; }
+        .instructions p { font-size: 14px; color: var(--text-light); margin: 0; }
+        .section { background: white; border: 1px solid var(--border); border-radius: 8px; padding: 32px; margin-bottom: 24px; }
+        .section-header { display: flex; align-items: center; gap: 16px; margin-bottom: 8px; }
+        .step-number { width: 40px; height: 40px; background: var(--accent); border-radius: 50%; display: flex; align-items: center; justify-content: center; font-size: 18px; font-weight: 700; color: white; flex-shrink: 0; }
+        .section-title { font-family: 'Source Serif 4', Georgia, serif; font-size: 20px; font-weight: 600; color: var(--primary); }
+        .section-description { font-size: 14px; color: var(--text-light); margin-bottom: 24px; padding-left: 56px; }
+        label { display: block; font-size: 14px; font-weight: 500; color: var(--primary); margin-bottom: 8px; }
+        textarea, input[type="text"], input[type="date"] { width: 100%; padding: 12px 16px; border: 1px solid var(--border); border-radius: 4px; font-family: inherit; font-size: 15px; color: var(--text); background: var(--bg); transition: border-color 0.2s, box-shadow 0.2s; resize: vertical; }
+        textarea:focus, input:focus { outline: none; border-color: var(--accent); box-shadow: 0 0 0 3px rgba(42, 123, 140, 0.1); }
+        textarea { min-height: 80px; }
+        .field-group { margin-bottom: 20px; }
+        .data-table { width: 100%; border-collapse: collapse; margin: 8px 0; }
+        .data-table th { background: var(--primary); color: white; padding: 10px 14px; text-align: left; font-size: 12px; font-weight: 600; text-transform: uppercase; letter-spacing: 0.5px; }
+        .data-table td { padding: 0; border-bottom: 1px solid var(--border); vertical-align: middle; }
+        .data-table td input { width: 100%; padding: 12px 14px; border: none; background: transparent; font-family: inherit; font-size: 14px; color: var(--text); }
+        .data-table td select { width: 100%; border: none; background: transparent; padding: 12px 14px; font-family: inherit; font-size: 14px; color: var(--text); }
+        .data-table td input:focus, .data-table td select:focus { outline: none; background: rgba(42,123,140,0.04); }
+        .data-table tr:last-child td { border-bottom: none; }
+        .save-status { font-size: 13px; color: var(--success); display: flex; align-items: center; gap: 6px; }
+        .save-status.hidden { visibility: hidden; }
+        .button-row { display: flex; justify-content: space-between; align-items: center; margin-top: 40px; padding-top: 24px; border-top: 1px solid var(--border); }
+        .btn { padding: 12px 24px; border-radius: 4px; font-family: inherit; font-size: 14px; font-weight: 500; cursor: pointer; transition: all 0.2s; }
+        .btn-primary { background: var(--accent); color: white; border: none; }
+        .btn-primary:hover { background: #236a79; }
+        .btn-secondary { background: transparent; color: var(--text-light); border: 1px solid var(--border); }
+        .btn-secondary:hover { border-color: var(--text-light); }
+        footer { text-align: center; padding: 40px 24px; color: var(--text-muted); font-size: 13px; }
+        footer a { color: var(--accent); text-decoration: none; }
+        @media print { body { background: white; } .container { max-width: 100%; padding: 20px; } .button-row { display: none; } .section { border: 1px solid #ddd; break-inside: avoid; } }
+        @media screen and (max-width: 768px) { .container { padding: 24px 16px; } h1 { font-size: 28px; } .section { padding: 20px; } .data-table, .data-table thead, .data-table tbody, .data-table th, .data-table td, .data-table tr { display: block; } .data-table thead { display: none; } .data-table tr { margin-bottom: 16px; border: 1px solid var(--border); border-radius: 4px; } .data-table td { border-bottom: 1px solid var(--border); } }
+        @media screen and (max-width: 480px) { .container { padding: 16px 12px; } .logo { height: 60px; } h1 { font-size: 24px; } .subtitle { font-size: 15px; } }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <header>
+            <img src="https://coachingwomenofcolor.com/logo.webp" alt="Coaching Women of Color" class="logo">
+            <span class="module-label">Module 6 &mdash; June</span>
+            <h1>Relationship-Nurture Tracker</h1>
+            <p class="subtitle">A board is a relationship, not a transaction. Set a rhythm that keeps it alive &mdash; cadence beats intensity.</p>
+        </header>
+
+        <div class="instructions">
+            <h3>How to use this worksheet</h3>
+            <p>List each advisor on your board. For each, set a realistic contact cadence, log your last contact, and plan one way to give value back &mdash; not just ask. Then commit to your overall rhythm. Answers auto-save as you type.</p>
+        </div>
+
+        <!-- SECTION 1 -->
+        <div class="section" id="section-1">
+            <div class="section-header"><div class="step-number">1</div><div class="section-title">Your Board &amp; Cadence</div></div>
+            <div class="section-description">The most common mistake is going silent until you need a favor. A steady, light rhythm prevents that.</div>
+            <table class="data-table">
+                <thead><tr><th>Advisor</th><th>Cadence</th><th>Last contact</th><th>Value-back idea</th><th>Next touch</th></tr></thead>
+                <tbody>
+                    <tr><td><input type="text" class="n-name" placeholder="Name"></td><td><select class="n-cadence"><option value="">&mdash;</option><option>Monthly</option><option>Quarterly</option><option>Twice a year</option><option>At milestones</option></select></td><td><input type="date" class="n-last"></td><td><input type="text" class="n-value" placeholder="e.g., share a useful article, make an intro"></td><td><input type="date" class="n-next"></td></tr>
+                    <tr><td><input type="text" class="n-name"></td><td><select class="n-cadence"><option value="">&mdash;</option><option>Monthly</option><option>Quarterly</option><option>Twice a year</option><option>At milestones</option></select></td><td><input type="date" class="n-last"></td><td><input type="text" class="n-value"></td><td><input type="date" class="n-next"></td></tr>
+                    <tr><td><input type="text" class="n-name"></td><td><select class="n-cadence"><option value="">&mdash;</option><option>Monthly</option><option>Quarterly</option><option>Twice a year</option><option>At milestones</option></select></td><td><input type="date" class="n-last"></td><td><input type="text" class="n-value"></td><td><input type="date" class="n-next"></td></tr>
+                    <tr><td><input type="text" class="n-name"></td><td><select class="n-cadence"><option value="">&mdash;</option><option>Monthly</option><option>Quarterly</option><option>Twice a year</option><option>At milestones</option></select></td><td><input type="date" class="n-last"></td><td><input type="text" class="n-value"></td><td><input type="date" class="n-next"></td></tr>
+                    <tr><td><input type="text" class="n-name"></td><td><select class="n-cadence"><option value="">&mdash;</option><option>Monthly</option><option>Quarterly</option><option>Twice a year</option><option>At milestones</option></select></td><td><input type="date" class="n-last"></td><td><input type="text" class="n-value"></td><td><input type="date" class="n-next"></td></tr>
+                    <tr><td><input type="text" class="n-name"></td><td><select class="n-cadence"><option value="">&mdash;</option><option>Monthly</option><option>Quarterly</option><option>Twice a year</option><option>At milestones</option></select></td><td><input type="date" class="n-last"></td><td><input type="text" class="n-value"></td><td><input type="date" class="n-next"></td></tr>
+                </tbody>
+            </table>
+        </div>
+
+        <!-- SECTION 2 -->
+        <div class="section" id="section-2">
+            <div class="section-header"><div class="step-number">2</div><div class="section-title">Close the Loop</div></div>
+            <div class="section-description">When someone helps you win, tell them about the win they helped create. Plan it.</div>
+            <div class="field-group"><label>A recent win an advisor helped create &mdash; and how I'll tell them:</label><textarea id="loop-win" placeholder="e.g., 'Got the project lead role — I'll email [name] to thank them for the intro and share how it went.'"></textarea></div>
+        </div>
+
+        <!-- SECTION 3 -->
+        <div class="section" id="section-3">
+            <div class="section-header"><div class="step-number">3</div><div class="section-title">My Nurture Commitment</div></div>
+            <div class="section-description">Make it sustainable. A rhythm you can keep beats an ambitious one you can't.</div>
+            <div class="field-group"><label>The cadence I will realistically maintain:</label><input type="text" id="commit-cadence" placeholder="e.g., One outreach every Friday morning, 15 minutes"></div>
+            <div class="field-group"><label>How I'll remember to do it:</label><input type="text" id="commit-system" placeholder="e.g., recurring calendar block, reminder app"></div>
+        </div>
+
+        <div class="button-row">
+            <button class="btn btn-secondary" onclick="clearAll()">Clear All</button>
+            <span class="save-status hidden" id="save-status">
+                <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="20 6 9 17 4 12"></polyline></svg>
+                Auto-saved
+            </span>
+            <button class="btn btn-primary" onclick="window.print()">Print / PDF</button>
+        </div>
+    </div>
+
+    <footer>
+        <p>Executive Leadership Lab &mdash; Module 6: Build Your Board of Advisors</p>
+        <p><a href="https://coachingwomenofcolor.com">Coaching Women of Color&reg;</a></p>
+    </footer>
+
+    <script>
+        const STORAGE_KEY = 'cwc-nurture-tracker-v1';
+        const CLASS_FIELDS = ['n-name','n-cadence','n-last','n-value','n-next'];
+        function saveData() {
+            const data = {};
+            document.querySelectorAll('input[type="text"], input[type="date"], textarea').forEach(el => { if (el.id) data[el.id] = el.value; });
+            CLASS_FIELDS.forEach(cls => { document.querySelectorAll('.' + cls).forEach((el, i) => { data[cls + '-' + i] = el.value; }); });
+            localStorage.setItem(STORAGE_KEY, JSON.stringify(data));
+            const status = document.getElementById('save-status');
+            status.classList.remove('hidden');
+            setTimeout(() => status.classList.add('hidden'), 2000);
+        }
+        function loadData() {
+            const saved = localStorage.getItem(STORAGE_KEY);
+            if (!saved) return;
+            const data = JSON.parse(saved);
+            Object.keys(data).forEach(key => { const el = document.getElementById(key); if (el) el.value = data[key]; });
+            CLASS_FIELDS.forEach(cls => { document.querySelectorAll('.' + cls).forEach((el, i) => { if (data[cls + '-' + i] !== undefined) el.value = data[cls + '-' + i]; }); });
+        }
+        function clearAll() {
+            if (!confirm('Clear all saved data? This cannot be undone.')) return;
+            localStorage.removeItem(STORAGE_KEY);
+            document.querySelectorAll('input[type="text"], input[type="date"], textarea').forEach(el => el.value = '');
+            document.querySelectorAll('select').forEach(el => el.value = '');
+        }
+        document.addEventListener('input', saveData);
+        document.addEventListener('change', saveData);
+        loadData();
+    </script>
+</body>
+</html>

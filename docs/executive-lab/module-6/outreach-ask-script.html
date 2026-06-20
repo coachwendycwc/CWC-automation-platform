@@ -1,0 +1,148 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Outreach &amp; Ask Script Template | Executive Leadership Lab</title>
+    <link href="https://fonts.googleapis.com/css2?family=Source+Serif+4:wght@400;600;700&family=Inter:wght@400;500;600&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --primary: #1A1A1A; --accent: #2A7B8C; --accent-warm: #D4A574;
+            --text: #333333; --text-light: #666666; --text-muted: #999999;
+            --bg: #FAF8F5; --bg-warm: #F5F2ED; --border: #E5E0D8; --success: #4A9B7F;
+        }
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        body { font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif; background: var(--bg); color: var(--text); line-height: 1.6; min-height: 100vh; }
+        .container { max-width: 900px; margin: 0 auto; padding: 40px 24px; }
+        header { text-align: center; margin-bottom: 48px; padding-bottom: 32px; border-bottom: 1px solid var(--border); }
+        .logo { height: 80px; margin-bottom: 24px; }
+        .module-label { font-size: 11px; font-weight: 600; color: var(--accent); text-transform: uppercase; letter-spacing: 2.5px; margin-bottom: 12px; display: block; }
+        h1 { font-family: 'Source Serif 4', Georgia, serif; font-size: 36px; font-weight: 700; color: var(--primary); margin-bottom: 12px; }
+        .subtitle { font-size: 18px; color: var(--text-light); max-width: 640px; margin: 0 auto; }
+        .advocacy-equation { background: var(--primary); color: white; padding: 24px 32px; border-radius: 8px; margin-bottom: 32px; display: grid; grid-template-columns: 1fr auto 1fr auto 1fr auto 1fr; gap: 12px; align-items: center; text-align: center; }
+        .eq-item h3 { font-family: 'Source Serif 4', Georgia, serif; font-size: 16px; font-weight: 600; color: var(--accent-warm); margin-bottom: 4px; }
+        .eq-item p { font-size: 12px; color: rgba(255,255,255,0.65); margin: 0; }
+        .eq-operator { font-size: 24px; color: var(--accent-warm); font-weight: 700; }
+        .instructions { background: var(--bg-warm); border-left: 3px solid var(--accent-warm); padding: 20px 24px; margin-bottom: 40px; border-radius: 0 4px 4px 0; }
+        .instructions h3 { font-family: 'Source Serif 4', Georgia, serif; font-size: 16px; font-weight: 600; color: var(--primary); margin-bottom: 8px; }
+        .instructions p { font-size: 14px; color: var(--text-light); margin: 0; }
+        .section { background: white; border: 1px solid var(--border); border-radius: 8px; padding: 32px; margin-bottom: 24px; }
+        .section-header { display: flex; align-items: center; gap: 16px; margin-bottom: 8px; }
+        .step-number { width: 40px; height: 40px; background: var(--accent); border-radius: 50%; display: flex; align-items: center; justify-content: center; font-size: 18px; font-weight: 700; color: white; flex-shrink: 0; }
+        .section-title { font-family: 'Source Serif 4', Georgia, serif; font-size: 20px; font-weight: 600; color: var(--primary); }
+        .section-description { font-size: 14px; color: var(--text-light); margin-bottom: 24px; padding-left: 56px; }
+        label { display: block; font-size: 14px; font-weight: 500; color: var(--primary); margin-bottom: 8px; }
+        .hint { font-size: 13px; color: var(--text-muted); font-weight: 400; }
+        textarea, input[type="text"] { width: 100%; padding: 12px 16px; border: 1px solid var(--border); border-radius: 4px; font-family: inherit; font-size: 15px; color: var(--text); background: var(--bg); transition: border-color 0.2s, box-shadow 0.2s; resize: vertical; }
+        textarea:focus, input[type="text"]:focus { outline: none; border-color: var(--accent); box-shadow: 0 0 0 3px rgba(42, 123, 140, 0.1); }
+        textarea { min-height: 80px; }
+        textarea.tall { min-height: 140px; }
+        .field-group { margin-bottom: 20px; }
+        .example-box { background: var(--bg-warm); border: 1px dashed var(--border); border-radius: 4px; padding: 16px 20px; margin-bottom: 16px; font-size: 14px; color: var(--text-light); }
+        .example-box strong { color: var(--accent); }
+        .save-status { font-size: 13px; color: var(--success); display: flex; align-items: center; gap: 6px; }
+        .save-status.hidden { visibility: hidden; }
+        .button-row { display: flex; justify-content: space-between; align-items: center; margin-top: 40px; padding-top: 24px; border-top: 1px solid var(--border); }
+        .btn { padding: 12px 24px; border-radius: 4px; font-family: inherit; font-size: 14px; font-weight: 500; cursor: pointer; transition: all 0.2s; }
+        .btn-primary { background: var(--accent); color: white; border: none; }
+        .btn-primary:hover { background: #236a79; }
+        .btn-secondary { background: transparent; color: var(--text-light); border: 1px solid var(--border); }
+        .btn-secondary:hover { border-color: var(--text-light); }
+        footer { text-align: center; padding: 40px 24px; color: var(--text-muted); font-size: 13px; }
+        footer a { color: var(--accent); text-decoration: none; }
+        @media print { body { background: white; } .container { max-width: 100%; padding: 20px; } .button-row { display: none; } .section { border: 1px solid #ddd; break-inside: avoid; } }
+        @media screen and (max-width: 768px) { .container { padding: 24px 16px; } h1 { font-size: 28px; } .advocacy-equation { grid-template-columns: 1fr; gap: 12px; } .eq-operator { display: none; } .section { padding: 20px; } }
+        @media screen and (max-width: 480px) { .container { padding: 16px 12px; } .logo { height: 60px; } h1 { font-size: 24px; } .subtitle { font-size: 15px; } }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <header>
+            <img src="https://coachingwomenofcolor.com/logo.webp" alt="Coaching Women of Color" class="logo">
+            <span class="module-label">Module 6 &mdash; June</span>
+            <h1>Outreach &amp; Ask Script Template</h1>
+            <p class="subtitle">Write outreach and a specific ask for a real empty seat &mdash; something you can actually send this week.</p>
+        </header>
+
+        <div class="advocacy-equation">
+            <div class="eq-item"><h3>Context</h3><p>Set the stage</p></div>
+            <div class="eq-operator">+</div>
+            <div class="eq-item"><h3>Specific Request</h3><p>The clear ask</p></div>
+            <div class="eq-operator">+</div>
+            <div class="eq-item"><h3>Why You</h3><p>The reason to say yes</p></div>
+            <div class="eq-operator">+</div>
+            <div class="eq-item"><h3>Easy Out</h3><p>Lower the stakes</p></div>
+        </div>
+
+        <div class="instructions">
+            <h3>How to use this worksheet</h3>
+            <p>Pick one real empty seat from your Advisor Map and a real person who could fill it. Build the four parts of your ask, then assemble them into one message you can send. Specific beats vague every time. Answers auto-save as you type.</p>
+        </div>
+
+        <!-- SECTION 1 -->
+        <div class="section" id="section-1">
+            <div class="section-header"><div class="step-number">1</div><div class="section-title">Who &amp; Which Seat</div></div>
+            <div class="section-description">Anchor this to something real from your Advisor Map.</div>
+            <div class="field-group"><label>Person I'm reaching out to</label><input type="text" id="who-person" placeholder="Name"></div>
+            <div class="field-group"><label>Which seat would they fill?</label><input type="text" id="who-seat" placeholder="e.g., Sponsor, Connector"></div>
+        </div>
+
+        <!-- SECTION 2 -->
+        <div class="section" id="section-2">
+            <div class="section-header"><div class="step-number">2</div><div class="section-title">Build the Four Parts</div></div>
+            <div class="section-description">Draft each piece separately first. You'll assemble them next.</div>
+            <div class="field-group"><label>Context <span class="hint">&mdash; how you know them / why you're reaching out now</span></label><div class="example-box"><strong>Example:</strong> &ldquo;We worked together on the Q3 launch, and I've valued your perspective ever since.&rdquo;</div><textarea id="part-context"></textarea></div>
+            <div class="field-group"><label>Specific Request <span class="hint">&mdash; name the role, room, or opportunity</span></label><div class="example-box"><strong>Example:</strong> &ldquo;Would you be willing to put my name forward for the cross-functional lead role?&rdquo; (not &ldquo;any advice?&rdquo;)</div><textarea id="part-request"></textarea></div>
+            <div class="field-group"><label>Why You <span class="hint">&mdash; the reason it makes sense for them to say yes</span></label><div class="example-box"><strong>Example:</strong> &ldquo;I led the same kind of initiative last year and delivered it 3 weeks early.&rdquo;</div><textarea id="part-whyyou"></textarea></div>
+            <div class="field-group"><label>Easy Out <span class="hint">&mdash; lower the stakes; a graceful no is fine</span></label><div class="example-box"><strong>Example:</strong> &ldquo;No pressure at all if the timing isn't right &mdash; I'd value your honest read either way.&rdquo;</div><textarea id="part-easyout"></textarea></div>
+        </div>
+
+        <!-- SECTION 3 -->
+        <div class="section" id="section-3">
+            <div class="section-header"><div class="step-number">3</div><div class="section-title">Assemble Your Message</div></div>
+            <div class="section-description">Put the four parts together in your own voice. Read it out loud once &mdash; if it sounds like you, it's ready.</div>
+            <div class="field-group"><label>My complete outreach message</label><textarea id="assembled" class="tall" placeholder="Combine Context + Specific Request + Why You + Easy Out into one natural message."></textarea></div>
+            <div class="field-group"><label>How will I send it, and by when?</label><input type="text" id="send-plan" placeholder="e.g., Email by Friday; LinkedIn message Monday"></div>
+        </div>
+
+        <div class="button-row">
+            <button class="btn btn-secondary" onclick="clearAll()">Clear All</button>
+            <span class="save-status hidden" id="save-status">
+                <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="20 6 9 17 4 12"></polyline></svg>
+                Auto-saved
+            </span>
+            <button class="btn btn-primary" onclick="window.print()">Print / PDF</button>
+        </div>
+    </div>
+
+    <footer>
+        <p>Executive Leadership Lab &mdash; Module 6: Build Your Board of Advisors</p>
+        <p><a href="https://coachingwomenofcolor.com">Coaching Women of Color&reg;</a></p>
+    </footer>
+
+    <script>
+        const STORAGE_KEY = 'cwc-outreach-ask-v1';
+        function saveData() {
+            const data = {};
+            document.querySelectorAll('input[type="text"], textarea').forEach(el => { if (el.id) data[el.id] = el.value; });
+            localStorage.setItem(STORAGE_KEY, JSON.stringify(data));
+            const status = document.getElementById('save-status');
+            status.classList.remove('hidden');
+            setTimeout(() => status.classList.add('hidden'), 2000);
+        }
+        function loadData() {
+            const saved = localStorage.getItem(STORAGE_KEY);
+            if (!saved) return;
+            const data = JSON.parse(saved);
+            Object.keys(data).forEach(key => { const el = document.getElementById(key); if (el) el.value = data[key]; });
+        }
+        function clearAll() {
+            if (!confirm('Clear all saved data? This cannot be undone.')) return;
+            localStorage.removeItem(STORAGE_KEY);
+            document.querySelectorAll('input[type="text"], textarea').forEach(el => el.value = '');
+        }
+        document.addEventListener('input', saveData);
+        loadData();
+    </script>
+</body>
+</html>
