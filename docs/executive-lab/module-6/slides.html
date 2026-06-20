@@ -1,0 +1,705 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Build Your Board of Advisors | Executive Leadership Lab</title>
+    <link href="https://fonts.googleapis.com/css2?family=Source+Serif+4:wght@400;600;700&family=Inter:wght@400;500;600&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --primary: #1A1A1A;
+            --accent: #2A7B8C;
+            --accent-warm: #D4A574;
+            --text: #333333;
+            --text-light: #666666;
+            --text-muted: #999999;
+            --bg: #FAF8F5;
+            --bg-warm: #F5F2ED;
+            --border: #E5E0D8;
+        }
+
+        @media print {
+            body { overflow: visible; height: auto; background: white; }
+            .presentation { height: auto; }
+            .slide {
+                position: relative; opacity: 1; visibility: visible; transform: none;
+                page-break-after: always; height: 100vh; padding: 40px 60px;
+            }
+            .slide::before { display: none; }
+            .nav-controls, .progress-bar { display: none; }
+            .slide-title, .slide-dark { background: var(--primary) !important; -webkit-print-color-adjust: exact; print-color-adjust: exact; }
+        }
+
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+
+        body {
+            font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
+            background: var(--primary); color: var(--text); overflow: hidden; height: 100vh;
+        }
+
+        .progress-bar {
+            position: fixed; top: 0; left: 0; height: 3px;
+            background: var(--accent); transition: width 0.4s ease; z-index: 1000;
+        }
+
+        .presentation { width: 100%; height: 100vh; position: relative; }
+
+        .slide {
+            position: absolute; top: 0; left: 0; width: 100%; height: 100%;
+            display: flex; flex-direction: column; justify-content: center; align-items: center;
+            padding: 80px 120px 140px 120px;
+            opacity: 0; visibility: hidden; transform: translateY(20px);
+            transition: opacity 0.4s ease, visibility 0s 0.4s, transform 0.4s ease;
+            background: var(--bg);
+        }
+        .slide::before {
+            content: ''; position: absolute; top: 0; left: 0; right: 0; bottom: 0;
+            background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 200 200' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.7' numOctaves='3' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E");
+            opacity: 0.03; pointer-events: none; z-index: 0;
+        }
+        .slide > * { position: relative; z-index: 1; }
+        .slide.active { opacity: 1; visibility: visible; transform: translateY(0); transition: opacity 0.4s ease 0.05s, visibility 0s, transform 0.4s ease 0.05s; z-index: 1; }
+
+        /* Dark slides use gradient only — no image dependency */
+        .slide-title { background: linear-gradient(135deg, #1A1A1A 0%, #2d3a3d 50%, #1A1A1A 100%); color: white; }
+        .slide-title .section-label { color: rgba(255,255,255,0.5); }
+        .slide-title h1 { color: white; font-size: 56px; }
+        .slide-title .lead { color: rgba(255,255,255,0.7); }
+        .slide-title .title-meta { border-top-color: rgba(255,255,255,0.1); }
+        .slide-title .meta-item { color: rgba(255,255,255,0.4); }
+        .slide-title .module-label { color: rgba(255,255,255,0.4); }
+
+        .slide-dark { background: linear-gradient(135deg, #1A1A1A 0%, #243034 60%, #1A1A1A 100%); color: white; }
+        .slide-dark .section-label { color: rgba(255,255,255,0.4); }
+        .slide-dark h1, .slide-dark h2 { color: white; }
+        .slide-dark p { color: rgba(255,255,255,0.7); }
+        .slide-dark .module-label { color: rgba(255,255,255,0.4); }
+        .slide-dark .feature-text h4 { color: white; }
+        .slide-dark .feature-text p { color: rgba(255,255,255,0.7); }
+        .slide-dark .feature-item { border-bottom-color: rgba(255,255,255,0.12); }
+
+        .slide-quote { background: var(--bg-warm); }
+
+        .slide-header {
+            position: absolute; top: 40px; left: 60px; right: 60px;
+            display: flex; justify-content: space-between; align-items: center;
+        }
+        .logo { height: 80px; }
+        .module-label { font-size: 11px; font-weight: 600; color: var(--accent); text-transform: uppercase; letter-spacing: 2.5px; }
+
+        .slide-content { max-width: 960px; width: 100%; }
+
+        h1 { font-family: 'Source Serif 4', Georgia, serif; font-size: 56px; font-weight: 700; color: var(--primary); letter-spacing: -1px; line-height: 1.1; margin-bottom: 24px; }
+        h2 { font-family: 'Source Serif 4', Georgia, serif; font-size: 40px; font-weight: 600; color: var(--primary); letter-spacing: -0.5px; line-height: 1.15; margin-bottom: 20px; }
+        p, .lead { font-size: 18px; line-height: 1.6; color: var(--text-light); }
+        .lead { font-size: 20px; color: var(--text); }
+
+        .section-label { display: block; font-size: 11px; font-weight: 600; color: var(--accent); text-transform: uppercase; letter-spacing: 2.5px; margin-bottom: 20px; }
+
+        .title-meta { display: flex; gap: 32px; margin-top: 48px; padding-top: 24px; border-top: 1px solid var(--border); }
+        .meta-item { font-size: 13px; color: var(--text-muted); text-transform: uppercase; letter-spacing: 1px; }
+
+        /* Stats Row */
+        .stats-row { display: flex; gap: 64px; margin-top: 48px; }
+        .stat-item { text-align: center; flex: 1; }
+        .stat-number { font-family: 'Source Serif 4', Georgia, serif; font-size: 48px; font-weight: 700; color: var(--accent); line-height: 1; }
+        .stat-label { font-size: 13px; color: var(--text-light); margin-top: 8px; text-transform: uppercase; letter-spacing: 0.5px; }
+
+        /* Cards Grid */
+        .cards-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 28px; margin-top: 40px; }
+        .cards-grid.two-col { grid-template-columns: repeat(2, 1fr); }
+        .card { background: white; border: 1px solid var(--border); padding: 28px; border-radius: 2px; }
+        .card h4 { font-family: 'Source Serif 4', Georgia, serif; font-size: 17px; font-weight: 600; color: var(--primary); margin-bottom: 10px; }
+        .card p { font-size: 15px; color: var(--text-light); line-height: 1.5; margin: 0; }
+        .card .card-tag { display: block; font-size: 11px; font-weight: 600; color: var(--accent); text-transform: uppercase; letter-spacing: 1px; margin-bottom: 8px; }
+
+        /* Two Column */
+        .two-column { display: grid; grid-template-columns: 1fr 1fr; gap: 56px; margin-top: 40px; }
+        .column h4 { font-size: 15px; font-weight: 600; color: var(--primary); text-transform: uppercase; letter-spacing: 1px; margin-bottom: 20px; padding-bottom: 12px; border-bottom: 2px solid var(--accent); }
+        .column ul { list-style: none; }
+        .column li { font-size: 15px; color: var(--text-light); padding: 12px 0; border-bottom: 1px solid var(--border); line-height: 1.5; }
+        .column li:last-child { border-bottom: none; }
+
+        /* Feature List */
+        .feature-list { margin-top: 40px; }
+        .feature-item { display: flex; align-items: flex-start; gap: 20px; padding: 20px 0; border-bottom: 1px solid var(--border); }
+        .feature-item:last-child { border-bottom: none; }
+        .feature-number { width: 32px; height: 32px; background: var(--accent); border-radius: 50%; display: flex; align-items: center; justify-content: center; font-size: 14px; font-weight: 700; color: white; flex-shrink: 0; }
+        .feature-text h4 { font-size: 16px; font-weight: 600; color: var(--primary); margin-bottom: 4px; }
+        .feature-text p { font-size: 15px; color: var(--text-light); margin: 0; }
+
+        /* Quote */
+        .quote-text { font-family: 'Source Serif 4', Georgia, serif; font-size: 32px; font-weight: 400; color: var(--primary); line-height: 1.4; max-width: 800px; }
+        .slide-dark .quote-text { color: white; }
+        .quote-text::before { content: '\201C'; display: block; font-size: 64px; color: var(--accent); line-height: 1; margin-bottom: 16px; }
+
+        /* Equation */
+        .equation { display: flex; align-items: center; justify-content: center; gap: 16px; margin-top: 48px; flex-wrap: wrap; }
+        .equation-part { background: white; border: 1px solid var(--border); padding: 20px 28px; font-size: 16px; font-weight: 600; color: var(--primary); border-radius: 2px; }
+        .equation-result { background: var(--accent); color: white; border-color: var(--accent); }
+        .equation-symbol { font-size: 24px; font-weight: 300; color: var(--text-muted); }
+
+        /* Callout */
+        .callout { background: var(--bg-warm); border-left: 3px solid var(--accent-warm); padding: 24px 28px; margin-top: 40px; }
+        .callout p { font-size: 15px; color: var(--text); margin: 0; line-height: 1.6; }
+        .callout strong { color: var(--primary); }
+
+        /* Simple Table */
+        .simple-table { width: 100%; border-collapse: collapse; margin-top: 32px; }
+        .simple-table th { background: var(--primary); color: white; padding: 14px 20px; text-align: left; font-size: 13px; font-weight: 600; text-transform: uppercase; letter-spacing: 0.5px; }
+        .simple-table td { padding: 14px 20px; border-bottom: 1px solid var(--border); font-size: 15px; color: var(--text); }
+        .simple-table tr:nth-child(even) { background: var(--bg-warm); }
+
+        /* Formula Box */
+        .formula-box { background: var(--bg-warm); border: 1px solid var(--border); padding: 32px; margin-top: 32px; border-radius: 2px; }
+        .formula-box h4 { font-family: 'Source Serif 4', Georgia, serif; font-size: 18px; font-weight: 600; color: var(--primary); margin-bottom: 16px; }
+        .formula-box p { font-size: 15px; margin-bottom: 12px; color: var(--text); }
+        .formula-box p:last-child { margin-bottom: 0; }
+        .formula-highlight { font-weight: 600; color: var(--accent); }
+
+        /* Roadmap Steps */
+        .roadmap-steps { display: grid; grid-template-columns: repeat(3, 1fr); gap: 20px; margin-top: 40px; }
+        .roadmap-step { background: white; border: 1px solid var(--border); padding: 24px; border-radius: 2px; display: flex; align-items: flex-start; gap: 16px; position: relative; }
+        .step-number { width: 36px; height: 36px; background: var(--accent); border-radius: 50%; display: flex; align-items: center; justify-content: center; font-size: 16px; font-weight: 700; color: white; flex-shrink: 0; }
+        .step-content h4 { font-size: 15px; font-weight: 600; color: var(--primary); margin-bottom: 4px; }
+        .step-content p { font-size: 13px; color: var(--text-light); margin: 0; }
+
+        /* Activity Meta */
+        .activity-meta { display: inline-block; margin-top: 32px; padding: 10px 24px; background: var(--bg-warm); border: 1px solid var(--border); border-radius: 2px; font-size: 13px; color: var(--text-light); font-weight: 500; }
+
+        /* Source line */
+        .source-line { font-size: 12px; color: var(--text-muted); margin-top: 14px; font-style: italic; }
+        .stat-item .source-line { margin-top: 10px; }
+        .slide-dark .source-line { color: rgba(255,255,255,0.45); }
+
+        /* References */
+        .references { margin-top: 32px; }
+        .references li { font-size: 13px; color: var(--text-light); line-height: 1.7; list-style: none; padding-left: 18px; position: relative; }
+        .references li::before { content: '\2013'; position: absolute; left: 0; color: var(--accent); }
+        .slide-dark .references li { color: rgba(255,255,255,0.6); }
+
+        .ell-mark { position: absolute; right: 60px; bottom: 30px; font-size: 13px; font-weight: 600; color: var(--text-muted); letter-spacing: 3px; opacity: 0.3; }
+        .slide-dark .ell-mark, .slide-title .ell-mark { color: rgba(255,255,255,0.4); }
+
+        /* Navigation */
+        .nav-controls { position: fixed; bottom: 48px; left: 50%; transform: translateX(-50%); display: flex; align-items: center; gap: 24px; z-index: 1000; }
+        .nav-btn { width: 48px; height: 48px; border-radius: 50%; border: 2px solid var(--primary); background: transparent; color: var(--primary); cursor: pointer; display: flex; align-items: center; justify-content: center; transition: all 0.2s ease; }
+        .nav-btn:hover { background: var(--primary); color: var(--bg); }
+        .nav-btn:disabled { border-color: var(--border); color: var(--text-muted); cursor: not-allowed; }
+        .nav-btn:disabled:hover { background: transparent; color: var(--text-muted); }
+        .nav-btn svg { width: 20px; height: 20px; }
+        .slide-counter { font-size: 13px; font-weight: 500; color: var(--text-muted); letter-spacing: 0.5px; }
+
+        @media screen and (max-width: 1024px) {
+            .slide { padding: 60px 80px 120px 80px; }
+            .slide-header { top: 30px; left: 40px; right: 40px; }
+            h1 { font-size: 48px; } .slide-title h1 { font-size: 52px; }
+            h2 { font-size: 36px; } .quote-text { font-size: 28px; }
+            .cards-grid { gap: 24px; } .card { padding: 24px; }
+            .two-column { gap: 48px; } .stats-row { gap: 48px; } .stat-number { font-size: 40px; }
+            .ell-mark { right: 40px; bottom: 30px; } .roadmap-steps { gap: 16px; } .roadmap-step { padding: 20px; }
+        }
+        @media screen and (max-width: 768px) {
+            .slide { padding: 100px 40px 140px; }
+            .slide-header { top: 20px; left: 24px; right: 24px; flex-direction: column; align-items: flex-start; gap: 8px; }
+            .logo { height: 60px; }
+            h1 { font-size: 36px; } .slide-title h1 { font-size: 40px; }
+            h2 { font-size: 30px; } p, .lead { font-size: 16px; } .quote-text { font-size: 24px; }
+            .cards-grid, .cards-grid.two-col { grid-template-columns: 1fr; gap: 16px; }
+            .card { padding: 24px; } .two-column { grid-template-columns: 1fr; gap: 32px; }
+            .feature-list { margin-top: 32px; } .stats-row { flex-direction: column; gap: 24px; }
+            .equation { flex-direction: column; gap: 12px; } .equation-part { padding: 16px 24px; font-size: 14px; }
+            .roadmap-steps { grid-template-columns: 1fr; } .simple-table { font-size: 14px; }
+            .simple-table th, .simple-table td { padding: 12px 8px; } .formula-box { padding: 24px; }
+            .nav-controls { bottom: 24px; }
+        }
+        @media screen and (max-width: 480px) {
+            .slide { padding: 70px 12px 90px; justify-content: flex-start; padding-top: 80px; overflow-y: auto; }
+            .slide-content { max-width: 100%; padding: 0 4px; }
+            .slide-header { top: 8px; left: 10px; right: 10px; flex-direction: row; justify-content: space-between; }
+            .logo { height: 28px; } .module-label { font-size: 9px; letter-spacing: 1px; }
+            .section-label { font-size: 9px; letter-spacing: 1.5px; margin-bottom: 12px; }
+            h1 { font-size: 22px; margin-bottom: 16px; } .slide-title h1 { font-size: 24px; }
+            h2 { font-size: 20px; margin-bottom: 12px; } p, .lead { font-size: 13px; line-height: 1.5; }
+            .quote-text { font-size: 16px; } .quote-text::before { font-size: 48px; }
+            .card { padding: 12px; } .card h4 { font-size: 14px; margin-bottom: 6px; } .card p { font-size: 12px; line-height: 1.4; }
+            .stats-row { gap: 16px; } .stat-number { font-size: 30px; } .stat-label { font-size: 10px; }
+            .feature-list { margin-top: 20px; } .feature-item { padding: 14px 0; gap: 12px; }
+            .feature-number { width: 26px; height: 26px; font-size: 12px; }
+            .feature-text h4 { font-size: 14px; } .feature-text p { font-size: 12px; }
+            .equation-part { padding: 12px 16px; font-size: 12px; } .equation-symbol { font-size: 18px; }
+            .two-column { gap: 20px; margin-top: 24px; } .column h4 { font-size: 14px; margin-bottom: 12px; padding-bottom: 8px; } .column li { font-size: 12px; padding: 8px 0; }
+            .simple-table { font-size: 12px; margin-top: 24px; } .simple-table th { font-size: 10px; padding: 8px 6px; } .simple-table td { padding: 10px 6px; font-size: 12px; }
+            .formula-box { padding: 16px; margin-top: 24px; } .formula-box h4 { font-size: 14px; } .formula-box p { font-size: 13px; }
+            .roadmap-step { padding: 12px; gap: 10px; } .step-number { width: 28px; height: 28px; font-size: 13px; } .step-content h4 { font-size: 13px; } .step-content p { font-size: 11px; }
+            .callout { padding: 14px 16px; margin-top: 20px; } .callout p { font-size: 12px; }
+            .activity-meta { padding: 8px 16px; font-size: 11px; margin-top: 24px; }
+            .source-line { font-size: 10px; } .references li { font-size: 11px; }
+            .title-meta { margin-top: 32px; padding-top: 20px; gap: 24px; flex-wrap: wrap; justify-content: center; } .meta-item { font-size: 11px; }
+            .nav-controls { bottom: 10px; gap: 16px; } .nav-btn { width: 36px; height: 36px; } .nav-btn svg { width: 16px; height: 16px; } .slide-counter { font-size: 11px; }
+            .ell-mark { font-size: 11px; bottom: 24px; right: 12px; }
+        }
+    </style>
+</head>
+<body>
+    <div class="progress-bar" id="progress"></div>
+    <div class="presentation" id="presentation">
+
+        <!-- Slide 1: Title -->
+        <div class="slide slide-title active" data-slide="1">
+            <div class="slide-header">
+                <img src="https://coachingwomenofcolor.com/logo.webp" alt="CWC" class="logo" style="filter: brightness(0) invert(1);">
+                <span class="module-label">Executive Leadership Lab</span>
+            </div>
+            <div class="slide-content">
+                <span class="section-label">Module 6 &mdash; June</span>
+                <h1>Build Your<br>Board of Advisors</h1>
+                <p class="lead">Build the single highest-leverage asset in your career &mdash; the people in the room when decisions about you get made.</p>
+                <div class="title-meta">
+                    <span class="meta-item">12-Month Program</span>
+                    <span class="meta-item">Coaching Women of Color</span>
+                </div>
+            </div>
+            <div class="ell-mark">ELL</div>
+        </div>
+
+        <!-- Slide 2: Why this module (the gap) -->
+        <div class="slide" data-slide="2">
+            <div class="slide-header">
+                <img src="https://coachingwomenofcolor.com/logo.webp" alt="CWC" class="logo">
+                <span class="module-label">Module 6 &mdash; June</span>
+            </div>
+            <div class="slide-content">
+                <span class="section-label">Why This Module</span>
+                <h2>Hard Work Alone Doesn't Open the Next Door</h2>
+                <p class="lead">Advancement runs on advocacy &mdash; and access to it isn't equal.</p>
+                <div class="stats-row">
+                    <div class="stat-item">
+                        <div class="stat-number">31% / 45%</div>
+                        <div class="stat-label">Entry-level women with a sponsor, vs. men</div>
+                        <div class="source-line">All women vs. all men &middot; McKinsey &amp; LeanIn, 2025</div>
+                    </div>
+                    <div class="stat-item">
+                        <div class="stat-number">93 &middot; 82 &middot; 60</div>
+                        <div class="stat-label">Per 100 men promoted to manager: women overall &middot; Asian women &amp; Latinas &middot; Black women</div>
+                        <div class="source-line">McKinsey &amp; LeanIn, 2025</div>
+                    </div>
+                </div>
+                <div class="callout"><p>This is a structural gap, not a performance gap. A board of advisors is how you close it on purpose.</p></div>
+            </div>
+            <div class="ell-mark">ELL</div>
+        </div>
+
+        <!-- Slide 3: What you'll gain (objectives) -->
+        <div class="slide" data-slide="3">
+            <div class="slide-header">
+                <img src="https://coachingwomenofcolor.com/logo.webp" alt="CWC" class="logo">
+                <span class="module-label">Module 6 &mdash; June</span>
+            </div>
+            <div class="slide-content">
+                <span class="section-label">What You'll Gain</span>
+                <h2>Four Things You'll Walk Away With</h2>
+                <div class="feature-list">
+                    <div class="feature-item"><div class="feature-number">1</div><div class="feature-text"><h4>Clarity on roles</h4><p>Distinguish a mentor, a sponsor, and an advocate &mdash; and why the difference decides careers.</p></div></div>
+                    <div class="feature-item"><div class="feature-number">2</div><div class="feature-text"><h4>Your current map</h4><p>Map the board you already have and spot the empty seats.</p></div></div>
+                    <div class="feature-item"><div class="feature-number">3</div><div class="feature-text"><h4>A specific ask</h4><p>Write an outreach message and a request that's easy to say yes to.</p></div></div>
+                    <div class="feature-item"><div class="feature-number">4</div><div class="feature-text"><h4>A system to sustain it</h4><p>Build a rhythm that keeps the relationships alive over time.</p></div></div>
+                </div>
+            </div>
+            <div class="ell-mark">ELL</div>
+        </div>
+
+        <!-- Slide 4: The core idea -->
+        <div class="slide" data-slide="4">
+            <div class="slide-header">
+                <img src="https://coachingwomenofcolor.com/logo.webp" alt="CWC" class="logo">
+                <span class="module-label">Module 6 &mdash; June</span>
+            </div>
+            <div class="slide-content">
+                <span class="section-label">The Core Idea</span>
+                <h2>A Board, Not a Person</h2>
+                <p class="lead">No single mentor can be your strategist, your advocate, your connector, and your truth-teller. So stop looking for one person. Build a board.</p>
+                <div class="callout"><p>The idea of a <strong>personal board of directors</strong> &mdash; instead of one all-purpose mentor &mdash; was popularized by Priscilla Claman in <em>Harvard Business Review</em> (2010). The roles we'll define next are this program's framework.</p></div>
+            </div>
+            <div class="ell-mark">ELL</div>
+        </div>
+
+        <!-- Slide 5: Mentor vs Sponsor vs Advocate -->
+        <div class="slide" data-slide="5">
+            <div class="slide-header">
+                <img src="https://coachingwomenofcolor.com/logo.webp" alt="CWC" class="logo">
+                <span class="module-label">Module 6 &mdash; June</span>
+            </div>
+            <div class="slide-content">
+                <span class="section-label">The Framework</span>
+                <h2>Mentor &middot; Sponsor &middot; Advocate</h2>
+                <div class="cards-grid">
+                    <div class="card"><span class="card-tag">Mentor</span><h4>Talks <em>to</em> you</h4><p>Gives advice, perspective, and guidance. Helps you think. Does not move the decision.</p></div>
+                    <div class="card"><span class="card-tag">Sponsor</span><h4>Talks <em>about</em> you</h4><p>Advocates for you when you're not in the room and creates opportunities for you.</p></div>
+                    <div class="card"><span class="card-tag">Advocate / Connector</span><h4>Opens the network</h4><p>Vouches for you laterally and connects you to people and rooms you can't reach alone.</p></div>
+                </div>
+                <div class="callout"><p>A sponsor, defined: <strong>&ldquo;someone other than your direct manager who actively advocates for your career advancement and/or creates opportunities for you.&rdquo;</strong></p><p class="source-line">Definition: McKinsey &amp; LeanIn, 2025</p></div>
+            </div>
+            <div class="ell-mark">ELL</div>
+        </div>
+
+        <!-- Slide 6: Why sponsorship moves the needle -->
+        <div class="slide" data-slide="6">
+            <div class="slide-header">
+                <img src="https://coachingwomenofcolor.com/logo.webp" alt="CWC" class="logo">
+                <span class="module-label">Module 6 &mdash; June</span>
+            </div>
+            <div class="slide-content">
+                <span class="section-label">Why Sponsorship</span>
+                <h2>Sponsorship Has a Measurable Effect</h2>
+                <p class="lead">Mentorship is advice. Sponsorship is action &mdash; and it shows up in promotions.</p>
+                <div class="stats-row">
+                    <div class="stat-item"><div class="stat-number">+23%</div><div class="stat-label">Men with a sponsor &mdash; more likely to get the next promotion</div></div>
+                    <div class="stat-item"><div class="stat-number">+19%</div><div class="stat-label">Women with a sponsor &mdash; more likely to get the next promotion</div></div>
+                </div>
+                <p class="source-line">Sylvia Ann Hewlett, <em>The Sponsor Effect</em>, 2010</p>
+                <div class="callout"><p>Note the gap in the benefit itself: women get a real but smaller bump. That's exactly why building your board deliberately matters.</p></div>
+            </div>
+            <div class="ell-mark">ELL</div>
+        </div>
+
+        <!-- Slide 7: Quote / reflection -->
+        <div class="slide slide-quote" data-slide="7">
+            <div class="slide-header">
+                <img src="https://coachingwomenofcolor.com/logo.webp" alt="CWC" class="logo">
+                <span class="module-label">Module 6 &mdash; June</span>
+            </div>
+            <div class="slide-content">
+                <p class="quote-text">The most important conversations about your career happen when you're not in the room. A board makes sure someone in that room is for you.</p>
+            </div>
+            <div class="ell-mark">ELL</div>
+        </div>
+
+        <!-- Slide 8: The barrier is not the same for everyone -->
+        <div class="slide" data-slide="8">
+            <div class="slide-header">
+                <img src="https://coachingwomenofcolor.com/logo.webp" alt="CWC" class="logo">
+                <span class="module-label">Module 6 &mdash; June</span>
+            </div>
+            <div class="slide-content">
+                <span class="section-label">An Honest Look</span>
+                <h2>The Barrier Isn't the Same for Everyone</h2>
+                <div class="cards-grid">
+                    <div class="card"><span class="card-tag">AAPI Women</span><h4>80% &middot; 62%</h4><p>80% say the &ldquo;bamboo ceiling&rdquo; is real; 62% say it hit hardest beyond junior level.</p><p class="source-line">Scope: investment-management professionals &middot; AAAIM, 2022</p></div>
+                    <div class="card"><span class="card-tag">Native / AIAN Women</span><h4>0.4%</h4><p>Just 0.4% of executives are Native/AIAN women.</p><p class="source-line">Scope: U.S. federal sector, FY2020 &middot; EEOC</p></div>
+                    <div class="card"><span class="card-tag">The Term</span><h4>&ldquo;Bamboo Ceiling&rdquo;</h4><p>Coined by Jane Hyun in <em>Breaking the Bamboo Ceiling</em> (2005).</p></div>
+                </div>
+                <div class="callout"><p><strong>An honest gap:</strong> comparable sponsorship data for MENA and Pacific Islander women is not separately reported in these sources. The gap is real &mdash; and so is the need. The board you build works regardless of which dataset exists.</p></div>
+            </div>
+            <div class="ell-mark">ELL</div>
+        </div>
+
+        <!-- Slide 9: What a strong board looks like -->
+        <div class="slide" data-slide="9">
+            <div class="slide-header">
+                <img src="https://coachingwomenofcolor.com/logo.webp" alt="CWC" class="logo">
+                <span class="module-label">Module 6 &mdash; June</span>
+            </div>
+            <div class="slide-content">
+                <span class="section-label">The Five Seats</span>
+                <h2>What a Strong Board Looks Like</h2>
+                <div class="feature-list">
+                    <div class="feature-item"><div class="feature-number">1</div><div class="feature-text"><h4>The Sponsor</h4><p>Advocates for you in rooms you're not in.</p></div></div>
+                    <div class="feature-item"><div class="feature-number">2</div><div class="feature-text"><h4>The Skill Mentor</h4><p>Helps you grow a specific capability.</p></div></div>
+                    <div class="feature-item"><div class="feature-number">3</div><div class="feature-text"><h4>The Insider</h4><p>Reads the politics and tells you how things really work.</p></div></div>
+                    <div class="feature-item"><div class="feature-number">4</div><div class="feature-text"><h4>The Connector</h4><p>Opens doors and makes introductions.</p></div></div>
+                    <div class="feature-item"><div class="feature-number">5</div><div class="feature-text"><h4>The Truth-Teller</h4><p>A peer who is honest with you when others won't be.</p></div></div>
+                </div>
+                <div class="callout"><p>One person can hold two seats &mdash; what matters is that every seat is filled.</p></div>
+            </div>
+            <div class="ell-mark">ELL</div>
+        </div>
+
+        <!-- Slide 10: Activity - Map your board (Worksheet 1) -->
+        <div class="slide" data-slide="10">
+            <div class="slide-header">
+                <img src="https://coachingwomenofcolor.com/logo.webp" alt="CWC" class="logo">
+                <span class="module-label">Module 6 &mdash; June</span>
+            </div>
+            <div class="slide-content">
+                <span class="section-label">Activity</span>
+                <h2>Map Your Board</h2>
+                <p class="lead">Open the <strong>Advisor Map / Gap Analysis</strong> worksheet. List the people you currently have against each of the five seats &mdash; then circle the seats that are empty.</p>
+                <div class="callout"><p>Your empty seats are your outreach targets for the rest of this module.</p></div>
+                <span class="activity-meta">Time: 12&ndash;15 minutes &middot; Worksheet: Advisor Map / Gap Analysis</span>
+            </div>
+            <div class="ell-mark">ELL</div>
+        </div>
+
+        <!-- Slide 11: Sort your network (Worksheet 2 intro) -->
+        <div class="slide" data-slide="11">
+            <div class="slide-header">
+                <img src="https://coachingwomenofcolor.com/logo.webp" alt="CWC" class="logo">
+                <span class="module-label">Module 6 &mdash; June</span>
+            </div>
+            <div class="slide-content">
+                <span class="section-label">Before the Next Activity</span>
+                <h2>Who's a Mentor? Who's Actually a Sponsor?</h2>
+                <p class="lead">Most people overcount their sponsors. A friendly senior colleague who gives you advice is a mentor &mdash; not a sponsor &mdash; until they advocate for you when you're not there.</p>
+                <div class="callout"><p>The honesty in the next worksheet is the point: name who is <strong>not yet</strong> advocating for you.</p></div>
+            </div>
+            <div class="ell-mark">ELL</div>
+        </div>
+
+        <!-- Slide 12: Activity - Sorter (Worksheet 2) -->
+        <div class="slide" data-slide="12">
+            <div class="slide-header">
+                <img src="https://coachingwomenofcolor.com/logo.webp" alt="CWC" class="logo">
+                <span class="module-label">Module 6 &mdash; June</span>
+            </div>
+            <div class="slide-content">
+                <span class="section-label">Activity</span>
+                <h2>Sort Your Network</h2>
+                <p class="lead">Open the <strong>Mentor vs. Sponsor vs. Advocate Sorter</strong>. For each person in your network, decide which role they actually play &mdash; and mark which relationship to deepen.</p>
+                <span class="activity-meta">Time: 10&ndash;12 minutes &middot; Worksheet: Mentor / Sponsor / Advocate Sorter</span>
+            </div>
+            <div class="ell-mark">ELL</div>
+        </div>
+
+        <!-- Slide 13: From mentor to sponsor -->
+        <div class="slide" data-slide="13">
+            <div class="slide-header">
+                <img src="https://coachingwomenofcolor.com/logo.webp" alt="CWC" class="logo">
+                <span class="module-label">Module 6 &mdash; June</span>
+            </div>
+            <div class="slide-content">
+                <span class="section-label">The Conversion</span>
+                <h2>From Mentor to Sponsor</h2>
+                <p class="lead">You don't earn a sponsor by asking &ldquo;will you sponsor me.&rdquo; You earn one by making advocacy easy and specific.</p>
+                <div class="roadmap-steps">
+                    <div class="roadmap-step"><div class="step-number">1</div><div class="step-content"><h4>Deliver visible wins</h4><p>Give them something concrete to point to.</p></div></div>
+                    <div class="roadmap-step"><div class="step-number">2</div><div class="step-content"><h4>Make the ask specific</h4><p>Name the role, the room, or the opportunity.</p></div></div>
+                    <div class="roadmap-step"><div class="step-number">3</div><div class="step-content"><h4>Make it easy to say yes</h4><p>Give them the words and the why.</p></div></div>
+                </div>
+            </div>
+            <div class="ell-mark">ELL</div>
+        </div>
+
+        <!-- Slide 14: The Ask framework -->
+        <div class="slide" data-slide="14">
+            <div class="slide-header">
+                <img src="https://coachingwomenofcolor.com/logo.webp" alt="CWC" class="logo">
+                <span class="module-label">Module 6 &mdash; June</span>
+            </div>
+            <div class="slide-content">
+                <span class="section-label">The Framework</span>
+                <h2>The Specific Ask</h2>
+                <div class="equation">
+                    <div class="equation-part">Context</div>
+                    <div class="equation-symbol">+</div>
+                    <div class="equation-part">Specific Request</div>
+                    <div class="equation-symbol">+</div>
+                    <div class="equation-part">Why You</div>
+                    <div class="equation-symbol">+</div>
+                    <div class="equation-part equation-result">Easy Out</div>
+                </div>
+                <div class="callout"><p>Specific beats vague every time. &ldquo;Would you put my name forward for the X project?&rdquo; lands; &ldquo;any advice?&rdquo; doesn't.</p></div>
+            </div>
+            <div class="ell-mark">ELL</div>
+        </div>
+
+        <!-- Slide 15: Activity - Outreach & Ask (Worksheet 3) -->
+        <div class="slide" data-slide="15">
+            <div class="slide-header">
+                <img src="https://coachingwomenofcolor.com/logo.webp" alt="CWC" class="logo">
+                <span class="module-label">Module 6 &mdash; June</span>
+            </div>
+            <div class="slide-content">
+                <span class="section-label">Activity</span>
+                <h2>Write Your Outreach &amp; Ask</h2>
+                <p class="lead">Open the <strong>Outreach &amp; Ask Script Template</strong>. Draft one outreach message and one specific ask &mdash; aimed at a real empty seat from your Advisor Map.</p>
+                <span class="activity-meta">Time: 10&ndash;12 minutes &middot; Worksheet: Outreach &amp; Ask Script</span>
+            </div>
+            <div class="ell-mark">ELL</div>
+        </div>
+
+        <!-- Slide 16: WOC-specific strategy -->
+        <div class="slide" data-slide="16">
+            <div class="slide-header">
+                <img src="https://coachingwomenofcolor.com/logo.webp" alt="CWC" class="logo">
+                <span class="module-label">Module 6 &mdash; June</span>
+            </div>
+            <div class="slide-content">
+                <span class="section-label">Strategy</span>
+                <h2>Building Your Board as a Woman of Color</h2>
+                <div class="two-column">
+                    <div class="column">
+                        <h4>The Realities</h4>
+                        <ul>
+                            <li>The &ldquo;prove-it-again&rdquo; tax means your wins need to be documented and visible.</li>
+                            <li>Visibility is not the same as advocacy &mdash; being seen isn't being championed.</li>
+                            <li>Access to senior leaders is uneven, as the data this module already showed.</li>
+                        </ul>
+                    </div>
+                    <div class="column">
+                        <h4>The Moves</h4>
+                        <ul>
+                            <li>Bring receipts &mdash; pair every ask with a documented win.</li>
+                            <li>Build both cross-racial sponsors and in-community advocates.</li>
+                            <li>Convert visibility into advocacy with a specific ask.</li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+            <div class="ell-mark">ELL</div>
+        </div>
+
+        <!-- Slide 17: Nurture the board -->
+        <div class="slide" data-slide="17">
+            <div class="slide-header">
+                <img src="https://coachingwomenofcolor.com/logo.webp" alt="CWC" class="logo">
+                <span class="module-label">Module 6 &mdash; June</span>
+            </div>
+            <div class="slide-content">
+                <span class="section-label">Sustain It</span>
+                <h2>A Board Is a Relationship, Not a Transaction</h2>
+                <div class="cards-grid">
+                    <div class="card"><h4>Give value back</h4><p>Offer help, intros, and recognition &mdash; not just asks.</p></div>
+                    <div class="card"><h4>Stay in contact</h4><p>Regular, light touches beat a flurry only when you need something.</p></div>
+                    <div class="card"><h4>Close the loop</h4><p>Update them on the wins they helped create.</p></div>
+                </div>
+                <div class="callout"><p>The most common mistake: going silent until you need a favor. Reciprocity keeps the board alive.</p></div>
+            </div>
+            <div class="ell-mark">ELL</div>
+        </div>
+
+        <!-- Slide 18: Activity - Nurture Tracker (Worksheet 4) -->
+        <div class="slide" data-slide="18">
+            <div class="slide-header">
+                <img src="https://coachingwomenofcolor.com/logo.webp" alt="CWC" class="logo">
+                <span class="module-label">Module 6 &mdash; June</span>
+            </div>
+            <div class="slide-content">
+                <span class="section-label">Activity</span>
+                <h2>Set Your Nurture Rhythm</h2>
+                <p class="lead">Open the <strong>Relationship-Nurture Tracker</strong>. Set a contact cadence and a value-back idea for each advisor.</p>
+                <div class="callout"><p>Cadence beats intensity. A steady rhythm outlasts a one-time push.</p></div>
+                <span class="activity-meta">Time: 8&ndash;10 minutes &middot; Worksheet: Relationship-Nurture Tracker</span>
+            </div>
+            <div class="ell-mark">ELL</div>
+        </div>
+
+        <!-- Slide 19: The 14-Day Board Sprint -->
+        <div class="slide" data-slide="19">
+            <div class="slide-header">
+                <img src="https://coachingwomenofcolor.com/logo.webp" alt="CWC" class="logo">
+                <span class="module-label">Module 6 &mdash; June</span>
+            </div>
+            <div class="slide-content">
+                <span class="section-label">Take Action</span>
+                <h2>The 14-Day Board Sprint</h2>
+                <div class="roadmap-steps">
+                    <div class="roadmap-step"><div class="step-number">1</div><div class="step-content"><h4>Fill one seat</h4><p>Send outreach for one empty seat this week.</p></div></div>
+                    <div class="roadmap-step"><div class="step-number">2</div><div class="step-content"><h4>Give value back</h4><p>Send one value-back message to an existing advisor.</p></div></div>
+                    <div class="roadmap-step"><div class="step-number">3</div><div class="step-content"><h4>Convert a mentor</h4><p>Make one specific ask that moves a mentor toward sponsorship.</p></div></div>
+                </div>
+            </div>
+            <div class="ell-mark">ELL</div>
+        </div>
+
+        <!-- Slide 20: Quote / reflection (dark) -->
+        <div class="slide slide-dark" data-slide="20">
+            <div class="slide-header">
+                <img src="https://coachingwomenofcolor.com/logo.webp" alt="CWC" class="logo" style="filter: brightness(0) invert(1);">
+                <span class="module-label">Module 6 &mdash; June</span>
+            </div>
+            <div class="slide-content">
+                <p class="quote-text">You are not asking for a favor. You are building the infrastructure your career deserves.</p>
+            </div>
+            <div class="ell-mark">ELL</div>
+        </div>
+
+        <!-- Slide 21: Key takeaways -->
+        <div class="slide" data-slide="21">
+            <div class="slide-header">
+                <img src="https://coachingwomenofcolor.com/logo.webp" alt="CWC" class="logo">
+                <span class="module-label">Module 6 &mdash; June</span>
+            </div>
+            <div class="slide-content">
+                <span class="section-label">Key Takeaways</span>
+                <h2>What to Remember</h2>
+                <div class="feature-list">
+                    <div class="feature-item"><div class="feature-number">1</div><div class="feature-text"><h4>A board beats a single mentor</h4><p>Diversify your guidance and your advocacy.</p></div></div>
+                    <div class="feature-item"><div class="feature-number">2</div><div class="feature-text"><h4>A sponsor is not a mentor</h4><p>Advice helps you think; advocacy moves the decision.</p></div></div>
+                    <div class="feature-item"><div class="feature-number">3</div><div class="feature-text"><h4>Map, then fill the gaps</h4><p>Know your empty seats and target them.</p></div></div>
+                    <div class="feature-item"><div class="feature-number">4</div><div class="feature-text"><h4>The ask is specific</h4><p>Make it easy to say yes.</p></div></div>
+                    <div class="feature-item"><div class="feature-number">5</div><div class="feature-text"><h4>Nurture it or it dies</h4><p>Cadence and reciprocity keep the board alive.</p></div></div>
+                </div>
+            </div>
+            <div class="ell-mark">ELL</div>
+        </div>
+
+        <!-- Slide 22: Homework & close (dark) -->
+        <div class="slide slide-dark" data-slide="22">
+            <div class="slide-header">
+                <img src="https://coachingwomenofcolor.com/logo.webp" alt="CWC" class="logo" style="filter: brightness(0) invert(1);">
+                <span class="module-label">Module 6 &mdash; June</span>
+            </div>
+            <div class="slide-content">
+                <span class="section-label">Your Homework</span>
+                <h2>Build Your Board. Own the Room.</h2>
+                <div class="feature-list">
+                    <div class="feature-item"><div class="feature-number">1</div><div class="feature-text"><h4>Complete all four worksheets</h4><p>Map, Sorter, Outreach &amp; Ask, Nurture Tracker.</p></div></div>
+                    <div class="feature-item"><div class="feature-number">2</div><div class="feature-text"><h4>Send one outreach</h4><p>Aimed at a real empty seat.</p></div></div>
+                    <div class="feature-item"><div class="feature-number">3</div><div class="feature-text"><h4>Book one nurture conversation</h4><p>With an existing advisor.</p></div></div>
+                    <div class="feature-item"><div class="feature-number">4</div><div class="feature-text"><h4>Post your biggest gap</h4><p>Share it in the community for accountability.</p></div></div>
+                </div>
+                <ul class="references">
+                    <li>McKinsey &amp; LeanIn, <em>Women in the Workplace 2025</em></li>
+                    <li>AAAIM &amp; Backstop, <em>Beyond the Glass Ceiling</em> (2022)</li>
+                    <li>EEOC, <em>American Indian &amp; Alaska Native Women in the Federal Sector</em> (FY2020)</li>
+                    <li>Jane Hyun, <em>Breaking the Bamboo Ceiling</em> (2005)</li>
+                    <li>Priscilla Claman, &ldquo;Forget Mentors: Employ a Personal Board of Directors,&rdquo; HBR (2010)</li>
+                    <li>Sylvia Ann Hewlett, <em>The Sponsor Effect</em> (2010)</li>
+                </ul>
+            </div>
+            <div class="ell-mark">ELL</div>
+        </div>
+
+    </div>
+
+    <div class="nav-controls">
+        <button class="nav-btn" id="prev" onclick="navigate(-1)" disabled aria-label="Previous slide">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="15 18 9 12 15 6"></polyline></svg>
+        </button>
+        <span class="slide-counter" id="counter">1 / 22</span>
+        <button class="nav-btn" id="next" onclick="navigate(1)" aria-label="Next slide">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="9 18 15 12 9 6"></polyline></svg>
+        </button>
+    </div>
+
+    <script>
+        const slides = document.querySelectorAll('.slide');
+        const total = slides.length;
+        let current = 0;
+
+        function navigate(dir) {
+            slides[current].classList.remove('active');
+            current = Math.max(0, Math.min(total - 1, current + dir));
+            slides[current].classList.add('active');
+            document.getElementById('counter').textContent = (current + 1) + ' / ' + total;
+            document.getElementById('prev').disabled = current === 0;
+            document.getElementById('next').disabled = current === total - 1;
+            document.getElementById('progress').style.width = ((current + 1) / total * 100) + '%';
+        }
+
+        document.addEventListener('keydown', e => {
+            if (e.key === 'ArrowRight' || e.key === 'ArrowDown') navigate(1);
+            if (e.key === 'ArrowLeft'  || e.key === 'ArrowUp')   navigate(-1);
+        });
+        let touchStartX = 0;
+        document.addEventListener('touchstart', e => { touchStartX = e.changedTouches[0].screenX; });
+        document.addEventListener('touchend', e => {
+            const diff = touchStartX - e.changedTouches[0].screenX;
+            if (Math.abs(diff) > 50) navigate(diff > 0 ? 1 : -1);
+        });
+
+        document.getElementById('progress').style.width = (1 / total * 100) + '%';
+    </script>
+</body>
+</html>
