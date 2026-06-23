@@ -25,6 +25,12 @@
 | F5 | Native/AIAN women: 0.4% of executives (scope: U.S. federal sector, FY2020) | EEOC, FY2020 |
 | F6 | "Personal Board of Directors" concept popularized by Priscilla Claman | Priscilla Claman, HBR, 2010 |
 | F7 | Protégés with a sponsor: men +23%, women +19% more likely to get next promotion | Sylvia Ann Hewlett, *The Sponsor Effect*, 2010 |
+| F8 | 59% of Black women have never had an informal interaction with a senior leader at their company | LeanIn, *State of Black Women in Corporate America*, 2020 (read via CNBC quoting report) |
+| F9 | Latinas: 74 promoted from entry level to manager per 100 men; 90 to VP per 100 men | LeanIn, *State of Latinas in Corporate America*, 2024 (read PDF) |
+| F10 | Latinas: 4.9% of entry-level roles → 1.0% of C-suite ("only 1 percent of C-suite executives are Latina") — steepest representation drop of any group | LeanIn, *State of Latinas in Corporate America*, 2024 (read PDF) |
+| F11 | Entry→C-suite: white men's representation +64% while Latinas' declines | LeanIn, *State of Latinas in Corporate America*, 2024 (read PDF) |
+
+**CUT (could not origin-verify — do NOT use):** "24% of Black women get the sponsorship they need," "29% Black women manager advocacy" (B3/B4 — not found at any readable origin). Also still cut: "~2x promotion rate," WOC senior-leader access %.
 
 **DATA-GAP DISCLOSURE (to be honored in the deck, not hidden):** Sponsorship/advancement data is not separately reported for MENA and Pacific Islander women in the sources used. The deck names this gap rather than inventing figures. The Board-of-Advisors framework applies to every woman regardless.
 
@@ -34,7 +40,7 @@
 - Fonts: Source Serif 4 (headings), Inter (body)
 - Tokens: `--primary:#1A1A1A; --accent:#2A7B8C; --accent-warm:#D4A574; --text:#333; --bg:#FAF8F5; --bg-warm:#F5F2ED; --border:#E5E0D8`
 - Logo: `https://coachingwomenofcolor.com/logo.webp`
-- NO background image unless the file is confirmed present (avoid the Module 2 broken-image mistake). Module 6 uses gradient/solid dark slides — NO `images/` dependency.
+- Slide 1 backdrop: `images/0B1A7916.jpg` (CONFIRMED present — copied from module-4 into module-6/images/ BEFORE referencing, so the ref is never broken). Used behind the dark gradient at low opacity so title text stays readable. All other dark slides remain gradient-only — no further image dependencies.
 - Worksheets: vanilla JS, localStorage autosave, print/PDF, responsive (768/480 breakpoints) — same pattern as existing worksheets.
 
 ---
@@ -65,13 +71,15 @@
 - **Speaker:** Explain why one mentor is fragile; a board diversifies your guidance and advocacy. Attribute the *concept* to Claman (F6); the role taxonomy on the next slides is OUR framework, not hers.
 - **Time:** 4 min · **Facts:** F6
 
-### Slide 5 — MENTOR vs SPONSOR vs ADVOCATE (framework)
-- **On slide:** Three columns:
+### Slide 5 — MENTOR vs SPONSOR vs ADVOCATE (THE TYPES — conceptual)
+- **On slide:** Three columns. PURPOSE: teach the DISTINCTION between kinds of relationships (this is the concept; Slide 9 turns it into a roster).
   - MENTOR — advises you (talks TO you)
   - SPONSOR — advocates for you when you're not in the room (talks ABOUT you). On-slide definition: "someone other than your direct manager who actively advocates for your advancement and/or creates opportunities for you." *(McKinsey & LeanIn 2025)*
   - ADVOCATE / CONNECTOR — opens networks, vouches laterally
-- **Speaker:** The distinction that changes careers: mentorship is advice; sponsorship is action. Use F2b verbatim for the sponsor definition.
+- **Bridge line on slide (sets up Slide 9):** "These are the *types* of support. Next, we turn them into the specific *seats* on your board."
+- **Speaker:** The distinction that changes careers: mentorship is advice; sponsorship is action. Use F2b verbatim. End by teeing up Slide 9: these three types become a five-seat roster.
 - **Time:** 5–6 min · **Facts:** F2b
+- **NOTE (5 vs 9 overlap resolution — Option A):** Slide 5 = the concept/types. Slide 9 = the roster/seats. The bridge line makes the build explicit so 9 doesn't feel like a repeat.
 
 ### Slide 6 — WHY SPONSORSHIP MOVES THE NEEDLE
 - **On slide:** "Protégés with a sponsor are more likely to get the next promotion — men +23%, women +19%." *(Hewlett, The Sponsor Effect, 2010)*
@@ -83,19 +91,22 @@
 - **Speaker:** Pause. Reflection beat. No facts.
 - **Time:** 2 min · **Facts:** none
 
-### Slide 8 — THE BARRIER IS NOT THE SAME FOR EVERYONE
-- **On slide:** Honest, disaggregated panel:
-  - AAPI women: 80% say the bamboo ceiling is real; 62% say it hits hardest beyond junior level. *(investment-management professionals · AAAIM 2022)*
-  - Native/AIAN women: just 0.4% of executives. *(U.S. federal sector, FY2020 · EEOC)*
-  - Term note: "bamboo ceiling" coined by Jane Hyun (2005).
-  - Data-gap line on slide: "Comparable sponsorship data for MENA and Pacific Islander women is not separately reported — the gap is real, and so is the need."
-- **Speaker:** This is the inclusive, honest slide. Read each stat WITH its scope caveat. Name the data gap out loud — do not imply these numbers cover all WOC.
-- **Time:** 5–6 min · **Facts:** F3, F4, F5 (+ documented gap)
+### Slide 8 — THE STEEPEST CLIMBS: BLACK & LATINA WOMEN (Black/Latina focused, per Wendy)
+- **On slide:** Headline "The Steepest Climbs: Black & Latina Women." Three cards:
+  - CARD 1 — Black Women: "60 promoted to manager per 100 men" + "59% have never had an informal interaction with a senior leader." *(McKinsey & LeanIn 2025; LeanIn State of Black Women 2020)*
+  - CARD 2 — Latinas: "74 promoted to manager per 100 men" + "from 4.9% at entry level to just 1% in the C-suite — the steepest drop of any group." *(LeanIn State of Latinas 2024)*
+  - CARD 3 — Why a board matters: "When advocacy and senior-leader access are scarcest, building your board deliberately is how you close the gap." (framing, NO stat)
+  - Umbrella honesty line (kept): "Other women of color — AAPI, Native, MENA, Pacific Islander — face their own distinct barriers; the strategy applies to all."
+- **Speaker:** Lead with Black & Latina realities, each stat WITH source. Frame as structural, not personal. Land card 3: scarce advocacy = build it on purpose. Close with the umbrella line so no one is erased.
+- **Time:** 5–6 min · **Facts:** F1 (Black 60), F8 (59%), F9 (Latina 74), F10 (4.9%→1%)
+- **CHANGED from v1:** was AAPI/Native-led; now Black/Latina-led per Wendy. AAPI/Native/MENA/PI now compressed into the umbrella honesty line rather than carrying the slide. F3/F4/F5 no longer on this slide.
 
-### Slide 9 — WHAT A STRONG BOARD LOOKS LIKE
-- **On slide:** 5 seats to fill: The Sponsor · The Skill Mentor · The Insider (reads the politics) · The Connector · The Truth-Teller (peer who's honest with you).
-- **Speaker:** Describe each seat, why you need all five, that one person can hold two seats.
+### Slide 9 — WHAT A STRONG BOARD LOOKS LIKE (THE ROSTER — practical; builds on Slide 5)
+- **On slide:** Lead-in line: "Now turn those three types into a five-seat roster." 5 seats to fill: The Sponsor · The Skill Mentor · The Insider (reads the politics) · The Connector · The Truth-Teller (peer who's honest with you).
+- **Make the NEW seats visible:** tag The Insider and The Truth-Teller as the two seats that go BEYOND the Slide 5 types (Sponsor/Skill Mentor/Connector map back to the three types; Insider + Truth-Teller are additions).
+- **Speaker:** Open by explicitly connecting to Slide 5: "We named three types of support. A real board operationalizes them into five seats." Then describe each seat, flag Insider + Truth-Teller as the additions, note one person can hold two seats.
 - **Time:** 5 min · **Facts:** none
+- **NOTE (5 vs 9 overlap resolution — Option A):** This slide is the ROSTER. The lead-in + "new seats" tagging removes the "didn't I just see this?" feeling.
 
 ### Slide 10 — ACTIVITY: MAP YOUR BOARD (Worksheet 1)
 - **On slide:** "Open: Advisor Map / Gap Analysis." Instructions to list current people against the 5 seats and circle the empty seats.

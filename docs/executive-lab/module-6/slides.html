@@ -60,8 +60,17 @@
         .slide > * { position: relative; z-index: 1; }
         .slide.active { opacity: 1; visibility: visible; transform: translateY(0); transition: opacity 0.4s ease 0.05s, visibility 0s, transform 0.4s ease 0.05s; z-index: 1; }
 
-        /* Dark slides use gradient only — no image dependency */
+        /* Title slide: confirmed backdrop image behind dark gradient. Other dark slides remain gradient-only. */
         .slide-title { background: linear-gradient(135deg, #1A1A1A 0%, #2d3a3d 50%, #1A1A1A 100%); color: white; }
+        .slide-title::after {
+            content: '';
+            position: absolute; top: 0; left: 0; right: 0; bottom: 0;
+            background: url('images/0B1A7916.jpg') center/cover no-repeat;
+            opacity: 0.18;
+            pointer-events: none;
+            z-index: 0;
+        }
+        .slide-title > * { position: relative; z-index: 1; }
         .slide-title .section-label { color: rgba(255,255,255,0.5); }
         .slide-title h1 { color: white; font-size: 56px; }
         .slide-title .lead { color: rgba(255,255,255,0.7); }
@@ -339,6 +348,7 @@
                     <div class="card"><span class="card-tag">Advocate / Connector</span><h4>Opens the network</h4><p>Vouches for you laterally and connects you to people and rooms you can't reach alone.</p></div>
                 </div>
                 <div class="callout"><p>A sponsor, defined: <strong>&ldquo;someone other than your direct manager who actively advocates for your career advancement and/or creates opportunities for you.&rdquo;</strong></p><p class="source-line">Definition: McKinsey &amp; LeanIn, 2025</p></div>
+                <p class="lead" style="margin-top:24px;">These are the <strong>types</strong> of support. Next, we turn them into the specific <strong>seats</strong> on your board.</p>
             </div>
             <div class="ell-mark">ELL</div>
         </div>
@@ -383,13 +393,13 @@
             </div>
             <div class="slide-content">
                 <span class="section-label">An Honest Look</span>
-                <h2>The Barrier Isn't the Same for Everyone</h2>
+                <h2>The Steepest Climbs: Black &amp; Latina Women</h2>
                 <div class="cards-grid">
-                    <div class="card"><span class="card-tag">AAPI Women</span><h4>80% &middot; 62%</h4><p>80% say the &ldquo;bamboo ceiling&rdquo; is real; 62% say it hit hardest beyond junior level.</p><p class="source-line">Scope: investment-management professionals &middot; AAAIM, 2022</p></div>
-                    <div class="card"><span class="card-tag">Native / AIAN Women</span><h4>0.4%</h4><p>Just 0.4% of executives are Native/AIAN women.</p><p class="source-line">Scope: U.S. federal sector, FY2020 &middot; EEOC</p></div>
-                    <div class="card"><span class="card-tag">The Term</span><h4>&ldquo;Bamboo Ceiling&rdquo;</h4><p>Coined by Jane Hyun in <em>Breaking the Bamboo Ceiling</em> (2005).</p></div>
+                    <div class="card"><span class="card-tag">Black Women</span><h4>60 &middot; 59%</h4><p>60 promoted to manager per 100 men. 59% have never had an informal interaction with a senior leader.</p><p class="source-line">McKinsey &amp; LeanIn, 2025; LeanIn, State of Black Women, 2020</p></div>
+                    <div class="card"><span class="card-tag">Latinas</span><h4>74 &rarr; 1%</h4><p>74 promoted to manager per 100 men. From 4.9% at entry level to just 1% in the C-suite &mdash; the steepest drop of any group.</p><p class="source-line">LeanIn, State of Latinas in Corporate America, 2024</p></div>
+                    <div class="card"><span class="card-tag">Why a Board Matters</span><h4>Build It On Purpose</h4><p>When advocacy and senior-leader access are scarcest, building your board deliberately is how you close the gap.</p></div>
                 </div>
-                <div class="callout"><p><strong>An honest gap:</strong> comparable sponsorship data for MENA and Pacific Islander women is not separately reported in these sources. The gap is real &mdash; and so is the need. The board you build works regardless of which dataset exists.</p></div>
+                <div class="callout"><p><strong>The full picture:</strong> other women of color &mdash; AAPI, Native, MENA, and Pacific Islander women &mdash; face their own distinct barriers. The strategy in this module applies to all.</p></div>
             </div>
             <div class="ell-mark">ELL</div>
         </div>
@@ -403,14 +413,15 @@
             <div class="slide-content">
                 <span class="section-label">The Five Seats</span>
                 <h2>What a Strong Board Looks Like</h2>
+                <p class="lead">Now turn those three <em>types</em> of support into a five-seat <em>roster</em>.</p>
                 <div class="feature-list">
                     <div class="feature-item"><div class="feature-number">1</div><div class="feature-text"><h4>The Sponsor</h4><p>Advocates for you in rooms you're not in.</p></div></div>
                     <div class="feature-item"><div class="feature-number">2</div><div class="feature-text"><h4>The Skill Mentor</h4><p>Helps you grow a specific capability.</p></div></div>
-                    <div class="feature-item"><div class="feature-number">3</div><div class="feature-text"><h4>The Insider</h4><p>Reads the politics and tells you how things really work.</p></div></div>
+                    <div class="feature-item"><div class="feature-number">3</div><div class="feature-text"><h4>The Insider <span style="color:var(--accent-warm); font-size:13px; font-weight:600;">&middot; new</span></h4><p>Reads the politics and tells you how things really work.</p></div></div>
                     <div class="feature-item"><div class="feature-number">4</div><div class="feature-text"><h4>The Connector</h4><p>Opens doors and makes introductions.</p></div></div>
-                    <div class="feature-item"><div class="feature-number">5</div><div class="feature-text"><h4>The Truth-Teller</h4><p>A peer who is honest with you when others won't be.</p></div></div>
+                    <div class="feature-item"><div class="feature-number">5</div><div class="feature-text"><h4>The Truth-Teller <span style="color:var(--accent-warm); font-size:13px; font-weight:600;">&middot; new</span></h4><p>A peer who is honest with you when others won't be.</p></div></div>
                 </div>
-                <div class="callout"><p>One person can hold two seats &mdash; what matters is that every seat is filled.</p></div>
+                <div class="callout"><p>Sponsor, Skill Mentor, and Connector are the three types from the last slide. The <strong>Insider</strong> and <strong>Truth-Teller</strong> are the two seats that complete a real board. One person can hold two seats &mdash; what matters is that every seat is filled.</p></div>
             </div>
             <div class="ell-mark">ELL</div>
         </div>
@@ -651,9 +662,8 @@
                 </div>
                 <ul class="references">
                     <li>McKinsey &amp; LeanIn, <em>Women in the Workplace 2025</em></li>
-                    <li>AAAIM &amp; Backstop, <em>Beyond the Glass Ceiling</em> (2022)</li>
-                    <li>EEOC, <em>American Indian &amp; Alaska Native Women in the Federal Sector</em> (FY2020)</li>
-                    <li>Jane Hyun, <em>Breaking the Bamboo Ceiling</em> (2005)</li>
+                    <li>LeanIn, <em>State of Black Women in Corporate America</em> (2020)</li>
+                    <li>LeanIn, <em>State of Latinas in Corporate America</em> (2024)</li>
                     <li>Priscilla Claman, &ldquo;Forget Mentors: Employ a Personal Board of Directors,&rdquo; HBR (2010)</li>
                     <li>Sylvia Ann Hewlett, <em>The Sponsor Effect</em> (2010)</li>
                 </ul>
