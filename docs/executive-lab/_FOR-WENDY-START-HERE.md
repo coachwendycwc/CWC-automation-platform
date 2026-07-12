@@ -26,10 +26,10 @@ That's it. From then on you just talk to Claude.
 
 ---
 
-## How to build a NEW module (Modules 7–10 remain)
+## How to build a NEW module (Sep–Dec remain, plus the summer worksheets)
 Open Claude Code in the repo and say, in plain English:
 
-> "Read docs/executive-lab/_MODULE-PLAYBOOK.md, then build Module 7 (Lead and Develop Teams) following it."
+> "Read docs/executive-lab/_CURRICULUM-2026.md and _MODULE-PLAYBOOK.md, then build the September module (Executive Storytelling: Master Your Narrative) following the process."
 
 Claude will then:
 1. **Research the facts** and show you a "source map" — a list of every statistic with its real source. **It will pause and ask you to approve it.** Nothing gets written until you say yes. (This is what guarantees no made-up numbers.)
@@ -68,8 +68,14 @@ Within a minute or two it's live on the web at the module's URL. To share with c
 
 ---
 
-## What's left to build
-Modules **7 (Lead and Develop Teams)**, **8 (Lead Difficult Conversations)**, **9 (Get Promoted)**, **10 (Set the Table for Your Future)**.
-Optional cleanup: migrate Module 1 into this folder; add the missing worksheets to Module 5-v2; fix a few module titles in the old README.
+## What's left to build (per the revised 2026 curriculum — see _CURRICULUM-2026.md)
+It's a **12-month** program. Built through June. Remaining:
+- **Jul–Aug — Summer Integration:** worksheets only, no live slides (Board of Advisors Deep Dive, Energy & Cultural Tax Workbook, Mid-Year Reflection, etc.)
+- **September — Executive Storytelling: Master Your Narrative**
+- **October — Inclusive Leadership: Lead Authentically & Build Your Coalition**
+- **November — Evidence-Based Confidence: From Self-Doubt to Self-Trust**
+- **December — Reclaim Your Time: Boundaries, Decisions & Your Personal Operating System**
+
+Optional cleanup: migrate the January module into this folder; add the missing worksheets to Module 5-v2; retire the old README (its module list is outdated — `_CURRICULUM-2026.md` is the real one).
 
 Questions? Ask Rafael, or just ask Claude — it knows this repo.

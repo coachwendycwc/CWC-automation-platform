@@ -2,9 +2,11 @@
 ## MASTER OUTLINE (single source of truth)
 > COPY THIS FILE to `module-N/OUTLINE.md` and fill the [bracketed] parts. See `_MODULE-PLAYBOOK.md` for the 4 gates.
 
-**Program:** CWC Executive Leadership Lab — 10-month program for women of color
-**Module N ([MONTH]):** [Module Title]
+**Program:** CWC Executive Leadership Lab — 12-month program for women of color (Jan–Dec)
+**Module ([MONTH]):** [Module Title — copy EXACT title/lane/anchor-tools from `_CURRICULUM-2026.md`]
+**Lane (one of the Six):** [Direction | Value | Influence | Leadership | Sustainability | Relationships]
 **Slide count:** [21–24, default 22]
+> Before filling this out, read the module's row + detail in `_CURRICULUM-2026.md` (the source of truth). Use Wendy's exact anchor-tool names for the worksheets.
 
 ### HOW THIS FILE WORKS (anti-drift contract)
 - This outline is the ONLY source. `slides.html` and `talking-points.html` are both generated FROM it.

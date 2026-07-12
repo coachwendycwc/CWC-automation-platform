@@ -67,19 +67,26 @@ This playbook exists because the slow, error-prone part of building modules was 
 
 ---
 
-## MODULE STATUS (update as built)
-- M1 Break Through Career Plateaus — built, OLD flat folder `cwc-executive-lab/`, NOT migrated to docs/
-- M2 Strategic Positioning for Promotion — built (README mislabels as "Executive Presence")
-- M3 Confident Career Pivot — built (README mislabels as "Strategic Brand")
-- M4 Leadership Composure (Bias) — built
-- M5 Advocacy & Negotiation — built; v2 "Fortune 500" redesign MISSING its 6 worksheets
-- M6 Build Your Board of Advisors — SHIPPED 2026-06 (this process)
-- **M7 Lead and Develop Teams — NOT BUILT**
-- **M8 Lead Difficult Conversations — NOT BUILT**
-- **M9 Get Promoted — NOT BUILT**
-- **M10 Set the Table for Your Future — NOT BUILT**
+## MODULE STATUS — SOURCE OF TRUTH IS `_CURRICULUM-2026.md` (NOT the old README)
+⚠️ The old README's back-half module list was WRONG. Always build against `_CURRICULUM-2026.md`. It's a **12-month** program (Jan–Dec); Jul–Aug are WORKSHEETS-ONLY summer integration, not live modules.
+
+Built:
+- JAN Break Through Career Plateaus — OLD flat folder `cwc-executive-lab/`, NOT migrated
+- FEB Strategic Positioning for Promotion — built (module-2)
+- MAR Confident Career Pivot — built (module-3)
+- APR Leadership Composure — built (module-4)
+- MAY Advocacy & Negotiation — built (module-5); v2 "Fortune 500" redesign MISSING its 6 worksheets
+- JUN Build Your Board of Advisors — ✅ SHIPPED 2026-06 (module-6, this process)
+
+NOT built (the REAL remaining work):
+- **JUL–AUG Summer Integration — WORKSHEETS ONLY** (Board of Advisors Deep Dive + Energy & Cultural Tax Workbook + Mid-Year Reflection + Networking for Introverts + Reciprocity Playbook + Reading List). No live slides/talking-points.
+- **SEP Executive Storytelling: Master Your Narrative** (Lane: Value)
+- **OCT Inclusive Leadership: Lead Authentically & Build Your Coalition** (Lane: Leadership)
+- **NOV Evidence-Based Confidence: From Self-Doubt to Self-Trust** (Lane: Sustainability)
+- **DEC Reclaim Your Time: Boundaries, Decisions & Personal Operating System** (Lane: Sustainability)
 
 ### Optional cleanup backlog (separate from new builds)
-- Migrate Module 1 into docs/executive-lab/module-1/
+- Migrate Module 1 (January) into docs/
 - Add the 6 missing worksheets to module-5-v2 (or reconcile v1/v2)
-- Fix README module-title mismatches (M2/M3/M5)
+- Fix the OLD README (it has wrong titles AND a wrong back-half roadmap — `_CURRICULUM-2026.md` supersedes it)
+- Confirm folder-naming convention with Rafael before creating Sep–Dec folders (month-number vs sequential)
