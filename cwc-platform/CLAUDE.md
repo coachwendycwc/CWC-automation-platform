@@ -96,7 +96,6 @@ npm run dev
 - Email/password registration and login
 - Google OAuth integration
 - Password reset via email
-- Dev login for testing
 
 ### Phase 7: Calendar & Integrations
 - FullCalendar integration at `/calendar`
@@ -292,7 +291,6 @@ npm run dev
 ```
 POST   /api/auth/login              # Email/password login
 POST   /api/auth/register           # New user registration
-POST   /api/auth/dev-login          # Development login (no password)
 GET    /api/contacts                # List contacts
 GET    /api/invoices                # List invoices
 GET    /api/contracts               # List contracts
@@ -461,8 +459,8 @@ Using SQLite for development (auto-created), PostgreSQL for production.
 ## Test Credentials
 
 ### Admin Dashboard
-- **Dev Login:** dev@cwcplatform.com (no password, use Dev Login)
 - **Test User:** test@cwcplatform.com / TestPass123
+  (create locally with `python -m scripts.seed_dev_user` from `backend/`, then log in at `/login`)
 
 ### Client Portal (magic link auth)
 - **Org Admin:** testclient@example.com

@@ -194,5 +194,6 @@ NEXT_PUBLIC_GOOGLE_CLIENT_ID=
 - **Email:** test@cwcplatform.com
 - **Password:** TestPass123
 
-Or use Dev Login (no password required):
-- **Email:** dev@cwcplatform.com
+Create this account locally with `python -m scripts.seed_dev_user` (run from
+`backend/`), then log in normally at `/login`. You can also register a fresh
+account at `/register`.
