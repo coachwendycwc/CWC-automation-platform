@@ -409,7 +409,8 @@ class TestStripeWebhook:
             invoice_id=invoice.id,
             amount=Decimal("100.00"),
             payment_method="stripe",
-            transaction_id="pi_test_refund_123",
+            payment_date=datetime.utcnow().date(),
+            stripe_payment_intent_id="pi_test_refund_123",
             status="completed",
         )
         db_session.add(payment)

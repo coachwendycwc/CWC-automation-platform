@@ -4,6 +4,8 @@ Contract template management router.
 from typing import Optional
 
 from fastapi import APIRouter, Depends, HTTPException, Query
+
+from app.services.auth_service import get_current_user
 from sqlalchemy.ext.asyncio import AsyncSession
 from sqlalchemy import select, func
 from sqlalchemy.orm import selectinload
@@ -22,7 +24,11 @@ from app.schemas.contract_template import (
 )
 from app.services.contract_service import ContractService
 
-router = APIRouter(prefix="/api/contract-templates", tags=["contract-templates"])
+router = APIRouter(
+    prefix="/api/contract-templates",
+    tags=["contract-templates"],
+    dependencies=[Depends(get_current_user)],
+)
 
 
 @router.get("", response_model=list[ContractTemplateList])

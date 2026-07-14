@@ -28,7 +28,9 @@ class FathomWebhookPayload(BaseModel):
 def verify_fathom_signature(payload: bytes, signature: str, secret: str) -> bool:
     """Verify the Fathom webhook signature."""
     if secret == "stubbed-for-now":
-        return True  # Skip verification in dev mode
+        # Skipping verification is a dev-only convenience. In production a stub
+        # secret must fail closed rather than trust any/no signature.
+        return not settings.is_production
 
     expected = hmac.new(
         secret.encode(),

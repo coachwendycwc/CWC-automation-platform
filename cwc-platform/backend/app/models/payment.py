@@ -29,6 +29,9 @@ class Payment(Base):
         String(20), nullable=False, default="other"
     )  # card, bank_transfer, cash, check, other
     payment_date: Mapped[date] = mapped_column(Date, nullable=False)
+    status: Mapped[str | None] = mapped_column(
+        String(20), nullable=True
+    )  # completed, failed, pending, refunded (nullable for legacy manual payments)
 
     # Stripe fields (for future integration)
     stripe_payment_intent_id: Mapped[str | None] = mapped_column(

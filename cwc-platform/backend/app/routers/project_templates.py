@@ -5,6 +5,8 @@ from typing import Optional
 import uuid
 
 from fastapi import APIRouter, Depends, HTTPException, Query
+
+from app.services.auth_service import get_current_user
 from sqlalchemy.ext.asyncio import AsyncSession
 from sqlalchemy import select, or_
 
@@ -17,7 +19,11 @@ from app.schemas.project import (
     ProjectTemplateList,
 )
 
-router = APIRouter(prefix="/api/project-templates", tags=["project-templates"])
+router = APIRouter(
+    prefix="/api/project-templates",
+    tags=["project-templates"],
+    dependencies=[Depends(get_current_user)],
+)
 
 
 @router.get("", response_model=list[ProjectTemplateList])

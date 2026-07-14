@@ -103,13 +103,11 @@ class TestAuthEndpoints:
         # which causes an internal error when accessing credentials.credentials
         assert response.status_code in [401, 403]
 
-    async def test_dev_login(self, client: AsyncClient):
-        """Test dev login endpoint creates user."""
+    async def test_dev_login_removed(self, client: AsyncClient):
+        """The dev-login backdoor must not exist: it minted admin tokens with no
+        credential. Regression guard so it is never reintroduced."""
         response = await client.post("/api/auth/dev-login")
-        assert response.status_code == 200
-        data = response.json()
-        assert "access_token" in data
-        assert data["user"]["email"] == "dev@cwcplatform.com"
+        assert response.status_code == 404
 
     async def test_forgot_password(self, client: AsyncClient, test_user):
         """Test forgot password returns success message."""

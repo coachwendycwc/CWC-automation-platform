@@ -150,7 +150,7 @@ async def register(
         email=request.email,
         name=request.name,
         password_hash=hash_password(request.password),
-        role="admin",  # First user is admin, subsequent could be different
+        role="user",  # Self-registration must not grant admin; promote deliberately
     )
     db.add(user)
     await db.commit()
@@ -228,36 +228,3 @@ async def reset_password(
     await db.commit()
 
     return MessageResponse(message="Password has been reset successfully")
-
-
-# Dev-only endpoint for testing without Google OAuth
-@router.post("/dev-login", response_model=TokenResponse)
-async def dev_login(
-    email: str = "dev@cwcplatform.com",
-    db: AsyncSession = Depends(get_db),
-):
-    """
-    Development-only login endpoint.
-    Creates or gets a dev user without Google OAuth.
-    Remove in production!
-    """
-    result = await db.execute(select(User).where(User.email == email))
-    user = result.scalar_one_or_none()
-
-    if not user:
-        user = User(
-            email=email,
-            name="Development User",
-            password_hash=hash_password("dev123"),
-            role="admin",
-        )
-        db.add(user)
-        await db.commit()
-        await db.refresh(user)
-
-    access_token = create_access_token(data={"sub": str(user.id)})
-
-    return TokenResponse(
-        access_token=access_token,
-        user=UserResponse.model_validate(user),
-    )

@@ -5,6 +5,8 @@ from decimal import Decimal
 from typing import Optional, List
 
 from fastapi import APIRouter, Depends, HTTPException, Query
+
+from app.services.auth_service import get_current_user
 from sqlalchemy import select, func
 from sqlalchemy.ext.asyncio import AsyncSession
 
@@ -15,7 +17,11 @@ from app.schemas.expense import (
     MileageSummary,
 )
 
-router = APIRouter(prefix="/api/mileage", tags=["mileage"])
+router = APIRouter(
+    prefix="/api/mileage",
+    tags=["mileage"],
+    dependencies=[Depends(get_current_user)],
+)
 
 
 # IRS standard mileage rates by year

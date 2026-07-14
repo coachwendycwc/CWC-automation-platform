@@ -74,12 +74,15 @@ async def lifespan(app: FastAPI):
     await reminder_service.stop()
 
 
+# Interactive API docs are disabled in production to avoid exposing the full
+# endpoint surface; enabled in non-production for developer convenience.
 app = FastAPI(
     title="CWC Platform API",
     description="Unified business platform for Coaching Women of Color",
     version="0.1.0",
-    docs_url="/docs",
-    redoc_url="/redoc",
+    docs_url=None if settings.is_production else "/docs",
+    redoc_url=None if settings.is_production else "/redoc",
+    openapi_url=None if settings.is_production else "/openapi.json",
     lifespan=lifespan,
 )
 

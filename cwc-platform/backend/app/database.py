@@ -6,7 +6,7 @@ settings = get_settings()
 
 engine = create_async_engine(
     settings.database_url,
-    echo=True,  # Set to False in production
+    echo=not settings.is_production,  # SQL echo in non-production only
 )
 
 async_session_maker = async_sessionmaker(

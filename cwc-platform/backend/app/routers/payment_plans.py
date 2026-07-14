@@ -5,6 +5,8 @@ from datetime import datetime
 from decimal import Decimal
 
 from fastapi import APIRouter, Depends, HTTPException
+
+from app.services.auth_service import get_current_user
 from sqlalchemy.ext.asyncio import AsyncSession
 from sqlalchemy import select
 from sqlalchemy.orm import selectinload
@@ -14,7 +16,11 @@ from app.models.invoice import Invoice
 from app.models.payment_plan import PaymentPlan
 from app.schemas.payment_plan import PaymentPlanCreate, PaymentPlanUpdate, PaymentPlanRead
 
-router = APIRouter(prefix="/api", tags=["payment-plans"])
+router = APIRouter(
+    prefix="/api",
+    tags=["payment-plans"],
+    dependencies=[Depends(get_current_user)],
+)
 
 
 def _enrich_payment_plan_response(plan: PaymentPlan) -> PaymentPlanRead:
