@@ -20,19 +20,13 @@ test.describe('Authentication', () => {
     await expect(page.locator('text=/invalid|error|incorrect/i')).toBeVisible({ timeout: 5000 });
   });
 
-  test('should login with dev credentials', async ({ page }) => {
+  test('should login with test credentials', async ({ page }) => {
     await page.goto('/login');
 
-    // Look for dev login button or use email/password
-    const devLoginButton = page.locator('text=/dev login/i');
-    if (await devLoginButton.isVisible()) {
-      await devLoginButton.click();
-    } else {
-      // Try logging in with test credentials
-      await page.fill('input[type="email"], input[name="email"]', 'dev@cwcplatform.com');
-      await page.fill('input[type="password"], input[name="password"]', 'dev123');
-      await page.click('button[type="submit"]');
-    }
+    // Log in with the test account via the standard email/password flow.
+    await page.fill('input[type="email"], input[name="email"]', 'test@cwcplatform.com');
+    await page.fill('input[type="password"], input[name="password"]', 'TestPass123');
+    await page.click('button[type="submit"]');
 
     // Should redirect to dashboard
     await expect(page).toHaveURL(/dashboard/, { timeout: 10000 });
