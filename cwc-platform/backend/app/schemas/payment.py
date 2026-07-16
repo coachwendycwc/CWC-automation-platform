@@ -25,6 +25,7 @@ class PaymentRead(BaseModel):
     amount: Decimal
     payment_method: str
     payment_date: date
+    status: Optional[str] = None  # completed, failed, refunded, pending (None for legacy manual payments)
     stripe_payment_intent_id: Optional[str] = None
     stripe_charge_id: Optional[str] = None
     reference: Optional[str] = None
@@ -42,6 +43,7 @@ class PaymentList(BaseModel):
     amount: Decimal
     payment_method: str
     payment_date: date
+    status: Optional[str] = None  # completed, failed, refunded, pending (None for legacy manual payments)
     reference: Optional[str] = None
     created_at: datetime
 

@@ -35,6 +35,18 @@ async def seed_user() -> None:
     name = os.getenv("SEED_NAME", DEFAULT_NAME)
     role = os.getenv("SEED_ROLE", DEFAULT_ROLE)
 
+    # This is also the supported way to bootstrap the FIRST admin in production
+    # (self-registration and Google sign-in now create role=user only). But it
+    # must never mint a weak, known-password admin in a real environment:
+    # in production, refuse to run unless SEED_PASSWORD is explicitly provided.
+    from app.config import get_settings
+
+    if get_settings().is_production and "SEED_PASSWORD" not in os.environ:
+        raise SystemExit(
+            "Refusing to seed with the built-in default password in production. "
+            "Set SEED_PASSWORD (and SEED_EMAIL) to bootstrap the first admin."
+        )
+
     async with async_session_maker() as session:
         result = await session.execute(select(User).where(User.email == email))
         user = result.scalar_one_or_none()

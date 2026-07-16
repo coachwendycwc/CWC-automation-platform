@@ -191,7 +191,7 @@ async def handle_checkout_completed(db: AsyncSession, session: dict):
 
     # Calculate amount paid (Stripe returns in cents). Use Decimal so it stays
     # compatible with the Numeric invoice columns and avoids float rounding.
-    amount_paid = Decimal(session.get("amount_total", 0)) / 100
+    amount_paid = Decimal(session.get("amount_total") or 0) / 100
 
     # Create payment record
     payment = Payment(
@@ -285,7 +285,7 @@ async def handle_payment_succeeded(db: AsyncSession, payment_intent: dict):
         return
 
     # Calculate amount (Stripe returns cents; Decimal for Numeric compatibility)
-    amount_paid = Decimal(payment_intent.get("amount_received", 0)) / 100
+    amount_paid = Decimal(payment_intent.get("amount_received") or 0) / 100
 
     # Create payment record
     payment = Payment(
@@ -329,7 +329,7 @@ async def handle_payment_failed(db: AsyncSession, payment_intent: dict):
     if invoice:
         payment = Payment(
             invoice_id=invoice.id,
-            amount=Decimal(payment_intent.get("amount", 0)) / 100,
+            amount=Decimal(payment_intent.get("amount") or 0) / 100,
             payment_method="stripe",
             payment_date=datetime.now().date(),
             stripe_payment_intent_id=payment_intent.get("id"),
@@ -358,8 +358,24 @@ async def handle_refund(db: AsyncSession, charge: dict):
         logger.warning(f"Original payment not found for refund: {payment_intent_id}")
         return
 
+    # Idempotency: Stripe delivers webhooks at-least-once and retries on any
+    # non-2xx/timeout. Without this guard a replayed charge.refunded would
+    # insert a second negative Payment and decrement amount_paid again,
+    # driving balance_due negative. Skip if this charge's refund is recorded.
+    charge_id = charge.get("id")
+    if charge_id:
+        existing_refund = await db.execute(
+            select(Payment).where(
+                Payment.stripe_charge_id == charge_id,
+                Payment.payment_method == "stripe_refund",
+            )
+        )
+        if existing_refund.scalar_one_or_none():
+            logger.info(f"Refund already recorded for charge {charge_id}, skipping")
+            return
+
     # Calculate refund amount (Stripe returns cents; Decimal for Numeric columns)
-    refund_amount = Decimal(charge.get("amount_refunded", 0)) / 100
+    refund_amount = Decimal(charge.get("amount_refunded") or 0) / 100
 
     # Create refund payment record (negative amount)
     refund_payment = Payment(
@@ -546,14 +562,14 @@ async def handle_stripe_invoice_paid(db: AsyncSession, stripe_invoice: dict):
         # Update existing invoice
         existing_invoice.status = "paid"
         existing_invoice.paid_at = datetime.now()
-        existing_invoice.amount_paid = Decimal(stripe_invoice.get("amount_paid", 0)) / 100
+        existing_invoice.amount_paid = Decimal(stripe_invoice.get("amount_paid") or 0) / 100
         existing_invoice.balance_due = 0
         await db.commit()
         logger.info(f"Updated existing invoice {existing_invoice.invoice_number} as paid")
         return
 
     # Create a new invoice record for this subscription payment
-    amount = Decimal(stripe_invoice.get("amount_paid", 0)) / 100
+    amount = Decimal(stripe_invoice.get("amount_paid") or 0) / 100
 
     invoice = Invoice(
         contact_id=subscription.contact_id,
