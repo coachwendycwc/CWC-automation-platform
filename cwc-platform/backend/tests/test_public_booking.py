@@ -58,7 +58,7 @@ async def test_user_for_booking(db_session) -> User:
     user = User(
         id=str(uuid.uuid4()),
         email="coach@example.com",
-        hashed_password="hashedpassword",
+        password_hash="hashedpassword",
         name="Test Coach",
         is_active=True,
     )
