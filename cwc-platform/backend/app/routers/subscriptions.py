@@ -8,6 +8,8 @@ from datetime import datetime
 from typing import Optional
 
 from fastapi import APIRouter, Depends, HTTPException, Query
+
+from app.services.auth_service import get_current_user
 from sqlalchemy.ext.asyncio import AsyncSession
 from sqlalchemy import select, func
 from sqlalchemy.orm import selectinload
@@ -40,7 +42,11 @@ from app.schemas.subscription import (
 
 logger = logging.getLogger(__name__)
 
-router = APIRouter(prefix="/api/subscriptions", tags=["subscriptions"])
+router = APIRouter(
+    prefix="/api/subscriptions",
+    tags=["subscriptions"],
+    dependencies=[Depends(get_current_user)],
+)
 
 
 # ==================== Products ====================

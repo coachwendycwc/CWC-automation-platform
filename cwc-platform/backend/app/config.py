@@ -1,15 +1,26 @@
 from pydantic_settings import BaseSettings
 from functools import lru_cache
 
+# The insecure default JWT signing key. Must never be the live key in production.
+DEFAULT_SECRET_KEY = "dev-secret-key-change-in-production"
+
 
 class Settings(BaseSettings):
+    # Deployment environment: "development" (default) or "production".
+    # Sourced from the ENVIRONMENT env var like every other setting below.
+    environment: str = "development"
+
     # Database
     database_url: str = "postgresql+asyncpg://postgres:postgres@localhost:5432/cwc_platform"
 
     # Security
-    secret_key: str = "dev-secret-key-change-in-production"
+    secret_key: str = DEFAULT_SECRET_KEY
     algorithm: str = "HS256"
     access_token_expire_minutes: int = 60 * 24 * 7  # 7 days
+
+    @property
+    def is_production(self) -> bool:
+        return self.environment.strip().lower() == "production"
 
     # Google OAuth
     google_client_id: str = "stubbed-for-now"
@@ -46,4 +57,12 @@ class Settings(BaseSettings):
 
 @lru_cache()
 def get_settings() -> Settings:
-    return Settings()
+    settings = Settings()
+    # Fail closed: a production deployment must never run on the known default
+    # signing key, or every JWT it issues is forgeable by anyone.
+    if settings.is_production and settings.secret_key == DEFAULT_SECRET_KEY:
+        raise RuntimeError(
+            "SECRET_KEY is still the built-in default in a production environment. "
+            "Set a strong, unique SECRET_KEY before starting."
+        )
+    return settings

@@ -4,6 +4,8 @@ import os
 from typing import Optional
 
 from fastapi import APIRouter, Depends, HTTPException, Query
+
+from app.services.auth_service import get_current_user
 from sqlalchemy.ext.asyncio import AsyncSession
 
 from app.database import get_db
@@ -22,7 +24,11 @@ from app.schemas.offboarding import (
     OffboardingStats,
 )
 
-router = APIRouter(prefix="/api/offboarding", tags=["offboarding"])
+router = APIRouter(
+    prefix="/api/offboarding",
+    tags=["offboarding"],
+    dependencies=[Depends(get_current_user)],
+)
 
 
 # ============== Workflows ==============
@@ -279,7 +285,11 @@ async def approve_testimonial(
 
 # ============== Templates ==============
 
-templates_router = APIRouter(prefix="/api/offboarding-templates", tags=["offboarding"])
+templates_router = APIRouter(
+    prefix="/api/offboarding-templates",
+    tags=["offboarding"],
+    dependencies=[Depends(get_current_user)],
+)
 
 
 @templates_router.get("", response_model=list[OffboardingTemplateRead])

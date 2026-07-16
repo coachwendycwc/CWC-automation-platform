@@ -4,16 +4,10 @@ import { test, expect, Page } from '@playwright/test';
 async function login(page: Page) {
   await page.goto('/login');
 
-  // Try dev login button first
-  const devLoginButton = page.locator('text=/dev login/i');
-  if (await devLoginButton.isVisible({ timeout: 2000 }).catch(() => false)) {
-    await devLoginButton.click();
-  } else {
-    // Use credentials
-    await page.fill('input[type="email"], input[name="email"]', 'dev@cwcplatform.com');
-    await page.fill('input[type="password"], input[name="password"]', 'dev123');
-    await page.click('button[type="submit"]');
-  }
+  // Log in with the test account via the standard email/password flow.
+  await page.fill('input[type="email"], input[name="email"]', 'test@cwcplatform.com');
+  await page.fill('input[type="password"], input[name="password"]', 'TestPass123');
+  await page.click('button[type="submit"]');
 
   // Wait for redirect to dashboard
   await page.waitForURL(/dashboard/, { timeout: 10000 });

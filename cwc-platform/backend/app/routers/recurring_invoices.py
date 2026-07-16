@@ -8,6 +8,8 @@ from datetime import date, timedelta
 from typing import Optional
 
 from fastapi import APIRouter, Depends, HTTPException, Query
+
+from app.services.auth_service import get_current_user
 from sqlalchemy.ext.asyncio import AsyncSession
 from sqlalchemy import select, func
 from sqlalchemy.orm import selectinload
@@ -28,7 +30,11 @@ from app.services.email_service import email_service
 
 logger = logging.getLogger(__name__)
 
-router = APIRouter(prefix="/api/recurring-invoices", tags=["recurring-invoices"])
+router = APIRouter(
+    prefix="/api/recurring-invoices",
+    tags=["recurring-invoices"],
+    dependencies=[Depends(get_current_user)],
+)
 
 
 def calculate_next_date(current_date: date, frequency: str) -> date:

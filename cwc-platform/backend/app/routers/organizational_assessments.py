@@ -12,6 +12,8 @@ from sqlalchemy import select, func
 from sqlalchemy.orm import selectinload
 
 from app.database import get_db
+from app.models.user import User
+from app.services.auth_service import get_current_user
 from app.models.organizational_assessment import OrganizationalAssessment
 from app.models.contact import Contact
 from app.models.organization import Organization
@@ -149,6 +151,7 @@ async def submit_assessment(
 @router.get("", response_model=OrganizationalAssessmentList)
 async def list_assessments(
     db: AsyncSession = Depends(get_db),
+    _: User = Depends(get_current_user),
     status: Optional[str] = Query(None, description="Filter by status"),
     search: Optional[str] = Query(None, description="Search by org name or email"),
     skip: int = Query(0, ge=0),
@@ -196,6 +199,7 @@ async def list_assessments(
 @router.get("/stats")
 async def get_assessment_stats(
     db: AsyncSession = Depends(get_db),
+    _: User = Depends(get_current_user),
 ):
     """Get assessment statistics."""
     stats = {}
@@ -218,6 +222,7 @@ async def get_assessment_stats(
 async def get_assessment(
     assessment_id: str,
     db: AsyncSession = Depends(get_db),
+    _: User = Depends(get_current_user),
 ):
     """Get a single assessment (admin)."""
     result = await db.execute(
@@ -242,6 +247,7 @@ async def update_assessment(
     assessment_id: str,
     data: OrganizationalAssessmentUpdate,
     db: AsyncSession = Depends(get_db),
+    _: User = Depends(get_current_user),
 ):
     """Update assessment status (admin)."""
     result = await db.execute(
@@ -268,6 +274,7 @@ async def update_assessment(
 async def delete_assessment(
     assessment_id: str,
     db: AsyncSession = Depends(get_db),
+    _: User = Depends(get_current_user),
 ):
     """Delete an assessment (admin)."""
     result = await db.execute(

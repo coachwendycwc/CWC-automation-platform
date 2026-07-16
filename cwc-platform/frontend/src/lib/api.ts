@@ -71,12 +71,6 @@ export const authApi = {
   getMe: (token: string) =>
     fetchApi<any>("/api/auth/me", { token }),
 
-  devLogin: (email?: string) =>
-    fetchApi<{ access_token: string; user: any }>("/api/auth/dev-login", {
-      method: "POST",
-      body: JSON.stringify({ email }),
-    }),
-
   googleAuth: (accessToken: string) =>
     fetchApi<{ access_token: string; user: any }>("/api/auth/google", {
       method: "POST",

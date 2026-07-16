@@ -18,7 +18,6 @@ interface AuthContextType {
   isLoading: boolean;
   isAuthenticated: boolean;
   login: (email: string, password: string) => Promise<void>;
-  devLogin: (email?: string) => Promise<void>;
   register: (email: string, password: string, name: string) => Promise<void>;
   logout: () => void;
 }
@@ -87,14 +86,6 @@ export function AuthProvider({ children }: { children: ReactNode }) {
     router.push("/dashboard");
   };
 
-  const devLogin = async (email?: string) => {
-    const response = await authApi.devLogin(email);
-    localStorage.setItem("token", response.access_token);
-    setToken(response.access_token);
-    setUser(response.user);
-    router.push("/dashboard");
-  };
-
   const register = async (email: string, password: string, name: string) => {
     const response = await authApi.register(email, password, name);
     localStorage.setItem("token", response.access_token);
@@ -118,7 +109,6 @@ export function AuthProvider({ children }: { children: ReactNode }) {
         isLoading,
         isAuthenticated: !!token,
         login,
-        devLogin,
         register,
         logout,
       }}

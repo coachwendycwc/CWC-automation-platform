@@ -6,6 +6,8 @@ from typing import Optional
 from decimal import Decimal
 
 from fastapi import APIRouter, Depends, HTTPException, Query
+
+from app.services.auth_service import get_current_user
 from sqlalchemy.ext.asyncio import AsyncSession
 from sqlalchemy import select, and_, or_
 from sqlalchemy.orm import selectinload
@@ -25,7 +27,11 @@ from app.schemas.invoice import (
 from app.services.invoice_service import InvoiceService
 from app.services.email_service import email_service
 
-router = APIRouter(prefix="/api/invoices", tags=["invoices"])
+router = APIRouter(
+    prefix="/api/invoices",
+    tags=["invoices"],
+    dependencies=[Depends(get_current_user)],
+)
 
 
 @router.get("", response_model=list[InvoiceList])

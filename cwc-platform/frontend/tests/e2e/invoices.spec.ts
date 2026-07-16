@@ -4,8 +4,9 @@ test.describe('Invoice Management', () => {
   test.beforeEach(async ({ page }) => {
     // Log in before each test
     await page.goto('/login')
-    await page.fill('input[type="email"]', 'dev@cwcplatform.com')
-    await page.click('button:has-text("Dev Login")')
+    await page.fill('input[type="email"]', 'test@cwcplatform.com')
+    await page.fill('input[type="password"]', 'TestPass123')
+    await page.click('button:has-text("Sign In")')
     await page.waitForURL('**/dashboard')
   })
 

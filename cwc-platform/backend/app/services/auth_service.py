@@ -103,7 +103,7 @@ async def get_or_create_user(db: AsyncSession, google_user: dict) -> User:
         name=google_user.get("name"),
         google_id=google_id,
         avatar_url=google_user.get("picture"),
-        role="admin",  # First user is admin
+        role="user",  # Google self-sign-in must not grant admin; promote deliberately
     )
     db.add(user)
     await db.commit()

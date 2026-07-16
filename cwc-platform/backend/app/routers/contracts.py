@@ -5,6 +5,8 @@ from datetime import datetime
 from typing import Optional
 
 from fastapi import APIRouter, Depends, HTTPException, Query
+
+from app.services.auth_service import get_current_user
 from fastapi.responses import Response
 from sqlalchemy.ext.asyncio import AsyncSession
 from sqlalchemy import select, and_, or_
@@ -32,7 +34,11 @@ from app.services.contract_service import ContractService
 from app.services.email_service import email_service
 from app.services.pdf_service import pdf_service
 
-router = APIRouter(prefix="/api/contracts", tags=["contracts"])
+router = APIRouter(
+    prefix="/api/contracts",
+    tags=["contracts"],
+    dependencies=[Depends(get_current_user)],
+)
 
 
 @router.get("", response_model=list[ContractList])

@@ -55,3 +55,8 @@ frontend/test-results/
 
 # Scripts
 scripts/
+# ...but keep the backend source scripts (seed helpers, etc.)
+!backend/scripts/
+!backend/scripts/**
+# (still ignore compiled artifacts under it)
+backend/scripts/**/__pycache__/

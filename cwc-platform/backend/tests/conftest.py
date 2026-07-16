@@ -60,6 +60,20 @@ TestSessionLocal = async_sessionmaker(
 )
 
 
+def pytest_sessionfinish(session, exitstatus):
+    """Dispose the async engine once the whole suite is done.
+
+    Without this, aiosqlite's background connection-worker thread is never
+    shut down, so the interpreter blocks forever in threading._shutdown at
+    exit — a hang that looks like the suite never completing even though every
+    test has already passed. Run synchronously here (not as a session-scoped
+    async fixture, which conflicts with the function-scoped asyncio loop).
+    """
+    import asyncio
+
+    asyncio.run(test_engine.dispose())
+
+
 @pytest.fixture(scope="function")
 async def db_session() -> AsyncGenerator[AsyncSession, None]:
     """Create a fresh database session for each test."""

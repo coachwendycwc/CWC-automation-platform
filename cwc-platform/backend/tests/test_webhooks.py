@@ -54,6 +54,7 @@ class TestFathomWebhookEndpoint:
         """Test webhook with stubbed signature verification."""
         with patch("app.routers.webhooks.settings") as mock_settings:
             mock_settings.fathom_webhook_secret = "stubbed-for-now"  # Skip verification
+            mock_settings.is_production = False
 
             payload = {
                 "recording_id": f"rec_{uuid.uuid4().hex[:8]}",
@@ -85,6 +86,7 @@ class TestFathomWebhookEndpoint:
 
         with patch("app.routers.webhooks.settings") as mock_settings:
             mock_settings.fathom_webhook_secret = "stubbed-for-now"
+            mock_settings.is_production = False
 
             payload = {
                 "recording_id": recording_id,
@@ -138,6 +140,7 @@ class TestFathomWebhookEndpoint:
 
         with patch("app.routers.webhooks.settings") as mock_settings:
             mock_settings.fathom_webhook_secret = "stubbed-for-now"
+            mock_settings.is_production = False
 
             payload = {
                 "recording_id": recording_id,
@@ -160,6 +163,7 @@ class TestFathomWebhookEndpoint:
         """Test webhook with invalid JSON payload."""
         with patch("app.routers.webhooks.settings") as mock_settings:
             mock_settings.fathom_webhook_secret = "stubbed-for-now"
+            mock_settings.is_production = False
 
             response = await client.post(
                 "/api/webhooks/fathom",
@@ -181,6 +185,7 @@ class TestFathomWebhookEndpoint:
 
         with patch("app.routers.webhooks.settings") as mock_settings:
             mock_settings.fathom_webhook_secret = "stubbed-for-now"
+            mock_settings.is_production = False
 
             payload = {
                 "recording_id": recording_id,
@@ -204,6 +209,7 @@ class TestFathomWebhookEndpoint:
 
         with patch("app.routers.webhooks.settings") as mock_settings:
             mock_settings.fathom_webhook_secret = "stubbed-for-now"
+            mock_settings.is_production = False
 
             payload = {
                 "recording_id": recording_id,
@@ -227,6 +233,7 @@ class TestFathomWebhookEndpoint:
 
         with patch("app.routers.webhooks.settings") as mock_settings:
             mock_settings.fathom_webhook_secret = "stubbed-for-now"
+            mock_settings.is_production = False
 
             payload = {
                 "recording_id": recording_id,

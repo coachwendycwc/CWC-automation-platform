@@ -5,6 +5,7 @@ Handles checkout sessions, webhooks, and payment processing.
 import os
 import logging
 from datetime import datetime
+from decimal import Decimal
 from typing import Optional
 
 from fastapi import APIRouter, Depends, HTTPException, Request, Header
@@ -188,15 +189,17 @@ async def handle_checkout_completed(db: AsyncSession, session: dict):
         logger.error(f"Invoice not found for checkout: {invoice_id}")
         return
 
-    # Calculate amount paid (Stripe returns in cents)
-    amount_paid = session.get("amount_total", 0) / 100
+    # Calculate amount paid (Stripe returns in cents). Use Decimal so it stays
+    # compatible with the Numeric invoice columns and avoids float rounding.
+    amount_paid = Decimal(session.get("amount_total") or 0) / 100
 
     # Create payment record
     payment = Payment(
         invoice_id=invoice.id,
         amount=amount_paid,
         payment_method="stripe",
-        transaction_id=session.get("payment_intent"),
+        payment_date=datetime.now().date(),
+        stripe_payment_intent_id=session.get("payment_intent"),
         status="completed",
         notes=f"Paid via Stripe Checkout (Session: {session.get('id')})",
     )
@@ -260,7 +263,9 @@ async def handle_payment_succeeded(db: AsyncSession, payment_intent: dict):
 
     # Check if already processed
     result = await db.execute(
-        select(Payment).where(Payment.transaction_id == payment_intent.get("id"))
+        select(Payment).where(
+            Payment.stripe_payment_intent_id == payment_intent.get("id")
+        )
     )
     existing = result.scalar_one_or_none()
 
@@ -279,15 +284,16 @@ async def handle_payment_succeeded(db: AsyncSession, payment_intent: dict):
     if not invoice:
         return
 
-    # Calculate amount
-    amount_paid = payment_intent.get("amount_received", 0) / 100
+    # Calculate amount (Stripe returns cents; Decimal for Numeric compatibility)
+    amount_paid = Decimal(payment_intent.get("amount_received") or 0) / 100
 
     # Create payment record
     payment = Payment(
         invoice_id=invoice.id,
         amount=amount_paid,
         payment_method="stripe",
-        transaction_id=payment_intent.get("id"),
+        payment_date=datetime.now().date(),
+        stripe_payment_intent_id=payment_intent.get("id"),
         status="completed",
         notes=f"Paid via Stripe (Payment Intent: {payment_intent.get('id')})",
     )
@@ -323,9 +329,10 @@ async def handle_payment_failed(db: AsyncSession, payment_intent: dict):
     if invoice:
         payment = Payment(
             invoice_id=invoice.id,
-            amount=payment_intent.get("amount", 0) / 100,
+            amount=Decimal(payment_intent.get("amount") or 0) / 100,
             payment_method="stripe",
-            transaction_id=payment_intent.get("id"),
+            payment_date=datetime.now().date(),
+            stripe_payment_intent_id=payment_intent.get("id"),
             status="failed",
             notes=f"Payment failed: {payment_intent.get('last_payment_error', {}).get('message', 'Unknown error')}",
         )
@@ -343,7 +350,7 @@ async def handle_refund(db: AsyncSession, charge: dict):
     result = await db.execute(
         select(Payment)
         .options(selectinload(Payment.invoice))
-        .where(Payment.transaction_id == payment_intent_id)
+        .where(Payment.stripe_payment_intent_id == payment_intent_id)
     )
     original_payment = result.scalar_one_or_none()
 
@@ -351,16 +358,33 @@ async def handle_refund(db: AsyncSession, charge: dict):
         logger.warning(f"Original payment not found for refund: {payment_intent_id}")
         return
 
-    # Calculate refund amount
-    refund_amount = charge.get("amount_refunded", 0) / 100
+    # Idempotency: Stripe delivers webhooks at-least-once and retries on any
+    # non-2xx/timeout. Without this guard a replayed charge.refunded would
+    # insert a second negative Payment and decrement amount_paid again,
+    # driving balance_due negative. Skip if this charge's refund is recorded.
+    charge_id = charge.get("id")
+    if charge_id:
+        existing_refund = await db.execute(
+            select(Payment).where(
+                Payment.stripe_charge_id == charge_id,
+                Payment.payment_method == "stripe_refund",
+            )
+        )
+        if existing_refund.scalar_one_or_none():
+            logger.info(f"Refund already recorded for charge {charge_id}, skipping")
+            return
+
+    # Calculate refund amount (Stripe returns cents; Decimal for Numeric columns)
+    refund_amount = Decimal(charge.get("amount_refunded") or 0) / 100
 
     # Create refund payment record (negative amount)
     refund_payment = Payment(
         invoice_id=original_payment.invoice_id,
         amount=-refund_amount,
         payment_method="stripe_refund",
-        transaction_id=f"refund_{charge.get('id')}",
-        status="completed",
+        payment_date=datetime.now().date(),
+        stripe_charge_id=charge.get("id"),
+        status="refunded",
         notes=f"Refund for payment {payment_intent_id}",
     )
     db.add(refund_payment)
@@ -538,14 +562,14 @@ async def handle_stripe_invoice_paid(db: AsyncSession, stripe_invoice: dict):
         # Update existing invoice
         existing_invoice.status = "paid"
         existing_invoice.paid_at = datetime.now()
-        existing_invoice.amount_paid = stripe_invoice.get("amount_paid", 0) / 100
+        existing_invoice.amount_paid = Decimal(stripe_invoice.get("amount_paid") or 0) / 100
         existing_invoice.balance_due = 0
         await db.commit()
         logger.info(f"Updated existing invoice {existing_invoice.invoice_number} as paid")
         return
 
     # Create a new invoice record for this subscription payment
-    amount = stripe_invoice.get("amount_paid", 0) / 100
+    amount = Decimal(stripe_invoice.get("amount_paid") or 0) / 100
 
     invoice = Invoice(
         contact_id=subscription.contact_id,
@@ -572,7 +596,8 @@ async def handle_stripe_invoice_paid(db: AsyncSession, stripe_invoice: dict):
         invoice_id=invoice.id,
         amount=amount,
         payment_method="stripe_subscription",
-        transaction_id=stripe_invoice.get("payment_intent"),
+        payment_date=datetime.now().date(),
+        stripe_payment_intent_id=stripe_invoice.get("payment_intent"),
         status="completed",
         notes=f"Subscription payment (Invoice: {stripe_invoice_id})",
     )

@@ -10,12 +10,11 @@ import { Label } from "@/components/ui/label";
 import Link from "next/link";
 
 export default function LoginPage() {
-  const { login, devLogin } = useAuth();
+  const { login } = useAuth();
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [error, setError] = useState("");
   const [loading, setLoading] = useState(false);
-  const [devLoading, setDevLoading] = useState(false);
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
@@ -28,18 +27,6 @@ export default function LoginPage() {
       setError(err.message || "Failed to login");
     } finally {
       setLoading(false);
-    }
-  };
-
-  const handleDevLogin = async () => {
-    setError("");
-    setDevLoading(true);
-    try {
-      await devLogin("dev@cwcplatform.com");
-    } catch (err: any) {
-      setError(err.message || "Failed to login");
-    } finally {
-      setDevLoading(false);
     }
   };
 
@@ -109,25 +96,6 @@ export default function LoginPage() {
               {loading ? "Signing in..." : "Sign In"}
             </Button>
           </form>
-
-          <div className="relative my-6">
-            <div className="absolute inset-0 flex items-center">
-              <div className="w-full border-t border-border" />
-            </div>
-            <div className="relative flex justify-center text-sm">
-              <span className="bg-card px-2 text-muted-foreground">Or</span>
-            </div>
-          </div>
-
-          <Button
-            type="button"
-            variant="outline"
-            className="w-full"
-            onClick={handleDevLogin}
-            disabled={devLoading}
-          >
-            {devLoading ? "Signing in..." : "Dev Login (No Password)"}
-          </Button>
 
           <div className="mt-6 text-center text-sm">
             <span className="text-muted-foreground">Don't have an account? </span>

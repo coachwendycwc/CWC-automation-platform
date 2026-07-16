@@ -6,6 +6,8 @@ from typing import Optional
 import uuid
 
 from fastapi import APIRouter, Depends, HTTPException, Query
+
+from app.services.auth_service import get_current_user
 from sqlalchemy.ext.asyncio import AsyncSession
 from sqlalchemy import select, and_, or_
 from sqlalchemy.orm import selectinload
@@ -27,7 +29,11 @@ from app.schemas.project import (
 )
 from app.services.project_service import ProjectService
 
-router = APIRouter(prefix="/api", tags=["tasks"])
+router = APIRouter(
+    prefix="/api",
+    tags=["tasks"],
+    dependencies=[Depends(get_current_user)],
+)
 
 
 # ============ Task CRUD ============

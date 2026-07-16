@@ -5,6 +5,8 @@ from decimal import Decimal
 from typing import Optional, List
 
 from fastapi import APIRouter, Depends, HTTPException, Query
+
+from app.services.auth_service import get_current_user
 from sqlalchemy import select, func, extract
 from sqlalchemy.ext.asyncio import AsyncSession
 from sqlalchemy.orm import selectinload
@@ -18,7 +20,11 @@ from app.schemas.expense import (
     ExpenseSummary,
 )
 
-router = APIRouter(prefix="/api/expenses", tags=["expenses"])
+router = APIRouter(
+    prefix="/api/expenses",
+    tags=["expenses"],
+    dependencies=[Depends(get_current_user)],
+)
 
 
 # ============ Default Categories ============
