@@ -95,13 +95,21 @@ class TestAuthEndpoints:
         data = response.json()
         assert data["email"] == test_user.email
 
-    @pytest.mark.skip(reason="HTTPBearer with auto_error=False causes internal error - needs auth service fix")
     async def test_get_me_unauthenticated(self, client: AsyncClient):
         """Test getting current user without auth fails."""
         response = await client.get("/api/auth/me")
-        # Without credentials, HTTPBearer with auto_error=False returns None
-        # which causes an internal error when accessing credentials.credentials
         assert response.status_code in [401, 403]
+
+    async def test_disabled_user_rejected_with_valid_token(
+        self, client: AsyncClient, db_session, test_user, auth_headers
+    ):
+        """A deactivated user's still-valid JWT must stop working."""
+        test_user.is_active = False
+        await db_session.commit()
+
+        response = await client.get("/api/auth/me", headers=auth_headers)
+        assert response.status_code == 403
+        assert "disabled" in response.json()["detail"].lower()
 
     async def test_dev_login_removed(self, client: AsyncClient):
         """The dev-login backdoor must not exist: it minted admin tokens with no
