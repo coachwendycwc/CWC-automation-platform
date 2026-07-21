@@ -3,6 +3,7 @@ from contextlib import asynccontextmanager
 from fastapi import FastAPI
 from fastapi.middleware.cors import CORSMiddleware
 
+from app.auth_gate import enforce_auth_gate
 from app.config import get_settings
 from app.services.reminder_service import reminder_service
 from app.services.offboarding_scheduler import offboarding_scheduler
@@ -155,3 +156,9 @@ async def root():
 @app.get("/health")
 async def health_check():
     return {"status": "healthy"}
+
+
+# Default-deny auth gate: every route registered above must carry an auth
+# dependency or be explicitly declared public in app/auth_gate.py, or the
+# app refuses to start. Keep this as the LAST statement so it sees all routes.
+enforce_auth_gate(app)
