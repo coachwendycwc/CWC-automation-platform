@@ -65,16 +65,15 @@ PUBLIC_ROUTES: set[tuple[str, str]] = {
     ("POST", "/api/testimonial/{token}"),
     # Approved-testimonials gallery — intentionally public marketing data.
     ("GET", "/api/testimonials/public"),
-    # ⚠ Open video upload for testimonial recording. Known abuse vector
-    # (unauthenticated Cloudinary uploads) — tracked as a follow-up; should
-    # require the testimonial token.
+    # Video upload for testimonial/feedback recording — requires a valid
+    # capability token (?token=) validated in the handler (issue #10).
     ("GET", "/api/upload/video/signature"),
     ("POST", "/api/upload/video"),
     # Public org-assessment intake form. Known spam/DoS follow-up
     # (creates Contact+Organization rows; needs rate limiting).
     ("POST", "/api/assessments/organizations/submit"),
-    # Stripe: publishable key only / checkout for public pay-by-token flow.
-    # ⚠ checkout also accepts raw invoice_id unauthenticated — follow-up.
+    # Stripe: publishable key only / checkout for public pay-by-token flow
+    # (raw invoice_id lookups require admin JWT inside the handler).
     ("GET", "/api/stripe/config"),
     ("POST", "/api/stripe/checkout"),
     # Stripe webhook — authenticated by signature verification, not JWT.
@@ -91,7 +90,8 @@ PUBLIC_ROUTES: set[tuple[str, str]] = {
 
 def _has_auth_dependency(dependant) -> bool:
     for dep in dependant.dependencies:
-        if dep.call is not None and dep.call.__name__ in AUTH_DEPENDENCY_NAMES:
+        # dep.call may be a callable instance (e.g. HTTPBearer) with no __name__.
+        if getattr(dep.call, "__name__", None) in AUTH_DEPENDENCY_NAMES:
             return True
         if _has_auth_dependency(dep):
             return True
