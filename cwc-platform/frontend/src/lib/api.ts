@@ -2432,16 +2432,16 @@ export const publicTestimonialsApi = {
       body: JSON.stringify(data),
     }),
 
-  getUploadSignature: () =>
+  getUploadSignature: (token: string) =>
     fetchApi<{
       signature: string;
       timestamp: number;
       cloud_name: string;
       api_key: string;
       folder: string;
-    }>("/api/upload/video/signature"),
+    }>(`/api/upload/video/signature?token=${encodeURIComponent(token)}`),
 
-  uploadVideo: async (file: File): Promise<{
+  uploadVideo: async (file: File, token: string): Promise<{
     url: string;
     public_id: string;
     duration: number;
@@ -2450,7 +2450,7 @@ export const publicTestimonialsApi = {
     const formData = new FormData();
     formData.append("file", file);
 
-    const response = await fetch(`${API_URL}/api/upload/video`, {
+    const response = await fetch(`${API_URL}/api/upload/video?token=${encodeURIComponent(token)}`, {
       method: "POST",
       body: formData,
     });

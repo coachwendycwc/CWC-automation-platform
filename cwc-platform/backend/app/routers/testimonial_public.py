@@ -145,10 +145,45 @@ async def submit_testimonial(
     )
 
 
-# Video upload endpoints
+# Video upload endpoints.
+# Uploads are only reachable from token-holding public pages (testimonial
+# recording, offboarding feedback survey), so the same capability token
+# gates them — otherwise these are anonymous uploads to our Cloudinary.
+async def _require_upload_token(token: str, db: AsyncSession) -> None:
+    from sqlalchemy import or_
+
+    from app.models.offboarding import OffboardingWorkflow
+
+    result = await db.execute(
+        select(Testimonial.id).where(Testimonial.request_token == token)
+    )
+    if result.scalar_one_or_none():
+        return
+
+    result = await db.execute(
+        select(OffboardingWorkflow.id).where(
+            or_(
+                OffboardingWorkflow.survey_token == token,
+                OffboardingWorkflow.testimonial_token == token,
+            )
+        )
+    )
+    if result.scalar_one_or_none():
+        return
+
+    raise HTTPException(
+        status_code=status.HTTP_401_UNAUTHORIZED,
+        detail="Invalid upload token",
+    )
+
+
 @router.get("/upload/video/signature", response_model=VideoUploadSignature)
-async def get_upload_signature():
+async def get_upload_signature(
+    token: str = Query(...),
+    db: AsyncSession = Depends(get_db),
+):
     """Get Cloudinary upload signature for direct browser uploads."""
+    await _require_upload_token(token, db)
     signature_data = cloudinary_service.generate_upload_signature()
     return VideoUploadSignature(**signature_data)
 
@@ -156,8 +191,11 @@ async def get_upload_signature():
 @router.post("/upload/video", response_model=VideoUploadResponse)
 async def upload_video(
     file: UploadFile = File(...),
+    token: str = Query(...),
+    db: AsyncSession = Depends(get_db),
 ):
     """Upload a video file to Cloudinary."""
+    await _require_upload_token(token, db)
     if not file.content_type or not file.content_type.startswith("video/"):
         raise HTTPException(
             status_code=status.HTTP_400_BAD_REQUEST,

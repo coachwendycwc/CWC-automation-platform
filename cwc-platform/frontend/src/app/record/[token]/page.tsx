@@ -218,7 +218,7 @@ export default function RecordTestimonialPage() {
           <CardContent>
             <VideoRecorder
               maxDuration={120}
-              onUpload={publicTestimonialsApi.uploadVideo}
+              onUpload={(file) => publicTestimonialsApi.uploadVideo(file, token)}
               onComplete={handleVideoComplete}
             />
             {videoData && (

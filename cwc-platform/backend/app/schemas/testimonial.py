@@ -162,7 +162,7 @@ class VideoUploadResponse(BaseModel):
 
     url: str
     public_id: str
-    duration: int
+    duration: float  # Cloudinary reports fractional seconds
     thumbnail_url: Optional[str] = None
 
 

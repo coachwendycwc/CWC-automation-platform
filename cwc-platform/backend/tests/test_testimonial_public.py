@@ -251,7 +251,9 @@ class TestVideoUpload:
 
     @pytest.mark.asyncio
     @patch("app.services.cloudinary_service.cloudinary_service.generate_upload_signature")
-    async def test_get_upload_signature(self, mock_signature, client: AsyncClient):
+    async def test_get_upload_signature(
+        self, mock_signature, client: AsyncClient, test_testimonial_request
+    ):
         """Test getting upload signature."""
         mock_signature.return_value = {
             "cloud_name": "test-cloud",
@@ -261,7 +263,9 @@ class TestVideoUpload:
             "folder": "testimonials",
         }
 
-        response = await client.get("/api/upload/video/signature")
+        response = await client.get(
+            f"/api/upload/video/signature?token={test_testimonial_request.request_token}"
+        )
         assert response.status_code == 200
         data = response.json()
         assert "signature" in data
@@ -269,7 +273,9 @@ class TestVideoUpload:
 
     @pytest.mark.asyncio
     @patch("app.services.cloudinary_service.cloudinary_service.upload_video")
-    async def test_upload_video_success(self, mock_upload, client: AsyncClient):
+    async def test_upload_video_success(
+        self, mock_upload, client: AsyncClient, test_testimonial_request
+    ):
         """Test successful video upload."""
         mock_upload.return_value = {
             "url": "https://cloudinary.com/video.mp4",
@@ -282,7 +288,7 @@ class TestVideoUpload:
         video_content = b"fake video content"
 
         response = await client.post(
-            "/api/upload/video",
+            f"/api/upload/video?token={test_testimonial_request.request_token}",
             files={"file": ("test.webm", video_content, "video/webm")},
         )
         assert response.status_code == 200
@@ -291,10 +297,12 @@ class TestVideoUpload:
         assert "public_id" in data
 
     @pytest.mark.asyncio
-    async def test_upload_video_wrong_content_type(self, client: AsyncClient):
+    async def test_upload_video_wrong_content_type(
+        self, client: AsyncClient, test_testimonial_request
+    ):
         """Test upload rejects non-video files."""
         response = await client.post(
-            "/api/upload/video",
+            f"/api/upload/video?token={test_testimonial_request.request_token}",
             files={"file": ("test.txt", b"text content", "text/plain")},
         )
         assert response.status_code == 400
@@ -305,3 +313,96 @@ class TestVideoUpload:
         # This would need actual content over 100MB to test properly
         # For now, just verify the endpoint exists
         pass
+
+
+class TestVideoUploadTokenGate:
+    """Upload endpoints must require a valid capability token (testimonial
+    request_token or offboarding survey/testimonial token) — they were fully
+    open (issue #10)."""
+
+    @pytest.mark.asyncio
+    async def test_upload_without_token_rejected(self, client: AsyncClient):
+        response = await client.post(
+            "/api/upload/video",
+            files={"file": ("test.webm", b"fake video", "video/webm")},
+        )
+        assert response.status_code == 422
+
+    @pytest.mark.asyncio
+    async def test_upload_with_bogus_token_rejected(self, client: AsyncClient):
+        response = await client.post(
+            "/api/upload/video?token=not-a-real-token",
+            files={"file": ("test.webm", b"fake video", "video/webm")},
+        )
+        assert response.status_code == 401
+
+    @pytest.mark.asyncio
+    @patch("app.services.cloudinary_service.cloudinary_service.upload_video")
+    async def test_upload_with_testimonial_token_accepted(
+        self, mock_upload, client: AsyncClient, test_testimonial_request
+    ):
+        mock_upload.return_value = {
+            "url": "https://cloudinary.com/video.mp4",
+            "public_id": "testimonials/video123",
+            "duration": 30.5,
+            "thumbnail_url": "https://cloudinary.com/thumb.jpg",
+        }
+        response = await client.post(
+            f"/api/upload/video?token={test_testimonial_request.request_token}",
+            files={"file": ("test.webm", b"fake video", "video/webm")},
+        )
+        assert response.status_code == 200
+
+    @pytest.mark.asyncio
+    @patch("app.services.cloudinary_service.cloudinary_service.upload_video")
+    async def test_upload_with_offboarding_survey_token_accepted(
+        self, mock_upload, client: AsyncClient, db_session, test_contact
+    ):
+        from app.models.offboarding import OffboardingWorkflow
+
+        workflow = OffboardingWorkflow(
+            contact_id=test_contact.id,
+            workflow_type="client",
+            survey_token=str(uuid.uuid4()),
+        )
+        db_session.add(workflow)
+        await db_session.commit()
+
+        mock_upload.return_value = {
+            "url": "https://cloudinary.com/video.mp4",
+            "public_id": "testimonials/video123",
+            "duration": 30.5,
+            "thumbnail_url": "https://cloudinary.com/thumb.jpg",
+        }
+        response = await client.post(
+            f"/api/upload/video?token={workflow.survey_token}",
+            files={"file": ("test.webm", b"fake video", "video/webm")},
+        )
+        assert response.status_code == 200
+
+    @pytest.mark.asyncio
+    async def test_signature_without_token_rejected(self, client: AsyncClient):
+        response = await client.get("/api/upload/video/signature")
+        assert response.status_code == 422
+
+    @pytest.mark.asyncio
+    async def test_signature_with_bogus_token_rejected(self, client: AsyncClient):
+        response = await client.get("/api/upload/video/signature?token=bogus")
+        assert response.status_code == 401
+
+    @pytest.mark.asyncio
+    @patch("app.services.cloudinary_service.cloudinary_service.generate_upload_signature")
+    async def test_signature_with_valid_token_accepted(
+        self, mock_sig, client: AsyncClient, test_testimonial_request
+    ):
+        mock_sig.return_value = {
+            "signature": "sig",
+            "timestamp": 123,
+            "cloud_name": "demo",
+            "api_key": "key",
+            "folder": "testimonials",
+        }
+        response = await client.get(
+            f"/api/upload/video/signature?token={test_testimonial_request.request_token}"
+        )
+        assert response.status_code == 200
