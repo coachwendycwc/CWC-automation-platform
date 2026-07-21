@@ -49,7 +49,7 @@ class TestStripeCheckout:
 
     @pytest.mark.asyncio
     async def test_create_checkout_stripe_not_configured(
-        self, client: AsyncClient, test_invoice: Invoice
+        self, client: AsyncClient, auth_headers, test_invoice: Invoice
     ):
         """Test checkout fails when Stripe not configured."""
         with patch("app.routers.stripe.stripe_service") as mock_service:
@@ -57,7 +57,8 @@ class TestStripeCheckout:
 
             response = await client.post(
                 "/api/stripe/checkout",
-                json={"invoice_id": test_invoice.id}
+                json={"invoice_id": test_invoice.id},
+                headers=auth_headers,
             )
             assert response.status_code == 503
             assert "not configured" in response.json()["detail"].lower()
@@ -76,21 +77,24 @@ class TestStripeCheckout:
             assert "required" in response.json()["detail"].lower()
 
     @pytest.mark.asyncio
-    async def test_create_checkout_invoice_not_found(self, client: AsyncClient):
+    async def test_create_checkout_invoice_not_found(
+        self, client: AsyncClient, auth_headers
+    ):
         """Test checkout fails with non-existent invoice."""
         with patch("app.routers.stripe.stripe_service") as mock_service:
             mock_service.is_configured.return_value = True
 
             response = await client.post(
                 "/api/stripe/checkout",
-                json={"invoice_id": str(uuid.uuid4())}
+                json={"invoice_id": str(uuid.uuid4())},
+                headers=auth_headers,
             )
             assert response.status_code == 404
             assert "not found" in response.json()["detail"].lower()
 
     @pytest.mark.asyncio
     async def test_create_checkout_invoice_already_paid(
-        self, db_session, client: AsyncClient, test_contact: Contact
+        self, db_session, client: AsyncClient, auth_headers, test_contact: Contact
     ):
         """Test checkout fails for already paid invoice."""
         # Create a paid invoice
@@ -114,14 +118,15 @@ class TestStripeCheckout:
 
             response = await client.post(
                 "/api/stripe/checkout",
-                json={"invoice_id": invoice.id}
+                json={"invoice_id": invoice.id},
+                headers=auth_headers,
             )
             assert response.status_code == 400
             assert "already paid" in response.json()["detail"].lower()
 
     @pytest.mark.asyncio
     async def test_create_checkout_invoice_cancelled(
-        self, db_session, client: AsyncClient, test_contact: Contact
+        self, db_session, client: AsyncClient, auth_headers, test_contact: Contact
     ):
         """Test checkout fails for cancelled invoice."""
         invoice = Invoice(
@@ -142,14 +147,15 @@ class TestStripeCheckout:
 
             response = await client.post(
                 "/api/stripe/checkout",
-                json={"invoice_id": invoice.id}
+                json={"invoice_id": invoice.id},
+                headers=auth_headers,
             )
             assert response.status_code == 400
             assert "cancelled" in response.json()["detail"].lower()
 
     @pytest.mark.asyncio
     async def test_create_checkout_success(
-        self, db_session, client: AsyncClient, test_contact: Contact
+        self, db_session, client: AsyncClient, auth_headers, test_contact: Contact
     ):
         """Test successful checkout session creation."""
         invoice = Invoice(
@@ -177,7 +183,8 @@ class TestStripeCheckout:
 
             response = await client.post(
                 "/api/stripe/checkout",
-                json={"invoice_id": invoice.id}
+                json={"invoice_id": invoice.id},
+                headers=auth_headers,
             )
             assert response.status_code == 200
             data = response.json()
@@ -571,3 +578,46 @@ class TestStripeService:
 
         with pytest.raises(ValueError, match="not configured"):
             service.verify_webhook_signature(b"payload", "signature")
+
+
+class TestCheckoutInvoiceIdRequiresAuth:
+    """The public pay flow only ever needs view_token; raw invoice_id lookups
+    are for the admin UI and must require auth (issue #10, defense-in-depth)."""
+
+    @pytest.mark.asyncio
+    async def test_unauthenticated_invoice_id_rejected(
+        self, client: AsyncClient, test_invoice: Invoice
+    ):
+        response = await client.post(
+            "/api/stripe/checkout",
+            json={"invoice_id": test_invoice.id},
+        )
+        assert response.status_code == 401
+
+    @pytest.mark.asyncio
+    async def test_authenticated_invoice_id_accepted(
+        self, client: AsyncClient, auth_headers, test_invoice: Invoice
+    ):
+        with patch("app.routers.stripe.stripe_service") as mock_service:
+            mock_service.is_configured.return_value = False
+
+            response = await client.post(
+                "/api/stripe/checkout",
+                json={"invoice_id": test_invoice.id},
+                headers=auth_headers,
+            )
+            # Past the auth check: fails on Stripe config, not on credentials.
+            assert response.status_code == 503
+
+    @pytest.mark.asyncio
+    async def test_view_token_flow_still_public(
+        self, client: AsyncClient, test_invoice: Invoice
+    ):
+        with patch("app.routers.stripe.stripe_service") as mock_service:
+            mock_service.is_configured.return_value = False
+
+            response = await client.post(
+                "/api/stripe/checkout",
+                json={"view_token": test_invoice.view_token},
+            )
+            assert response.status_code == 503

@@ -9,12 +9,14 @@ from decimal import Decimal
 from typing import Optional
 
 from fastapi import APIRouter, Depends, HTTPException, Request, Header
+from fastapi.security import HTTPAuthorizationCredentials
 from sqlalchemy.ext.asyncio import AsyncSession
 from sqlalchemy import select
 from sqlalchemy.orm import selectinload
 from pydantic import BaseModel
 
 from app.database import get_db
+from app.services.auth_service import get_current_user, security
 from app.services.stripe_service import stripe_service
 from app.services.email_service import email_service
 from app.models.invoice import Invoice
@@ -64,8 +66,14 @@ async def get_stripe_config() -> StripeConfigResponse:
 async def create_checkout(
     request: CheckoutRequest,
     db: AsyncSession = Depends(get_db),
+    credentials: HTTPAuthorizationCredentials | None = Depends(security),
 ) -> CheckoutResponse:
     """Create a Stripe Checkout session for an invoice."""
+    # The public pay page always uses the unguessable view_token; looking an
+    # invoice up by raw id is reserved for the authenticated admin UI.
+    if request.invoice_id and not request.view_token:
+        await get_current_user(credentials, db)
+
     if not stripe_service.is_configured():
         raise HTTPException(
             status_code=503,
