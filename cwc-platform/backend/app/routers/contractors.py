@@ -27,6 +27,16 @@ router = APIRouter(
 )
 
 
+def _serialize_contractor(
+    contractor: Contractor, ytd_total: Decimal
+) -> ContractorRead:
+    """Build a ContractorRead from the ORM object. Uses model_validate so the
+    masked-tax-id property is read and the encrypted column never leaks."""
+    read = ContractorRead.model_validate(contractor)
+    read.total_paid_ytd = ytd_total
+    return read
+
+
 # ============ Contractor Endpoints ============
 
 @router.get("", response_model=ContractorList)
@@ -71,29 +81,7 @@ async def list_contractors(
         )
         ytd_total = ytd_result.scalar() or Decimal("0")
 
-        contractor_dict = {
-            "id": c.id,
-            "name": c.name,
-            "business_name": c.business_name,
-            "email": c.email,
-            "phone": c.phone,
-            "tax_id": c.tax_id,
-            "tax_id_type": c.tax_id_type,
-            "w9_on_file": c.w9_on_file,
-            "w9_received_date": c.w9_received_date,
-            "address_line1": c.address_line1,
-            "address_line2": c.address_line2,
-            "city": c.city,
-            "state": c.state,
-            "zip_code": c.zip_code,
-            "service_type": c.service_type,
-            "is_active": c.is_active,
-            "notes": c.notes,
-            "created_at": c.created_at,
-            "updated_at": c.updated_at,
-            "total_paid_ytd": ytd_total,
-        }
-        contractor_list.append(ContractorRead(**contractor_dict))
+        contractor_list.append(_serialize_contractor(c, ytd_total))
 
     return ContractorList(items=contractor_list, total=total)
 
@@ -113,7 +101,7 @@ async def create_contractor(
     await db.commit()
     await db.refresh(contractor)
 
-    return ContractorRead(**contractor.__dict__, total_paid_ytd=Decimal("0"))
+    return _serialize_contractor(contractor, Decimal("0"))
 
 
 @router.get("/{contractor_id}", response_model=ContractorRead)
@@ -138,7 +126,7 @@ async def get_contractor(
     )
     ytd_total = ytd_result.scalar() or Decimal("0")
 
-    return ContractorRead(**contractor.__dict__, total_paid_ytd=ytd_total)
+    return _serialize_contractor(contractor, ytd_total)
 
 
 @router.put("/{contractor_id}", response_model=ContractorRead)
@@ -171,7 +159,7 @@ async def update_contractor(
     )
     ytd_total = ytd_result.scalar() or Decimal("0")
 
-    return ContractorRead(**contractor.__dict__, total_paid_ytd=ytd_total)
+    return _serialize_contractor(contractor, ytd_total)
 
 
 @router.delete("/{contractor_id}")

@@ -189,7 +189,6 @@ class ContractorBase(BaseModel):
     business_name: Optional[str] = Field(None, max_length=200)
     email: Optional[str] = None
     phone: Optional[str] = Field(None, max_length=20)
-    tax_id: Optional[str] = Field(None, max_length=20)
     tax_id_type: str = Field(default="ein")
     w9_on_file: bool = False
     w9_received_date: Optional[date] = None
@@ -203,7 +202,8 @@ class ContractorBase(BaseModel):
 
 
 class ContractorCreate(ContractorBase):
-    pass
+    # Full SSN/EIN accepted on write only; never echoed back in a read schema.
+    tax_id: Optional[str] = Field(None, max_length=20)
 
 
 class ContractorUpdate(BaseModel):
@@ -228,6 +228,10 @@ class ContractorUpdate(BaseModel):
 class ContractorRead(ContractorBase):
     id: str
     is_active: bool
+    # Only the last 4 digits of the SSN/EIN are ever returned over the API.
+    # The full value lives encrypted at rest and is exposed solely to the
+    # 1099 CSV export, which reads it server-side and never serializes it here.
+    tax_id_masked: Optional[str] = None
     created_at: datetime
     updated_at: datetime
     total_paid_ytd: Optional[Decimal] = None  # Computed field

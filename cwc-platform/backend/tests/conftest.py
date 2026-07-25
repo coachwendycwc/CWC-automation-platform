@@ -761,6 +761,7 @@ async def test_contractor(db_session: AsyncSession) -> Contractor:
         business_name="Smith Consulting LLC",
         email="jane@smithconsulting.com",
         phone="555-9876",
+        tax_id="12-3456789",
         tax_id_type="ein",
         w9_on_file=True,
         w9_received_date=datetime.utcnow().date(),

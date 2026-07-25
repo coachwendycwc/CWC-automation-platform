@@ -307,3 +307,12 @@ class TestExportContractors:
         """Export contractors for specific tax year."""
         response = await auth_client.get("/api/reports/export/contractors?tax_year=2024")
         assert response.status_code == 200
+
+    async def test_export_contractors_csv_has_full_tax_id(
+        self, auth_client: AsyncClient, test_contractor
+    ):
+        """The 1099 CSV must contain the FULL decrypted tax_id — filing requires
+        it. This is the one place the full SSN/EIN is legitimately emitted."""
+        response = await auth_client.get("/api/reports/export/contractors")
+        assert response.status_code == 200
+        assert "12-3456789" in response.text
