@@ -621,3 +621,16 @@ class TestCheckoutInvoiceIdRequiresAuth:
                 json={"view_token": test_invoice.view_token},
             )
             assert response.status_code == 503
+
+    @pytest.mark.asyncio
+    async def test_invoice_id_with_bogus_view_token_still_requires_auth(
+        self, client: AsyncClient, test_invoice: Invoice
+    ):
+        """Supplying a junk view_token alongside a real invoice_id must NOT
+        bypass auth: the lookup still resolves by invoice_id, so the raw-id
+        path must stay authenticated (issue #10 bypass)."""
+        response = await client.post(
+            "/api/stripe/checkout",
+            json={"invoice_id": test_invoice.id, "view_token": "not-a-real-token"},
+        )
+        assert response.status_code == 401

@@ -70,8 +70,10 @@ async def create_checkout(
 ) -> CheckoutResponse:
     """Create a Stripe Checkout session for an invoice."""
     # The public pay page always uses the unguessable view_token; looking an
-    # invoice up by raw id is reserved for the authenticated admin UI.
-    if request.invoice_id and not request.view_token:
+    # invoice up by raw id is reserved for the authenticated admin UI. The
+    # lookup below prefers invoice_id whenever it is present, so auth must key
+    # on invoice_id alone — a bogus view_token must not unlock the raw-id path.
+    if request.invoice_id:
         await get_current_user(credentials, db)
 
     if not stripe_service.is_configured():
