@@ -6,7 +6,7 @@ from typing import Optional, List
 
 from fastapi import APIRouter, Depends, HTTPException, Query
 
-from app.services.auth_service import get_current_user
+from app.services.auth_service import get_current_user, require_admin
 from sqlalchemy import select, func
 from sqlalchemy.ext.asyncio import AsyncSession
 from sqlalchemy.orm import selectinload
@@ -23,7 +23,7 @@ from app.schemas.expense import (
 router = APIRouter(
     prefix="/api/contractors",
     tags=["contractors"],
-    dependencies=[Depends(get_current_user)],
+    dependencies=[Depends(require_admin)],
 )
 
 

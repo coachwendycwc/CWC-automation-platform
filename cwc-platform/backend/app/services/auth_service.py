@@ -148,3 +148,17 @@ async def get_current_user(
         )
 
     return user
+
+
+async def require_admin(current_user: User = Depends(get_current_user)) -> User:
+    """Dependency that authorizes admin-only endpoints. Authenticates via
+    get_current_user, then requires role == 'admin'. Non-admins get 403.
+
+    This is the authorization tier: get_current_user proves *who* you are,
+    require_admin proves you're *allowed* to mutate privileged data."""
+    if current_user.role != "admin":
+        raise HTTPException(
+            status_code=status.HTTP_403_FORBIDDEN,
+            detail="Admin privileges required",
+        )
+    return current_user
