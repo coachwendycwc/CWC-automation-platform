@@ -11,7 +11,7 @@ from typing import Optional
 from fastapi import APIRouter, Depends, HTTPException, Request, Header
 from fastapi.security import HTTPAuthorizationCredentials
 from sqlalchemy.ext.asyncio import AsyncSession
-from sqlalchemy import select
+from sqlalchemy import select, or_
 from sqlalchemy.orm import selectinload
 from pydantic import BaseModel
 
@@ -199,6 +199,29 @@ async def handle_checkout_completed(db: AsyncSession, session: dict):
         logger.error(f"Invoice not found for checkout: {invoice_id}")
         return
 
+    # Idempotency: Stripe redelivers this event on any non-2xx or timeout, and
+    # payment_intent.succeeded fires for the same purchase. Either would credit
+    # the invoice twice. The session id is the stable key for this event; the
+    # payment intent may be null on some session types, so check both.
+    session_id = session.get("id")
+    payment_intent_id = session.get("payment_intent")
+    duplicate_filters = []
+    if session_id:
+        duplicate_filters.append(Payment.reference == session_id)
+    if payment_intent_id:
+        duplicate_filters.append(
+            Payment.stripe_payment_intent_id == payment_intent_id
+        )
+    if duplicate_filters:
+        existing = await db.execute(
+            select(Payment).where(
+                Payment.invoice_id == invoice.id, or_(*duplicate_filters)
+            )
+        )
+        if existing.scalar_one_or_none():
+            logger.info(f"Checkout already recorded, skipping: {session_id}")
+            return
+
     # Calculate amount paid (Stripe returns in cents). Use Decimal so it stays
     # compatible with the Numeric invoice columns and avoids float rounding.
     amount_paid = Decimal(session.get("amount_total") or 0) / 100
@@ -209,9 +232,10 @@ async def handle_checkout_completed(db: AsyncSession, session: dict):
         amount=amount_paid,
         payment_method="stripe",
         payment_date=datetime.now().date(),
-        stripe_payment_intent_id=session.get("payment_intent"),
+        stripe_payment_intent_id=payment_intent_id,
+        reference=session_id,
         status="completed",
-        notes=f"Paid via Stripe Checkout (Session: {session.get('id')})",
+        notes=f"Paid via Stripe Checkout (Session: {session_id})",
     )
     db.add(payment)
 

@@ -68,7 +68,7 @@ async def submit_survey(
 
 # ============== Testimonial Endpoints ==============
 
-@router.get("/testimonial/{token}", response_model=TestimonialPublicData)
+@router.get("/offboarding-testimonial/{token}", response_model=TestimonialPublicData)
 async def get_testimonial_request(
     token: str,
     db: AsyncSession = Depends(get_db),
@@ -91,7 +91,7 @@ async def get_testimonial_request(
     )
 
 
-@router.post("/testimonial/{token}")
+@router.post("/offboarding-testimonial/{token}")
 async def submit_testimonial(
     token: str,
     submission: TestimonialSubmission,

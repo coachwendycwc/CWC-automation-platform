@@ -1357,7 +1357,7 @@ export const publicFeedbackApi = {
       contact_name: string;
       workflow_type: string;
       already_submitted: boolean;
-    }>(`/api/testimonial/${token}`),
+    }>(`/api/offboarding-testimonial/${token}`),
 
   submitTestimonial: (token: string, submission: {
     testimonial_text: string;
@@ -1366,7 +1366,7 @@ export const publicFeedbackApi = {
     photo?: string | null;
     permission_granted: boolean;
   }) =>
-    fetchApi<{ success: boolean; message: string }>(`/api/testimonial/${token}`, {
+    fetchApi<{ success: boolean; message: string }>(`/api/offboarding-testimonial/${token}`, {
       method: "POST",
       body: JSON.stringify(submission),
     }),

@@ -64,6 +64,10 @@ PUBLIC_ROUTES: set[tuple[str, str]] = {
     # Public testimonial recording — capability URL.
     ("GET", "/api/testimonial/{token}"),
     ("POST", "/api/testimonial/{token}"),
+    # Offboarding testimonial (workflow token) — distinct flow, distinct path so
+    # it no longer shadows the recording routes above.
+    ("GET", "/api/offboarding-testimonial/{token}"),
+    ("POST", "/api/offboarding-testimonial/{token}"),
     # Approved-testimonials gallery — intentionally public marketing data.
     ("GET", "/api/testimonials/public"),
     # Video upload for testimonial/feedback recording — requires a valid
