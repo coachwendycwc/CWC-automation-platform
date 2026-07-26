@@ -728,7 +728,7 @@ export default function FeedbackSurveyPage() {
                     <div className="mt-4 bg-white rounded-lg p-4">
                       <VideoRecorder
                         maxDuration={120}
-                        onUpload={publicTestimonialsApi.uploadVideo}
+                        onUpload={(file) => publicTestimonialsApi.uploadVideo(file, token)}
                         onComplete={(data) => {
                           setVideoData(data);
                         }}

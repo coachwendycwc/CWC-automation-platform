@@ -25,9 +25,34 @@ class Contractor(Base):
     email: Mapped[str | None] = mapped_column(String(255), nullable=True)
     phone: Mapped[str | None] = mapped_column(String(20), nullable=True)
 
-    # Tax info
-    tax_id: Mapped[str | None] = mapped_column(String(20), nullable=True)  # EIN or SSN (encrypted)
+    # Tax info. The SSN/EIN is encrypted at rest: the column holds Fernet
+    # ciphertext and is only ever read/written through the `tax_id` property
+    # below, which encrypts on set and decrypts on get. The ciphertext is
+    # longer than the plaintext, hence String(255).
+    tax_id_encrypted: Mapped[str | None] = mapped_column(
+        "tax_id_encrypted", String(255), nullable=True
+    )
     tax_id_type: Mapped[str] = mapped_column(String(10), default="ein")  # ein, ssn
+
+    @property
+    def tax_id(self) -> str | None:
+        """Decrypted SSN/EIN. Returns None when unset."""
+        from app.services.field_encryption import decrypt_value
+
+        return decrypt_value(self.tax_id_encrypted)
+
+    @tax_id.setter
+    def tax_id(self, value: str | None) -> None:
+        from app.services.field_encryption import encrypt_value
+
+        self.tax_id_encrypted = encrypt_value(value)
+
+    @property
+    def tax_id_masked(self) -> str | None:
+        """Display-safe SSN/EIN exposing only the last 4 digits."""
+        from app.services.field_encryption import mask_tax_id
+
+        return mask_tax_id(self.tax_id)
     w9_on_file: Mapped[bool] = mapped_column(Boolean, default=False)
     w9_received_date: Mapped[date | None] = mapped_column(Date, nullable=True)
 

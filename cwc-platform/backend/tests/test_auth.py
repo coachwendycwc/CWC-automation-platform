@@ -4,6 +4,8 @@ Tests for authentication endpoints.
 import pytest
 from httpx import AsyncClient
 
+from tests.test_invites import make_invite
+
 
 class TestAuthEndpoints:
     """Test authentication endpoints."""
@@ -22,14 +24,16 @@ class TestAuthEndpoints:
         assert response.status_code == 200
         assert response.json()["status"] == "healthy"
 
-    async def test_register_new_user(self, client: AsyncClient):
-        """Test user registration."""
+    async def test_register_new_user(self, client: AsyncClient, db_session):
+        """Test user registration (invite-only)."""
+        invite = await make_invite(db_session, email="newuser@example.com")
         response = await client.post(
             "/api/auth/register",
             json={
                 "email": "newuser@example.com",
                 "password": "SecurePass123",
                 "name": "New User",
+                "invite_token": invite.token,
             },
         )
         assert response.status_code == 201
@@ -38,14 +42,18 @@ class TestAuthEndpoints:
         assert data["token_type"] == "bearer"
         assert data["user"]["email"] == "newuser@example.com"
 
-    async def test_register_duplicate_email(self, client: AsyncClient, test_user):
+    async def test_register_duplicate_email(
+        self, client: AsyncClient, test_user, db_session
+    ):
         """Test registration with existing email fails."""
+        invite = await make_invite(db_session, email="test@example.com")
         response = await client.post(
             "/api/auth/register",
             json={
                 "email": "test@example.com",  # Same as test_user
                 "password": "SecurePass123",
                 "name": "Duplicate User",
+                "invite_token": invite.token,
             },
         )
         assert response.status_code == 400
@@ -95,13 +103,21 @@ class TestAuthEndpoints:
         data = response.json()
         assert data["email"] == test_user.email
 
-    @pytest.mark.skip(reason="HTTPBearer with auto_error=False causes internal error - needs auth service fix")
     async def test_get_me_unauthenticated(self, client: AsyncClient):
         """Test getting current user without auth fails."""
         response = await client.get("/api/auth/me")
-        # Without credentials, HTTPBearer with auto_error=False returns None
-        # which causes an internal error when accessing credentials.credentials
         assert response.status_code in [401, 403]
+
+    async def test_disabled_user_rejected_with_valid_token(
+        self, client: AsyncClient, db_session, test_user, auth_headers
+    ):
+        """A deactivated user's still-valid JWT must stop working."""
+        test_user.is_active = False
+        await db_session.commit()
+
+        response = await client.get("/api/auth/me", headers=auth_headers)
+        assert response.status_code == 403
+        assert "disabled" in response.json()["detail"].lower()
 
     async def test_dev_login_removed(self, client: AsyncClient):
         """The dev-login backdoor must not exist: it minted admin tokens with no

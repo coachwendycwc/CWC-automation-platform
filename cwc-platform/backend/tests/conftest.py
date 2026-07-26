@@ -128,6 +128,30 @@ async def test_user_token(test_user: User) -> str:
 
 
 @pytest.fixture
+async def nonadmin_user(db_session: AsyncSession) -> User:
+    """A non-privileged (role='user') account for authorization tests."""
+    user = User(
+        id=str(uuid.uuid4()),
+        email="member@example.com",
+        name="Member User",
+        password_hash=hash_password("memberpass123"),
+        role="user",
+        is_active=True,
+    )
+    db_session.add(user)
+    await db_session.commit()
+    await db_session.refresh(user)
+    return user
+
+
+@pytest.fixture
+async def nonadmin_headers(nonadmin_user: User) -> dict:
+    """Auth headers for the non-privileged user."""
+    token = create_access_token(data={"sub": str(nonadmin_user.id)})
+    return {"Authorization": f"Bearer {token}"}
+
+
+@pytest.fixture
 async def auth_headers(test_user_token: str) -> dict:
     """Return auth headers for authenticated requests."""
     return {"Authorization": f"Bearer {test_user_token}"}
@@ -761,6 +785,7 @@ async def test_contractor(db_session: AsyncSession) -> Contractor:
         business_name="Smith Consulting LLC",
         email="jane@smithconsulting.com",
         phone="555-9876",
+        tax_id="12-3456789",
         tax_id_type="ein",
         w9_on_file=True,
         w9_received_date=datetime.utcnow().date(),

@@ -18,6 +18,7 @@ from fastapi.routing import APIRoute
 # Dependency function names that count as auth enforcement.
 AUTH_DEPENDENCY_NAMES = {
     "get_current_user",   # admin/staff JWT (app.services.auth_service)
+    "require_admin",      # admin-only tier; wraps get_current_user (app.services.auth_service)
     "get_current_client",  # client-portal session token (app.routers.client_portal)
 }
 

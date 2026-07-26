@@ -4,6 +4,10 @@ from functools import lru_cache
 # The insecure default JWT signing key. Must never be the live key in production.
 DEFAULT_SECRET_KEY = "dev-secret-key-change-in-production"
 
+# Insecure default field-encryption key (a valid but public Fernet key, for
+# local dev only). Must never encrypt real tax IDs in production.
+DEFAULT_TAX_ID_ENCRYPTION_KEY = "ZmDfcTF7_60GrrY167zsiPd67pEvs0aGOv2oasOM1Pg="
+
 
 class Settings(BaseSettings):
     # Deployment environment: "development" (default) or "production".
@@ -17,6 +21,8 @@ class Settings(BaseSettings):
     secret_key: str = DEFAULT_SECRET_KEY
     algorithm: str = "HS256"
     access_token_expire_minutes: int = 60 * 24 * 7  # 7 days
+    # Fernet key for encrypting sensitive at-rest fields (contractor tax IDs).
+    tax_id_encryption_key: str = DEFAULT_TAX_ID_ENCRYPTION_KEY
 
     @property
     def is_production(self) -> bool:
@@ -64,5 +70,17 @@ def get_settings() -> Settings:
         raise RuntimeError(
             "SECRET_KEY is still the built-in default in a production environment. "
             "Set a strong, unique SECRET_KEY before starting."
+        )
+    # Fail closed: production must not encrypt tax IDs with the public dev key,
+    # or the ciphertext is trivially decryptable by anyone.
+    if (
+        settings.is_production
+        and settings.tax_id_encryption_key == DEFAULT_TAX_ID_ENCRYPTION_KEY
+    ):
+        raise RuntimeError(
+            "TAX_ID_ENCRYPTION_KEY is still the built-in default in a production "
+            "environment. Generate one with "
+            "`python -c \"from cryptography.fernet import Fernet; "
+            "print(Fernet.generate_key().decode())\"` and set it before starting."
         )
     return settings

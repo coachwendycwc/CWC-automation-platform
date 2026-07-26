@@ -1,5 +1,8 @@
 import os
+import secrets
 from datetime import datetime, timedelta
+from typing import Literal
+
 from fastapi import APIRouter, Depends, HTTPException, status
 from sqlalchemy.ext.asyncio import AsyncSession
 from sqlalchemy import select
@@ -11,12 +14,14 @@ from app.services.auth_service import (
     get_or_create_user,
     create_access_token,
     get_current_user,
+    require_admin,
     hash_password,
     verify_password,
     generate_reset_token,
 )
 from app.services.email_service import email_service
 from app.models.user import User
+from app.models.user_invite import UserInvite
 from app.schemas.user import UserResponse
 
 router = APIRouter(prefix="/auth", tags=["Authentication"])
@@ -35,6 +40,24 @@ class RegisterRequest(BaseModel):
     email: EmailStr
     password: str
     name: str
+    invite_token: str
+
+
+class InviteCreateRequest(BaseModel):
+    email: EmailStr
+    role: Literal["admin", "user"] = "user"
+
+
+class InviteResponse(BaseModel):
+    id: str
+    email: str
+    role: str
+    token: str
+    expires_at: datetime
+    used_at: datetime | None
+    created_at: datetime | None
+
+    model_config = {"from_attributes": True}
 
 
 class ForgotPasswordRequest(BaseModel):
@@ -132,7 +155,25 @@ async def register(
     request: RegisterRequest,
     db: AsyncSession = Depends(get_db),
 ):
-    """Register a new user with email and password."""
+    """Register a new user. Invite-only: requires a valid, unused, unexpired
+    invite whose email matches; the new user's role comes from the invite."""
+    result = await db.execute(
+        select(UserInvite).where(UserInvite.token == request.invite_token)
+    )
+    invite = result.scalar_one_or_none()
+
+    if (
+        invite is None
+        or invite.used_at is not None
+        or invite.expires_at < datetime.utcnow()
+        or invite.email.lower() != request.email.lower()
+    ):
+        # One generic message: don't let callers probe which check failed
+        raise HTTPException(
+            status_code=status.HTTP_403_FORBIDDEN,
+            detail="A valid invite is required to register",
+        )
+
     # Check if email already exists
     result = await db.execute(
         select(User).where(User.email == request.email)
@@ -145,13 +186,14 @@ async def register(
             detail="Email already registered",
         )
 
-    # Create new user
+    # Create new user with the role the invite grants
     user = User(
         email=request.email,
         name=request.name,
         password_hash=hash_password(request.password),
-        role="user",  # Self-registration must not grant admin; promote deliberately
+        role=invite.role,
     )
+    invite.used_at = datetime.utcnow()
     db.add(user)
     await db.commit()
     await db.refresh(user)
@@ -162,6 +204,72 @@ async def register(
         access_token=access_token,
         user=UserResponse.model_validate(user),
     )
+
+
+@router.post("/invites", response_model=InviteResponse, status_code=201)
+async def create_invite(
+    request: InviteCreateRequest,
+    db: AsyncSession = Depends(get_db),
+    current_user: User = Depends(require_admin),
+):
+    """Create a registration invite and email the link (admin only)."""
+    result = await db.execute(select(User).where(User.email == request.email))
+    if result.scalar_one_or_none():
+        raise HTTPException(
+            status_code=status.HTTP_400_BAD_REQUEST,
+            detail="Email already registered",
+        )
+
+    invite = UserInvite(
+        email=request.email,
+        role=request.role,
+        token=secrets.token_urlsafe(32),
+        invited_by=current_user.id,
+        expires_at=datetime.utcnow() + timedelta(days=7),
+    )
+    db.add(invite)
+    await db.commit()
+    await db.refresh(invite)
+
+    frontend_url = os.getenv("FRONTEND_URL", "http://localhost:3001")
+    invite_link = f"{frontend_url}/register?invite={invite.token}"
+    await email_service.send_user_invite(
+        to_email=invite.email,
+        invite_link=invite_link,
+        role=invite.role,
+    )
+
+    return InviteResponse.model_validate(invite)
+
+
+@router.get("/invites", response_model=list[InviteResponse])
+async def list_invites(
+    db: AsyncSession = Depends(get_db),
+    current_user: User = Depends(require_admin),
+):
+    """List all invites, newest first (admin only)."""
+    result = await db.execute(
+        select(UserInvite).order_by(UserInvite.created_at.desc())
+    )
+    return [InviteResponse.model_validate(i) for i in result.scalars().all()]
+
+
+@router.delete("/invites/{invite_id}", status_code=204)
+async def revoke_invite(
+    invite_id: str,
+    db: AsyncSession = Depends(get_db),
+    current_user: User = Depends(require_admin),
+):
+    """Revoke an invite so it can no longer be used (admin only)."""
+    result = await db.execute(
+        select(UserInvite).where(UserInvite.id == invite_id)
+    )
+    invite = result.scalar_one_or_none()
+    if invite is None:
+        raise HTTPException(status_code=404, detail="Invite not found")
+
+    await db.delete(invite)
+    await db.commit()
 
 
 @router.post("/forgot-password", response_model=MessageResponse)

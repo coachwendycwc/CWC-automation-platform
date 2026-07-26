@@ -39,6 +39,7 @@ from app.models.organizational_assessment import OrganizationalAssessment
 from app.models.onboarding_assessment import OnboardingAssessment
 from app.models.coaching_session import CoachingSession
 from app.models.icf_certification import ICFCertificationProgress
+from app.models.user_invite import UserInvite
 
 __all__ = [
     "User",
@@ -89,4 +90,5 @@ __all__ = [
     "OnboardingAssessment",
     "CoachingSession",
     "ICFCertificationProgress",
+    "UserInvite",
 ]

@@ -6,7 +6,7 @@ from decimal import Decimal
 
 from fastapi import APIRouter, Depends, HTTPException
 
-from app.services.auth_service import get_current_user
+from app.services.auth_service import get_current_user, require_admin
 from sqlalchemy.ext.asyncio import AsyncSession
 from sqlalchemy import select
 from sqlalchemy.orm import selectinload
@@ -19,7 +19,7 @@ from app.schemas.payment_plan import PaymentPlanCreate, PaymentPlanUpdate, Payme
 router = APIRouter(
     prefix="/api",
     tags=["payment-plans"],
-    dependencies=[Depends(get_current_user)],
+    dependencies=[Depends(require_admin)],
 )
 
 
