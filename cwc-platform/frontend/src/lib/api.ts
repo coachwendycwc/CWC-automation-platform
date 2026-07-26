@@ -2870,3 +2870,50 @@ export const icfTrackerApi = {
       body: JSON.stringify(data),
     }),
 };
+
+// Migration Imports API (admin-only)
+export const importsApi = {
+  presets: (token: string) =>
+    fetchApi<
+      { name: string; entity_type: string; header_signature: string[]; mapping: Record<string, string> }[]
+    >("/api/imports/presets", { token }),
+
+  preview: (
+    token: string,
+    data: { entity_type: string; csv_text: string; mapping?: Record<string, string>; dedupe_strategy?: string }
+  ) =>
+    fetchApi<{
+      preset: string | null;
+      mapping: Record<string, string>;
+      rows: { row_index: number; outcome: string; data: Record<string, string>; error: string | null }[];
+      counts: Record<string, number>;
+    }>("/api/imports/preview", { method: "POST", token, body: JSON.stringify(data) }),
+
+  commit: (
+    token: string,
+    data: { entity_type: string; csv_text: string; mapping?: Record<string, string>; dedupe_strategy?: string }
+  ) =>
+    fetchApi<ImportJob>("/api/imports/commit", { method: "POST", token, body: JSON.stringify(data) }),
+
+  history: (token: string) => fetchApi<ImportJob[]>("/api/imports", { token }),
+
+  undo: (token: string, jobId: string) =>
+    fetchApi<{ undone: Record<string, number>; skipped: string[] }>(
+      `/api/imports/${jobId}/undo`,
+      { method: "POST", token }
+    ),
+};
+
+export interface ImportJob {
+  id: string;
+  source: string;
+  entity_type: string;
+  status: string;
+  total_rows: number;
+  created_count: number;
+  skipped_count: number;
+  updated_count: number;
+  error_count: number;
+  row_errors: { row: number; error: string }[];
+  created_at: string | null;
+}
