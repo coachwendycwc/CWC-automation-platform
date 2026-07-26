@@ -3,7 +3,7 @@ from sqlalchemy.ext.asyncio import AsyncSession
 from sqlalchemy import select, func
 
 from app.database import get_db
-from app.services.auth_service import get_current_user
+from app.services.auth_service import require_admin
 from app.models.user import User
 from app.models.organization import Organization
 from app.models.contact import Contact
@@ -25,7 +25,7 @@ async def list_organizations(
     search: str | None = None,
     status: str | None = None,
     db: AsyncSession = Depends(get_db),
-    current_user: User = Depends(get_current_user),
+    current_user: User = Depends(require_admin),
 ):
     """List all organizations with pagination and filters."""
     query = select(Organization)
@@ -56,7 +56,7 @@ async def list_organizations(
 async def create_organization(
     org_data: OrganizationCreate,
     db: AsyncSession = Depends(get_db),
-    current_user: User = Depends(get_current_user),
+    current_user: User = Depends(require_admin),
 ):
     """Create a new organization."""
     organization = Organization(**org_data.model_dump())
@@ -70,7 +70,7 @@ async def create_organization(
 async def get_organization(
     org_id: str,
     db: AsyncSession = Depends(get_db),
-    current_user: User = Depends(get_current_user),
+    current_user: User = Depends(require_admin),
 ):
     """Get a single organization by ID with contact info."""
     result = await db.execute(select(Organization).where(Organization.id == org_id))
@@ -99,7 +99,7 @@ async def update_organization(
     org_id: str,
     update_data: OrganizationUpdate,
     db: AsyncSession = Depends(get_db),
-    current_user: User = Depends(get_current_user),
+    current_user: User = Depends(require_admin),
 ):
     """Update an organization."""
     result = await db.execute(select(Organization).where(Organization.id == org_id))
@@ -124,7 +124,7 @@ async def update_organization(
 async def delete_organization(
     org_id: str,
     db: AsyncSession = Depends(get_db),
-    current_user: User = Depends(get_current_user),
+    current_user: User = Depends(require_admin),
 ):
     """Delete an organization."""
     result = await db.execute(select(Organization).where(Organization.id == org_id))

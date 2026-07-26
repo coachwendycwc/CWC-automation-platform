@@ -7,7 +7,7 @@ from sqlalchemy import select, func
 from sqlalchemy.orm import selectinload
 
 from app.database import get_db
-from app.services.auth_service import get_current_user
+from app.services.auth_service import require_admin
 from app.models.user import User
 from app.models.client_goal import ClientGoal
 from app.models.goal_milestone import GoalMilestone
@@ -69,7 +69,7 @@ async def list_goals(
     status_filter: Optional[str] = Query(None, alias="status"),
     category: Optional[str] = None,
     db: AsyncSession = Depends(get_db),
-    current_user: User = Depends(get_current_user),
+    current_user: User = Depends(require_admin),
 ):
     """List all goals with filters."""
     query = select(ClientGoal).options(
@@ -115,7 +115,7 @@ async def list_goals(
 async def get_goal(
     goal_id: str,
     db: AsyncSession = Depends(get_db),
-    current_user: User = Depends(get_current_user),
+    current_user: User = Depends(require_admin),
 ):
     """Get a single goal."""
     result = await db.execute(
@@ -141,7 +141,7 @@ async def get_goal(
 async def create_goal(
     data: GoalCreate,
     db: AsyncSession = Depends(get_db),
-    current_user: User = Depends(get_current_user),
+    current_user: User = Depends(require_admin),
 ):
     """Create a new goal for a client."""
     # Validate contact exists
@@ -200,7 +200,7 @@ async def update_goal(
     goal_id: str,
     data: GoalUpdate,
     db: AsyncSession = Depends(get_db),
-    current_user: User = Depends(get_current_user),
+    current_user: User = Depends(require_admin),
 ):
     """Update a goal."""
     result = await db.execute(
@@ -245,7 +245,7 @@ async def update_goal(
 async def delete_goal(
     goal_id: str,
     db: AsyncSession = Depends(get_db),
-    current_user: User = Depends(get_current_user),
+    current_user: User = Depends(require_admin),
 ):
     """Delete a goal."""
     result = await db.execute(
@@ -269,7 +269,7 @@ async def add_milestone(
     goal_id: str,
     data: MilestoneCreate,
     db: AsyncSession = Depends(get_db),
-    current_user: User = Depends(get_current_user),
+    current_user: User = Depends(require_admin),
 ):
     """Add a milestone to a goal."""
     result = await db.execute(
@@ -318,7 +318,7 @@ async def update_milestone(
     milestone_id: str,
     data: MilestoneUpdate,
     db: AsyncSession = Depends(get_db),
-    current_user: User = Depends(get_current_user),
+    current_user: User = Depends(require_admin),
 ):
     """Update a milestone."""
     result = await db.execute(
@@ -371,7 +371,7 @@ async def delete_milestone(
     goal_id: str,
     milestone_id: str,
     db: AsyncSession = Depends(get_db),
-    current_user: User = Depends(get_current_user),
+    current_user: User = Depends(require_admin),
 ):
     """Delete a milestone."""
     result = await db.execute(

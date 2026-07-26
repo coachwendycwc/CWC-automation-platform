@@ -17,7 +17,7 @@ from app.models.fathom_extraction import FathomExtraction
 from app.models.contact import Contact
 from app.models.invoice import Invoice
 from app.services.ai_extraction_service import ai_extraction_service
-from app.routers.auth import get_current_user
+from app.services.auth_service import require_admin
 from app.models.user import User
 
 router = APIRouter(prefix="/api/extractions", tags=["Extractions"])
@@ -89,7 +89,7 @@ class ExtractionStats(BaseModel):
 @router.get("/stats", response_model=ExtractionStats)
 async def get_extraction_stats(
     db: AsyncSession = Depends(get_db),
-    current_user: User = Depends(get_current_user),
+    current_user: User = Depends(require_admin),
 ) -> ExtractionStats:
     """Get extraction statistics."""
     # Pending webhooks
@@ -135,7 +135,7 @@ async def list_pending_webhooks(
     status_filter: str = "pending",
     limit: int = 50,
     db: AsyncSession = Depends(get_db),
-    current_user: User = Depends(get_current_user),
+    current_user: User = Depends(require_admin),
 ) -> list[WebhookListResponse]:
     """List Fathom webhooks by status."""
     query = select(FathomWebhook).order_by(FathomWebhook.created_at.desc()).limit(limit)
@@ -154,7 +154,7 @@ async def process_webhook(
     webhook_id: str,
     background_tasks: BackgroundTasks,
     db: AsyncSession = Depends(get_db),
-    current_user: User = Depends(get_current_user),
+    current_user: User = Depends(require_admin),
 ) -> ExtractionResponse:
     """Process a Fathom webhook and extract invoice data."""
     # Get webhook
@@ -247,7 +247,7 @@ async def list_extractions(
     limit: int = 50,
     offset: int = 0,
     db: AsyncSession = Depends(get_db),
-    current_user: User = Depends(get_current_user),
+    current_user: User = Depends(require_admin),
 ) -> ExtractionListResponse:
     """List extractions with optional status filter."""
     query = select(FathomExtraction).order_by(
@@ -298,7 +298,7 @@ async def list_extractions(
 async def get_extraction(
     extraction_id: str,
     db: AsyncSession = Depends(get_db),
-    current_user: User = Depends(get_current_user),
+    current_user: User = Depends(require_admin),
 ) -> ExtractionResponse:
     """Get a single extraction with details."""
     result = await db.execute(
@@ -327,7 +327,7 @@ async def review_extraction(
     extraction_id: str,
     review: ExtractionReview,
     db: AsyncSession = Depends(get_db),
-    current_user: User = Depends(get_current_user),
+    current_user: User = Depends(require_admin),
 ):
     """Review and approve/reject an extraction."""
     result = await db.execute(
@@ -391,7 +391,7 @@ async def review_extraction(
 async def create_invoice_from_extraction(
     extraction_id: str,
     db: AsyncSession = Depends(get_db),
-    current_user: User = Depends(get_current_user),
+    current_user: User = Depends(require_admin),
 ):
     """Create a draft invoice from an approved extraction."""
     result = await db.execute(
