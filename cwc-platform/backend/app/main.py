@@ -55,6 +55,7 @@ from app.routers import (
     onboarding_assessment_router,
     icf_tracker_router,
     imports_router,
+    notifications_router,
 )
 
 settings = get_settings()
@@ -144,6 +145,7 @@ app.include_router(assessments_router)  # Already has /api prefix
 app.include_router(onboarding_assessment_router)  # Already has /api prefix
 app.include_router(icf_tracker_router)  # Already has /api prefix
 app.include_router(imports_router, prefix="/api")
+app.include_router(notifications_router)  # Already has /api prefix
 
 
 @app.get("/")

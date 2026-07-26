@@ -41,6 +41,8 @@ from app.models.coaching_session import CoachingSession
 from app.models.icf_certification import ICFCertificationProgress
 from app.models.user_invite import UserInvite
 from app.models.import_job import ImportJob
+from app.models.task_comment import TaskComment
+from app.models.notification import Notification
 
 __all__ = [
     "User",
@@ -93,4 +95,6 @@ __all__ = [
     "ICFCertificationProgress",
     "UserInvite",
     "ImportJob",
+    "TaskComment",
+    "Notification",
 ]

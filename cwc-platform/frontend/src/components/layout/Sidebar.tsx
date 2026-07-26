@@ -21,6 +21,7 @@ import {
   LogOut,
   Brain,
   Download,
+  ListChecks,
   Receipt,
   UserMinus,
   ListTodo,
@@ -58,6 +59,7 @@ interface NavGroup {
 // Top level items (always visible)
 const topNavigation: NavItem[] = [
   { name: "Dashboard", href: "/dashboard", icon: LayoutDashboard },
+  { name: "My Tasks", href: "/my-tasks", icon: ListChecks },
   { name: "Calendar", href: "/calendar", icon: CalendarDays },
 ];
 
