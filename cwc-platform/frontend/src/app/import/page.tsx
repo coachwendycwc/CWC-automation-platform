@@ -14,15 +14,36 @@ import {
 } from "@/components/ui/select";
 import { Upload, Undo2, CheckCircle2, AlertTriangle } from "lucide-react";
 
-const CWC_FIELDS = [
-  { value: "", label: "— not imported —" },
-  { value: "full_name", label: "Full name (auto-split)" },
-  { value: "first_name", label: "First name" },
-  { value: "last_name", label: "Last name" },
-  { value: "email", label: "Email" },
-  { value: "phone", label: "Phone" },
-  { value: "organization_name", label: "Company / Organization" },
-  { value: "notes", label: "Notes" },
+const ENTITY_TYPES = [
+  {
+    value: "contacts",
+    label: "Contacts",
+    blurb: "Clients and their companies",
+    fields: [
+      { value: "full_name", label: "Full name (auto-split)" },
+      { value: "first_name", label: "First name" },
+      { value: "last_name", label: "Last name" },
+      { value: "email", label: "Email" },
+      { value: "phone", label: "Phone" },
+      { value: "organization_name", label: "Company / Organization" },
+      { value: "notes", label: "Notes" },
+    ],
+  },
+  {
+    value: "invoices",
+    label: "Invoices",
+    blurb: "Past invoices and payments, so revenue history carries over",
+    fields: [
+      { value: "contact_email", label: "Client email (required)" },
+      { value: "contact_name", label: "Client name" },
+      { value: "issue_date", label: "Invoice date" },
+      { value: "due_date", label: "Due date" },
+      { value: "total", label: "Amount (required)" },
+      { value: "amount_paid", label: "Amount paid" },
+      { value: "description", label: "Description" },
+      { value: "notes", label: "Notes" },
+    ],
+  },
 ];
 
 const OUTCOME_BADGES: Record<string, { label: string; className: string }> = {
@@ -36,6 +57,7 @@ type Step = "upload" | "map" | "preview" | "done";
 
 export default function ImportPage() {
   const { token } = useAuth();
+  const [entityType, setEntityType] = useState("contacts");
   const [step, setStep] = useState<Step>("upload");
   const [csvText, setCsvText] = useState("");
   const [fileName, setFileName] = useState("");
@@ -75,7 +97,7 @@ export default function ImportPage() {
     try {
       // Let the backend try preset detection first
       const result = await importsApi.preview(token, {
-        entity_type: "contacts",
+        entity_type: entityType,
         csv_text: text,
         dedupe_strategy: dedupeStrategy,
       });
@@ -100,7 +122,7 @@ export default function ImportPage() {
     setLoading(true);
     try {
       const result = await importsApi.preview(token, {
-        entity_type: "contacts",
+        entity_type: entityType,
         csv_text: csvText,
         mapping,
         dedupe_strategy: dedupeStrategy,
@@ -120,7 +142,7 @@ export default function ImportPage() {
     setLoading(true);
     try {
       const committed = await importsApi.commit(token, {
-        entity_type: "contacts",
+        entity_type: entityType,
         csv_text: csvText,
         mapping,
         dedupe_strategy: dedupeStrategy,
@@ -146,6 +168,10 @@ export default function ImportPage() {
       setError(err.message || "Undo failed");
     }
   };
+
+  const activeEntity =
+    ENTITY_TYPES.find((e) => e.value === entityType) || ENTITY_TYPES[0];
+  const activeFields = activeEntity.fields;
 
   const reset = () => {
     setStep("upload");
@@ -180,11 +206,27 @@ export default function ImportPage() {
           <CardHeader>
             <CardTitle>1. Upload your export file</CardTitle>
             <CardDescription>
-              Export contacts from your old platform as CSV, then drop the file here.
-              HoneyBook and Dubsado exports are recognized automatically.
+              Export your data from the old platform as CSV, then drop the file here.
+              HoneyBook and Dubsado contact exports are recognized automatically.
             </CardDescription>
           </CardHeader>
-          <CardContent>
+          <CardContent className="space-y-4">
+            <div className="flex items-center gap-3">
+              <span className="text-sm text-muted-foreground">What are you importing?</span>
+              <Select value={entityType} onValueChange={setEntityType}>
+                <SelectTrigger className="w-64">
+                  <SelectValue />
+                </SelectTrigger>
+                <SelectContent>
+                  {ENTITY_TYPES.map((e) => (
+                    <SelectItem key={e.value} value={e.value}>
+                      {e.label}
+                    </SelectItem>
+                  ))}
+                </SelectContent>
+              </Select>
+              <span className="text-sm text-muted-foreground">{activeEntity.blurb}</span>
+            </div>
             <label className="flex flex-col items-center justify-center gap-3 border-2 border-dashed border-muted-foreground/25 rounded-lg p-10 cursor-pointer hover:border-primary/50">
               <Upload className="h-8 w-8 text-muted-foreground" aria-hidden />
               <span className="text-sm text-muted-foreground">
@@ -240,7 +282,7 @@ export default function ImportPage() {
                             <SelectValue placeholder="— not imported —" />
                           </SelectTrigger>
                           <SelectContent>
-                            {CWC_FIELDS.filter((f) => f.value !== "").map((f) => (
+                            {activeFields.map((f) => (
                               <SelectItem key={f.value} value={f.value}>
                                 {f.label}
                               </SelectItem>
@@ -290,8 +332,8 @@ export default function ImportPage() {
                 <TableHeader>
                   <TableRow>
                     <TableHead>Row</TableHead>
-                    <TableHead>Name</TableHead>
-                    <TableHead>Email</TableHead>
+                    <TableHead>{entityType === "invoices" ? "Client" : "Name"}</TableHead>
+                    <TableHead>{entityType === "invoices" ? "Amount" : "Email"}</TableHead>
                     <TableHead>Outcome</TableHead>
                   </TableRow>
                 </TableHeader>
@@ -302,9 +344,17 @@ export default function ImportPage() {
                       <TableRow key={row.row_index}>
                         <TableCell>{row.row_index + 1}</TableCell>
                         <TableCell>
-                          {[row.data.first_name, row.data.last_name].filter(Boolean).join(" ") || "—"}
+                          {entityType === "invoices"
+                            ? row.data.contact_name || row.data.contact_email || "—"
+                            : [row.data.first_name, row.data.last_name]
+                                .filter(Boolean)
+                                .join(" ") || "—"}
                         </TableCell>
-                        <TableCell>{row.data.email || "—"}</TableCell>
+                        <TableCell>
+                          {entityType === "invoices"
+                            ? row.data.total || "—"
+                            : row.data.email || "—"}
+                        </TableCell>
                         <TableCell>
                           <Badge className={badge.className} variant="outline">
                             {badge.label}
