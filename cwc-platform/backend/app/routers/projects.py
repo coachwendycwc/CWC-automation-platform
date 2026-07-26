@@ -6,7 +6,7 @@ import uuid
 
 from fastapi import APIRouter, Depends, HTTPException, Query
 
-from app.services.auth_service import require_admin
+from app.services.auth_service import require_staff
 from sqlalchemy.ext.asyncio import AsyncSession
 from sqlalchemy import select, and_, or_, func
 from sqlalchemy.orm import selectinload
@@ -38,7 +38,7 @@ from app.services.project_service import ProjectService
 router = APIRouter(
     prefix="/api/projects",
     tags=["projects"],
-    dependencies=[Depends(require_admin)],
+    dependencies=[Depends(require_staff)],
 )
 
 

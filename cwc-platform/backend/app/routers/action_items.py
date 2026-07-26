@@ -7,7 +7,7 @@ from sqlalchemy import select, func
 from sqlalchemy.orm import selectinload
 
 from app.database import get_db
-from app.services.auth_service import require_admin
+from app.services.auth_service import require_staff
 from app.models.user import User
 from app.models.client_action_item import ClientActionItem
 from app.models.contact import Contact
@@ -52,7 +52,7 @@ async def list_action_items(
     status_filter: Optional[str] = Query(None, alias="status"),
     priority: Optional[str] = None,
     db: AsyncSession = Depends(get_db),
-    current_user: User = Depends(require_admin),
+    current_user: User = Depends(require_staff),
 ):
     """List all action items with filters."""
     query = select(ClientActionItem).options(selectinload(ClientActionItem.contact))
@@ -96,7 +96,7 @@ async def list_action_items(
 async def get_action_item(
     item_id: str,
     db: AsyncSession = Depends(get_db),
-    current_user: User = Depends(require_admin),
+    current_user: User = Depends(require_staff),
 ):
     """Get a single action item."""
     result = await db.execute(
@@ -119,7 +119,7 @@ async def get_action_item(
 async def create_action_item(
     data: ActionItemCreate,
     db: AsyncSession = Depends(get_db),
-    current_user: User = Depends(require_admin),
+    current_user: User = Depends(require_staff),
 ):
     """Create a new action item for a client."""
     # Validate contact exists
@@ -164,7 +164,7 @@ async def update_action_item(
     item_id: str,
     data: ActionItemUpdate,
     db: AsyncSession = Depends(get_db),
-    current_user: User = Depends(require_admin),
+    current_user: User = Depends(require_staff),
 ):
     """Update an action item."""
     result = await db.execute(
@@ -206,7 +206,7 @@ async def update_action_item(
 async def delete_action_item(
     item_id: str,
     db: AsyncSession = Depends(get_db),
-    current_user: User = Depends(require_admin),
+    current_user: User = Depends(require_staff),
 ):
     """Delete an action item."""
     result = await db.execute(

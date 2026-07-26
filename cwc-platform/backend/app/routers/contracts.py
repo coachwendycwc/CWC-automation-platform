@@ -6,7 +6,7 @@ from typing import Optional
 
 from fastapi import APIRouter, Depends, HTTPException, Query
 
-from app.services.auth_service import require_admin
+from app.services.auth_service import require_staff
 from fastapi.responses import Response
 from sqlalchemy.ext.asyncio import AsyncSession
 from sqlalchemy import select, and_, or_
@@ -37,7 +37,7 @@ from app.services.pdf_service import pdf_service
 router = APIRouter(
     prefix="/api/contracts",
     tags=["contracts"],
-    dependencies=[Depends(require_admin)],
+    dependencies=[Depends(require_staff)],
 )
 
 

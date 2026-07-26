@@ -1,13 +1,13 @@
 """
 Task management router.
 """
-from datetime import datetime
+from datetime import date, datetime
 from typing import Optional
 import uuid
 
 from fastapi import APIRouter, Depends, HTTPException, Query
 
-from app.services.auth_service import require_admin
+from app.services.auth_service import require_staff
 from sqlalchemy.ext.asyncio import AsyncSession
 from sqlalchemy import select, and_, or_
 from sqlalchemy.orm import selectinload
@@ -15,6 +15,7 @@ from sqlalchemy.orm import selectinload
 from app.database import get_db
 from app.models.project import Project
 from app.models.task import Task
+from app.models.user import User
 from app.models.time_entry import TimeEntry
 from app.schemas.project import (
     TaskCreate,
@@ -32,7 +33,7 @@ from app.services.project_service import ProjectService
 router = APIRouter(
     prefix="/api",
     tags=["tasks"],
-    dependencies=[Depends(require_admin)],
+    dependencies=[Depends(require_staff)],
 )
 
 
@@ -137,6 +138,59 @@ async def get_task_stats(
     return TaskStats(**stats)
 
 
+@router.get("/tasks/my-tasks")
+async def get_my_tasks(
+    db: AsyncSession = Depends(get_db),
+    current_user: User = Depends(require_staff),
+) -> dict:
+    """Everything assigned to me, grouped by how soon it needs attention.
+
+    Registered before /tasks/{task_id} so the path param doesn't swallow it.
+    """
+    result = await db.execute(
+        select(Task)
+        .where(
+            Task.assignee_id == current_user.id,
+            Task.status != "completed",
+        )
+        .order_by(Task.due_date.is_(None), Task.due_date)
+    )
+    tasks = result.scalars().all()
+
+    today = date.today()
+    groups: dict[str, list] = {
+        "overdue": [],
+        "today": [],
+        "upcoming": [],
+        "no_due_date": [],
+    }
+    for task in tasks:
+        payload = _task_summary(task, current_user)
+        if task.due_date is None:
+            groups["no_due_date"].append(payload)
+        elif task.due_date < today:
+            groups["overdue"].append(payload)
+        elif task.due_date == today:
+            groups["today"].append(payload)
+        else:
+            groups["upcoming"].append(payload)
+    return groups
+
+
+def _task_summary(task: Task, assignee: User | None = None) -> dict:
+    return {
+        "id": task.id,
+        "task_number": task.task_number,
+        "project_id": task.project_id,
+        "title": task.title,
+        "status": task.status,
+        "priority": task.priority,
+        "due_date": task.due_date.isoformat() if task.due_date else None,
+        "assignee_id": task.assignee_id,
+        "assignee_name": assignee.name if assignee else None,
+    }
+
+
 @router.get("/tasks/{task_id}", response_model=TaskDetail)
 async def get_task(
     task_id: str,
@@ -156,6 +210,13 @@ async def get_task(
     if not task:
         raise HTTPException(status_code=404, detail="Task not found")
 
+    assignee_name = None
+    if task.assignee_id:
+        assignee = (
+            await db.execute(select(User).where(User.id == task.assignee_id))
+        ).scalar_one_or_none()
+        assignee_name = assignee.name if assignee else None
+
     return TaskDetail(
         id=task.id,
         task_number=task.task_number,
@@ -165,6 +226,8 @@ async def get_task(
         status=task.status,
         priority=task.priority,
         assigned_to=task.assigned_to,
+        assignee_id=task.assignee_id,
+        assignee_name=assignee_name,
         due_date=task.due_date,
         completed_at=task.completed_at,
         estimated_hours=task.estimated_hours,

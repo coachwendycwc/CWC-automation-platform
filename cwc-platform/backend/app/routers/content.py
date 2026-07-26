@@ -6,7 +6,7 @@ from sqlalchemy.orm import selectinload
 from typing import Optional
 
 from app.database import get_db
-from app.services.auth_service import require_admin
+from app.services.auth_service import require_staff
 from app.models.user import User
 from app.models.client_content import ClientContent
 from app.models.contact import Contact
@@ -63,7 +63,7 @@ async def list_content(
     project_id: Optional[str] = None,
     is_active: Optional[bool] = None,
     db: AsyncSession = Depends(get_db),
-    current_user: User = Depends(require_admin),
+    current_user: User = Depends(require_staff),
 ):
     """List all content with pagination and filters."""
     query = select(ClientContent).options(
@@ -116,7 +116,7 @@ async def list_content(
 @router.get("/categories", response_model=CategoryResponse)
 async def list_categories(
     db: AsyncSession = Depends(get_db),
-    current_user: User = Depends(require_admin),
+    current_user: User = Depends(require_staff),
 ):
     """List all unique content categories."""
     result = await db.execute(
@@ -133,7 +133,7 @@ async def list_categories(
 async def get_content(
     content_id: str,
     db: AsyncSession = Depends(get_db),
-    current_user: User = Depends(require_admin),
+    current_user: User = Depends(require_staff),
 ):
     """Get a single content item."""
     result = await db.execute(
@@ -160,7 +160,7 @@ async def get_content(
 async def create_content(
     data: ContentCreate,
     db: AsyncSession = Depends(get_db),
-    current_user: User = Depends(require_admin),
+    current_user: User = Depends(require_staff),
 ):
     """Create a new content item."""
     # Validate related entities
@@ -220,7 +220,7 @@ async def update_content(
     content_id: str,
     data: ContentUpdate,
     db: AsyncSession = Depends(get_db),
-    current_user: User = Depends(require_admin),
+    current_user: User = Depends(require_staff),
 ):
     """Update a content item."""
     result = await db.execute(
@@ -293,7 +293,7 @@ async def update_content(
 async def delete_content(
     content_id: str,
     db: AsyncSession = Depends(get_db),
-    current_user: User = Depends(require_admin),
+    current_user: User = Depends(require_staff),
 ):
     """Delete a content item."""
     result = await db.execute(

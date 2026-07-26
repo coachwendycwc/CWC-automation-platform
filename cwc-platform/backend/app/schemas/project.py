@@ -35,6 +35,7 @@ class TaskBase(BaseModel):
     description: Optional[str] = None
     priority: TaskPriority = "medium"
     assigned_to: Optional[str] = None
+    assignee_id: Optional[str] = None
     due_date: Optional[date] = None
     estimated_hours: Optional[Decimal] = None
     notes: Optional[str] = None
@@ -53,6 +54,7 @@ class TaskUpdate(BaseModel):
     status: Optional[TaskStatus] = None
     priority: Optional[TaskPriority] = None
     assigned_to: Optional[str] = None
+    assignee_id: Optional[str] = None
     due_date: Optional[date] = None
     estimated_hours: Optional[Decimal] = None
     notes: Optional[str] = None
@@ -70,6 +72,8 @@ class TaskRead(BaseModel):
     status: str
     priority: str
     assigned_to: Optional[str] = None
+    assignee_id: Optional[str] = None
+    assignee_name: Optional[str] = None
     due_date: Optional[date] = None
     completed_at: Optional[datetime] = None
     estimated_hours: Optional[Decimal] = None
@@ -92,6 +96,8 @@ class TaskList(BaseModel):
     status: str
     priority: str
     assigned_to: Optional[str] = None
+    assignee_id: Optional[str] = None
+    assignee_name: Optional[str] = None
     due_date: Optional[date] = None
     estimated_hours: Optional[Decimal] = None
     actual_hours: Decimal

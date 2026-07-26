@@ -202,6 +202,24 @@ async def get_current_user(
     return user
 
 
+STAFF_ROLES = ("admin", "assistant")
+
+
+async def require_staff(current_user: User = Depends(get_current_user)) -> User:
+    """Dependency for surfaces a coach's assistant works in day to day:
+    the CRM and delivery side — contacts, projects, tasks, goals, content.
+
+    Deliberately narrower than require_admin, which still guards anything
+    involving money or identity (invoices, payments, payouts, contractor tax
+    data, user invites). A role not named here fails closed."""
+    if current_user.role not in STAFF_ROLES:
+        raise HTTPException(
+            status_code=status.HTTP_403_FORBIDDEN,
+            detail="Staff privileges required",
+        )
+    return current_user
+
+
 async def require_admin(current_user: User = Depends(get_current_user)) -> User:
     """Dependency that authorizes admin-only endpoints. Authenticates via
     get_current_user, then requires role == 'admin'. Non-admins get 403.

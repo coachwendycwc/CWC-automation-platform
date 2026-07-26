@@ -32,7 +32,11 @@ class Task(Base):
     priority: Mapped[str] = mapped_column(String(20), default="medium")  # low, medium, high, urgent
 
     # Assignment
-    assigned_to: Mapped[Optional[str]] = mapped_column(String(255), nullable=True)  # Email or name
+    assigned_to: Mapped[Optional[str]] = mapped_column(String(255), nullable=True)  # Legacy free text; prefer assignee_id
+    # Real owner reference: My Tasks, workload and notifications key off this.
+    assignee_id: Mapped[Optional[str]] = mapped_column(
+        String(36), ForeignKey("users.id"), nullable=True, index=True
+    )
 
     # Timeline
     due_date: Mapped[Optional[date]] = mapped_column(Date, nullable=True)
