@@ -1,7 +1,8 @@
 "use client";
 
-import { useState } from "react";
+import { Suspense, useState } from "react";
 import Image from "next/image";
+import { useSearchParams } from "next/navigation";
 import { useAuth } from "@/contexts/AuthContext";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
@@ -9,8 +10,10 @@ import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import Link from "next/link";
 
-export default function RegisterPage() {
+function RegisterForm() {
   const { register } = useAuth();
+  const searchParams = useSearchParams();
+  const inviteToken = searchParams.get("invite") || "";
   const [name, setName] = useState("");
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
@@ -21,6 +24,11 @@ export default function RegisterPage() {
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     setError("");
+
+    if (!inviteToken) {
+      setError("Registration is invite-only. Use the link from your invite email.");
+      return;
+    }
 
     if (password !== confirmPassword) {
       setError("Passwords do not match");
@@ -35,7 +43,7 @@ export default function RegisterPage() {
     setLoading(true);
 
     try {
-      await register(email, password, name);
+      await register(email, password, name, inviteToken);
     } catch (err: any) {
       setError(err.message || "Failed to register");
     } finally {
@@ -61,7 +69,11 @@ export default function RegisterPage() {
       <Card>
         <CardHeader className="text-center">
           <CardTitle className="text-2xl font-bold">Create Account</CardTitle>
-          <CardDescription>Get started with your account</CardDescription>
+          <CardDescription>
+            {inviteToken
+              ? "Get started with your account"
+              : "Registration is invite-only — ask an admin for an invite link"}
+          </CardDescription>
         </CardHeader>
         <CardContent>
           <form onSubmit={handleSubmit} className="space-y-4">
@@ -138,5 +150,13 @@ export default function RegisterPage() {
       </Card>
       </div>
     </div>
+  );
+}
+
+export default function RegisterPage() {
+  return (
+    <Suspense>
+      <RegisterForm />
+    </Suspense>
   );
 }

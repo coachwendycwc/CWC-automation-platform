@@ -50,10 +50,10 @@ export const authApi = {
       body: JSON.stringify({ email, password }),
     }),
 
-  register: (email: string, password: string, name: string) =>
+  register: (email: string, password: string, name: string, inviteToken: string) =>
     fetchApi<{ access_token: string; user: any }>("/api/auth/register", {
       method: "POST",
-      body: JSON.stringify({ email, password, name }),
+      body: JSON.stringify({ email, password, name, invite_token: inviteToken }),
     }),
 
   forgotPassword: (email: string) =>

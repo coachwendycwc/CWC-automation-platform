@@ -708,6 +708,33 @@ CWC Platform Team
 
         return await self._send_email(to_email, subject, body)
 
+    async def send_user_invite(
+        self,
+        to_email: str,
+        invite_link: str,
+        role: str,
+    ) -> bool:
+        """Send a staff registration invite email."""
+        subject = "You're Invited to CWC Platform"
+
+        body = f"""
+Hi,
+
+You've been invited to create a {role} account on CWC Platform.
+
+Click the link below to set up your account:
+{invite_link}
+
+This invite is single-use and expires in 7 days.
+
+If you weren't expecting this, you can safely ignore this email.
+
+Best regards,
+CWC Platform Team
+"""
+
+        return await self._send_email(to_email, subject, body)
+
     # Offboarding email methods
 
     async def send_offboarding_completion(

@@ -4,6 +4,8 @@ Tests for authentication endpoints.
 import pytest
 from httpx import AsyncClient
 
+from tests.test_invites import make_invite
+
 
 class TestAuthEndpoints:
     """Test authentication endpoints."""
@@ -22,14 +24,16 @@ class TestAuthEndpoints:
         assert response.status_code == 200
         assert response.json()["status"] == "healthy"
 
-    async def test_register_new_user(self, client: AsyncClient):
-        """Test user registration."""
+    async def test_register_new_user(self, client: AsyncClient, db_session):
+        """Test user registration (invite-only)."""
+        invite = await make_invite(db_session, email="newuser@example.com")
         response = await client.post(
             "/api/auth/register",
             json={
                 "email": "newuser@example.com",
                 "password": "SecurePass123",
                 "name": "New User",
+                "invite_token": invite.token,
             },
         )
         assert response.status_code == 201
@@ -38,14 +42,18 @@ class TestAuthEndpoints:
         assert data["token_type"] == "bearer"
         assert data["user"]["email"] == "newuser@example.com"
 
-    async def test_register_duplicate_email(self, client: AsyncClient, test_user):
+    async def test_register_duplicate_email(
+        self, client: AsyncClient, test_user, db_session
+    ):
         """Test registration with existing email fails."""
+        invite = await make_invite(db_session, email="test@example.com")
         response = await client.post(
             "/api/auth/register",
             json={
                 "email": "test@example.com",  # Same as test_user
                 "password": "SecurePass123",
                 "name": "Duplicate User",
+                "invite_token": invite.token,
             },
         )
         assert response.status_code == 400
