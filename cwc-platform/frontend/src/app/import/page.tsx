@@ -44,6 +44,21 @@ const ENTITY_TYPES = [
       { value: "notes", label: "Notes" },
     ],
   },
+  {
+    value: "icf_sessions",
+    label: "ICF coaching hours",
+    blurb: "Certification hours log — the record you can't recreate",
+    fields: [
+      { value: "client_name", label: "Client name (required)" },
+      { value: "session_date", label: "Session date (required)" },
+      { value: "duration_hours", label: "Duration (hours or minutes)" },
+      { value: "session_type", label: "Session type (individual/group)" },
+      { value: "payment_type", label: "Paid or pro bono" },
+      { value: "client_email", label: "Client email" },
+      { value: "meeting_title", label: "Meeting title" },
+      { value: "notes", label: "Notes" },
+    ],
+  },
 ];
 
 const OUTCOME_BADGES: Record<string, { label: string; className: string }> = {
@@ -332,8 +347,16 @@ export default function ImportPage() {
                 <TableHeader>
                   <TableRow>
                     <TableHead>Row</TableHead>
-                    <TableHead>{entityType === "invoices" ? "Client" : "Name"}</TableHead>
-                    <TableHead>{entityType === "invoices" ? "Amount" : "Email"}</TableHead>
+                    <TableHead>
+                      {entityType === "contacts" ? "Name" : "Client"}
+                    </TableHead>
+                    <TableHead>
+                      {entityType === "invoices"
+                        ? "Amount"
+                        : entityType === "icf_sessions"
+                          ? "Session date"
+                          : "Email"}
+                    </TableHead>
                     <TableHead>Outcome</TableHead>
                   </TableRow>
                 </TableHeader>
@@ -346,14 +369,18 @@ export default function ImportPage() {
                         <TableCell>
                           {entityType === "invoices"
                             ? row.data.contact_name || row.data.contact_email || "—"
-                            : [row.data.first_name, row.data.last_name]
-                                .filter(Boolean)
-                                .join(" ") || "—"}
+                            : entityType === "icf_sessions"
+                              ? row.data.client_name || "—"
+                              : [row.data.first_name, row.data.last_name]
+                                  .filter(Boolean)
+                                  .join(" ") || "—"}
                         </TableCell>
                         <TableCell>
                           {entityType === "invoices"
                             ? row.data.total || "—"
-                            : row.data.email || "—"}
+                            : entityType === "icf_sessions"
+                              ? row.data.session_date || "—"
+                              : row.data.email || "—"}
                         </TableCell>
                         <TableCell>
                           <Badge className={badge.className} variant="outline">

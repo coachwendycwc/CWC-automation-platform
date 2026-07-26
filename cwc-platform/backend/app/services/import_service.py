@@ -10,13 +10,14 @@ from datetime import date, datetime, timedelta
 from decimal import Decimal, InvalidOperation
 from typing import Any
 
-from sqlalchemy import select
+from sqlalchemy import select, func
 from sqlalchemy.ext.asyncio import AsyncSession
 
 from app.models.contact import Contact
 from app.models.organization import Organization
 from app.models.invoice import Invoice
 from app.models.payment import Payment
+from app.models.coaching_session import CoachingSession
 from app.models.import_job import ImportJob
 
 MAX_CSV_BYTES = 5 * 1024 * 1024
@@ -263,7 +264,84 @@ def _counts(analyzed: list[dict[str, Any]]) -> dict[str, int]:
     return counts
 
 
-SUPPORTED_ENTITIES = ("contacts", "invoices")
+SUPPORTED_ENTITIES = ("contacts", "invoices", "icf_sessions")
+
+DEFAULT_SESSION_HOURS = 1.0
+
+
+def _parse_hours(value: str) -> float | None:
+    """Accept "1.5", "1.5 hours", or "90" (minutes) for a session duration."""
+    cleaned = value.lower().replace("hours", "").replace("hour", "").replace(
+        "hrs", ""
+    ).replace("hr", "").strip()
+    if not cleaned:
+        return None
+    try:
+        hours = float(cleaned)
+    except ValueError:
+        return None
+    # A duration in whole minutes is the common alternative encoding.
+    if hours > 12:
+        hours = hours / 60
+    return round(hours, 2)
+
+
+def _validate_icf_session(data: dict[str, str]) -> str | None:
+    if not data.get("client_name"):
+        return "Missing client name"
+    if not data.get("session_date"):
+        return "Missing session date"
+    if _parse_date(data["session_date"]) is None:
+        return f"Unreadable session date: {data['session_date']}"
+    if data.get("duration_hours") and _parse_hours(data["duration_hours"]) is None:
+        return f"Unreadable duration: {data['duration_hours']}"
+    return None
+
+
+async def _analyze_icf_sessions(
+    db: AsyncSession,
+    rows: list[dict[str, str]],
+    mapping: dict[str, str],
+) -> list[dict[str, Any]]:
+    """Mirrors the ICF bulk-import dedupe rule: client + date + duration."""
+    seen: set[tuple] = set()
+    analyzed: list[dict[str, Any]] = []
+    for index, row in enumerate(rows):
+        data = _map_row(row, mapping)
+        error = _validate_icf_session(data)
+        if error:
+            analyzed.append(
+                {"row_index": index, "outcome": "error", "data": data, "error": error}
+            )
+            continue
+        session_date = _parse_date(data["session_date"])
+        hours = (
+            _parse_hours(data["duration_hours"])
+            if data.get("duration_hours")
+            else DEFAULT_SESSION_HOURS
+        )
+        key = (data["client_name"].lower(), str(session_date), hours)
+        outcome = "create"
+        if key in seen:
+            outcome = "skip_duplicate"
+        else:
+            existing = (
+                await db.execute(
+                    select(CoachingSession).where(
+                        func.lower(CoachingSession.client_name)
+                        == data["client_name"].lower(),
+                        CoachingSession.session_date == session_date,
+                        CoachingSession.duration_hours == hours,
+                    )
+                )
+            ).scalars().first()
+            if existing is not None:
+                outcome = "skip_duplicate"
+        seen.add(key)
+        analyzed.append(
+            {"row_index": index, "outcome": outcome, "data": data, "error": None}
+        )
+    return analyzed
 
 
 async def _analyze(
@@ -274,6 +352,8 @@ async def _analyze(
 ) -> list[dict[str, Any]]:
     if entity_type == "invoices":
         return await _analyze_invoices(db, rows, mapping)
+    if entity_type == "icf_sessions":
+        return await _analyze_icf_sessions(db, rows, mapping)
     return await _analyze_contacts(db, rows, mapping)
 
 
@@ -335,6 +415,7 @@ async def run_commit(
     created_orgs: list[str] = []
     created_invoices: list[str] = []
     created_payments: list[str] = []
+    created_sessions: list[str] = []
     updated_count = 0
     skipped_count = 0
     orgs_by_name: dict[str, Organization] = {}
@@ -450,6 +531,33 @@ async def run_commit(
                 await db.flush()
                 created_payments.append(payment.id)
 
+    if entity_type == "icf_sessions":
+        for item in analyzed:
+            data = item["data"]
+            if item["outcome"] != "create":
+                if item["outcome"] == "skip_duplicate":
+                    skipped_count += 1
+                continue
+
+            session = CoachingSession(
+                client_name=data["client_name"],
+                client_email=data.get("client_email"),
+                session_date=_parse_date(data["session_date"]),
+                duration_hours=(
+                    _parse_hours(data["duration_hours"])
+                    if data.get("duration_hours")
+                    else DEFAULT_SESSION_HOURS
+                ),
+                session_type=data.get("session_type") or "individual",
+                payment_type=data.get("payment_type") or "paid",
+                source=preset_name if preset_name != "custom" else "manual",
+                notes=data.get("notes"),
+                meeting_title=data.get("meeting_title"),
+            )
+            db.add(session)
+            await db.flush()
+            created_sessions.append(session.id)
+
     for item in analyzed if entity_type == "contacts" else []:
         data = item["data"]
         if item["outcome"] == "error":
@@ -491,9 +599,11 @@ async def run_commit(
         await db.flush()
         created_contacts.append(contact.id)
 
-    created_count = (
-        len(created_invoices) if entity_type == "invoices" else len(created_contacts)
-    )
+    created_by_entity = {
+        "invoices": len(created_invoices),
+        "icf_sessions": len(created_sessions),
+    }
+    created_count = created_by_entity.get(entity_type, len(created_contacts))
     job = ImportJob(
         source=preset_name,
         entity_type=entity_type,
@@ -508,6 +618,7 @@ async def run_commit(
             "organizations": created_orgs,
             "invoices": created_invoices,
             "payments": created_payments,
+            "icf_sessions": created_sessions,
         },
         row_errors=[
             {"row": item["row_index"], "error": item["error"]}
@@ -531,12 +642,30 @@ async def run_undo(db: AsyncSession, job_id: str) -> dict[str, Any]:
     if job.status != "committed":
         raise ValueError("Import job has already been undone")
 
-    undone = {"contacts": 0, "organizations": 0, "invoices": 0, "payments": 0}
+    undone = {
+        "contacts": 0,
+        "organizations": 0,
+        "invoices": 0,
+        "payments": 0,
+        "icf_sessions": 0,
+    }
     skipped: list[str] = []
 
     # Invoices first: contacts created by the same job can only be removed once
     # nothing references them. Payments cascade from their invoice, so count
     # them here and let the delete take them.
+    for session_id in job.created_ids.get("icf_sessions", []):
+        session = (
+            await db.execute(
+                select(CoachingSession).where(CoachingSession.id == session_id)
+            )
+        ).scalar_one_or_none()
+        if session is None:
+            continue
+        await db.delete(session)
+        undone["icf_sessions"] += 1
+    await db.flush()
+
     for payment_id in job.created_ids.get("payments", []):
         payment = (
             await db.execute(select(Payment).where(Payment.id == payment_id))
