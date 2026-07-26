@@ -42,6 +42,7 @@ from app.routers.recurring_invoices import router as recurring_invoices_router
 from app.routers.organizational_assessments import router as assessments_router
 from app.routers.onboarding_assessment import router as onboarding_assessment_router
 from app.routers.icf_tracker import router as icf_tracker_router
+from app.routers.imports import router as imports_router
 
 __all__ = [
     "auth_router",
@@ -88,4 +89,5 @@ __all__ = [
     "assessments_router",
     "onboarding_assessment_router",
     "icf_tracker_router",
+    "imports_router",
 ]

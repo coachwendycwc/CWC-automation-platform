@@ -54,6 +54,7 @@ from app.routers import (
     assessments_router,
     onboarding_assessment_router,
     icf_tracker_router,
+    imports_router,
 )
 
 settings = get_settings()
@@ -142,6 +143,7 @@ app.include_router(recurring_invoices_router)  # Already has /api prefix
 app.include_router(assessments_router)  # Already has /api prefix
 app.include_router(onboarding_assessment_router)  # Already has /api prefix
 app.include_router(icf_tracker_router)  # Already has /api prefix
+app.include_router(imports_router, prefix="/api")
 
 
 @app.get("/")

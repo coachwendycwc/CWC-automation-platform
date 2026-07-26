@@ -20,6 +20,7 @@ import {
   Settings,
   LogOut,
   Brain,
+  Download,
   Receipt,
   UserMinus,
   ListTodo,
@@ -106,6 +107,7 @@ const navGroups: NavGroup[] = [
     items: [
       { name: "Offboarding", href: "/offboarding", icon: UserMinus },
       { name: "AI Extractions", href: "/extractions", icon: Brain },
+      { name: "Import Data", href: "/import", icon: Download },
     ],
   },
 ];
