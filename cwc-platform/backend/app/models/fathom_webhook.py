@@ -18,6 +18,9 @@ class FathomWebhook(Base):
         String(36), primary_key=True, default=lambda: str(uuid.uuid4())
     )
     recording_id: Mapped[str | None] = mapped_column(String(100), unique=True)
+    # Where this session came from: the Fathom webhook, or a Zoom cloud-recording
+    # export. The table predates having more than one source.
+    source: Mapped[str] = mapped_column(String(20), nullable=False, default="fathom")
     meeting_title: Mapped[str | None] = mapped_column(String(255))
 
     # Recording URL from Fathom
