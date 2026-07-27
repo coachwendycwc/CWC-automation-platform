@@ -3,6 +3,7 @@
 import { useCallback, useEffect, useState } from "react";
 import Link from "next/link";
 import { useAuth } from "@/contexts/AuthContext";
+import { Shell } from "@/components/layout/Shell";
 import { workspaceApi, notificationsApi, MyTask, AppNotification } from "@/lib/api";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
@@ -73,16 +74,19 @@ export default function MyTasksPage() {
 
   if (loading) {
     return (
-      <div className="space-y-4">
-        <Skeleton className="h-8 w-48" />
-        <Skeleton className="h-32 w-full" />
-        <Skeleton className="h-32 w-full" />
-      </div>
+      <Shell>
+        <div className="space-y-4">
+          <Skeleton className="h-8 w-48" />
+          <Skeleton className="h-32 w-full" />
+          <Skeleton className="h-32 w-full" />
+        </div>
+      </Shell>
     );
   }
 
   return (
-    <div className="space-y-6">
+    <Shell>
+      <div className="space-y-6">
       <div>
         <h1 className="text-2xl font-bold">My Tasks</h1>
         <p className="text-muted-foreground">
@@ -200,6 +204,7 @@ export default function MyTasksPage() {
           </CardContent>
         </Card>
       </div>
-    </div>
+      </div>
+    </Shell>
   );
 }
