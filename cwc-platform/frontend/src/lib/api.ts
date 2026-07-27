@@ -2997,3 +2997,14 @@ export const notificationsApi = {
       token,
     }),
 };
+
+export interface StaffMember {
+  id: string;
+  name: string;
+  email: string;
+  role: string;
+}
+
+export const staffApi = {
+  list: (token: string) => fetchApi<StaffMember[]>("/api/users/staff", { token }),
+};
