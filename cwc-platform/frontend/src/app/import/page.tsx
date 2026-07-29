@@ -269,6 +269,21 @@ export default function ImportPage() {
             </CardDescription>
           </CardHeader>
           <CardContent className="space-y-4">
+            {detectedPreset && (
+              <div className="bg-warning/10 border border-warning/20 text-foreground px-4 py-3 rounded flex items-start gap-2 text-sm">
+                <AlertTriangle
+                  className="h-4 w-4 mt-0.5 shrink-0 text-warning"
+                  aria-hidden
+                />
+                <span>
+                  <strong className="font-medium">Check this mapping.</strong>{" "}
+                  The {detectedPreset} preset is based on their published export
+                  format, not a verified file — column names change. Confirm each
+                  row below before continuing. The preview on the next step shows
+                  exactly what will be imported.
+                </span>
+              </div>
+            )}
             <div className="overflow-x-auto">
               <Table>
                 <TableHeader>
