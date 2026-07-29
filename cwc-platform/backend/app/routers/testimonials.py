@@ -57,6 +57,7 @@ def testimonial_to_response(testimonial: Testimonial) -> TestimonialResponse:
         featured=testimonial.featured,
         display_order=testimonial.display_order,
         request_token=testimonial.request_token,
+        request_token_expires_at=testimonial.request_token_expires_at,
         request_sent_at=testimonial.request_sent_at,
         submitted_at=testimonial.submitted_at,
         reviewed_at=testimonial.reviewed_at,

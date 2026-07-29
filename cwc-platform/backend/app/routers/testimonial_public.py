@@ -90,6 +90,14 @@ async def get_testimonial_request(
             detail="Testimonial request not found",
         )
 
+    if testimonial.request_token_expires_at is not None and (
+        testimonial.request_token_expires_at < datetime.utcnow()
+    ):
+        raise HTTPException(
+            status_code=status.HTTP_410_GONE,
+            detail="This recording link has expired. Ask your coach for a new one.",
+        )
+
     return TestimonialRequestInfo(
         id=testimonial.id,
         author_name=testimonial.author_name,
@@ -116,6 +124,14 @@ async def submit_testimonial(
         raise HTTPException(
             status_code=status.HTTP_404_NOT_FOUND,
             detail="Testimonial request not found",
+        )
+
+    if testimonial.request_token_expires_at is not None and (
+        testimonial.request_token_expires_at < datetime.utcnow()
+    ):
+        raise HTTPException(
+            status_code=status.HTTP_410_GONE,
+            detail="This recording link has expired. Ask your coach for a new one.",
         )
 
     if testimonial.submitted_at is not None:
