@@ -708,6 +708,45 @@ CWC Platform Team
 
         return await self._send_email(to_email, subject, body)
 
+    async def send_task_notification(
+        self,
+        to_email: str,
+        actor_name: str,
+        kind: str,
+        task_title: str,
+        task_url: str,
+        comment_body: str | None = None,
+    ) -> bool:
+        """Tell someone about work that needs them, in their inbox.
+
+        In-app notices only reach people already looking at CWC; this is what
+        makes the workspace usable by an assistant who isn't in the tab.
+        """
+        if kind == "assigned":
+            subject = f"{actor_name} assigned you: {task_title}"
+            opening = f"{actor_name} assigned you a task."
+        else:
+            subject = f"{actor_name} mentioned you on: {task_title}"
+            opening = f"{actor_name} mentioned you in a comment."
+
+        quoted = f'\n\n"{comment_body}"\n' if comment_body else ""
+
+        body = f"""
+Hi,
+
+{opening}
+
+Task: {task_title}{quoted}
+
+Open it here:
+{task_url}
+
+Best regards,
+CWC Platform Team
+"""
+
+        return await self._send_email(to_email, subject, body)
+
     async def send_user_invite(
         self,
         to_email: str,
