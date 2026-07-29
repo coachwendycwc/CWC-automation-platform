@@ -6,7 +6,7 @@ from typing import Literal
 from fastapi import APIRouter, Depends, HTTPException, status
 from sqlalchemy.ext.asyncio import AsyncSession
 from sqlalchemy import select
-from pydantic import BaseModel, EmailStr
+from pydantic import BaseModel, EmailStr, Field
 
 from app.database import get_db
 from app.services.auth_service import (
@@ -18,6 +18,7 @@ from app.services.auth_service import (
     hash_password,
     verify_password,
     generate_reset_token,
+    hash_token,
 )
 from app.services.email_service import email_service
 from app.models.user import User
@@ -38,7 +39,7 @@ class LoginRequest(BaseModel):
 
 class RegisterRequest(BaseModel):
     email: EmailStr
-    password: str
+    password: str = Field(min_length=8)
     name: str
     invite_token: str
 
@@ -66,7 +67,7 @@ class ForgotPasswordRequest(BaseModel):
 
 class ResetPasswordRequest(BaseModel):
     token: str
-    password: str
+    password: str = Field(min_length=8)
 
 
 class TokenResponse(BaseModel):
@@ -287,7 +288,8 @@ async def forgot_password(
     if user and user.password_hash:
         # Generate reset token
         token = generate_reset_token()
-        user.password_reset_token = token
+        # Only the hash is stored; the raw token exists solely in the email.
+        user.password_reset_token = hash_token(token)
         user.password_reset_expires = datetime.utcnow() + timedelta(hours=1)
         await db.commit()
 
@@ -313,7 +315,7 @@ async def reset_password(
 ):
     """Reset password using token from email."""
     result = await db.execute(
-        select(User).where(User.password_reset_token == request.token)
+        select(User).where(User.password_reset_token == hash_token(request.token))
     )
     user = result.scalar_one_or_none()
 
@@ -323,7 +325,12 @@ async def reset_password(
             detail="Invalid or expired reset token",
         )
 
-    if user.password_reset_expires and user.password_reset_expires < datetime.utcnow():
+    # Fail closed: a token with no recorded expiry is treated as expired, not
+    # as one that never expires.
+    if (
+        user.password_reset_expires is None
+        or user.password_reset_expires < datetime.utcnow()
+    ):
         raise HTTPException(
             status_code=status.HTTP_400_BAD_REQUEST,
             detail="Reset token has expired",

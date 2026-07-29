@@ -1,4 +1,5 @@
 from datetime import datetime, timedelta
+import hashlib
 import secrets
 from jose import JWTError, jwt
 from fastapi import Depends, HTTPException, status
@@ -33,6 +34,18 @@ def verify_password(plain_password: str, hashed_password: str) -> bool:
 def generate_reset_token() -> str:
     """Generate a secure password reset token."""
     return secrets.token_urlsafe(32)
+
+
+def hash_token(token: str) -> str:
+    """Store only a hash of any credential handed out in a link.
+
+    Password-reset tokens and client-portal tokens are bearer credentials:
+    whoever holds one can take over the account. A database backup, dump, or
+    log line containing them in plaintext hands that over. sha256 rather than
+    bcrypt because these are already 256 bits of entropy — there is nothing to
+    brute force — and lookups stay a single indexed query.
+    """
+    return hashlib.sha256(token.encode()).hexdigest()
 
 
 def create_access_token(data: dict, expires_delta: timedelta | None = None) -> str:
