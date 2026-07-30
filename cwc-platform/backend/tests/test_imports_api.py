@@ -99,3 +99,57 @@ class TestImportsFlow:
             f"/api/imports/{job['id']}/undo", headers=auth_headers
         )
         assert undo_again.status_code == 400
+
+
+class TestInvoiceImportEndpoint:
+    INVOICES_CSV = (
+        "Client Email,Client Name,Due Date,Amount,Amount Paid\n"
+        "carla@example.com,Carla Diaz,2024-05-01,750.00,750.00\n"
+    )
+    MAPPING = {
+        "Client Email": "contact_email",
+        "Client Name": "contact_name",
+        "Due Date": "due_date",
+        "Amount": "total",
+        "Amount Paid": "amount_paid",
+    }
+
+    async def test_commit_invoices_via_api(
+        self, client: AsyncClient, auth_headers: dict
+    ):
+        response = await client.post(
+            "/api/imports/commit",
+            json={
+                "entity_type": "invoices",
+                "csv_text": self.INVOICES_CSV,
+                "mapping": self.MAPPING,
+            },
+            headers=auth_headers,
+        )
+        assert response.status_code == 201
+        assert response.json()["created_count"] == 1
+        assert response.json()["entity_type"] == "invoices"
+
+    async def test_invoice_import_rejects_non_admin(
+        self, client: AsyncClient, nonadmin_headers: dict
+    ):
+        response = await client.post(
+            "/api/imports/commit",
+            json={
+                "entity_type": "invoices",
+                "csv_text": self.INVOICES_CSV,
+                "mapping": self.MAPPING,
+            },
+            headers=nonadmin_headers,
+        )
+        assert response.status_code == 403
+
+    async def test_unknown_entity_type_is_400(
+        self, client: AsyncClient, auth_headers: dict
+    ):
+        response = await client.post(
+            "/api/imports/preview",
+            json={"entity_type": "spaceships", "csv_text": "a,b\n1,2\n"},
+            headers=auth_headers,
+        )
+        assert response.status_code == 400

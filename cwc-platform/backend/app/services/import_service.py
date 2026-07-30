@@ -6,13 +6,18 @@ so unknown export formats degrade to a manual mapping rather than failing.
 """
 import csv
 import io
+from datetime import date, datetime, timedelta
+from decimal import Decimal, InvalidOperation
 from typing import Any
 
-from sqlalchemy import select
+from sqlalchemy import select, func
 from sqlalchemy.ext.asyncio import AsyncSession
 
 from app.models.contact import Contact
 from app.models.organization import Organization
+from app.models.invoice import Invoice
+from app.models.payment import Payment
+from app.models.coaching_session import CoachingSession
 from app.models.import_job import ImportJob
 
 MAX_CSV_BYTES = 5 * 1024 * 1024
@@ -152,11 +157,204 @@ async def _analyze_contacts(
     return analyzed
 
 
+DATE_FORMATS = ("%Y-%m-%d", "%m/%d/%Y", "%d/%m/%Y", "%m/%d/%y", "%b %d, %Y")
+
+
+def _parse_date(value: str) -> date | None:
+    for fmt in DATE_FORMATS:
+        try:
+            return datetime.strptime(value.strip(), fmt).date()
+        except ValueError:
+            continue
+    return None
+
+
+def _parse_money(value: str) -> Decimal | None:
+    cleaned = value.replace("$", "").replace(",", "").strip()
+    if not cleaned:
+        return None
+    try:
+        return Decimal(cleaned).quantize(Decimal("0.01"))
+    except InvalidOperation:
+        return None
+
+
+def _validate_invoice(data: dict[str, str]) -> str | None:
+    if not data.get("contact_email"):
+        return "Missing client email"
+    if _parse_money(data.get("total", "")) is None:
+        return "Missing or unreadable amount"
+    if data.get("issue_date") and _parse_date(data["issue_date"]) is None:
+        return f"Unreadable invoice date: {data['issue_date']}"
+    if data.get("due_date") and _parse_date(data["due_date"]) is None:
+        return f"Unreadable due date: {data['due_date']}"
+    return None
+
+
+def _resolve_due_date(data: dict[str, str]) -> date:
+    """Due date from the CSV, else 30 days after the invoice date, else today."""
+    if data.get("due_date"):
+        parsed = _parse_date(data["due_date"])
+        if parsed:
+            return parsed
+    if data.get("issue_date"):
+        issued = _parse_date(data["issue_date"])
+        if issued:
+            return issued + timedelta(days=30)
+    return date.today()
+
+
+def _invoice_key(data: dict[str, str]) -> tuple:
+    """Natural key for a historical invoice: who, when due, how much."""
+    return (
+        data.get("contact_email", "").lower(),
+        str(_resolve_due_date(data)),
+        str(_parse_money(data.get("total", "")) or ""),
+    )
+
+
+async def _analyze_invoices(
+    db: AsyncSession,
+    rows: list[dict[str, str]],
+    mapping: dict[str, str],
+) -> list[dict[str, Any]]:
+    """Shared preview/commit analysis for invoice rows."""
+    seen: set[tuple] = set()
+    analyzed: list[dict[str, Any]] = []
+    for index, row in enumerate(rows):
+        data = _map_row(row, mapping)
+        error = _validate_invoice(data)
+        if error:
+            analyzed.append(
+                {"row_index": index, "outcome": "error", "data": data, "error": error}
+            )
+            continue
+        key = _invoice_key(data)
+        outcome = "create"
+        if key in seen:
+            outcome = "skip_duplicate"
+        else:
+            # The model has no issue_date, so dedupe on (client, due date, total)
+            total = _parse_money(data["total"])
+            due = _resolve_due_date(data)
+            existing = (
+                await db.execute(
+                    select(Invoice)
+                    .join(Contact, Invoice.contact_id == Contact.id)
+                    .where(
+                        Contact.email == data["contact_email"].lower(),
+                        Invoice.total == total,
+                        Invoice.due_date == due,
+                    )
+                )
+            ).scalars().first()
+            if existing is not None:
+                outcome = "skip_duplicate"
+        seen.add(key)
+        analyzed.append(
+            {"row_index": index, "outcome": outcome, "data": data, "error": None}
+        )
+    return analyzed
+
+
 def _counts(analyzed: list[dict[str, Any]]) -> dict[str, int]:
     counts = {"create": 0, "skip_duplicate": 0, "update_existing": 0, "error": 0}
     for item in analyzed:
         counts[item["outcome"]] = counts.get(item["outcome"], 0) + 1
     return counts
+
+
+SUPPORTED_ENTITIES = ("contacts", "invoices", "icf_sessions")
+
+DEFAULT_SESSION_HOURS = 1.0
+
+
+def _parse_hours(value: str) -> float | None:
+    """Accept "1.5", "1.5 hours", or "90" (minutes) for a session duration."""
+    cleaned = value.lower().replace("hours", "").replace("hour", "").replace(
+        "hrs", ""
+    ).replace("hr", "").strip()
+    if not cleaned:
+        return None
+    try:
+        hours = float(cleaned)
+    except ValueError:
+        return None
+    # A duration in whole minutes is the common alternative encoding.
+    if hours > 12:
+        hours = hours / 60
+    return round(hours, 2)
+
+
+def _validate_icf_session(data: dict[str, str]) -> str | None:
+    if not data.get("client_name"):
+        return "Missing client name"
+    if not data.get("session_date"):
+        return "Missing session date"
+    if _parse_date(data["session_date"]) is None:
+        return f"Unreadable session date: {data['session_date']}"
+    if data.get("duration_hours") and _parse_hours(data["duration_hours"]) is None:
+        return f"Unreadable duration: {data['duration_hours']}"
+    return None
+
+
+async def _analyze_icf_sessions(
+    db: AsyncSession,
+    rows: list[dict[str, str]],
+    mapping: dict[str, str],
+) -> list[dict[str, Any]]:
+    """Mirrors the ICF bulk-import dedupe rule: client + date + duration."""
+    seen: set[tuple] = set()
+    analyzed: list[dict[str, Any]] = []
+    for index, row in enumerate(rows):
+        data = _map_row(row, mapping)
+        error = _validate_icf_session(data)
+        if error:
+            analyzed.append(
+                {"row_index": index, "outcome": "error", "data": data, "error": error}
+            )
+            continue
+        session_date = _parse_date(data["session_date"])
+        hours = (
+            _parse_hours(data["duration_hours"])
+            if data.get("duration_hours")
+            else DEFAULT_SESSION_HOURS
+        )
+        key = (data["client_name"].lower(), str(session_date), hours)
+        outcome = "create"
+        if key in seen:
+            outcome = "skip_duplicate"
+        else:
+            existing = (
+                await db.execute(
+                    select(CoachingSession).where(
+                        func.lower(CoachingSession.client_name)
+                        == data["client_name"].lower(),
+                        CoachingSession.session_date == session_date,
+                        CoachingSession.duration_hours == hours,
+                    )
+                )
+            ).scalars().first()
+            if existing is not None:
+                outcome = "skip_duplicate"
+        seen.add(key)
+        analyzed.append(
+            {"row_index": index, "outcome": outcome, "data": data, "error": None}
+        )
+    return analyzed
+
+
+async def _analyze(
+    db: AsyncSession,
+    entity_type: str,
+    rows: list[dict[str, str]],
+    mapping: dict[str, str],
+) -> list[dict[str, Any]]:
+    if entity_type == "invoices":
+        return await _analyze_invoices(db, rows, mapping)
+    if entity_type == "icf_sessions":
+        return await _analyze_icf_sessions(db, rows, mapping)
+    return await _analyze_contacts(db, rows, mapping)
 
 
 def _resolve_mapping(
@@ -179,11 +377,11 @@ async def run_preview(
     mapping: dict[str, str] | None = None,
     dedupe_strategy: str = "skip",
 ) -> dict[str, Any]:
-    if entity_type != "contacts":
+    if entity_type not in SUPPORTED_ENTITIES:
         raise ValueError(f"Unsupported entity type: {entity_type}")
     headers, rows = parse_csv(csv_text)
     preset_name, effective_mapping = _resolve_mapping(headers, entity_type, mapping)
-    analyzed = await _analyze_contacts(db, rows, effective_mapping)
+    analyzed = await _analyze(db, entity_type, rows, effective_mapping)
     if dedupe_strategy == "update":
         for item in analyzed:
             if item["outcome"] == "skip_duplicate":
@@ -204,20 +402,24 @@ async def run_commit(
     dedupe_strategy: str = "skip",
     user_id: str | None = None,
 ) -> ImportJob:
-    if entity_type != "contacts":
+    if entity_type not in SUPPORTED_ENTITIES:
         raise ValueError(f"Unsupported entity type: {entity_type}")
     if dedupe_strategy not in ("skip", "update"):
         raise ValueError(f"Unknown dedupe strategy: {dedupe_strategy}")
     headers, rows = parse_csv(csv_text)
     preset_name, effective_mapping = _resolve_mapping(headers, entity_type, mapping)
-    analyzed = await _analyze_contacts(db, rows, effective_mapping)
+    analyzed = await _analyze(db, entity_type, rows, effective_mapping)
 
     source = f"import:{preset_name}"
     created_contacts: list[str] = []
     created_orgs: list[str] = []
+    created_invoices: list[str] = []
+    created_payments: list[str] = []
+    created_sessions: list[str] = []
     updated_count = 0
     skipped_count = 0
     orgs_by_name: dict[str, Organization] = {}
+    contacts_by_email: dict[str, Contact] = {}
 
     async def get_or_create_org(name: str) -> Organization:
         if name in orgs_by_name:
@@ -233,7 +435,130 @@ async def run_commit(
         orgs_by_name[name] = existing
         return existing
 
-    for item in analyzed:
+    async def get_or_create_contact(email: str, name: str | None) -> Contact:
+        """Invoices reference a client; create a minimal contact if unknown."""
+        key = email.lower()
+        if key in contacts_by_email:
+            return contacts_by_email[key]
+        existing = (
+            await db.execute(select(Contact).where(Contact.email == key))
+        ).scalars().first()
+        if existing is None:
+            first, last = _split_full_name(name or key.split("@")[0])
+            existing = Contact(
+                first_name=first, last_name=last, email=key, source=source
+            )
+            db.add(existing)
+            await db.flush()
+            created_contacts.append(existing.id)
+        contacts_by_email[key] = existing
+        return existing
+
+    if entity_type == "invoices":
+        # Allocate invoice numbers locally: invoice_service.generate_invoice_number
+        # re-queries committed rows, so calling it per row in one transaction
+        # would hand out the same number repeatedly.
+        year = date.today().year
+        prefix = f"IMP-{year}-"
+        last = (
+            await db.execute(
+                select(Invoice.invoice_number)
+                .where(Invoice.invoice_number.like(f"{prefix}%"))
+                .order_by(Invoice.invoice_number.desc())
+                .limit(1)
+            )
+        ).scalar_one_or_none()
+        next_seq = 1
+        if last:
+            try:
+                next_seq = int(last.split("-")[-1]) + 1
+            except ValueError:
+                next_seq = 1
+
+        for item in analyzed:
+            data = item["data"]
+            if item["outcome"] != "create":
+                if item["outcome"] == "skip_duplicate":
+                    skipped_count += 1
+                continue
+
+            contact = await get_or_create_contact(
+                data["contact_email"], data.get("contact_name")
+            )
+            total = _parse_money(data["total"]) or Decimal("0.00")
+            amount_paid = _parse_money(data.get("amount_paid", "")) or Decimal("0.00")
+            due = _resolve_due_date(data)
+            description = data.get("description") or "Imported invoice"
+
+            invoice = Invoice(
+                invoice_number=f"{prefix}{next_seq:04d}",
+                contact_id=contact.id,
+                organization_id=contact.organization_id,
+                line_items=[
+                    {
+                        "description": description,
+                        "quantity": 1,
+                        "unit_price": float(total),
+                        "amount": float(total),
+                    }
+                ],
+                subtotal=total,
+                total=total,
+                amount_paid=amount_paid,
+                balance_due=total - amount_paid,
+                due_date=due,
+                status="paid" if amount_paid >= total and total > 0 else "sent",
+                notes=data.get("notes") or f"Imported from {preset_name}",
+            )
+            if invoice.status == "paid":
+                invoice.paid_at = datetime.utcnow()
+            next_seq += 1
+            db.add(invoice)
+            await db.flush()
+            created_invoices.append(invoice.id)
+
+            if amount_paid > 0:
+                payment = Payment(
+                    invoice_id=invoice.id,
+                    amount=amount_paid,
+                    payment_method="other",
+                    payment_date=due,
+                    status="completed",
+                    reference=f"import:{invoice.invoice_number}",
+                    notes="Historical payment recorded during migration",
+                )
+                db.add(payment)
+                await db.flush()
+                created_payments.append(payment.id)
+
+    if entity_type == "icf_sessions":
+        for item in analyzed:
+            data = item["data"]
+            if item["outcome"] != "create":
+                if item["outcome"] == "skip_duplicate":
+                    skipped_count += 1
+                continue
+
+            session = CoachingSession(
+                client_name=data["client_name"],
+                client_email=data.get("client_email"),
+                session_date=_parse_date(data["session_date"]),
+                duration_hours=(
+                    _parse_hours(data["duration_hours"])
+                    if data.get("duration_hours")
+                    else DEFAULT_SESSION_HOURS
+                ),
+                session_type=data.get("session_type") or "individual",
+                payment_type=data.get("payment_type") or "paid",
+                source=preset_name if preset_name != "custom" else "manual",
+                notes=data.get("notes"),
+                meeting_title=data.get("meeting_title"),
+            )
+            db.add(session)
+            await db.flush()
+            created_sessions.append(session.id)
+
+    for item in analyzed if entity_type == "contacts" else []:
         data = item["data"]
         if item["outcome"] == "error":
             continue
@@ -274,16 +599,27 @@ async def run_commit(
         await db.flush()
         created_contacts.append(contact.id)
 
+    created_by_entity = {
+        "invoices": len(created_invoices),
+        "icf_sessions": len(created_sessions),
+    }
+    created_count = created_by_entity.get(entity_type, len(created_contacts))
     job = ImportJob(
         source=preset_name,
         entity_type=entity_type,
         status="committed",
         total_rows=len(rows),
-        created_count=len(created_contacts),
+        created_count=created_count,
         skipped_count=skipped_count,
         updated_count=updated_count,
         error_count=_counts(analyzed)["error"],
-        created_ids={"contacts": created_contacts, "organizations": created_orgs},
+        created_ids={
+            "contacts": created_contacts,
+            "organizations": created_orgs,
+            "invoices": created_invoices,
+            "payments": created_payments,
+            "icf_sessions": created_sessions,
+        },
         row_errors=[
             {"row": item["row_index"], "error": item["error"]}
             for item in analyzed
@@ -306,14 +642,76 @@ async def run_undo(db: AsyncSession, job_id: str) -> dict[str, Any]:
     if job.status != "committed":
         raise ValueError("Import job has already been undone")
 
-    undone = {"contacts": 0, "organizations": 0}
+    undone = {
+        "contacts": 0,
+        "organizations": 0,
+        "invoices": 0,
+        "payments": 0,
+        "icf_sessions": 0,
+    }
     skipped: list[str] = []
+
+    # Invoices first: contacts created by the same job can only be removed once
+    # nothing references them. Payments cascade from their invoice, so count
+    # them here and let the delete take them.
+    for session_id in job.created_ids.get("icf_sessions", []):
+        session = (
+            await db.execute(
+                select(CoachingSession).where(CoachingSession.id == session_id)
+            )
+        ).scalar_one_or_none()
+        if session is None:
+            continue
+        await db.delete(session)
+        undone["icf_sessions"] += 1
+    await db.flush()
+
+    for payment_id in job.created_ids.get("payments", []):
+        payment = (
+            await db.execute(select(Payment).where(Payment.id == payment_id))
+        ).scalar_one_or_none()
+        if payment is None:
+            continue
+        await db.delete(payment)
+        undone["payments"] += 1
+    await db.flush()
+
+    for invoice_id in job.created_ids.get("invoices", []):
+        invoice = (
+            await db.execute(select(Invoice).where(Invoice.id == invoice_id))
+        ).scalar_one_or_none()
+        if invoice is None:
+            continue
+        # A payment recorded after the import means this invoice is live now.
+        later_payments = (
+            await db.execute(
+                select(Payment).where(Payment.invoice_id == invoice_id)
+            )
+        ).scalars().first()
+        if later_payments is not None:
+            skipped.append(
+                f"invoice {invoice.invoice_number} has payments recorded since import"
+            )
+            continue
+        await db.delete(invoice)
+        undone["invoices"] += 1
+    await db.flush()
 
     for contact_id in job.created_ids.get("contacts", []):
         contact = (
             await db.execute(select(Contact).where(Contact.id == contact_id))
         ).scalar_one_or_none()
         if contact is None:
+            continue
+        remaining_invoices = (
+            await db.execute(
+                select(Invoice).where(Invoice.contact_id == contact_id)
+            )
+        ).scalars().first()
+        if remaining_invoices is not None:
+            skipped.append(
+                f"contact {contact.email or contact.first_name} still has invoices"
+            )
             continue
         await db.delete(contact)
         undone["contacts"] += 1
