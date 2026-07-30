@@ -4,7 +4,7 @@ from sqlalchemy import select, func
 from sqlalchemy.orm import selectinload
 
 from app.database import get_db
-from app.services.auth_service import require_admin
+from app.services.auth_service import require_staff
 from app.models.user import User
 from app.models.contact import Contact
 from app.models.organization import Organization
@@ -28,7 +28,7 @@ async def list_contacts(
     coaching_type: str | None = None,
     organization_id: str | None = None,
     db: AsyncSession = Depends(get_db),
-    current_user: User = Depends(require_admin),
+    current_user: User = Depends(require_staff),
 ):
     """List all contacts with pagination and filters."""
     query = select(Contact)
@@ -68,7 +68,7 @@ async def list_contacts(
 async def create_contact(
     contact_data: ContactCreate,
     db: AsyncSession = Depends(get_db),
-    current_user: User = Depends(require_admin),
+    current_user: User = Depends(require_staff),
 ):
     """Create a new contact."""
     # Validate organization exists if provided
@@ -93,7 +93,7 @@ async def create_contact(
 async def get_contact(
     contact_id: str,
     db: AsyncSession = Depends(get_db),
-    current_user: User = Depends(require_admin),
+    current_user: User = Depends(require_staff),
 ):
     """Get a single contact by ID with organization info."""
     result = await db.execute(
@@ -117,7 +117,7 @@ async def update_contact(
     contact_id: str,
     update_data: ContactUpdate,
     db: AsyncSession = Depends(get_db),
-    current_user: User = Depends(require_admin),
+    current_user: User = Depends(require_staff),
 ):
     """Update a contact."""
     result = await db.execute(select(Contact).where(Contact.id == contact_id))
@@ -153,7 +153,7 @@ async def update_contact(
 async def delete_contact(
     contact_id: str,
     db: AsyncSession = Depends(get_db),
-    current_user: User = Depends(require_admin),
+    current_user: User = Depends(require_staff),
 ):
     """Delete a contact."""
     result = await db.execute(select(Contact).where(Contact.id == contact_id))

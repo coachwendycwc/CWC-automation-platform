@@ -4,6 +4,7 @@ import { useState } from "react";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
+import { TaskDetailDialog } from "@/components/projects/TaskDetailDialog";
 import { Input } from "@/components/ui/input";
 import { tasksApi } from "@/lib/api";
 import { formatDate } from "@/lib/utils";
@@ -24,6 +25,8 @@ interface Task {
   status: string;
   priority: string;
   assigned_to: string | null;
+  assignee_id?: string | null;
+  assignee_name?: string | null;
   due_date: string | null;
   completed_at: string | null;
   estimated_hours: number | null;
@@ -56,6 +59,7 @@ export function TaskKanbanView({ projectId, tasks, onTasksChange }: TaskKanbanVi
   const [newTaskTitle, setNewTaskTitle] = useState("");
   const [addingToColumn, setAddingToColumn] = useState<string | null>(null);
   const [draggedTask, setDraggedTask] = useState<Task | null>(null);
+  const [detailTaskId, setDetailTaskId] = useState<string | null>(null);
 
   const getTasksByStatus = (status: string) => {
     return tasks
@@ -218,6 +222,7 @@ export function TaskKanbanView({ projectId, tasks, onTasksChange }: TaskKanbanVi
                   } ${draggedTask?.id === task.id ? "opacity-50" : ""}`}
                   draggable
                   onDragStart={(e) => handleDragStart(e, task)}
+                  onClick={() => setDetailTaskId(task.id)}
                 >
                   <div className="flex items-start justify-between gap-2">
                     <div className="flex-1 min-w-0">
@@ -232,7 +237,10 @@ export function TaskKanbanView({ projectId, tasks, onTasksChange }: TaskKanbanVi
                       variant="ghost"
                       size="sm"
                       className="h-6 w-6 p-0 opacity-0 group-hover:opacity-100 cursor-pointer"
-                      onClick={() => handleDeleteTask(task.id)}
+                      onClick={(e) => {
+                        e.stopPropagation();
+                        handleDeleteTask(task.id);
+                      }}
                     >
                       <Trash2 className="h-3 w-3 text-muted-foreground hover:text-destructive" />
                     </Button>
@@ -248,10 +256,10 @@ export function TaskKanbanView({ projectId, tasks, onTasksChange }: TaskKanbanVi
                       </span>
                     )}
 
-                    {task.assigned_to && (
+                    {(task.assignee_name || task.assigned_to) && (
                       <span className="text-xs text-muted-foreground flex items-center gap-1">
                         <User className="h-3 w-3" />
-                        {task.assigned_to}
+                        {task.assignee_name || task.assigned_to}
                       </span>
                     )}
 
@@ -273,6 +281,13 @@ export function TaskKanbanView({ projectId, tasks, onTasksChange }: TaskKanbanVi
           </div>
         );
       })}
+
+      <TaskDetailDialog
+        taskId={detailTaskId}
+        open={detailTaskId !== null}
+        onOpenChange={(open) => !open && setDetailTaskId(null)}
+        onChange={onTasksChange}
+      />
     </div>
   );
 }

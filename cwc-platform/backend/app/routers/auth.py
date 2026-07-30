@@ -46,7 +46,7 @@ class RegisterRequest(BaseModel):
 
 class InviteCreateRequest(BaseModel):
     email: EmailStr
-    role: Literal["admin", "user"] = "user"
+    role: Literal["admin", "assistant", "user"] = "user"
 
 
 class InviteResponse(BaseModel):

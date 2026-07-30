@@ -3,11 +3,37 @@ from sqlalchemy.ext.asyncio import AsyncSession
 from sqlalchemy import select
 
 from app.database import get_db
-from app.services.auth_service import get_current_user
+from app.services.auth_service import get_current_user, require_staff, STAFF_ROLES
 from app.models.user import User
 from app.schemas.user import UserResponse, UserUpdate
 
 router = APIRouter(prefix="/users", tags=["Users"])
+
+
+@router.get("/staff")
+async def list_staff(
+    db: AsyncSession = Depends(get_db),
+    current_user: User = Depends(require_staff),
+) -> list[dict]:
+    """Who work can be assigned to, and who can be @mentioned.
+
+    Active staff only — a deactivated assistant shouldn't keep appearing in
+    assignee pickers.
+    """
+    result = await db.execute(
+        select(User)
+        .where(User.role.in_(STAFF_ROLES), User.is_active.is_(True))
+        .order_by(User.name)
+    )
+    return [
+        {
+            "id": user.id,
+            "name": user.name or user.email,
+            "email": user.email,
+            "role": user.role,
+        }
+        for user in result.scalars().all()
+    ]
 
 
 @router.get("/me", response_model=UserResponse)

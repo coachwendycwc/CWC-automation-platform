@@ -2917,3 +2917,94 @@ export interface ImportJob {
   row_errors: { row: number; error: string }[];
   created_at: string | null;
 }
+
+// Team workspace: My Tasks, comments, notifications
+export interface MyTask {
+  id: string;
+  task_number: string;
+  project_id: string;
+  title: string;
+  status: string;
+  priority: string;
+  due_date: string | null;
+  assignee_id: string | null;
+  assignee_name: string | null;
+}
+
+export interface TaskComment {
+  id: string;
+  task_id: string;
+  body: string;
+  author_id: string;
+  author_name: string;
+  created_at: string | null;
+}
+
+export interface AppNotification {
+  id: string;
+  kind: string;
+  message: string;
+  task_id: string | null;
+  read: boolean;
+  created_at: string | null;
+}
+
+export const workspaceApi = {
+  myTasks: (token: string) =>
+    fetchApi<Record<string, MyTask[]>>("/api/tasks/my-tasks", { token }),
+
+  listComments: (token: string, taskId: string) =>
+    fetchApi<TaskComment[]>(`/api/tasks/${taskId}/comments`, { token }),
+
+  addComment: (token: string, taskId: string, body: string) =>
+    fetchApi<TaskComment>(`/api/tasks/${taskId}/comments`, {
+      method: "POST",
+      token,
+      body: JSON.stringify({ body }),
+    }),
+
+  assign: (token: string, taskId: string, assigneeId: string | null) =>
+    fetchApi<any>(`/api/tasks/${taskId}`, {
+      method: "PUT",
+      token,
+      body: JSON.stringify({ assignee_id: assigneeId }),
+    }),
+
+  setStatus: (token: string, taskId: string, status: string) =>
+    fetchApi<any>(`/api/tasks/${taskId}`, {
+      method: "PUT",
+      token,
+      body: JSON.stringify({ status }),
+    }),
+};
+
+export const notificationsApi = {
+  list: (token: string) =>
+    fetchApi<{ unread_count: number; items: AppNotification[] }>(
+      "/api/notifications",
+      { token }
+    ),
+
+  markRead: (token: string, id: string) =>
+    fetchApi<{ id: string; read: boolean }>(`/api/notifications/${id}/read`, {
+      method: "POST",
+      token,
+    }),
+
+  markAllRead: (token: string) =>
+    fetchApi<{ marked_read: number }>("/api/notifications/read-all", {
+      method: "POST",
+      token,
+    }),
+};
+
+export interface StaffMember {
+  id: string;
+  name: string;
+  email: string;
+  role: string;
+}
+
+export const staffApi = {
+  list: (token: string) => fetchApi<StaffMember[]>("/api/users/staff", { token }),
+};
