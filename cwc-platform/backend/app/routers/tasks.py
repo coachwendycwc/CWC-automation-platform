@@ -3,6 +3,8 @@ Task management router.
 """
 from datetime import date, datetime
 from typing import Optional
+import logging
+import os
 import re
 import uuid
 
@@ -33,6 +35,9 @@ from app.schemas.project import (
     TimeEntryRead,
 )
 from app.services.project_service import ProjectService
+from app.services.email_service import email_service
+
+logger = logging.getLogger(__name__)
 
 router = APIRouter(
     prefix="/api",
@@ -205,8 +210,13 @@ async def notify(
     message: str,
     task_id: str | None = None,
     actor_id: str | None = None,
+    recipient: User | None = None,
+    actor_name: str | None = None,
+    task_title: str | None = None,
+    comment_body: str | None = None,
 ) -> None:
-    """Record an in-app notice. Never notifies someone about their own action."""
+    """Record an in-app notice, and email it so it reaches someone who isn't
+    currently looking at CWC. Never notifies someone about their own action."""
     if actor_id and user_id == actor_id:
         return
     db.add(
@@ -218,6 +228,26 @@ async def notify(
             actor_id=actor_id,
         )
     )
+
+    # Email is best effort: a dead SMTP server must never cost us the comment
+    # or the assignment that triggered this.
+    if recipient is None or not recipient.email:
+        return
+    try:
+        frontend_url = os.getenv("FRONTEND_URL", "http://localhost:3001")
+        await email_service.send_task_notification(
+            to_email=recipient.email,
+            actor_name=actor_name or "A teammate",
+            kind=kind,
+            task_title=task_title or "a task",
+            task_url=f"{frontend_url}/my-tasks",
+            comment_body=comment_body,
+        )
+    except Exception:
+        logger.warning(
+            "Could not email %s notification to %s", kind, recipient.email,
+            exc_info=True,
+        )
 
 
 class CommentCreate(BaseModel):
@@ -263,6 +293,10 @@ async def create_task_comment(
             message=f"{current_user.name or current_user.email} mentioned you on {task.title}",
             task_id=task_id,
             actor_id=current_user.id,
+            recipient=mentioned,
+            actor_name=current_user.name or current_user.email,
+            task_title=task.title,
+            comment_body=data.body,
         )
 
     await db.commit()
@@ -387,6 +421,9 @@ async def update_task(
 
     # Tell someone when work lands on their plate
     if task.assignee_id and task.assignee_id != old_assignee_id:
+        assignee = (
+            await db.execute(select(User).where(User.id == task.assignee_id))
+        ).scalar_one_or_none()
         await notify(
             db,
             user_id=task.assignee_id,
@@ -394,6 +431,9 @@ async def update_task(
             message=f"{current_user.name or current_user.email} assigned you {task.title}",
             task_id=task.id,
             actor_id=current_user.id,
+            recipient=assignee,
+            actor_name=current_user.name or current_user.email,
+            task_title=task.title,
         )
 
     # Handle status change to completed
