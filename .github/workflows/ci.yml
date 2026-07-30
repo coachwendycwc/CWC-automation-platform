@@ -1,0 +1,102 @@
+name: CI
+
+on:
+  pull_request:
+  push:
+    branches: [main]
+
+jobs:
+  tests:
+    name: Backend tests
+    runs-on: ubuntu-latest
+    defaults:
+      run:
+        working-directory: cwc-platform/backend
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+          cache: pip
+      - name: Install dependencies
+        run: pip install -r requirements.txt
+      - name: Run test suite
+        run: pytest tests/ --timeout=60 --timeout-method=thread -q
+
+  migrations:
+    name: Migrations build a database from scratch
+    runs-on: ubuntu-latest
+    defaults:
+      run:
+        working-directory: cwc-platform/backend
+    # Production runs Postgres. SQLite silently tolerates schema changes that
+    # Postgres rejects, so this check is worthless on anything else.
+    services:
+      postgres:
+        image: postgres:15-alpine
+        env:
+          POSTGRES_USER: postgres
+          POSTGRES_PASSWORD: postgres
+          POSTGRES_DB: cwc_ci
+        ports: ["5432:5432"]
+        options: >-
+          --health-cmd pg_isready
+          --health-interval 10s
+          --health-timeout 5s
+          --health-retries 5
+    env:
+      DATABASE_URL: postgresql+asyncpg://postgres:postgres@localhost:5432/cwc_ci
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+          cache: pip
+      - name: Install dependencies
+        run: pip install -r requirements.txt
+
+      # The check that would have caught 18 tables having no migration for
+      # months: can the chain build a working database from nothing?
+      - name: alembic upgrade head on an empty database
+        run: alembic upgrade head
+
+      # And does the result actually match the models? A migration that runs
+      # but produces the wrong schema is worse than one that fails loudly.
+      - name: Schema matches the models
+        run: |
+          python - <<'PY'
+          import subprocess, app.models
+          from app.database import Base
+          rows = subprocess.run(
+              ["psql", "postgresql://postgres:postgres@localhost:5432/cwc_ci", "-tAc",
+               "SELECT table_name FROM information_schema.tables WHERE table_schema='public'"],
+              capture_output=True, text=True, check=True).stdout.split()
+          db = set(rows) - {"alembic_version"}
+          models = set(Base.metadata.tables)
+          missing = sorted(models - db)
+          if missing:
+              raise SystemExit(
+                  "These tables exist in the models but no migration creates them:\n  "
+                  + "\n  ".join(missing)
+                  + "\n\nAdd a migration. Do not fix this with create_all."
+              )
+          print(f"OK: {len(models)} model tables, all built by migrations")
+          PY
+
+  frontend:
+    name: Frontend typecheck
+    runs-on: ubuntu-latest
+    defaults:
+      run:
+        working-directory: cwc-platform/frontend
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: "20"
+          cache: npm
+          cache-dependency-path: cwc-platform/frontend/package-lock.json
+      - name: Install dependencies
+        run: npm ci
+      - name: Typecheck
+        run: npx tsc --noEmit

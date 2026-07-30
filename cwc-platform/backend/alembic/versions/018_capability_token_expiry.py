@@ -26,15 +26,27 @@ branch_labels: Union[str, Sequence[str], None] = None
 depends_on: Union[str, Sequence[str], None] = None
 
 
+
+def _column_exists(table: str, column: str) -> bool:
+    """Databases built by create_all before schema was migration-managed
+    already have some of these columns; adding them again would fail."""
+    insp = sa.inspect(op.get_bind())
+    if table not in insp.get_table_names():
+        return False
+    return column in {c["name"] for c in insp.get_columns(table)}
+
+
 def upgrade() -> None:
-    with op.batch_alter_table("invoices") as batch_op:
-        batch_op.add_column(
-            sa.Column("view_token_expires_at", sa.DateTime(), nullable=True)
-        )
-    with op.batch_alter_table("testimonials") as batch_op:
-        batch_op.add_column(
-            sa.Column("request_token_expires_at", sa.DateTime(), nullable=True)
-        )
+    if not _column_exists("invoices", "view_token_expires_at"):
+        with op.batch_alter_table("invoices") as batch_op:
+            batch_op.add_column(
+                sa.Column("view_token_expires_at", sa.DateTime(), nullable=True)
+            )
+    if not _column_exists("testimonials", "request_token_expires_at"):
+        with op.batch_alter_table("testimonials") as batch_op:
+            batch_op.add_column(
+                sa.Column("request_token_expires_at", sa.DateTime(), nullable=True)
+            )
 
     # Backfill: give live links a generous window from today rather than
     # breaking anything already sitting in a client's inbox. Dates are computed

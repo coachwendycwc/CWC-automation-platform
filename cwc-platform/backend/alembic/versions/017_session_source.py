@@ -22,7 +22,19 @@ branch_labels: Union[str, Sequence[str], None] = None
 depends_on: Union[str, Sequence[str], None] = None
 
 
+
+def _column_exists(table: str, column: str) -> bool:
+    """Databases built by create_all before schema was migration-managed
+    already have some of these columns; adding them again would fail."""
+    insp = sa.inspect(op.get_bind())
+    if table not in insp.get_table_names():
+        return False
+    return column in {c["name"] for c in insp.get_columns(table)}
+
+
 def upgrade() -> None:
+    if _column_exists("fathom_webhooks", "source"):
+        return
     with op.batch_alter_table("fathom_webhooks") as batch_op:
         batch_op.add_column(
             sa.Column(

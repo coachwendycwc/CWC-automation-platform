@@ -19,19 +19,33 @@ import sqlalchemy as sa
 
 # revision identifiers, used by Alembic.
 revision: str = "012"
-down_revision: Union[str, None] = "011"
+down_revision: Union[str, None] = "011a"
 branch_labels: Union[str, Sequence[str], None] = None
 depends_on: Union[str, Sequence[str], None] = None
+
+
+def _columns(table: str) -> set[str]:
+    return {c["name"] for c in sa.inspect(op.get_bind()).get_columns(table)}
 
 
 def upgrade() -> None:
     from app.services.field_encryption import encrypt_value
 
+    # Databases built by create_all before the schema was migration-managed
+    # already have the encrypted column and may already have lost the plaintext
+    # one. Each step is therefore conditional, so this runs cleanly on both a
+    # fresh database and a create_all-era one.
+    existing = _columns("contractors")
+
     # 1. Add the ciphertext column (nullable so the add succeeds before backfill).
-    with op.batch_alter_table("contractors") as batch_op:
-        batch_op.add_column(
-            sa.Column("tax_id_encrypted", sa.String(255), nullable=True)
-        )
+    if "tax_id_encrypted" not in existing:
+        with op.batch_alter_table("contractors") as batch_op:
+            batch_op.add_column(
+                sa.Column("tax_id_encrypted", sa.String(255), nullable=True)
+            )
+
+    if "tax_id" not in existing:
+        return  # nothing to migrate: plaintext column is already gone
 
     # 2. Encrypt existing plaintext values in place.
     conn = op.get_bind()
