@@ -40,6 +40,17 @@ async def view_invoice(
     if invoice.status == "cancelled":
         raise HTTPException(status_code=410, detail="Invoice has been cancelled")
 
+    # A pay link is a bearer credential sitting in an inbox; stop honouring it
+    # once its window has passed. NULL = legacy row, still works.
+    if (
+        invoice.view_token_expires_at is not None
+        and invoice.view_token_expires_at < datetime.now()
+    ):
+        raise HTTPException(
+            status_code=410,
+            detail="This payment link has expired. Contact us for a new one.",
+        )
+
     # Mark as viewed on first access
     if invoice.status == "sent" and invoice.viewed_at is None:
         invoice.status = "viewed"
