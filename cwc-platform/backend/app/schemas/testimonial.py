@@ -62,6 +62,7 @@ class TestimonialResponse(TestimonialBase):
 
     # Request tracking
     request_token: str
+    request_token_expires_at: Optional[datetime] = None
     request_sent_at: Optional[datetime] = None
     submitted_at: Optional[datetime] = None
     reviewed_at: Optional[datetime] = None

@@ -1,6 +1,6 @@
 import uuid
 import secrets
-from datetime import datetime, date
+from datetime import datetime, date, timedelta
 from decimal import Decimal
 from typing import TYPE_CHECKING
 
@@ -82,6 +82,14 @@ class Invoice(Base):
     # Tokens for public access
     view_token: Mapped[str] = mapped_column(
         String(64), nullable=False, unique=True, default=lambda: secrets.token_urlsafe(32)
+    )
+    # A pay link lives in an inbox indefinitely. One year is deliberately long:
+    # invoices get paid late, and an expired link a client should have been able
+    # to use is a support call. NULL (legacy rows) still works.
+    view_token_expires_at: Mapped[datetime | None] = mapped_column(
+        DateTime,
+        nullable=True,
+        default=lambda: datetime.utcnow() + timedelta(days=365),
     )
 
     # Notes

@@ -1,7 +1,7 @@
 """Testimonial model for video testimonials."""
 import uuid
 import secrets
-from datetime import datetime
+from datetime import datetime, timedelta
 from typing import Optional, TYPE_CHECKING
 
 from sqlalchemy import String, Text, Integer, Boolean, DateTime, ForeignKey
@@ -67,6 +67,14 @@ class Testimonial(Base):
     # Request tracking
     request_token: Mapped[str] = mapped_column(
         String(64), unique=True, default=generate_request_token
+    )
+    # A recording link sits in an inbox indefinitely; bound how long it works.
+    # 90 days is generous — clients often record weeks after being asked.
+    # NULL means "no expiry recorded" (legacy rows) and still works.
+    request_token_expires_at: Mapped[Optional[datetime]] = mapped_column(
+        DateTime,
+        nullable=True,
+        default=lambda: datetime.utcnow() + timedelta(days=90),
     )
     request_sent_at: Mapped[Optional[datetime]] = mapped_column(DateTime, nullable=True)
     submitted_at: Mapped[Optional[datetime]] = mapped_column(DateTime, nullable=True)
