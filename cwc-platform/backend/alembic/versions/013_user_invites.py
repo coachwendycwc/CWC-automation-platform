@@ -23,9 +23,28 @@ branch_labels: Union[str, Sequence[str], None] = None
 depends_on: Union[str, Sequence[str], None] = None
 
 
+def _table_exists(name: str) -> bool:
+    return name in sa.inspect(op.get_bind()).get_table_names()
+
+
+def _column_exists(table: str, column: str) -> bool:
+    insp = sa.inspect(op.get_bind())
+    if table not in insp.get_table_names():
+        return False
+    return column in {c["name"] for c in insp.get_columns(table)}
+
+
+def _index_exists(table: str, name: str) -> bool:
+    insp = sa.inspect(op.get_bind())
+    if table not in insp.get_table_names():
+        return False
+    return name in {i["name"] for i in insp.get_indexes(table)}
+
+
 def upgrade() -> None:
-    op.create_table(
-        "user_invites",
+    if not _table_exists("user_invites"):
+        op.create_table(
+            "user_invites",
         sa.Column("id", sa.String(36), primary_key=True),
         sa.Column("email", sa.String(255), nullable=False),
         sa.Column("role", sa.String(20), nullable=False, server_default="user"),
@@ -37,8 +56,12 @@ def upgrade() -> None:
             "created_at", sa.DateTime(), server_default=sa.func.now(), nullable=True
         ),
     )
-    op.create_index("ix_user_invites_email", "user_invites", ["email"])
-    op.create_index("ix_user_invites_token", "user_invites", ["token"], unique=True)
+    if not _index_exists("user_invites", "ix_user_invites_email"):
+        op.create_index(
+            "ix_user_invites_email", "user_invites", ["email"])
+    if not _index_exists("user_invites", "ix_user_invites_token"):
+        op.create_index(
+            "ix_user_invites_token", "user_invites", ["token"], unique=True)
 
 
 def downgrade() -> None:

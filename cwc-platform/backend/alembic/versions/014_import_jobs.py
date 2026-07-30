@@ -18,9 +18,28 @@ branch_labels: Union[str, Sequence[str], None] = None
 depends_on: Union[str, Sequence[str], None] = None
 
 
+def _table_exists(name: str) -> bool:
+    return name in sa.inspect(op.get_bind()).get_table_names()
+
+
+def _column_exists(table: str, column: str) -> bool:
+    insp = sa.inspect(op.get_bind())
+    if table not in insp.get_table_names():
+        return False
+    return column in {c["name"] for c in insp.get_columns(table)}
+
+
+def _index_exists(table: str, name: str) -> bool:
+    insp = sa.inspect(op.get_bind())
+    if table not in insp.get_table_names():
+        return False
+    return name in {i["name"] for i in insp.get_indexes(table)}
+
+
 def upgrade() -> None:
-    op.create_table(
-        "import_jobs",
+    if not _table_exists("import_jobs"):
+        op.create_table(
+            "import_jobs",
         sa.Column("id", sa.String(36), primary_key=True),
         sa.Column("source", sa.String(50), nullable=False, server_default="custom"),
         sa.Column("entity_type", sa.String(30), nullable=False),
