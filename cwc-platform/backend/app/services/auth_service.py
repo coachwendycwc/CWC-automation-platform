@@ -57,10 +57,48 @@ def decode_token(token: str) -> dict:
         )
 
 
+def _is_truthy(value) -> bool:
+    """Google returns email_verified as a JSON bool or the string "true"."""
+    return value is True or (isinstance(value, str) and value.lower() == "true")
+
+
 async def verify_google_token(access_token: str) -> dict:
-    """Verify Google OAuth token and get user info."""
+    """Verify a Google OAuth token belongs to THIS app, then get user info.
+
+    The audience check is what stops a confused-deputy attack: without it, an
+    access token minted for any other Google OAuth client would authenticate
+    here as that token's user. email_verified must also hold before the email
+    is trusted, because get_or_create_user links accounts by email.
+    """
     async with httpx.AsyncClient() as client:
-        # Get user info from Google
+        # 1. Token introspection: who issued this token, and for which client?
+        token_info_response = await client.get(
+            GOOGLE_TOKEN_INFO_URL,
+            params={"access_token": access_token},
+        )
+        if token_info_response.status_code != 200:
+            raise HTTPException(
+                status_code=status.HTTP_401_UNAUTHORIZED,
+                detail="Invalid Google token",
+            )
+        token_info = token_info_response.json()
+
+        expected_client_id = settings.google_client_id
+        if token_info.get("aud") != expected_client_id and token_info.get(
+            "azp"
+        ) != expected_client_id:
+            raise HTTPException(
+                status_code=status.HTTP_401_UNAUTHORIZED,
+                detail="Invalid Google token",
+            )
+
+        if not _is_truthy(token_info.get("email_verified")):
+            raise HTTPException(
+                status_code=status.HTTP_401_UNAUTHORIZED,
+                detail="Google account email is not verified",
+            )
+
+        # 2. Profile details for the account record
         response = await client.get(
             GOOGLE_USERINFO_URL,
             headers={"Authorization": f"Bearer {access_token}"},
@@ -70,13 +108,27 @@ async def verify_google_token(access_token: str) -> dict:
                 status_code=status.HTTP_401_UNAUTHORIZED,
                 detail="Invalid Google token",
             )
-        return response.json()
+        google_user = response.json()
+        # Carry the introspected verification forward so account linking can
+        # re-check it independently of which endpoint supplied the profile.
+        google_user["email_verified"] = True
+        return google_user
 
 
 async def get_or_create_user(db: AsyncSession, google_user: dict) -> User:
     """Get existing user or create new one from Google OAuth data."""
     google_id = google_user.get("id")
     email = google_user.get("email")
+
+    # Defense in depth: the email drives account lookup and linking below, so
+    # refuse to act on one Google never confirmed the user owns.
+    if not _is_truthy(google_user.get("email_verified")) and not _is_truthy(
+        google_user.get("verified_email")
+    ):
+        raise HTTPException(
+            status_code=status.HTTP_401_UNAUTHORIZED,
+            detail="Google account email is not verified",
+        )
 
     # Try to find by google_id first
     result = await db.execute(select(User).where(User.google_id == google_id))

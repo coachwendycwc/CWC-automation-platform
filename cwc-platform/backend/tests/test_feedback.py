@@ -73,14 +73,14 @@ class TestSubmitSurvey:
 
 
 class TestGetTestimonialRequest:
-    """Tests for GET /api/testimonial/{token}"""
+    """Tests for GET /api/offboarding-testimonial/{token}"""
 
     async def test_get_testimonial_request(
         self, client: AsyncClient, test_offboarding_workflow
     ):
         """Get testimonial request by token (public endpoint)."""
         response = await client.get(
-            f"/api/testimonial/{test_offboarding_workflow.testimonial_token}"
+            f"/api/offboarding-testimonial/{test_offboarding_workflow.testimonial_token}"
         )
         assert response.status_code == 200
         data = response.json()
@@ -91,12 +91,12 @@ class TestGetTestimonialRequest:
 
     async def test_get_testimonial_request_invalid_token(self, client: AsyncClient):
         """Get testimonial request with invalid token returns 404."""
-        response = await client.get("/api/testimonial/invalid-token-123")
+        response = await client.get("/api/offboarding-testimonial/invalid-token-123")
         assert response.status_code == 404
 
 
 class TestSubmitTestimonial:
-    """Tests for POST /api/testimonial/{token}"""
+    """Tests for POST /api/offboarding-testimonial/{token}"""
 
     @pytest.mark.skip(reason="Service bug: uses allow_public_use but schema has permission_granted")
     async def test_submit_testimonial(
@@ -110,7 +110,7 @@ class TestSubmitTestimonial:
             "permission_granted": True,
         }
         response = await client.post(
-            f"/api/testimonial/{test_offboarding_workflow.testimonial_token}",
+            f"/api/offboarding-testimonial/{test_offboarding_workflow.testimonial_token}",
             json=testimonial_data,
         )
         assert response.status_code == 200
@@ -128,7 +128,7 @@ class TestSubmitTestimonial:
             "permission_granted": True,
         }
         response = await client.post(
-            f"/api/testimonial/{test_offboarding_workflow.testimonial_token}",
+            f"/api/offboarding-testimonial/{test_offboarding_workflow.testimonial_token}",
             json=testimonial_data,
         )
         assert response.status_code == 200
@@ -141,7 +141,7 @@ class TestSubmitTestimonial:
             "permission_granted": True,
         }
         response = await client.post(
-            "/api/testimonial/invalid-token-123",
+            "/api/offboarding-testimonial/invalid-token-123",
             json=testimonial_data,
         )
         assert response.status_code == 404
