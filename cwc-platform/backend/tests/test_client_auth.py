@@ -12,6 +12,7 @@ from jose import jwt
 
 from app.models.contact import Contact
 from app.models.client_session import ClientSession
+from app.services.client_auth_service import hash_token
 from app.config import get_settings
 
 settings = get_settings()
@@ -166,7 +167,7 @@ class TestVerifyToken:
         session = ClientSession(
             id=str(uuid.uuid4()),
             contact_id=contact.id,
-            token=token,
+            token=hash_token(token),
             expires_at=datetime.utcnow() - timedelta(hours=1),  # Expired
             is_active=True,
         )
@@ -202,7 +203,7 @@ class TestVerifyToken:
         session = ClientSession(
             id=str(uuid.uuid4()),
             contact_id=contact.id,
-            token=token,
+            token=hash_token(token),
             expires_at=datetime.utcnow() + timedelta(minutes=15),
             token_used_at=datetime.utcnow() - timedelta(minutes=5),  # Already used
             is_active=True,
@@ -239,7 +240,7 @@ class TestVerifyToken:
         session = ClientSession(
             id=str(uuid.uuid4()),
             contact_id=contact.id,
-            token=token,
+            token=hash_token(token),
             expires_at=datetime.utcnow() + timedelta(minutes=15),
             is_active=True,
         )

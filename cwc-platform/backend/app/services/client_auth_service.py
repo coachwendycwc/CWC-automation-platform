@@ -2,6 +2,7 @@
 Client Portal Authentication Service.
 Handles magic link authentication for clients accessing their portal.
 """
+import hashlib
 import secrets
 import logging
 from datetime import datetime, timedelta
@@ -29,6 +30,18 @@ SESSION_EXPIRY_DAYS = 7
 
 # Rate limiting: max magic link requests per hour per email
 MAX_MAGIC_LINKS_PER_HOUR = 3
+
+
+def hash_token(token: str) -> str:
+    """Store only a hash of any credential that grants portal access.
+
+    These tokens are bearer credentials: whoever holds one is the client. A
+    database backup, a dump, or a stray log line containing plaintext tokens
+    would hand over every client's portal. SHA-256 is right here (not bcrypt) —
+    the tokens are already 256 bits of entropy, so there is nothing to brute
+    force, and lookups stay a single indexed query.
+    """
+    return hashlib.sha256(token.encode()).hexdigest()
 
 
 class ClientAuthService:
@@ -86,10 +99,11 @@ class ClientAuthService:
         token = secrets.token_urlsafe(32)
         expires_at = datetime.utcnow() + timedelta(minutes=MAGIC_LINK_EXPIRY_MINUTES)
 
-        # Create session record with magic link token
+        # Create session record. Only the hash is stored — the raw token exists
+        # solely in the email we are about to send.
         session = ClientSession(
             contact_id=contact.id,
-            token=token,
+            token=hash_token(token),
             expires_at=expires_at,
             ip_address=ip_address,
             user_agent=user_agent,
@@ -125,10 +139,10 @@ class ClientAuthService:
         Raises:
             HTTPException: If token invalid or expired
         """
-        # Find session by token
+        # Find session by the token's hash — plaintext is never stored
         result = await self.db.execute(
             select(ClientSession).where(
-                ClientSession.token == token,
+                ClientSession.token == hash_token(token),
                 ClientSession.is_active == True,
             )
         )
@@ -154,6 +168,18 @@ class ClientAuthService:
                 detail="This login link has expired. Please request a new one.",
             )
 
+        # Portal access can be revoked after a link is sent; re-check at redemption
+        contact_check = (
+            await self.db.execute(
+                select(Contact).where(Contact.id == session.contact_id)
+            )
+        ).scalar_one_or_none()
+        if contact_check is None or not contact_check.portal_enabled:
+            raise HTTPException(
+                status_code=status.HTTP_400_BAD_REQUEST,
+                detail="This login link is no longer valid.",
+            )
+
         # Mark token as used
         session.token_used_at = datetime.utcnow()
 
@@ -170,8 +196,9 @@ class ClientAuthService:
             algorithm="HS256",
         )
 
-        # Update session with JWT
-        session.session_token = session_token
+        # Update session with the JWT's hash — the raw JWT lives only in the
+        # client's browser
+        session.session_token = hash_token(session_token)
         session.expires_at = session_expires
         session.ip_address = ip_address or session.ip_address
         session.user_agent = user_agent or session.user_agent
@@ -267,6 +294,15 @@ class ClientAuthService:
         session = result.scalar_one_or_none()
 
         if not session:
+            raise HTTPException(
+                status_code=status.HTTP_401_UNAUTHORIZED,
+                detail="Session expired. Please log in again.",
+            )
+
+        # The JWT carries its own exp, but the DB session is the authority:
+        # ending a session server-side (revocation, shortened expiry) must take
+        # effect immediately rather than waiting for the JWT to lapse.
+        if session.expires_at and datetime.utcnow() > session.expires_at:
             raise HTTPException(
                 status_code=status.HTTP_401_UNAUTHORIZED,
                 detail="Session expired. Please log in again.",
