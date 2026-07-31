@@ -26,6 +26,14 @@ class FathomWebhook(Base):
     # Recording URL from Fathom
     recording_url: Mapped[str | None] = mapped_column(String(500))
 
+    # Where OUR copy lives. Zoom's download URLs die when the recording is
+    # deleted from Zoom, so a link there is not ownership. Until archived_url
+    # is set, the media exists only in someone else's account.
+    archived_url: Mapped[str | None] = mapped_column(String(500))
+    archived_at: Mapped[datetime | None] = mapped_column(DateTime)
+    archived_bytes: Mapped[int | None] = mapped_column(Integer)
+    archived_sha256: Mapped[str | None] = mapped_column(String(64))
+
     transcript: Mapped[str | None] = mapped_column(Text)
     summary: Mapped[dict | None] = mapped_column(JSON)
     action_items: Mapped[list | None] = mapped_column(JSON)
